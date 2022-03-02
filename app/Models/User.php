@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
     
     /**
      * The attributes that are mass assignable.
@@ -41,4 +41,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public static function usersIdByPermissionName($name) {
+
+        $permissions = \App\Permission::where('name', 'like', '%' . $name . '%')->get();
+        if ($permissions->isEmpty())
+            return [];
+        $role = \DB::table('permission_role')->where('permission_id', $permissions->first()->id)->get();
+        if ($role->isEmpty())
+            return [];
+        return \DB::table('role_user')->whereIN('role_id', $role->pluck('role_id'))->pluck('user_id')->toArray();
+    }
 }
