@@ -6,8 +6,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-
+// use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
+// use aravel\Passport\HasApiTokens
+use Illuminate\Support\Facades\DB;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
@@ -19,8 +21,23 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'fname',
+        'lname',
         'email',
         'password',
+        'gender',
+        'phonecode',
+        'mobile_no',
+        'type',
+        'email_otp',
+        'mobile_otp',
+        'profile_picture',
+        'status',
+        'apple_id',
+        'facebook_id',
+        'google_id',
+        'amazon_id',
+        'token'
     ];
 
     /**
@@ -45,12 +62,12 @@ class User extends Authenticatable
 
     public static function usersIdByPermissionName($name) {
 
-        $permissions = \App\Permission::where('name', 'like', '%' . $name . '%')->get();
+        $permissions = \App\Models\Permission::where('name', 'like', '%' . $name . '%')->get();
         if ($permissions->isEmpty())
             return [];
-        $role = \DB::table('permission_role')->where('permission_id', $permissions->first()->id)->get();
+        $role = DB::table('permission_role')->where('permission_id', $permissions->first()->id)->get();
         if ($role->isEmpty())
             return [];
-        return \DB::table('role_user')->whereIN('role_id', $role->pluck('role_id'))->pluck('user_id')->toArray();
+        return DB::table('role_user')->whereIN('role_id', $role->pluck('role_id'))->pluck('user_id')->toArray();
     }
 }

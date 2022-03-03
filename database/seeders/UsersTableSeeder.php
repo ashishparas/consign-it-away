@@ -16,17 +16,18 @@ class UsersTableSeeder extends Seeder
     {
         
         $data = [
-            'name'  => 'admin',
-            // 'fname' => 'Admin',
-            // 'lname' => 'User',
+            'name'  => 'Admin User',
+            'fname' => 'Admin',
+            'lname' => 'User',
             'email' => 'consign_it_away@admin.com',
             'password'  => Hash::make('12345678'),
-            // 'mobile_no' => '98166422',
-            // 'type'      => '3'
+            'mobile_no' => '98166422',
+            'type'      => '4',
+            'gender'    => '1',
   
         ];
         $user = \App\Models\User::create($data);
-        $user->assignRole('Super-Admin');
+        $user->assignRole('admin');
 
     }
 }

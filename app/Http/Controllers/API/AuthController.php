@@ -4,24 +4,25 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use Validator;
-use DB;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Helper;
+
 use \App\Models\Role;
 use Carbon\Carbon;
 
 // use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Mail;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
+use PhpParser\Node\Stmt\Return_;
 
 class AuthController extends ApiController {
 
     public $successStatus = 200;
-    // private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','profile_picture','dob','gender','zipcode','description','experience','license_no','upload_id','type','status','latitude','longitude','token','custom_id','created_at','updated_at'];
+    private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','profile_picture','gender','type','status','token','created_at','updated_at'];
 //    public static $_mediaBasePath = 'uploads/users/';
     public function formatValidator($validator) {
         $messages = $validator->getMessageBag();
@@ -41,32 +42,9 @@ class AuthController extends ApiController {
     }
     
 
-    public function getMetaContent(Request $request) {
-
-        $keyword = $request->get('search');
-
-        if (!empty($keyword)) {
-            $metaContent = \App\Metum::where('name', 'LIKE', "%$keyword%")->get();
-        } else {
-            $metaContent = \App\Metum::get();
-        }
-
-
-        if (!$metaContent->isEmpty()) {
-            return parent::success($metaContent, 200);
-        } else {
-            return parent::error('No Meta Content Found', 500);
-        }
-    }
-
-    
-    
-
-
-
-    public function login(Request $request) {
+    public function Login(Request $request) {
         try {
-            $rules = ['email' => 'required', 'password' => 'required'];
+            $rules = ['email' => 'required', 'password' => 'required','type'=> 'required|in:1,2'];
             
             $rules = array_merge($this->requiredParams, $rules);
             $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
@@ -76,7 +54,7 @@ class AuthController extends ApiController {
             endif;
 
             
-            if (Auth::attempt(['email' => request('email'), 'password' => request('password')])):
+            if (Auth::attempt(['email' => request('email'), 'password' => request('password'), 'type' => request('type')])):
                 
                 $input = $request->all();
                 // $latitude  = $input['latitude'];
@@ -84,16 +62,10 @@ class AuthController extends ApiController {
                 
                 // $UpdateData = \App\User::where('id', Auth::user()->id)->update(['latitude' => $latitude, 'longitude' => $longitude]); 
                 
-                $user = \App\User::select($this->LoginAttributes)->find(Auth::user()->id);
+                $user = \App\Models\User::select($this->LoginAttributes)->find(Auth::user()->id);
                 $user->save();
-                
-              if($user->status == '1'):
-             
-                  parent::sendOTPUser($user);
-                  endif;
-                
-                
-                $token = $user->createToken('MyApp')->accessToken;  
+      
+                $token = $user->createToken('consign-it-away')->accessToken;  
                
                 parent::addUserDeviceData($user, $request);
               
@@ -225,10 +197,10 @@ class AuthController extends ApiController {
             if (Auth::check()) {
                 Auth::user()->AauthAcessToken()->delete();
             }
-            $device = \App\UserDevice::where('user_id', \Auth::id())->get();
+            $device = \App\Models\UserDevice::where('user_id', Auth::id())->get();
 //            dd($device);
             if ($device->isEmpty() === false)
-                \App\UserDevice::destroy($device->first()->id);
+                \App\Models\UserDevice::destroy($device->first()->id);
 
             return parent::successCreated('Logout Successfully');
         } catch (\Exception $ex) {
@@ -236,55 +208,66 @@ class AuthController extends ApiController {
         }
     }
 
-    public function Signup(Request $request) {
-        dd('hello');
+    public function Register(Request $request) {
+    // dd(public_path('vendor'));
         // |unique:users,mobile_no
 
-        $rules = ['fname' => 'required', 'lname' => 'required', 'email' => 'required|email|unique:users', 'password' => 'required',  'mobile_no' => 'required', 'phonecode' => 'required', 'type' => 'required|in:1,2'];
+        $rules = ['fname' => 'required', 'lname' => 'required', 'email' => 'required|email|unique:users', 'password' => 'required',  'mobile_no' => 'required', 'phonecode' => 'required', 'type' => 'required|in:1,2','gender' =>'required|in:1,2,3','profile_picture'=>'','fax' => '','paypal_id' => ''];
         $rules = array_merge($this->requiredParams, $rules);
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
 
-            $errors = self::formatValidator($validator);
-            // dd($errors);
-            return parent::error($errors);
-        }
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        
         $input = $request->all();
-//        if (isset($request->image))
-//            $input['image'] = parent::__uploadImage($request->file('image'), public_path(\App\Http\Controllers\Admin\UsersController::$_mediaBasePath), true);
-        $fullname = $input['fname'].' '.$input['lname'];
+       if (isset($request->profile_picture)):
+           $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
+       endif;
+
+       if($input['type'] === '2'):
+
+            if($input['fax'] == ''):
+                return parent::error("The field fax is required.");
+            endif;
+            if($input['paypal_id'] == ''):
+                return parent::error("The field Paypal-Id is required.");
+            endif;
+
+       endif;
+           $fullname = $input['fname'].' '.$input['lname'];
         $input['name'] = $fullname;
-        $input['status'] = '1';
         $input['token'] = uniqid(md5(rand()));
         $input['password'] = bcrypt($input['password']);
         
         // Stripe Create user;
         
-            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
-            $customer = $stripe->customers->create([
-            'description' => 'My First Test Customer (created for API docs)',
-            'email' => $input['email'],
-            'name'  => $fullname,
-             ]);
-        $input['custom_id'] = $customer->id;
+            // $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+            // $customer = $stripe->customers->create([
+            // 'description' => 'My First Test Customer (created for API docs)',
+            // 'email' => $input['email'],
+            // 'name'  => $fullname,
+            //  ]);
+        $input['status'] = '1';
         $user = User::create($input);
     
-        parent::sendOTPUser($user);
-        
-        
-        // dd($customer->id);
-        $success['token'] = $user->createToken('MyApp')->accessToken;
+        // parent::sendOTPUser($user);
+   
+        $success['token'] = $user->createToken('Consign-it-away')->accessToken;
+        // dd($success['token']);
         $userData  = User::select($this->LoginAttributes)->where('id', $user->id)->first();
         $success['user'] = $userData;
         
        
-        
+       
         $lastId = $user->id;
         $selectClientRole = [];
         if($user->type == 1):
-            $selectClientRole = Role::where('name', 'Client')->first();
+           
+            $selectClientRole = Role::where('name', 'user')->first();
+            
             else:
-            $selectClientRole = Role::where('name', 'Artist')->first();
+            $selectClientRole = Role::where('name', 'vendor')->first();
         endif;
         
         $assignRole = DB::table('role_user')->insert(
@@ -397,7 +380,7 @@ class AuthController extends ApiController {
                 $input = $request->all();
                 $data['password'] = hash::make($input['password']);
                 // dd($password);
-                $user = \App\User::where('email', $input['email'])->update($data);
+                $user = \App\Models\User::where('email', $input['email'])->update($data);
             
                 return parent::success(['message' => 'Your password has been successfully changed!']);
             }catch(\Exception $ex){
@@ -498,24 +481,7 @@ class AuthController extends ApiController {
       
     }
 
-    public function ArtistViewProfile(Request $request){
-        $rules = [];
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
-        if($validateAttributes):
-            return $validateAttributes;
-        endif;
-        try{
-            
-            $user = User::select($this->LoginAttributes)->with('user_post','user_avg_rating')->find(Auth::id());
-            $Availability = \App\Availability::select('description')->where('user_id', Auth::id())->first();
-          
-            $user['description'] = $Availability['description'];
-            return parent::success(['message'=> 'View profile successfully', 'user' => $user]);
-            
-        } catch (\Execption $ex){
-            return parent::error($ex->getMessage());
-        }
-    }
+   
 
 
     public function changePassword(Request $request) {
@@ -530,9 +496,9 @@ class AuthController extends ApiController {
         
         try {
             
-            if (\Hash::check($request->old_password, \Auth::User()->password)):
-                $model = \App\User::find(\Auth::id());
-                $model->password = \Hash::make($request->password);
+            if (Hash::check($request->old_password, Auth::User()->password)):
+                $model = \App\Models\User::find(Auth::id());
+                $model->password = Hash::make($request->password);
                 $model->save();
                 return parent::success(['message'=>'Password Changed Successfully']);
             else:
@@ -544,148 +510,8 @@ class AuthController extends ApiController {
     }
     
     
-    public function SocialLink(Request $request){
-      $rules = ['facebook' => '','instagram'=>''];
-      $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
-      if($validateAttributes):
-          return $validateAttributes;
-      endif;
-      try{
-          $data = [];
-          $input = $request->all();
-          $user_id = Auth::id();  
-          $data = [
-              'user_id' => $user_id,
-              'facebook'   => $input['facebook'],
-              'instagram'  => $input['instagram']
-            
-          ];
-        
-        $model = User::find($user_id);
-        $update['status'] = '4';
-        $model->fill($update);
-        $model->save();
-        
-        $id = SocialLink::updateOrCreate(['user_id' => $user_id] ,$data)->id;
-        // dd($id);
-        $social = SocialLink::where('id', $id)->first();
-        $artist = User::select($this->LoginAttributes)->where('id', $user_id)->first();
-        return parent::success(['message' => 'Social Link Added!','social_link'=> $social, 'user' => $artist]);
-     
-      }catch( \Exception $ex ){
-        return parent::error($ex->getMessage());
-      }
-    }
+   
 
-    public function ViewSocialLink(Request $request){
-        $rules = [];
-        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
-        if($validateAttributes):
-            return $validateAttributes;
-        endif;
-        try{
-            $socialLinks = SocialLink::where('user_id', Auth::id())->first();
-            return parent::success(['message' => 'View social links', 'social_links' => $socialLinks]);
-        }catch(\Exception $ex){
-            return parent::error($ex->getMessage());
-        }
-    }
-    
-    
-    public function EditSocialLink(Request $request){
-      $rules = ['facebook' => '','instagram'=>''];
-      $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
-      if($validateAttributes):
-          return $validateAttributes;
-      endif;
-      try{
-          $data = [];
-          $input = $request->all();
-          
-          $data = [
-              'user_id' => Auth::id(),
-              'facebook'   => $input['facebook'],
-              'instagram'  => $input['instagram'],
-              
-          ];
-        
-          SocialLink::updateOrCreate(['user_id' => Auth::id()], $data);
-        
-       
-          $social = SocialLink::where('user_id', Auth::id())->first();
-        
-        return parent::success(['message' => 'Social media links are updated successfully!','social_link'=> $social]);
-     
-      }catch( \Exception $ex ){
-        return parent::error($ex->getMessage());
-      }
-    }
-    
-    
-    public function Contactus(Request $request){
-        $rules = ['name'=> 'required', 'email'=>'required','subject' => 'required','message' => ''];
-        $validateAttributes = parent::ValidateAttributes($request,'POST', $rules, array_keys($rules), true);
-        
-        if($validateAttributes):
-            return $validateAttributes;
-        endif;
-        try{
-            
-            $input = $request->all();
-            $input['user_id'] = Auth::id();
-            $model = App\ContactUs::Create($input);
-            return parent::success(['message' => 'email has been sent successfully']);
-        }catch(\Execption $ex){
-            return parent::error($ex->getMessage());
-        }
-    }
-    
-    
-    
-
-    public function getDirectories(Request $request) {
-        $model = new App\Directory;
-        if ($model->get()->isEmpty() === false) {
-            $perPage = isset($request->limit) ? $request->limit : 20;
-            if (isset($request->search))
-                $model = $model->Where('name', 'LIKE', "%$request->search%");
-            $model = $model->orderBy('id', 'desc');
-            return parent::success($model->paginate($perPage));
-//            return parent::success($directories, $this->successStatus);
-        } else {
-            return parent::error('No Directories Found', 200);
-        }
-    }
-
-    public function getAlphaLinks(Request $request) {
-        $model = new App\AlphaLink;
-        if ($model->get()->isEmpty() === false) {
-            $perPage = isset($request->limit) ? $request->limit : 20;
-            if (isset($request->search))
-                $model = $model->Where('name', 'LIKE', "%$request->search%");
-            $model = $model->orderBy('id', 'desc');
-            return parent::success($model->paginate($perPage));
-        } else {
-            return parent::error('No Alpha Links Found', 200);
-        }
-    }
-
-    public function getMeta(Request $request) {
-
-        $validator = Validator::make($request->all(), [
-                    'meta_name' => 'required',
-        ]);
-        if ($validator->fails()) {
-            $errors = self::formatValidator($validator);
-            return parent::error($errors, 200);
-        }
-        $meta = App\Meta::where('meta_name', $request->input('meta_name'))->first();
-        if ($meta) {
-            return parent::success($meta, $this->successStatus);
-        } else {
-            return parent::error('No Meta Content Found', 200);
-        }
-    }
 
     public function resetPassword(Request $request, Factory $view) {
         //Validating attributes
@@ -733,7 +559,7 @@ class AuthController extends ApiController {
         try{
            
                 $input = $request->all();
-                $User = \App\User::select('fname','lname', 'email')->where('email', $input['email'])->first();
+                $User = \App\Models\User::select('fname','lname', 'email')->where('email', $input['email'])->first();
                
                 $OTP = rand(1000,9999);
                 $data = [];
@@ -741,7 +567,7 @@ class AuthController extends ApiController {
                 $data['message'] = 'Your Wamglamz verification code is '.$OTP.' This help us secure your wamglamz account by verifying your OTP. This let you to access your wamglamz account.';
                 // dd($data);
                 $mail = Mail::to($input['email'])->send( new ForgotPassword($data));
-                \App\User::where('email', $User->email)->update(['email_otp' => $OTP]);                
+                \App\Models\User::where('email', $User->email)->update(['email_otp' => $OTP]);                
                
                 return parent::success(['message' => 'The email has been successfully']);
             
@@ -759,7 +585,7 @@ class AuthController extends ApiController {
         endif;
         try {
 //            dd(\Auth::id());
-            $model = \App\User::whereId(\Auth::id());
+            $model = \App\Models\User::whereId(Auth::id());
             return parent::success($model->first());
         } catch (\Exception $ex) {
             return parent::error($ex->getMessage());
@@ -767,129 +593,12 @@ class AuthController extends ApiController {
     }
     
     
-    public function Payment( Request $request ){
-        
-        $rules = ['name'=>'required','card_no'=>'required','zipcode'=>'', 'expiry_month'=>'required', 'expiry_date'=>'required', 'cvv'=>'required', 'payment_status' => 'required'];
-        
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
-        
-        if($validateAttributes):
-            return $validateAttributes;
-        endif;
-        
-        try{
-            
-            $user = User::select($this->LoginAttributes)->where('id',Auth::id())->first();
-            
-            $input =  $request->all();
-        
-          
-                $input['status'] = '1';
-       
-            
-                $input['card_no'] = $input['card_no'];
-                $input['cvv'] = base64_encode($input['cvv']);
-                $input['user_id'] = Auth::id();
-                
-                $data = [
-                    'name' => Auth::user()->fname.' '. Auth::user()->lname,
-                    'email' => Auth::user()->email,
-                    'description' => 'create Customer'
-                    ];
-                
-                  Helper::CreateCustomer($data);
-                
-                
-                $payment = Payment::Create($input);
-            
-            if($input['payment_status'] == 1):
-          
-                if($user->type == '1'):
-                    $Updateuser = User::where('id',Auth::id())->update(['status' => '4']);    
-                elseif($user->type == '2'):
-             
-                    $Updateuser = User::where('id',Auth::id())->update(['status' => '8']);    
-                endif;
-                
-                $userDetails = User::select($this->LoginAttributes)->where('id',Auth::id())->first();
-                
-                $paymentDetail = payment::where('id',$payment->id)->first();
-                
-                return parent::success(['message' => 'Payment Added successfully!', 'user' => $userDetails, 'payment'=> $payment]);
-                
-            endif;
-            
-            return parent::success(['message' => 'Payment Added successfully!', 'user' => $user, 'payment'=> $payment]);
-            
-            
-        } catch (\Exception $ex){
-            return parent::error($ex->getMessage());
-        }
-    }
-    
-    public function Favourite(Request $request){
-        $rules = ['status' => 'required|in:1,2', 'artist_id' => 'required'];
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
-        if($validateAttributes):
-            return $validateAttributes;
-        endif;
-                 
-        try{
-            
-            $input = $request->all();
-       
-                    $data = [
-                        'like_by' => Auth::id(),
-                        'like_to' => $input['artist_id'],
-                        'status'  => $input['status']
-                        ];
-                  
-                    $favourite = App\Favourite::updateOrCreate(['like_to' => $input['artist_id']], $data);
-                    $message = ($favourite['status'] == '1')? 'Like successfuly': 'Dislike successfully';
-        
-                return parent::success(['message' => $message]);
-            }catch(\Exception $ex){
-                return parent::error($ex->getMessage());
-            }
-    }
-    
-    
-    public function FavouriteList(Request $request){
    
-        $rules = [];
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
-        if($validateAttributes):
-            return $validateAttributes;
-        endif;
-        try{
-            // DB::enableQueryLog();
-            $favourites = App\Favourite::where('like_by', Auth::id())->where('status', '1')->with('artist_details')->get();
-         
-            
-            // dd(DB::getQueryLog());
-            return parent::success(['message' => 'view favourite list successfully', 'favourites' => $favourites]);
-        }catch(\Exception $ex){
-            return parent::error($ex->getMessage());
-        }
-    }
+   
+    
+   
     
     
-    public function FavouriteListById(Request $request){
-        $rules = ['id'=> 'required'];
-        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
-        if($validateAttributes):
-            return $validateAttributes;
-        endif;
-        
-        try{
-            $input = $request->all();
-            $favourite = App\Favourite::where('id', $input['id'])->with('artist_details')->first();
-            
-            return parent::success(['message' => 'View favourite list successfully', 'favourite' => $favourite]);
-        }catch(\Exception $ex){
-            return parent::error($ex->getMessage());
-        }
-    }
     
     
     
@@ -954,157 +663,25 @@ class AuthController extends ApiController {
     }
     
     
-    public function Blogs(Request $request){
-        
-        // dd(asset('uploads/admin/blogs'));
-        $rules = [];
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
-        if($validateAttributes):
-            return $validateAttributes;
-            endif;
-                
-                try{
-                    
-                    
-                    $blogs = App\Blog::get();
-                    return parent::success(['message' => 'View blogs successfully!','blogs' => $blogs]);
-                }catch(\Exception $ex){
-                    return parent::error($ex->getMessage());
-                }
-    }
+   
     
     
-    public function BlogDetailsById(Request $request){
-        $rules = ['id' => 'required'];
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
-        if($validateAttributes):
-            return $validateAttributes;
-            endif;
-            try{
-                $input = $request->all();
-                $blog = App\Blog::where('id', $input['id'])->first();
-                return parent::success(['message' => 'View Blog Successfully!','blog' => $blog]);
-            }catch(\Excpetion $ex){
-                return parent::error($ex->getMessage());
-            }
-    }
+  
     
     
-    public function PlanDetails(Request $request){
-      
-        $rules = [];
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
-        if($validateAttributes):
-            return $validateAttributes;
-            endif;
-            try{
-                
-                $plan_details = \App\PlanDetail::get();
-                
-                return parent::success(['message' => 'Plan view successfully!', 'plan_details'=> $plan_details]);
-            }catch(\Exception $ex){
-                return parent::error($ex->getMessage());
-            }
-         
-    }
+  
     
-    
-    public function PlanDetailsById(Request $request){
-        $rules = ['id'=> 'required'];
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
-        
-        if($validateAttributes):
-            return $validateAttributes;
-            endif;
-            
-            try{
-                
-                $input  = $request->all();
-               
-                if(Auth::user()->type == '1'):
-                    $user = User::where('id',Auth::id())->update(['status' => '4']);    
-                elseif(Auth::user()->type == '2'):
-                        $user = User::where('id',Auth::id())->update(['status' => '8']);
-                endif;
-                 $plan_details = \App\PlanDetail::where('id', $request->id)->first();
-                return parent::success(['message' => 'View Plan Successfully!', 'plan_details'=> $plan_details]);
-            }catch(\Exception  $ex){
-                return parent::error($ex->getMessage());
-            }
-    }
+   
     
     
     
     
-     public function viewNotification(Request $request){
-        $rules = [];
-        $validateAttributes = parent::validateAttributes($request, "POST", $rules, array_keys($rules), false);
-        if($validateAttributes):
-            return $validateAttributes;
-            endif;
-            try{
-              
-                $notification = Notification::where('receiver_id', Auth::id())->orderBy('id','DESC')->get();
-              
-                return parent::success(['message' => 'Notification view successfully!', 'notification' => $notification]);
-            }catch(\Exception $ex){
-                return parent::error($ex->getMessage());
-            }
-    }
-    
-    public function FAQ(Request $request){
-        $rules = [];
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
-        if($validateAttributes):
-            return $validateAttributes;
-            endif;
-            try{
-                $faq = DB::table('faq')->get();
-                return parent::success(['message' => 'FAQ view successfully!', 'faq' => $faq]);
-            }catch(\Exception $ex){
-                return parent::error($ex->getMessage());
-            }
-    }
     
     
-    public function GetSubscription(request $request){
-        $rules = ['plan_id' => 'required', 'amount' => '', 'type' => 'required','plan_type' => '', 'duration' => ''];
-        // plan type---> 1-> $25, 2 $50
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
-        if($validateAttributes):
-            return $validateAttributes;
-            endif;
-            try{
-                $input = $request->all();
-                $input['user_id'] = Auth::id();
-                $input['created_on'] = date('Y-m-d');
-                if($input['type'] == '1'):
-                    dd('hello');
-                elseif($input['type'] == '2'):
-                    
-                    $input['product_id'] = env("ARTIST_PRODUCT_ID");
-                    
-                    if($input['plan_type'] == '1'):
-                        $input['price_id']  = env("ARTIST_PRODUCT_PRICE_1");
-                        elseif($input['plan_type'] == '2'):
-                            $input['price_id']  = env("ARTIST_PRODUCT_PRICE_2");
-                            endif;
-                     
-                endif;
-                $data = [
-                    'email' => Auth::user()->email,
-                    'name'  => Auth::user()->fname.' '. Auth::user()->lname,
-                    'description' => 'Subscription plan'
-                    ];
-                 
-                  Helper::CreateCustomer($data);
-                $subscription  = Subscription::create($input);
-                
-                return parent::success(['message' => 'Subscription Buy Successfully']);
-            }catch(\Exception $ex){
-                return parent::error($ex->getmessage());
-            }
-    }
+   
+    
+    
+   
 
    
 

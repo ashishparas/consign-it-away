@@ -4,16 +4,16 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use Validator;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Twilio\Rest\Client;
-use App\UserDevice;
+// use Twilio\Rest\Client;
+use App\Models\UserDevice;
 //fcm
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class ApiController extends \App\Http\Controllers\Controller {
 
@@ -34,8 +34,8 @@ class ApiController extends \App\Http\Controllers\Controller {
     }
 
     protected function __allowedUsers() {
-        $userRole = \App\User::find($this->_headers()['user_id'])->getRoleNames()['0'];
-        return \App\User::role($userRole)->get()->pluck('id')->toArray();
+        $userRole = \App\Models\User::find($this->_headers()['user_id'])->getRoleNames()['0'];
+        return \App\Models\User::role($userRole)->get()->pluck('id')->toArray();
     }
 
     public $successStatus = 200;
@@ -55,7 +55,7 @@ class ApiController extends \App\Http\Controllers\Controller {
             return self::error('Client Id and Secret mismatched.', 409);
         endif;
 //        dd(\Request::route()->uri());
-        if (!in_array(\Request::route()->uri(), self::$_allowedURIwithoutAuth)):
+        if (!in_array(Request::route()->uri(), self::$_allowedURIwithoutAuth)):
             if (!isset($headers['user_id'])):
                 return self::error('Loged in User Id is required', 422);
             else:
@@ -63,7 +63,7 @@ class ApiController extends \App\Http\Controllers\Controller {
                 if ($user === null)
                     return self::error('Loged in User Not found', 401);
 //                dd($user->hasAnyRole('super admin'));
-                if ($user->hasPermissionTo(\Request::route()->uri()) === false):
+                if ($user->hasPermissionTo(Request::route()->uri()) === false):
                     return self::error("You're not authorized to do, Please contact administrator", 403);
                 endif;
             endif;
@@ -295,7 +295,7 @@ class ApiController extends \App\Http\Controllers\Controller {
     }
 
     public static function pushNotificationiOS($data = [], $userId, $customData = null) {
-        foreach (\App\UserDevice::whereUserId($userId)->get() as $userDevice):
+        foreach (\App\Models\UserDevice::whereUserId($userId)->get() as $userDevice):
             self::pushNotifyiOS($data, $userDevice->token);
         endforeach;
         return true;
@@ -317,7 +317,7 @@ class ApiController extends \App\Http\Controllers\Controller {
         // if (User::whereId($userId)->where('is_notify', '1')->get()->isEmpty() === true)
         //   return true;
        
-        foreach (\App\UserDevice::whereUserId($receiver_id)->get() as $userDevice):
+        foreach (\App\Models\UserDevice::whereUserId($receiver_id)->get() as $userDevice):
               
             self::pushNotofication($data, $userDevice->token);
       
@@ -346,9 +346,9 @@ class ApiController extends \App\Http\Controllers\Controller {
                 $data['receiver_id']  = $receiver_id;
             // $data += ['action_id' => $receiver_id];
        
-            \App\Notification::create($data);
+            \App\Models\Notification::create($data);
             return true;
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             
         }
     }
@@ -418,13 +418,15 @@ class ApiController extends \App\Http\Controllers\Controller {
         $imageName = str_random(10) . '.' . $fileExtension;
         if ($path === null)
             $path = public_path('uploads');
-        \File::put($path . '/' . $imageName, base64_decode($image));
+        File::put($path . '/' . $imageName, base64_decode($image));
         return $imageName;
     }
 
     protected static function __uploadImage($image, $path = null, $thumbnail = false) {
+        // dd($image);
+        // dd($path);
         if ($path === null)
-            $path = public_path('uploads');
+            $path = public_path('vendor');
         $digits = 3;
         $imageName = time() . rand(pow(10, $digits - 1), pow(10, $digits) - 1) . '.' . $image->getClientOriginalExtension();
         $image->move($path, $imageName);
@@ -441,7 +443,7 @@ class ApiController extends \App\Http\Controllers\Controller {
     public static function getDistanceByTable($lat, $lng, $distance, $tableName) {
         $latKey = 'latitude';
         $lngKey = 'longitude';
-        $results = \DB::select(\DB::raw('SELECT id, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( ' . $latKey . ' ) ) * cos( radians( ' . $lngKey . ' ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(' . $latKey . ') ) ) ) AS distance FROM ' . $tableName . ' HAVING distance < ' . $distance . ' ORDER BY distance'));
+        $results = DB::select(DB::raw('SELECT id, ( 3959 * acos( cos( radians(' . $lat . ') ) * cos( radians( ' . $latKey . ' ) ) * cos( radians( ' . $lngKey . ' ) - radians(' . $lng . ') ) + sin( radians(' . $lat . ') ) * sin( radians(' . $latKey . ') ) ) ) AS distance FROM ' . $tableName . ' HAVING distance < ' . $distance . ' ORDER BY distance'));
 //        dd($results);
         return $results;
     }
@@ -550,7 +552,7 @@ class ApiController extends \App\Http\Controllers\Controller {
             // $userDevice->type = $request->device_type;
             // $userDevice->token = $request->device_token;
             // $userDevice->save();
-            \App\UserDevice::updateOrCreate(['user_id'=> $user->id],['user_id' => $user->id,'type' =>  $request->device_type, 'token' =>  $request->device_token]);
+            \App\Models\UserDevice::updateOrCreate(['user_id'=> $user->id],['user_id' => $user->id,'type' =>  $request->device_type, 'token' =>  $request->device_token]);
             
         // endif;
         return true;
