@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 // use Twilio\Rest\Client;
@@ -183,11 +183,12 @@ class ApiController extends \App\Http\Controllers\Controller {
     protected static function sendOTPUser(User $user) {
     // dd($user);
         $otp = mt_rand(1000, 9999);
-        $user->otp = $otp;
+        $user->mobile_otp = 1111;
+        
         $user->save();
     $phonecode =     str_replace('+','', trim($user->phonecode));
     $phonecode = '+'.$phonecode;
-        return self::sendTextMessage('<#> Your ' . config('app.name') . ' OTP is ' . $otp.' Use this to verify your mobile '. config('app.name') ,$user->phonecode,$user->mobile_no);
+        // return self::sendTextMessage('<#> Your ' . config('app.name') . ' OTP is ' . $otp.' Use this to verify your mobile '. config('app.name') ,$user->phonecode,$user->mobile_no);
     }
 
     protected static function sendOTP($number) {

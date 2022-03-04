@@ -23,7 +23,7 @@ class UsersTableSeeder extends Seeder
             'password'  => Hash::make('12345678'),
             'mobile_no' => '98166422',
             'type'      => '4',
-            'gender'    => '1',
+            'marital_status'    => '1',
   
         ];
         $user = \App\Models\User::create($data);

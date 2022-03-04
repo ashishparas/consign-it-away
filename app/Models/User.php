@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 // use Laravel\Sanctum\HasApiTokens;
 use Laravel\Passport\HasApiTokens;
-// use aravel\Passport\HasApiTokens
+// use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
 class User extends Authenticatable
 {
@@ -25,7 +25,7 @@ class User extends Authenticatable
         'lname',
         'email',
         'password',
-        'gender',
+        'marital_status',
         'phonecode',
         'mobile_no',
         'type',
@@ -59,6 +59,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function AauthAcessToken(){
+        return $this->hasMany('\App\Models\OauthAccessToken');
+    }
 
     public static function usersIdByPermissionName($name) {
 

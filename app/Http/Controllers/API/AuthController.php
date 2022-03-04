@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+// use Auth;
 use App\Models\User;
 
 use \App\Models\Role;
 use Carbon\Carbon;
-
+use Laravel\Passport\HasApiTokens;
 // use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -18,11 +19,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
 use PhpParser\Node\Stmt\Return_;
+use App\Mail\EmailVerificationMail;
+use GrahamCampbell\ResultType\Success;
 
 class AuthController extends ApiController {
 
     public $successStatus = 200;
-    private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','profile_picture','gender','type','status','token','created_at','updated_at'];
+    private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','profile_picture','marital_status','type','status','token','created_at','updated_at'];
 //    public static $_mediaBasePath = 'uploads/users/';
     public function formatValidator($validator) {
         $messages = $validator->getMessageBag();
@@ -195,10 +198,11 @@ class AuthController extends ApiController {
         try {
 
             if (Auth::check()) {
+                
                 Auth::user()->AauthAcessToken()->delete();
             }
             $device = \App\Models\UserDevice::where('user_id', Auth::id())->get();
-//            dd($device);
+          
             if ($device->isEmpty() === false)
                 \App\Models\UserDevice::destroy($device->first()->id);
 
@@ -209,34 +213,21 @@ class AuthController extends ApiController {
     }
 
     public function Register(Request $request) {
-    // dd(public_path('vendor'));
+    
         // |unique:users,mobile_no
 
-        $rules = ['fname' => 'required', 'lname' => 'required', 'email' => 'required|email|unique:users', 'password' => 'required',  'mobile_no' => 'required', 'phonecode' => 'required', 'type' => 'required|in:1,2','gender' =>'required|in:1,2,3','profile_picture'=>'','fax' => '','paypal_id' => ''];
-        $rules = array_merge($this->requiredParams, $rules);
-
-        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
-        if($validateAttributes):
-            return $validateAttributes;
+        $input = $request->all();
+       
+    //    if (isset($request->profile_picture)):
+    //        $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
+    //    endif;
+        if($input['type'] === '1'):
+            $fullname = $input['fname'].' '.$input['lname'];
+            $input['name'] = $fullname;
+        else:
+            $input['name'] = 'New User';
         endif;
         
-        $input = $request->all();
-       if (isset($request->profile_picture)):
-           $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
-       endif;
-
-       if($input['type'] === '2'):
-
-            if($input['fax'] == ''):
-                return parent::error("The field fax is required.");
-            endif;
-            if($input['paypal_id'] == ''):
-                return parent::error("The field Paypal-Id is required.");
-            endif;
-
-       endif;
-           $fullname = $input['fname'].' '.$input['lname'];
-        $input['name'] = $fullname;
         $input['token'] = uniqid(md5(rand()));
         $input['password'] = bcrypt($input['password']);
         
@@ -250,8 +241,18 @@ class AuthController extends ApiController {
             //  ]);
         $input['status'] = '1';
         $user = User::create($input);
-    
-        // parent::sendOTPUser($user);
+                if($user->type === '1'):
+                    parent::sendOTPUser($user);
+                    $otp = 1111; //rand(1111, 9999);
+                    $email_data = [
+                        'name' => $user->name,
+                        'message' => 'your consign-it-away verification password is'.$otp,
+                    ];
+                //to()->send(new EmailVerificationMail($email_data));
+                    $user->email_otp = $otp;
+                    $user->save();
+                endif;
+        
    
         $success['token'] = $user->createToken('Consign-it-away')->accessToken;
         // dd($success['token']);
@@ -284,7 +285,11 @@ class AuthController extends ApiController {
         return parent::success($success, $this->successStatus);
     }
     
-    
+   
+
+
+
+
     public function resendOTP(Request $request){
         $rules = ['phonecode' => '', 'mobile_no' => ''];
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
@@ -319,7 +324,8 @@ class AuthController extends ApiController {
    
    
     public function VerifyOTP(Request $request){
-        $rules = ['otp' => 'required|numeric|digits:4'];
+     
+        $rules = ['otp' => 'required|numeric|digits:4','type'=> 'required|in:1,2'];
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
         if($validateAttributes):
             return $validateAttributes;
@@ -330,14 +336,25 @@ class AuthController extends ApiController {
                 $input = $request->all();
                 
                 $otp = $input['otp'];
-                $user = User::where('id', Auth::id())->where('otp', $otp)->first();
-            
+                $message='';
+            if($input['type'] === '2'):
+                $user = User::where('id', Auth::id())->where('mobile_otp', $otp)->first();
+                $message = "Mobile OTP didn't match";
+            elseif($input['type'] === '1'):
+                $user = User::where('id', Auth::id())->where('email_otp', $otp)->first();
+                $message = "Email OTP didn't match";
+            endif;
                 if(is_null($user) === true):
-                        return  parent::error(['message' => $otp.' OTP does not match']);
+                        return  parent::error(['message' => $message]);
                     endif;
                 
                     // $user = new User();
-                    $user->status = '2';
+                    if($input['type'] === '1'):
+                        $user->status = '2';
+                        elseif($input['type'] === '2'):
+                            $user->status = '3';
+                    endif;
+                    
                     $user->save();
                 
                 return parent::success(['message' => 'OTP verification successfuly!', 'user' => $user]);
