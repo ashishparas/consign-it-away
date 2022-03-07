@@ -10,7 +10,7 @@ use App\Models\User;
 
 use \App\Models\Role;
 use Carbon\Carbon;
-use Laravel\Passport\HasApiTokens;
+use Laravel\Sanctum\HasApiTokens;
 // use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -198,8 +198,9 @@ class AuthController extends ApiController {
         try {
 
             if (Auth::check()) {
-                
-                Auth::user()->AauthAcessToken()->delete();
+            //   dd(Auth::user());
+              $Auth =   Auth::user()->tokens()->delete();
+             
             }
             $device = \App\Models\UserDevice::where('user_id', Auth::id())->get();
           
@@ -254,7 +255,7 @@ class AuthController extends ApiController {
                 endif;
         
    
-        $success['token'] = $user->createToken('Consign-it-away')->accessToken;
+        $success['token'] = $user->createToken('Consign-it-away')->plainTextToken;
         // dd($success['token']);
         $userData  = User::select($this->LoginAttributes)->where('id', $user->id)->first();
         $success['user'] = $userData;

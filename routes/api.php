@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\VendorController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,9 +28,16 @@ Route::post('register',[AuthController::class,"Register"])->middleware('register
 Route::post('login',[AuthController::class, "Login"]);
 
 Route::group(['middleware' =>['auth:api']], function(){
-    Route::post('logout',[AuthController::class, "Logout"]);
-    Route::post('otp/verification',[AuthController::class,"VerifyOTP"]);
+    
 });
 
+
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::post('logout',[AuthController::class, "Logout"]);
+    Route::post('otp/verification',[AuthController::class,"VerifyOTP"]);
+    Route::post('create/profile',[VendorController::class, "CreateProfile"]);
+    Route::post('add/store',[VendorController::class,"AddStore"]);
+
+});
 
 

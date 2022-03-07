@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 // use Laravel\Sanctum\HasApiTokens;
-use Laravel\Passport\HasApiTokens;
-// use Laravel\Sanctum\HasApiTokens;
+// use Laravel\Passport\HasApiTokens;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
 class User extends Authenticatable
 {
@@ -33,6 +33,15 @@ class User extends Authenticatable
         'mobile_otp',
         'profile_picture',
         'status',
+        'fax',
+        'paypal_id',
+        'bank_ac_no',
+        'routing_no',
+        'street_address',
+        'city',
+        'state',
+        'country',
+        'zipcode',
         'apple_id',
         'facebook_id',
         'google_id',
