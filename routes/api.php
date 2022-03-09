@@ -37,6 +37,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('otp/verification',[AuthController::class,"VerifyOTP"]);
     Route::post('create/profile',[VendorController::class, "CreateProfile"]);
     Route::post('add/store',[VendorController::class,"AddStore"]);
+    Route::post('create/product',[VendorController::class, "Product"]);
 
 });
 

@@ -53,7 +53,7 @@ class VendorController extends ApiController
             $user->fill($input);
             $user->save();
             $user = $model->select($this->LoginAttributes)->where('id', Auth::id())->first();
-            return parent::success(['message' => 'Profile created successfully!','user' =>  $user]);
+            return parent::success('Profile created successfully!',['user' =>  $user]);
          }catch(\Exception $ex){
             return parent::error($ex->getMessage());
          }
@@ -107,10 +107,16 @@ class VendorController extends ApiController
                 'profile_picture' => $input['profile_picture']
             ];
             Manager::create($data);
-            return parent::success(['message' => 'Store added successfully!']);
+            return parent::success('Store added successfully!',[]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
     }
+
+
+    public function Product(Request $request){
+       
+    }
+
 
 }

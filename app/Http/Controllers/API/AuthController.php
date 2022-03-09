@@ -25,6 +25,7 @@ use GrahamCampbell\ResultType\Success;
 class AuthController extends ApiController {
 
     public $successStatus = 200;
+    public $successMessage = "successful!";
     private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','profile_picture','marital_status','type','status','token','created_at','updated_at'];
 //    public static $_mediaBasePath = 'uploads/users/';
     public function formatValidator($validator) {
@@ -72,7 +73,7 @@ class AuthController extends ApiController {
                
                 parent::addUserDeviceData($user, $request);
               
-                return parent::success(['message' => 'Login Successfully', 'token' => $token, 'user' => $user]);
+                return parent::success('Login Successfully!',['token' => $token, 'user' => $user]);
             else:
                 
                 return parent::error("User credentials doesn't matched");
@@ -126,7 +127,7 @@ class AuthController extends ApiController {
     			        return parent::error('This account already registered');
     			        endif;
     		        $token = $user->createToken('MyApp')->accessToken;
-    				return parent::success(['message'=> 'Login successfully-1','token' => $token, 'user' => $user]);
+    				return parent::success('Login successfully',['token' => $token, 'user' => $user]);
     			    
     			} else {
     
@@ -146,7 +147,7 @@ class AuthController extends ApiController {
                             $current_user_id = User::select('*')->where('email', $input['email'])->first();
                             User::where('id', $current_user_id->id)->update($field);
                             $token = $current_user_id->createToken('MyApp')->accessToken;
-                            return parent::success(['message' => 'login successfully-2', 'token' => $token,'user' => $current_user_id]);
+                            return parent::success('login successfully-2', ['token' => $token,'user' => $current_user_id]);
                         }
                         else {
                            
@@ -162,7 +163,7 @@ class AuthController extends ApiController {
     				        $token = $user->createToken('MyApp')->accessToken;
     				        
     				        parent::addUserDeviceData($user, $request);
-    				        return parent::success(['message' => 'login successfully-3', 'token' => $token,'user' => $user]);
+    				        return parent::success('login successfully',['token' => $token,'user' => $user]);
                         }
     				  
 
@@ -172,7 +173,7 @@ class AuthController extends ApiController {
                             $user = User::where('id', $userId)->first();
                             $token = $user->createToken('MyApp')->accessToken;
                             parent::addUserDeviceData($user, $request);
-                            return parent::success(['message' => 'login successfully','token' => $token, 'user' => $user]);
+                            return parent::success('login successfully', ['token' => $token, 'user' => $user]);
     				  
     				}
     				 
@@ -314,7 +315,7 @@ class AuthController extends ApiController {
                         parent::sendOTPUser($user);
                     endif;
                 $UserData = User::select($this->LoginAttributes)->where('id', Auth::id())->first();
-                return parent::success(['message' => 'OTP has been send successfully to your number!', 'user' => $UserData]);
+                return parent::success('OTP has been send successfully to your number!',['user' => $UserData]);
             
                 
             }catch(\Exception $ex){
@@ -358,7 +359,7 @@ class AuthController extends ApiController {
                     
                     $user->save();
                 
-                return parent::success(['message' => 'OTP verification successfuly!', 'user' => $user]);
+                return parent::success('OTP verification successfuly!', ['user' => $user]);
             }catch(\Exception $ex){
                 return parent::error($ex->getMessage());
             }
@@ -381,7 +382,7 @@ class AuthController extends ApiController {
                         // return  parent::error($input['otp'].' OTP does not match');
                     endif;
                 
-                return parent::success(['message' => 'Email verification successfully!']);
+                return parent::success('Email verification successfully!',[]);
             }catch(\Exception $ex){
                 return parent::error($ex->getMessage());
             }
@@ -400,7 +401,7 @@ class AuthController extends ApiController {
                 // dd($password);
                 $user = \App\Models\User::where('email', $input['email'])->update($data);
             
-                return parent::success(['message' => 'Your password has been successfully changed!']);
+                return parent::success('Your password has been successfully changed!', []);
             }catch(\Exception $ex){
                 return parent::error($ex->getMessage());
             }
@@ -518,7 +519,7 @@ class AuthController extends ApiController {
                 $model = \App\Models\User::find(Auth::id());
                 $model->password = Hash::make($request->password);
                 $model->save();
-                return parent::success(['message'=>'Password Changed Successfully']);
+                return parent::success('Password Changed Successfully',[]);
             else:
                 return parent::error('Please use valid old password');
             endif;
@@ -547,7 +548,7 @@ class AuthController extends ApiController {
                 'minutes' => trans('front/password.minutes'),
             ]);
         });
-        return parent::success('Email has been send');
+        return parent::success('Email has been send',[]);
 //        dd($request->only('email'));
         $response = Password::sendResetLink($request->only('email'), function (Message $message) {
                     $message->subject(trans('front/password.reset'));
@@ -587,7 +588,7 @@ class AuthController extends ApiController {
                 // $mail = Mail::to($input['email'])->send( new ForgotPassword($data));
                 \App\Models\User::where('email', $User->email)->update(['email_otp' => $OTP]);                
                
-                return parent::success(['message' => 'The email has been successfully']);
+                return parent::success('The email has been successfully',[]);
             
         } catch (\Exception $ex){
             return parent::error($ex->getMessage());
@@ -604,7 +605,7 @@ class AuthController extends ApiController {
         try {
 //            dd(\Auth::id());
             $model = \App\Models\User::whereId(Auth::id());
-            return parent::success($model->first());
+            return parent::success('',$model->first());
         } catch (\Exception $ex) {
             return parent::error($ex->getMessage());
         }
