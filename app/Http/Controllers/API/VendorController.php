@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
 use App\Models\Manager;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
@@ -114,9 +115,37 @@ class VendorController extends ApiController
     }
 
 
-    public function Product(Request $request){
-       
-    }
+   public function Product(Request $request){
+        $rules = ['name'=> 'required','image'=>'required','category_id' =>'required',
+                'description' => 'required', 'price' => 'required', 'discount' => '',
+                'brand' => 'required', 'color' =>'required', 'quantity' => 'required',
+                'weight' =>'required', 'condition'=>'required', 'dimensions' =>'required',
+                'available_for_sale' => 'required|in:1,2','constomer_contact'=> 'required|in:1,2',
+                'inventory_track' => 'required|in:1,2','product_offer' => '','ships_from'=>'required', 'shipping_type' => 'required', 'meta_description' => '',
+                'meta_tags' => '', 'meta_keywords' => '', 'title' => 'required', 'variants' => '',
+                'state'=> '','tags' =>'','advertisement' =>'', 'selling_fee' =>'required', 
+                'amount' => 'required'
+    ];
+  
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+
+        try{
+            $input = $request->all();
+            $input['user_id'] = Auth::id();
+
+            if (isset($request->image)):
+                $input['image'] = parent::__uploadImage($request->file('image'), public_path('products'), false);
+            endif;
+
+            $product = Product::create($input);
+            return parent::success("Product created successfully!",[]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
 
 
 }
