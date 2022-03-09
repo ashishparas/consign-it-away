@@ -68,7 +68,7 @@ class AuthController extends ApiController {
                 $user = \App\Models\User::select($this->LoginAttributes)->find(Auth::user()->id);
                 $user->save();
       
-                $token = $user->createToken('consign-it-away')->accessToken;  
+                $token = $user->createToken('consign-it-away')->plainTextToken;  
                
                 parent::addUserDeviceData($user, $request);
               
@@ -584,7 +584,7 @@ class AuthController extends ApiController {
                 $data['title'] = 'Hi @'.$User->fname.' '.$User->lname.'!';
                 $data['message'] = 'Your Wamglamz verification code is '.$OTP.' This help us secure your wamglamz account by verifying your OTP. This let you to access your wamglamz account.';
                 // dd($data);
-                $mail = Mail::to($input['email'])->send( new ForgotPassword($data));
+                // $mail = Mail::to($input['email'])->send( new ForgotPassword($data));
                 \App\Models\User::where('email', $User->email)->update(['email_otp' => $OTP]);                
                
                 return parent::success(['message' => 'The email has been successfully']);
