@@ -293,6 +293,7 @@ class AuthController extends ApiController {
 
 
     public function resendOTP(Request $request){
+       
         $rules = ['phonecode' => '', 'mobile_no' => ''];
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
         
@@ -302,6 +303,7 @@ class AuthController extends ApiController {
             
             try{
                 $input = $request->all();
+              
                 $user = User::findOrFail(Auth::id());
                
                 if(!empty($user->mobile_no)):
@@ -568,7 +570,7 @@ class AuthController extends ApiController {
     
     
     
-    public function ForgotPassword(Request $request){
+    public function ResendEmailOTP(Request $request){
         $rules = ['email' => 'required|exists:users,email'];
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules,  array_keys($rules), true);
         if($validateAttributes):
@@ -580,12 +582,12 @@ class AuthController extends ApiController {
                 $input = $request->all();
                 $User = \App\Models\User::select('fname','lname', 'email')->where('email', $input['email'])->first();
                
-                $OTP = rand(1000,9999);
+                $OTP = 1111; //rand(1000,9999);
                 $data = [];
                 $data['title'] = 'Hi @'.$User->fname.' '.$User->lname.'!';
-                $data['message'] = 'Your Wamglamz verification code is '.$OTP.' This help us secure your wamglamz account by verifying your OTP. This let you to access your wamglamz account.';
-                // dd($data);
-                // $mail = Mail::to($input['email'])->send( new ForgotPassword($data));
+                $data['message'] = 'Your consign-it-away verification code is '.$OTP.' This help us secure your wamglamz account by verifying your OTP. This let you to access your consign-it-away account.';
+               
+                // $mail = Mail::to($input['email'])->send( new EmailVerificationMail($data));
                 \App\Models\User::where('email', $User->email)->update(['email_otp' => $OTP]);                
                
                 return parent::success('The email has been successfully',[]);
