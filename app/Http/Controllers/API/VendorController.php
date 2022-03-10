@@ -141,7 +141,7 @@ class VendorController extends ApiController
             endif;
 
             $product = Product::create($input);
-            return parent::success("Product created successfully!",[]);
+            return parent::success("Product created successfully!",['product' => $product]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }

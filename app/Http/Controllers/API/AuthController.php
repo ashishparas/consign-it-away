@@ -284,7 +284,7 @@ class AuthController extends ApiController {
         //     return parent::error('Please contact admin to activate your account', 200);
         // }
        
-        return parent::success($success, $this->successStatus);
+        return parent::success('Register successfully',$success, $this->successStatus);
     }
     
    
