@@ -208,7 +208,7 @@ class AuthController extends ApiController {
             if ($device->isEmpty() === false)
                 \App\Models\UserDevice::destroy($device->first()->id);
 
-            return parent::successCreated('Logout Successfully');
+            return parent::success('Logout Successfully',[]);
         } catch (\Exception $ex) {
             return parent::error($ex->getMessage());
         }
