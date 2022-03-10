@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
+use App\Models\Category;
 use App\Models\Manager;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -147,5 +148,17 @@ class VendorController extends ApiController
         }
    }
 
+
+
+   public function getCategories(Request $request){
+
+    try{
+        $category = Category::get();
+        return parent::success("Category view successfully",['category' => $category]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+
+   }
 
 }
