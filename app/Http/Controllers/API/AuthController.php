@@ -25,7 +25,6 @@ use GrahamCampbell\ResultType\Success;
 class AuthController extends ApiController {
 
     public $successStatus = 200;
-    public $successMessage = "successful!";
     private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','profile_picture','marital_status','type','status','token','created_at','updated_at'];
 //    public static $_mediaBasePath = 'uploads/users/';
     public function formatValidator($validator) {

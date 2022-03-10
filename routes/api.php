@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\API\VendorController;
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('get/categories',[VendorController::class, "getCategories"]);
     Route::post('resend/otp',[AuthController::class, "resendOTP"]); 
     Route::post('resend/email/otp',[AuthController::class, "ResendEmailOTP"]);
+    Route::post('client/view/profile',[ClientController::class, "ClientViewProfile"]);
+    Route::post('client/edit/profile',[ClientController::class, "UpdateClientProfile"]);
+    Route::post('change/password',[AuthController::class, "changePassword"]);
+    Route::post('view/store',[VendorController::class, "ViewStore"]);
+    Route::post('add/bank',[VendorController::class, "AddBank"]);
 });
 
 

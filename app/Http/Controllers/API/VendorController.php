@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
+use App\Models\Bank;
 use App\Models\Category;
 use App\Models\Manager;
 use App\Models\Product;
@@ -155,6 +156,41 @@ class VendorController extends ApiController
     try{
         $category = Category::get();
         return parent::success("Category view successfully",['category' => $category]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+
+   }
+
+   public function ViewStore(Request $request){
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $store = Store::where('user_id',Auth::id())->get();
+        return parent::success("View all stores successfully", ['stores' => $store ]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
+
+   public function AddBank(Request $request){
+    $rules = ['bank_ac_no' =>'required', 'routing_no' =>'required'];
+
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+
+        $input = $request->all();
+        $input['user_id'] = Auth::id();
+        $bank = Bank::create($input);
+
+        return parent::success("Bank added successfully!",['bank' => $bank]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
