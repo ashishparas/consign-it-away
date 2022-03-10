@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-// use Twilio\Rest\Client;
+use Twilio\Rest\Client;
 use App\Models\UserDevice;
 //fcm
 use LaravelFCM\Message\OptionsBuilder;
@@ -192,7 +192,7 @@ class ApiController extends \App\Http\Controllers\Controller {
         $user->save();
     $phonecode =     str_replace('+','', trim($user->phonecode));
     $phonecode = '+'.$phonecode;
-        // return self::sendTextMessage('<#> Your ' . config('app.name') . ' OTP is ' . $otp.' Use this to verify your mobile '. config('app.name') ,$user->phonecode,$user->mobile_no);
+        // return self::sendTextMessage('<#> Your ' . config('app.name') . ' OTP is ' . $otp.' Use this to verify your mobile '. config('app.name') ,$phonecode,$user->mobile_no);
     }
 
     protected static function sendOTP($number) {
@@ -205,7 +205,7 @@ class ApiController extends \App\Http\Controllers\Controller {
         try {
             $sid = env('TWILIO_SID');
             $token = env('TWILIO_TOKEN');
-            // dd($sid);
+         
             $twilio = new Client($sid, $token);
         // dd($phonecode.$to);
             //$return = $twilio->messages->create("" . $to, ["body" => $message, "from" => env('TWILIO_FROM')]);
@@ -217,7 +217,7 @@ class ApiController extends \App\Http\Controllers\Controller {
             // dd($return);
             // return $return;
         } catch (\Twilio\Exceptions\TwilioException $ex) {
-            
+            // return parent::error($ex->getMessage());
             return true;
         }
     }
