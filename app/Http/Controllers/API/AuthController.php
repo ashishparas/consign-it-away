@@ -348,7 +348,7 @@ class AuthController extends ApiController {
                 $message = "Email OTP didn't match";
             endif;
                 if(is_null($user) === true):
-                        return  parent::error(['message' => $message]);
+                        return  parent::error($message);
                     endif;
                 
                     // $user = new User();
