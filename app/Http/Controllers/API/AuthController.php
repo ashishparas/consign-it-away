@@ -15,6 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
+use Stripe;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
@@ -231,15 +232,19 @@ class AuthController extends ApiController {
         
         $input['token'] = uniqid(md5(rand()));
         $input['password'] = bcrypt($input['password']);
+        if($input['type'] === '1'):
+            
+            //Stripe Create user;
         
-        // Stripe Create user;
+            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+            $customer = $stripe->customers->create([
+            'description' => 'Create stripe Customer for client',
+            'email' => $input['email'],
+            'name'  => $fullname,
+        ]);
+            $input['cus_id'] = $customer->id;
+        endif;
         
-            // $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
-            // $customer = $stripe->customers->create([
-            // 'description' => 'My First Test Customer (created for API docs)',
-            // 'email' => $input['email'],
-            // 'name'  => $fullname,
-            //  ]);
         $input['status'] = '1';
         $user = User::create($input);
                 if($user->type === '1'):

@@ -46,7 +46,8 @@ class User extends Authenticatable
         'facebook_id',
         'google_id',
         'amazon_id',
-        'token'
+        'token',
+        'cus_id'
     ];
 
     /**
