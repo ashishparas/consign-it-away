@@ -47,6 +47,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('change/password',[AuthController::class, "changePassword"]);
     Route::post('view/store',[VendorController::class, "ViewStore"]);
     Route::post('add/bank',[VendorController::class, "AddBank"]);
+    Route::post('create/address',[ClientController::class, "Address"]);  
+    Route::post('edit/address',[ClientController::class, "EditAddress"]);
+    Route::post('view/addresses',[ClientController::class, "ViewAddress"]);
+    Route::post('contact',[ClientController::class,'Contact']);
 });
 
 

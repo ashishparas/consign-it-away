@@ -15,11 +15,14 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
+use Stripe;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
 use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
+use App\Models\Address;
+use App\Models\Contact;
 use GrahamCampbell\ResultType\Success;
 
 class ClientController extends ApiController
@@ -62,5 +65,87 @@ class ClientController extends ApiController
             return parent::error($ex->getMessage());
         }
     }
+
+    public function Address(Request $request){
+        $rules = ['type'=>'required|in:1,2','address' =>'required','city' =>'required','state' =>'required','zipcode' => 'required','country' =>'required'];
+
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules),true);
+
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+
+        try{
+            $input = $request->all();
+            $input['user_id'] = Auth::id();
+            $address = Address::create($input);
+            return parent::success("Address added successfully!",['address' => $address]);
+        }catch(\exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+    public function EditAddress(Request $request){
+        $rules = ['address_id' =>'required|exists:addresses,id','type'=>'required|in:1,2','address' =>'required','city' =>'required','state' =>'required','zipcode' => 'required','country' =>'required'];
+
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules),true);
+
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+
+        try{
+            $input = $request->all();
+            $input['user_id'] = Auth::id();
+            $address = Address::FindOrfail($input['address_id']);
+            // dd($address);
+            $address->fill($input);
+            $address->save();
+            // $updated = $address->first();
+            return parent::success("Address edited successfully!",['address' => $address]);
+        }catch(\exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+    public function ViewAddress(Request $request){
+        $rules= [];
+        $validateAttributes= parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+
+        try{
+            $addresses = Address::get();
+            return parent::success('View addresses successfully!',['addresses' => $addresses]);         
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+
+    public function Contact(Request $request){
+        $rules= ['image'=>'', 'name'=>'required','email' =>'required','phonecode'=>'required','mobile_no' =>'required','order_no' =>'required','comment' =>''];
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+
+        try{
+            $input = $request->all();
+            $input['user_id'] =  Auth::id();
+
+            if (isset($request->image)):
+                       $input['image'] = parent::__uploadImage($request->file('image'), public_path('vendor'), false);
+                   endif;
+
+            $contact = Contact::create($input);
+            return parent::success("Your query successfully! submitted!",['contact' => $contact]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+
+        }
+    }
+
 
 }

@@ -45,7 +45,7 @@ class CreateUsersTable extends Migration
             $table->string('amazon_id')->nullable();
             $table->string('apple_id')->nullable();
             $table->text('token')->nullable();
-
+            $table->string('cus_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
