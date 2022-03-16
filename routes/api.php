@@ -27,7 +27,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('register',[AuthController::class,"Register"])->middleware('registerUser');
 Route::post('login',[AuthController::class, "Login"]);
-
+Route::post('social/login',[AuthController::class, "SocialLogin"]);
+Route::post('forget/password',[AuthController::class, "ResetPassword"]);
 Route::group(['middleware' =>['auth:api']], function(){
     
 });
@@ -51,6 +52,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('edit/address',[ClientController::class, "EditAddress"]);
     Route::post('view/addresses',[ClientController::class, "ViewAddress"]);
     Route::post('contact',[ClientController::class,'Contact']);
+    
 });
 
 

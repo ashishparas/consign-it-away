@@ -84,9 +84,9 @@ class AuthController extends ApiController {
     }
     
     
-    public function Social_login(Request $request){
-        
-        $rules = ['email'=> '','social_id' =>'required', 'name'=> '', 'type'=> 'required'];
+    public function SocialLogin(Request $request){
+        // dd('Social Login');
+        $rules = ['email'=> '','social_id' =>'required', 'name'=> '', 'type'=> 'required|in:1,2'];
         $rules = array_merge($this->requiredParams, $rules);
       
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
@@ -102,11 +102,13 @@ class AuthController extends ApiController {
                 $field = array();
                 $facebook_id = ''; 
                 $google_id = '';
+                $apple_id ='';
+                $amazon_id = '';
                 
                 $social_source  =  strtolower($input['social_type']); 
                 $social_id      =  $input['social_id'];  
                 
-                if( $social_source == 'facebook' || $social_source == 'google' ) {
+                if( $social_source == 'facebook' || $social_source == 'google' || $social_source == 'apple' || $social_source == 'amazon' ) {
                 
                     $field[ $social_source.'_id' ] = $social_id;
                 
@@ -120,13 +122,14 @@ class AuthController extends ApiController {
     		
     			    $user = User::where('id', $current_user_id->id)->first();
     			    if(!empty($user->status == '1')):
-    			            parent::sendOTPUser($user);    
+    			         //   parent::sendOTPUser($user);    
     			        endif;
     			    
     			    if($user->type !== $input['type']):
-    			        return parent::error('This account already registered');
+    			        $typ = ($user->type === '1')? 'client':'vendor';
+    			        return parent::error('This account already registered with '.$typ);
     			        endif;
-    		        $token = $user->createToken('MyApp')->accessToken;
+    		        $token = $user->createToken('consign-it-away')->plainTextToken;
     				return parent::success('Login successfully',['token' => $token, 'user' => $user]);
     			    
     			} else {
@@ -146,8 +149,9 @@ class AuthController extends ApiController {
                              
                             $current_user_id = User::select('*')->where('email', $input['email'])->first();
                             User::where('id', $current_user_id->id)->update($field);
-                            $token = $current_user_id->createToken('MyApp')->accessToken;
-                            return parent::success('login successfully-2', ['token' => $token,'user' => $current_user_id]);
+                            $userdata = User::select('*')->where('email', $input['email'])->first();
+                            $token = $current_user_id->createToken('consign-it-away')->plainTextToken;
+                            return parent::success('login successfully-2', ['token' => $token,'user' => $userdata]);
                         }
                         else {
                            
@@ -160,7 +164,7 @@ class AuthController extends ApiController {
     				        
     				        $user = User::where('id', $current_user_id)->first();
     				        
-    				        $token = $user->createToken('MyApp')->accessToken;
+    				        $token = $user->createToken('consign-it-away')->plainTextToken;
     				        
     				        parent::addUserDeviceData($user, $request);
     				        return parent::success('login successfully',['token' => $token,'user' => $user]);
@@ -169,11 +173,11 @@ class AuthController extends ApiController {
 
     				} else {
     			        
-                            $userId  = User::create($field)->id;
-                            $user = User::where('id', $userId)->first();
-                            $token = $user->createToken('MyApp')->accessToken;
-                            parent::addUserDeviceData($user, $request);
-                            return parent::success('login successfully', ['token' => $token, 'user' => $user]);
+                            // $userId  = User::create($field)->id;
+                            // $user = User::where('id', $userId)->first();
+                            // $token = $user->createToken('consign-it-away')->plainTextToken;
+                            // parent::addUserDeviceData($user, $request);
+                            return parent::error("Email field is required");
     				  
     				}
     				 
@@ -413,100 +417,9 @@ class AuthController extends ApiController {
             }
     }
     
-    public  function CustomerCreateProfile(Request  $request){
-        
-      $rules = ['zipcode' => '', 'dob' => 'required', 'gender' => 'required', 'description'=>'', 'profile_picture'=> 'required','fname'=> 'required','lname'=>'required'];
-      
-      $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
-      if($validateAttributes):
-          return $validateAttributes;
-          endif;
-
-      try{
-          
-            $input = $request->all();
-            $model = new User();
-            $user = $model->select($this->LoginAttributes)->find(Auth::id());
-          if($user != ''):
-              
-            if(!empty($request->file('profile_picture'))):
-                $file = $request->file('profile_picture');
-                $profile_picture =  self::imageUpload($file, 'uploads/client');
-                $user['profile_picture'] = $profile_picture;
-            endif;  
-              
-            $user['zipcode'] = ($input['zipcode'])? $input['zipcode']:'';
-            $user['dob'] = $input['dob'];
-            $user['gender'] = $input['gender'];
-            $user['description'] = $input['description'];
-            $user['fname'] = $input['fname'];
-            $user['lname'] = $input['lname'];
-            $user['status'] = '3';
-            $user->save();
-//            return parent::success(['message'=>'Profile created successfully', 'data'=> $user]);
-            return parent::successCreated(['message' => 'Profile Created Successfully',  'user' => $user]);
-        else:
-                return parent::error('Invalid Auth Token');
-          endif;
-            
-          
-          
-      }catch (\Exception $ex){
-          return parent::error($ex->getMessage());
-      }
-      
-    }
-    
-    
-    
-    public  function ArtistCreateProfile(Request  $request){
-      $rules = ['zipcode' => '', 'experience' => 'required','license_no' => 'required','upload_id'=>'required','profile_picture'=> 'required','fname' =>'required','lname'=>'required'];
-      $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
-      if($validateAttributes):
-          return $validateAttributes;
-          endif;
- 
-      try{
-          
-            $input = $request->all();
-            $model = new User();
-            $user = $model->select($this->LoginAttributes)->find(Auth::id());
-          if($user != ''):
-              
-            if(!empty($request->file('profile_picture'))):
-                $file = $request->file('profile_picture');
-                $profile_picture =  self::imageUpload($file , 'uploads/artist');
-                $user['profile_picture'] = $profile_picture;
-            endif;
-            
-            if(!empty($request->file('upload_id'))):
-                
-                $file = $request->file('upload_id');
-                $upload_id =  self::imageUpload($file , 'uploads/artist');
-                $user['upload_id'] = $upload_id;
-            endif;  
-              
-                $user['zipcode'] = ($input['zipcode'])?$input['zipcode']:'';
-                $user['experience'] = $input['experience'];
-                $user['license_no'] = $input['license_no'];
-                $user['fname'] = $input['fname'];
-                $user['lname'] = $input['lname'];
-           
-                $user['status'] = '3';
-                $user->save();
-//            return parent::success(['message'=>'Profile created successfully', 'data'=> $user]);
-                return parent::successCreated(['message' => 'Profile Created Successfully',  'user' => $user]);
-            else:
-                return parent::error('Invalid Auth Token');
-            endif;
-            
-      } catch (\Exception $ex){
-          return parent::error($ex->getMessage());
-      }
-      
-    }
-
    
+    
+    
 
 
     public function changePassword(Request $request) {
@@ -538,7 +451,7 @@ class AuthController extends ApiController {
    
 
 
-    public function resetPassword(Request $request, Factory $view) {
+    public function ResetPassword(Request $request, Factory $view) {
         //Validating attributes
         $rules = ['email' => 'required'];
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
