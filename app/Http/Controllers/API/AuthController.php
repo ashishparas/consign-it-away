@@ -23,6 +23,8 @@ use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
 use GrahamCampbell\ResultType\Success;
 
+use function PHPUnit\Framework\isEmpty;
+
 class AuthController extends ApiController {
 
     public $successStatus = 200;
@@ -84,7 +86,7 @@ class AuthController extends ApiController {
     }
     
     
-    public function SocialLogin(Request $request){
+    public function SocialLogin_2(Request $request){
         // dd('Social Login');
         $rules = ['email'=> '','social_id' =>'required', 'name'=> '', 'type'=> 'required|in:1,2','mobile_no' => ''];
         $rules = array_merge($this->requiredParams, $rules);
@@ -182,7 +184,7 @@ class AuthController extends ApiController {
                             // parent::addUserDeviceData($user, $request);
                             return parent::error("Email field is required");
     				  
-    				}
+    			}
     				 
     			}
                 
@@ -193,6 +195,42 @@ class AuthController extends ApiController {
         
     }
 
+
+
+
+    public function SocialLogin(Request $request){
+      
+        $rules = ['social_type' =>'required', 'social_id'=>'required'];
+        $rules = array_merge($this->requiredParams, $rules);
+           // dd($rules);
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            $field = [];
+            $social_type = strtolower($input['social_type']);
+            $social_id = $input['social_id'];
+
+        if( $social_type == 'facebook' || $social_type == 'google' || $social_type == 'apple' || $social_type == 'amazon' ) {
+                
+                $field[ $social_type.'_id' ] = $social_id;
+            
+            }
+            
+        $check_user = User::select($this->LoginAttributes)->where($field)->first();
+        // dd(isEmpty($check_user));   
+        if($check_user):
+            return parent::success("User already exists.",['user'=> $check_user],422);
+        else:
+            return parent::success('This user not exists.',['status' =>'not_exist']);
+        endif;
+        
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
     
     
 
