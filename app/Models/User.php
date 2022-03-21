@@ -47,7 +47,8 @@ class User extends Authenticatable
         'google_id',
         'amazon_id',
         'token',
-        'cus_id'
+        'cus_id',
+        'mobile_no_found'
     ];
 
     /**

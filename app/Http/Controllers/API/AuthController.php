@@ -26,7 +26,7 @@ use GrahamCampbell\ResultType\Success;
 class AuthController extends ApiController {
 
     public $successStatus = 200;
-    private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','profile_picture','marital_status','type','status','token','created_at','updated_at'];
+    private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','mobile_no_found','profile_picture','marital_status','type','status','token','created_at','updated_at'];
 //    public static $_mediaBasePath = 'uploads/users/';
     public function formatValidator($validator) {
         $messages = $validator->getMessageBag();
@@ -86,7 +86,7 @@ class AuthController extends ApiController {
     
     public function SocialLogin(Request $request){
         // dd('Social Login');
-        $rules = ['email'=> '','social_id' =>'required', 'name'=> '', 'type'=> 'required|in:1,2'];
+        $rules = ['email'=> '','social_id' =>'required', 'name'=> '', 'type'=> 'required|in:1,2','mobile_no' => ''];
         $rules = array_merge($this->requiredParams, $rules);
       
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
@@ -159,6 +159,9 @@ class AuthController extends ApiController {
                             $field['name']   = $input['name'];
                             $field['type']   = $input['type'];
                             $field['status']  = '1';
+                            if(!empty($input['mobile_no'])):
+                                $field['mobile_no_found']  = '1';
+                            endif;
                             
     				        $current_user_id = User::create($field)->id;
     				        

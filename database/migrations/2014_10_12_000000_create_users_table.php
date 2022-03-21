@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->enum('marital_status',[1,2,3])->default(1)->comment('1->Mr,2->Mrs,3->Miss');
             $table->string('phonecode')->nullable();
             $table->string('mobile_no')->nullable();
+            $table->enum('mobile_no_found',[0,1])->default(0)->comment('0->Not found, 1->Found');
             $table->string('profile_picture')->nullable();
             $table->string('email_otp')->nullable();
             $table->string('mobile_otp')->nullable();
