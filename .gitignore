@@ -2,6 +2,7 @@
 /public/hot
 /public/vendor
 /public/products
+/public/rating
 /public/storage
 /storage/*.key
 /vendor

@@ -16,6 +16,8 @@ class Product extends Model
     protected $primaryKey = "id";
 
 
+    protected $appends = ['base_url'];
+
     protected $fillable = [
         'user_id',
         'category_id',
@@ -47,4 +49,37 @@ class Product extends Model
         'selling_fee',
         'amount'
     ];
+
+
+
+
+    public function getBaseUrlAttribute(){
+        return public_path('/products');
+    }
+
+    public function Rating(){
+        return $this->hasOne(Rating::class);
+    }
+// showing in favourite section
+    // public function ProductRating(){
+    //     return $this->hasOne(Rating::class)->avg('rating');
+    // }
+   
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+

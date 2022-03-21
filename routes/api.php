@@ -52,6 +52,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('edit/address',[ClientController::class, "EditAddress"]);
     Route::post('view/addresses',[ClientController::class, "ViewAddress"]);
     Route::post('contact',[ClientController::class,'Contact']);
+    Route::post('home',[ClientController::class,"Home"]);
+    Route::post('rating',[ClientController::class, "Rating"]);
+    Route::post('favourite',[ClientController::class,"Favourite"]);
+    Route::post('product/by/id',[ClientController::class,"ProductById"]);
+    Route::post('favourite/list',[ClientController::class,"FavouriteList"]);
+    Route::post('delete/favourite',[ClientController::class,"DeleteFavourite"]);
     
 });
 

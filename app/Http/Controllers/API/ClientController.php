@@ -23,6 +23,9 @@ use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
 use App\Models\Address;
 use App\Models\Contact;
+use App\Models\Favourite;
+use App\Models\Product;
+use App\Models\Rating;
 use GrahamCampbell\ResultType\Success;
 
 class ClientController extends ApiController
@@ -146,6 +149,158 @@ class ClientController extends ApiController
 
         }
     }
+
+    public function Home(Request $request){
+        $rules = [];
+        $validateAttributes=parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+
+        try{
+            $products = Product::select('id','name','image','amount')->get();
+
+            foreach($products as $key => $product):
+                $products[$key]['rating']  = number_format($product->Rating()->avg('rating'),1);
+                $products[$key]['comment'] = $product->Rating()->count('comment');
+            endforeach;
+            
+            return parent::success("Product view successfully",['products' => $products]);
+        }catch(\exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+
+    public function ProductById(Request $request){
+        $rules = ['product_id'=> 'required|exists:products,id'];
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            $product = Product::FindOrfail($input['product_id']);
+            $product['rating'] = number_format($product->Rating()->avg('rating'),1);
+            $product['comment'] = $product->Rating()->select('id','product_id','from','rating','comment')->get();
+            foreach($product['comment'] as $key => $commentUser):
+               
+                $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
+            endforeach;
+            return parent::success("Product view successfully!",['product' => $product]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+
+
+    public function Rating(Request $request){
+        $rules = ['product_id'=> 'required|exists:products,id', 'rating'=>'required','upload'=>'','review'=>''];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            $input['from'] = Auth::id();
+            $input['to'] = $input['product_id'];
+
+            if (isset($request->upload)):
+                $input['upload'] = parent::__uploadImage($request->file('upload'), public_path('rating'), false);
+            else:
+                $input['upload']= "";
+            endif;
+
+            $Rating = Rating::create($input);
+            return parent::success("Product ratings successfully!",['rating'=> $Rating]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+    public function Favourite(Request $request){
+        $rules = ['product_id' => 'required|exists:products,id','status'=>'required|in:1,2'];
+
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            $input['by'] = Auth::id();
+            $input['to'] = $input['product_id'];
+            $favourite = Favourite::create($input);
+            return parent::success("Product favourite successfully!",['favourite' => $favourite]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+
+    }
+
+
+    public function FavouriteList(Request $request){
+        $rules = [];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $favourites = Favourite::where('by', Auth::id())->where('status','1')->with('Product')->get();
+            foreach($favourites as $key => $favourite):
+                $rating = Rating::where('product_id', $favourite->product->id)->avg('rating');
+                $comment = Rating::where('product_id', $favourite->product->id)->count('comment');
+                $favourites[$key]['product']['rating'] = number_format($rating,1);
+                $favourites[$key]['product']['comment'] = $comment;
+            endforeach;
+            return parent::success("View favourite list successfully",['favourite' => $favourites]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+
+    public function DeleteFavourite(Request $request){
+       
+        $rules = ['favourite_id' => 'required|exists:favourites,id'];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+
+        endif;
+        try{
+            $input = $request->all();
+            Favourite::find($input['favourite_id'])->delete();
+            return parent::success("Favourite delete successfully!",[]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
