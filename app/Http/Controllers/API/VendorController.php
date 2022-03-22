@@ -23,6 +23,7 @@ use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
 use PhpParser\Node\Stmt\Return_;
 use GrahamCampbell\ResultType\Success;
+use Symfony\Component\Console\Input\Input;
 
 class VendorController extends ApiController
 {
@@ -108,7 +109,7 @@ class VendorController extends ApiController
 
 
     public function Staff(Request $request){
-        $rules = ['store_id' => 'required|exists:stores,id','profile_picture' => '','name'=>'required','email'=>'required','phonecode' =>'required', 'mobile_no' => 'required'];
+        $rules = ['store_id' => 'required|exists:stores,id','profile_picture' => '','name'=>'required','email'=>'required','phonecode' =>'required', 'mobile_no' => 'required','status' =>'required|in:1,2'];
         $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
         if($validateAttributes):
             return $validateAttributes;
@@ -153,6 +154,29 @@ class VendorController extends ApiController
             $input = $request->all();
             Manager::find($input['staff_id'])->delete();
             return parent::success("staff Delete successfully!",[]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+
+    public function EditStaff(Request $request){
+        $rules = ['staff_id' => 'required|exists:managers,id','profile_picture' => '','name'=>'required','email'=>'required','phonecode' =>'required', 'mobile_no' => 'required','status'=>'required|in:1,2'];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+
+            if (isset($request->profile_picture)):
+                $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
+            endif;
+            
+            $staff = Manager::FindOrfail($input['staff_id']);
+            $staff->fill($input);
+            $staff->save();
+            return parent::success("Staff added successfully!",['staff' => $staff]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
