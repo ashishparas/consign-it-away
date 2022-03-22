@@ -99,8 +99,9 @@ class VendorController extends ApiController
             $model = new Store();
             $input['user_id'] = Auth::id();
             $model = $model->fill($input);
-            $model->save();
-            return parent::success("Store added successfully!",[]);
+            $store = $model->save();
+            User::FindOrfail(Auth::id())->update(['status' => '3']);
+            return parent::success("Store added successfully!",['store' => $model]);
             // return parent::success('Store added successfully!',[]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
@@ -122,6 +123,7 @@ class VendorController extends ApiController
             endif;
             $input['user_id']= Auth::id();
             $staff = Manager::create($input);
+            User::FindOrfail(Auth::id())->update(['status' => '4']);
             return parent::success("Staff added successfully!",['staff' => $staff]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
@@ -216,6 +218,26 @@ class VendorController extends ApiController
         }
    }
 
+
+
+   public function ViewProduct(Request $request)
+   {
+       $rules = ['limit' => ''];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+            $limit = $input['limit'];
+            $products = Product::Paginate($limit);
+            // $collection = $products->getCollection();
+          
+        return parent::success("View all products successfully!", ['products' => $products]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
 
 
    public function getCategories(Request $request){
