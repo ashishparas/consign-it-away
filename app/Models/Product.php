@@ -60,10 +60,9 @@ class Product extends Model
     public function Rating(){
         return $this->hasOne(Rating::class);
     }
-// showing in favourite section
-    // public function ProductRating(){
-    //     return $this->hasOne(Rating::class)->avg('rating');
-    // }
+    public function Category(){
+        return $this->belongsTo(Category::class)->select('id','title');
+    }
    
 
     

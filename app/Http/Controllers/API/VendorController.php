@@ -230,7 +230,11 @@ class VendorController extends ApiController
        try{
            $input = $request->all();
             $limit = $input['limit'];
-            $products = Product::Paginate($limit);
+            $products = Product::select('id','image','amount','category_id')->with(['Category'])->Paginate($limit);
+            foreach($products as $key => $product):
+                $products[$key]['rating'] = number_format($product->Rating()->avg('rating'),1);
+                $products[$key]['comment'] = $product->Rating()->count('comment');
+            endforeach;
             // $collection = $products->getCollection();
           
         return parent::success("View all products successfully!", ['products' => $products]);
@@ -238,6 +242,27 @@ class VendorController extends ApiController
         return parent::error($ex->getMessage());
        }
    }
+
+
+
+   public function DeleteProduct(Request $request)
+   {
+       $rules = ['product_id' => 'required|exists:products,id'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input =$request->all();
+           $product = Product::find($input['product_id']);
+           $product->delete();
+        return parent::success("Product deleted successfully!",[]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
+
 
 
    public function getCategories(Request $request){

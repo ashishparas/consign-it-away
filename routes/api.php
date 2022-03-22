@@ -63,6 +63,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('delete/staff',[VendorController::class,"DeleteStaff"]);
     Route::post('edit/staff',[VendorController::class, "EditStaff"]);
     Route::post('view/product',[VendorController::class, "ViewProduct"]);
+    Route::post('delete/product',[VendorController::class, "DeleteProduct"]);
     
 });
 
