@@ -58,6 +58,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('product/by/id',[ClientController::class,"ProductById"]);
     Route::post('favourite/list',[ClientController::class,"FavouriteList"]);
     Route::post('delete/favourite',[ClientController::class,"DeleteFavourite"]);
+    Route::post('add/staff',[VendorController::class, "Staff"]);
+    Route::post('view/staff',[VendorController::class, "ViewStaff"]);
+    Route::post('delete/staff',[VendorController::class,"DeleteStaff"]);
     
 });
 

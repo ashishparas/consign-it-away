@@ -14,5 +14,17 @@ class Manager extends Model
 
     protected $primaryKey = "id";
 
-    protected $fillable = ['store_id','profile_picture','name','email','phonecode','mobile_no'];
+    protected $appends = ['base_url'];
+
+    protected $fillable = ['store_id','user_id','profile_picture','name','email','phonecode','mobile_no'];
+
+
+    public function getBaseUrlAttribute(){
+        return public_path('vendor');
+    }
+
+
+
+
+
 }

@@ -64,17 +64,21 @@ class VendorController extends ApiController
 
 
     public function AddStore(Request $request){
-        $rules = ['banner'=>'required','image' => 'required','name'=>'required','location'=>'required','description'=>'required','store_images'=> 'required','manager_profile_picture' =>'required','manager_name'=>'required','manager_email'=>'required','manager_phonecode'=>'required','mamanger_mobile_no'=>'required'];
-        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),false);
+        $rules = ['banner'=>'required','image' => 'required','name'=>'required','location'=>'required','description'=>'required','store_images'=> 'required'];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+        
         if($validateAttributes):
             return $validateAttributes;
         endif;
+
         try{
+
             $input = $request->all();
-            
+        
             if (isset($request->banner)):
                 $input['banner'] = parent::__uploadImage($request->file('banner'), public_path('vendor'), false);
             endif;
+
             if (isset($request->image)):
                 $input['store_image'] = parent::__uploadImage($request->file('image'), public_path('vendor'), false);
             endif;
@@ -95,26 +99,65 @@ class VendorController extends ApiController
             $input['user_id'] = Auth::id();
             $model = $model->fill($input);
             $model->save();
-            
-            if (isset($request->manager_profile_picture)):
-                $input['profile_picture'] = parent::__uploadImage($request->file('manager_profile_picture'), public_path('vendor'), false);
-            endif;
-
-            $phonecode = str_replace('+','', $input['manager_phonecode']);
-            $data =[
-                'store_id' => $model->id,
-                'name' => $input['manager_name'],
-                'email' => $input['manager_email'],
-                'phonecode' => '+'.$phonecode,
-                'mobile_no' => $input['mamanger_mobile_no'],
-                'profile_picture' => $input['profile_picture']
-            ];
-            Manager::create($data);
-            return parent::success('Store added successfully!',[]);
+            return parent::success("Store added successfully!",[]);
+            // return parent::success('Store added successfully!',[]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
     }
+
+
+    public function Staff(Request $request){
+        $rules = ['store_id' => 'required|exists:stores,id','profile_picture' => '','name'=>'required','email'=>'required','phonecode' =>'required', 'mobile_no' => 'required'];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+
+            if (isset($request->profile_picture)):
+                $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
+            endif;
+            $input['user_id']= Auth::id();
+            $staff = Manager::create($input);
+            return parent::success("Staff added successfully!",['staff' => $staff]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+    public function ViewStaff(Request $request){
+        $rules = [];
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $manager = Manager::select('id','profile_picture','name','email','status')->where('user_id', Auth::id())->get();
+            return parent::success("View staff successfully!",['manager' => $manager]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+
+    }
+
+
+    public function DeleteStaff(Request $request){
+        $rules = ['staff_id' =>'required|exists:managers,id'];
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            Manager::find($input['staff_id'])->delete();
+            return parent::success("staff Delete successfully!",[]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
 
 
    public function Product(Request $request){
