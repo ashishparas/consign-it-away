@@ -75,6 +75,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('add/discount',[VendorController::class, "Discount"]);
     Route::post('update/discount',[VendorController::class, "UpdateDiscount"]);
     Route::post('expired/discount',[VendorController::class, "ExpiredDiscount"]);
+    Route::post('add/card',[ClientController::class,"Card"]);
+    Route::post('edit/card',[ClientController::class,"EditCard"]);
+    Route::post('delete/card',[ClientController::class, "DeleteCard"]);
+    Route::post('view/card',[ClientController::class, "ViewCard"]);
     
 });
 

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
 use App\Models\Bank;
+use App\Models\Card;
 use App\Models\Category;
 use App\Models\Discount;
 use App\Models\Manager;
@@ -373,6 +374,10 @@ class VendorController extends ApiController
         }
    }
 
+
+
+
+   
 
 
 

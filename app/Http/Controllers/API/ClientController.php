@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Password;
 use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
 use App\Models\Address;
+use App\Models\Card;
 use App\Models\Contact;
 use App\Models\Favourite;
 use App\Models\Product;
@@ -276,6 +277,85 @@ class ClientController extends ApiController
             return parent::error($ex->getMessage());
         }
     }
+
+
+    public function Card(Request $request)
+   {
+       $rules = ['card_no' => 'required', 'card_holder_name' => 'required','expiry_date'=>'required'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input =  $request->all();
+           $input['user_id'] =  Auth::id();
+           $card = Card::create($input);
+        return parent::success("Card Added successfully",['card' => $card]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
+   public function EditCard(Request $request)
+   {
+       $rules = ['card_id'=>'required|exists:cards,id','card_no' => 'required', 'card_holder_name' => 'required','expiry_date'=>'required'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input =  $request->all();
+    
+           $card = Card::find($input['card_id']);
+           $card->fill($input);
+           $card->save();
+        return parent::success("Card edited successfully",['card' => $card]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
+   public function DeleteCard(Request $request)
+   {
+    $rules = ['card_id'=>'required|exists:cards,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+
+    if($validateAttributes):
+     return $validateAttributes;
+    endif;
+    try{
+        $input =  $request->all();
+ 
+        $card = Card::find($input['card_id']);
+        $card->delete();
+     return parent::SuccessMessage("Card deleted successfully");
+    }catch(\Exception $ex){
+     return parent::error($ex->getMessage());
+    }
+   }
+
+   public function ViewCard(Request $request)
+   {
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+
+    if($validateAttributes):
+     return $validateAttributes;
+    endif;
+    try{
+ 
+        $card = Card::where('user_id',Auth::id())->orderby('created_at','DESC')->get();
+       
+     return parent::success("Card view successfully",['card' => $card]);
+    }catch(\Exception $ex){
+     return parent::error($ex->getMessage());
+    }
+   }
+
+
+
 
 
 
