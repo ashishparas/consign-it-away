@@ -222,7 +222,7 @@ class AuthController extends ApiController {
         $check_user = User::select($this->LoginAttributes)->where($field)->first();
         // dd(isEmpty($check_user));   
         if($check_user):
-            return parent::success("User already exists.",['user'=> $check_user],422);
+            return parent::success("User already exists.",['user'=> $check_user],200);
         else:
             return parent::success('This user not exists.',['status' =>'not_exist'],201);
         endif;
