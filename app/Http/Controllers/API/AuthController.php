@@ -21,6 +21,7 @@ use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
 use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
+use App\Models\Store;
 use GrahamCampbell\ResultType\Success;
 
 use function PHPUnit\Framework\isEmpty;
@@ -72,7 +73,7 @@ class AuthController extends ApiController {
                 $user->save();
       
                 $token = $user->createToken('consign-it-away')->plainTextToken;  
-               
+                $user['store'] = Store::select('id')->where('user_id', Auth::id())->orderBy('created_at','DESC')->first();
                 parent::addUserDeviceData($user, $request);
               
                 return parent::success('Login Successfully!',['token' => $token, 'user' => $user]);
@@ -653,6 +654,22 @@ class AuthController extends ApiController {
     }
     
     
+    public function customer(Request $request){
+        try{
+
+            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+            $customer = $stripe->customers->create([
+            'description' => 'Create stripe Customer for client',
+            'email' => 'duke_walker@icloud.com',
+            'name'  => 'Duke Walker',
+        ]);
+
+        dd($customer);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+        
+    }
    
     
     
