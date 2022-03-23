@@ -17,7 +17,7 @@ class RegisterMiddleware extends ApiController
     public function handle(Request $request, Closure $next)
     {
         if($request->type === '1'){
-            $rules = ['fname' => 'required', 'lname' => 'required', 'email' => 'required|email|unique:users', 'password' => 'required',  'mobile_no' => 'required', 'phonecode' => 'required', 'type' => 'required|in:1,2','marutal_status' =>'required|in:1,2,3'];
+            $rules = ['fname' => 'required', 'lname' => 'required', 'email' => 'required|email|unique:users', 'password' => 'required',  'mobile_no' => 'required', 'phonecode' => 'required', 'type' => 'required|in:1,2','marutal_status' =>'required|in:1,2,3','social_id'=>'','social_type'=> ''];
             $rules = array_merge($this->requiredParams, $rules);
     
             $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
@@ -26,7 +26,7 @@ class RegisterMiddleware extends ApiController
             endif;
             
         }elseif($request->type === '2'){
-            $rules = ['email' => 'required|email|unique:users', 'password' => 'required', 'type' => 'required|in:1,2'];
+            $rules = ['email' => 'required|email|unique:users', 'password' => 'required', 'type' => 'required|in:1,2','social_id'=>'','social_type'=> ''];
             $rules = array_merge($this->requiredParams, $rules);
     
             $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);

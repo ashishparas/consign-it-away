@@ -224,7 +224,7 @@ class AuthController extends ApiController {
         if($check_user):
             return parent::success("User already exists.",['user'=> $check_user],422);
         else:
-            return parent::success('This user not exists.',['status' =>'not_exist']);
+            return parent::success('This user not exists.',['status' =>'not_exist'],201);
         endif;
         
         }catch(\Exception $ex){
