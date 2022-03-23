@@ -264,7 +264,7 @@ class AuthController extends ApiController {
         // |unique:users,mobile_no
 
         $input = $request->all();
-       
+      
     //    if (isset($request->profile_picture)):
     //        $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
     //    endif;
@@ -291,6 +291,17 @@ class AuthController extends ApiController {
         endif;
         
         $input['status'] = '1';
+                $field = array();
+                $social_source  =  strtolower($input['social_type']); 
+                $social_id      =  $input['social_id'];  
+                
+                if( $social_source == 'facebook' || $social_source == 'google' || $social_source == 'apple' || $social_source == 'amazon' ) {
+                
+                    $input[ $social_source.'_id' ] = $social_id;
+                
+                }
+
+
         $user = User::create($input);
                 if($user->type === '1'):
                     parent::sendOTPUser($user);
