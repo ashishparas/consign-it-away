@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use App;
 use App\Models\Bank;
 use App\Models\Category;
+use App\Models\Discount;
 use App\Models\Manager;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -155,7 +156,7 @@ class VendorController extends ApiController
         try{
             $input = $request->all();
             Manager::find($input['staff_id'])->delete();
-            return parent::success("staff Delete successfully!",[]);
+            return parent::SuccessMessage("staff Delete successfully!");
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
@@ -310,5 +311,80 @@ class VendorController extends ApiController
     }
 
    }
+
+   public function Discount(Request $request)
+   {
+       $rules = ['banner'=>'required','category_id'=>'required|exists:categories,id','percentage'=>'required','description'=>'required','start_date'=>'required', 'valid_till' =>'required'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+        if (isset($request->banner)):
+           $input['banner'] = parent::__uploadImage($request->file('banner'), public_path('discount'), false);
+       endif;
+       $input['status'] = '2';
+       $input['user_id'] = Auth::id();
+       $discount = Discount::create($input);
+        return parent::success("Discount added successfully!",['discount' => $discount]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
+   public function UpdateDiscount(Request $request)
+   {
+       $rules = ['discount_id'=> 'required|exists:discounts,id','banner'=>'','category_id'=>'required|exists:categories,id','percentage'=>'required','description'=>'required','start_date'=>'required', 'valid_till' =>'required'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+        if (isset($request->banner)):
+           $input['banner'] = parent::__uploadImage($request->file('banner'), public_path('discount'), false);
+       endif;
+       
+       $discount = Discount::find($input['discount_id']);
+       $input['status'] = '1';
+       $input['user_id'] = Auth::id();
+       $discount->fill($input);
+       $discount->save();
+        return parent::success("Discount updated successfully!",['discount' => $discount]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
+
+   public function ExpiredDiscount(Request $request)
+   {
+        $rules = [];
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $discount = Discount::where('user_id', Auth::id())->where('status', '2')->get();
+            return parent::success("View expired discount successfully!",['discount' => $discount]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

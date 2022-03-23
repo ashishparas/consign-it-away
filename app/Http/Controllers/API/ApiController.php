@@ -174,6 +174,14 @@ class ApiController extends \App\Http\Controllers\Controller {
         return response()->json(['status' => true, 'code' => $code, 'message'=> $message, 'data' => $data], $code);
     }
 
+    public static function SuccessMessage($message, $code = 200, $returnType = 'object') {
+        // print_r($returnType);die;
+       
+        return response()->json(['status' => true, 'code' => $code, 'message'=> $message], $code);
+    }
+
+
+
     public static function abc($data, $message="200"){
         return response()->json(['status' => true, 'code' => $message, 'data' => $data], $message);
     }

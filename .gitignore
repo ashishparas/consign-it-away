@@ -3,6 +3,7 @@
 /public/vendor
 /public/products
 /public/rating
+/public/discount
 /public/storage
 /storage/*.key
 /vendor
