@@ -133,6 +133,25 @@ class VendorController extends ApiController
         }
     }
 
+
+    public function Proceed(Request $request)
+    {
+        $rules = [];
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $user = User::find(Auth::id());
+            $status = ['status' => '5'];
+            $user->fill($status);
+            $user->save();
+            return parent::success("Add staff proceed successfully!",['user' => $user]);
+        }catch(\Exception $ex){
+                return parent::error($ex->getMessage());
+        }
+    }
+
     public function ViewStaff(Request $request){
         $rules = [];
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
