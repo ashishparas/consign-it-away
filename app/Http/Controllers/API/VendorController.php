@@ -34,7 +34,7 @@ class VendorController extends ApiController
     private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','profile_picture','marital_status','type','status','token','created_at','updated_at'];
 
     public function CreateProfile(Request $request){
-        $rules = ['profile_picture' => 'required','fname'=>'required','lname'=>'required','phonecode'=>'required','mobile_no' => 'required','fax' =>'required', 'paypal_id' =>'required','bank_ac_no' => 'required','routing_no' => 'required','street_address' => 'required', 'city' =>'required','country' =>'required','state' =>'required','zip_code'=> 'required'];
+        $rules = ['profile_picture' => 'required','fname'=>'required','lname'=>'required','phonecode'=>'required','mobile_no' => 'required','fax' =>'required', 'paypal_id' =>'required','bank_ac_no' => 'required','routing_no' => 'required','street_address' => 'required', 'city' =>'required','country' =>'required','state' =>'required','zipcode'=> 'required'];
         $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
         if($validateAttributes):
             return $validateAttributes;
@@ -42,7 +42,7 @@ class VendorController extends ApiController
          try{
 
             $input = $request->all();
-         
+        
         if (isset($request->profile_picture)):
            $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
        endif;
@@ -65,6 +65,39 @@ class VendorController extends ApiController
          }
     }
 
+
+    public function EditVendorProfile(Request $request){
+        $rules = ['profile_picture' => 'required','fname'=>'required','lname'=>'required','phonecode'=>'required','mobile_no' => 'required','fax' =>'required', 'paypal_id' =>'required','bank_ac_no' => 'required','routing_no' => 'required','street_address' => 'required', 'city' =>'required','country' =>'required','state' =>'required','zipcode'=> 'required'];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+         try{
+
+            $input = $request->all();
+         
+        if (isset($request->profile_picture)):
+           $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
+       endif;
+            $phonecode =  str_replace('+','', $input['phonecode']);
+            $input['phonecode'] = '+'.$phonecode;
+            
+            $fullname = $input['fname'].' '.$input['lname'];
+            $input['name'] = $fullname;
+        
+            $model = new User();
+            $user = $model->FindOrfail(Auth::id());
+            $user->fill($input);
+            $user->save();
+            $user = $model->select('id','fname','lname','profile_picture','phonecode','mobile_no','fax','paypal_id','bank_ac_no','routing_no','street_address','city','state','country','zipcode')->where('id', Auth::id())->first();
+            return parent::success('Profile edited successfully!',['user' =>  $user]);
+         }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+         }
+    }
+
+
+
     public function ViewProfile(Request $request)
     {
         $rules =[];
@@ -73,7 +106,7 @@ class VendorController extends ApiController
             return $validateAttributes;
         endif;
         try{
-            $profile = User::select('id','fname','lname','phonecode','mobile_no','fax','paypal_id','bank_ac_no','routing_no','street_address','city','state','country','zipcode')->where('id', Auth::id())->first();
+            $profile = User::select('id','fname','lname','profile_picture','phonecode','mobile_no','fax','paypal_id','bank_ac_no','routing_no','street_address','city','state','country','zipcode')->where('id', Auth::id())->first();
             return parent::success("View profile successfully!",['profile' => $profile]);
         }catch(\exception $ex){
             return parent::error($ex->getMessage());
@@ -124,6 +157,53 @@ class VendorController extends ApiController
             $store = $model->save();
             User::FindOrfail(Auth::id())->update(['status' => '3']);
             return parent::success("Store added successfully!",['store' => $model]);
+            // return parent::success('Store added successfully!',[]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+
+
+    public function EditStore(Request $request){
+        $rules = ['store_id'=> 'required|exists:stores,id','banner'=>'','image' => '','name'=>'required','location'=>'required','description'=>'required'];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+        
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+
+        try{
+
+            $input = $request->all();
+        
+            if (isset($request->banner)):
+                $input['banner'] = parent::__uploadImage($request->file('banner'), public_path('vendor'), false);
+            endif;
+
+            if (isset($request->image)):
+                $input['store_image'] = parent::__uploadImage($request->file('image'), public_path('vendor'), false);
+            endif;
+
+            // if($files = $request->file('store_images')):
+            //     foreach($files as $file):
+                    
+            //        $images[] = parent::__uploadImage($file, public_path('vendor'), false);
+                 
+            //     endforeach;
+            // endif;
+
+            // $input['photos'] = implode(',', $images);
+
+            
+
+            $model = new Store();
+            $model = $model->find($input['store_id']);
+            $input['user_id'] = Auth::id();
+            $model = $model->fill($input);
+            $store = $model->save();
+            User::FindOrfail(Auth::id())->update(['status' => '3']);
+            return parent::success("Store edited successfully!",['store' => $model]);
             // return parent::success('Store added successfully!',[]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());

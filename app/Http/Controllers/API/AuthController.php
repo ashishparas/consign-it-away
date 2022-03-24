@@ -221,9 +221,10 @@ class AuthController extends ApiController {
             }
             
         $check_user = User::select($this->LoginAttributes)->where($field)->first();
+        $token = $check_user->createToken('Consign-it-away')->plainTextToken;
         // dd(isEmpty($check_user));   
         if($check_user):
-            return parent::success("User already exists.",['user'=> $check_user],200);
+            return parent::success("User already exists.",['token' =>  $token,'user'=> $check_user],200);
         else:
             return parent::success('This user not exists.',['status' =>'not_exist'],201);
         endif;

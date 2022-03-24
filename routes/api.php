@@ -42,7 +42,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('logout',[AuthController::class, "Logout"]);
     Route::post('otp/verification',[AuthController::class,"VerifyOTP"]);
     Route::post('create/profile',[VendorController::class, "CreateProfile"]);
+    Route::post('edit/vendor/profile',[VendorController::class, "EditVendorProfile"]);
     Route::post('add/store',[VendorController::class,"AddStore"]);
+    Route::post('edit/store',[VendorController::class,"EditStore"]);
     Route::post('create/product',[VendorController::class, "Product"]);
     Route::post('get/categories',[VendorController::class, "getCategories"]);
     Route::post('resend/otp',[AuthController::class, "resendOTP"]); 

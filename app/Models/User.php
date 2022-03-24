@@ -51,6 +51,9 @@ class User extends Authenticatable
         'mobile_no_found'
     ];
 
+
+    protected $appends = ['base_url'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -69,6 +72,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function getBaseUrlAttribute(){
+        return url('vendor');
+    }
+
 
     public function AauthAcessToken(){
         return $this->hasMany('\App\Models\OauthAccessToken');
