@@ -301,7 +301,7 @@ class VendorController extends ApiController
             $staff = Manager::FindOrfail($input['staff_id']);
             $staff->fill($input);
             $staff->save();
-            return parent::success("Staff added successfully!",['staff' => $staff]);
+            return parent::success("Staff edited successfully!",['staff' => $staff]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
