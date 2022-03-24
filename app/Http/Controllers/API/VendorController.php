@@ -125,8 +125,9 @@ class VendorController extends ApiController
             endif;
             $input['user_id']= Auth::id();
             $staff = Manager::create($input);
-            $user = User::select($this->LoginAttributes)->where('id', Auth::id())->first();
             User::FindOrfail(Auth::id())->update(['status' => '4']);
+            $user = User::select($this->LoginAttributes)->where('id', Auth::id())->first();
+            
             return parent::success("Staff added successfully!",['staff' => $staff,'user' =>$user]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
