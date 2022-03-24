@@ -76,6 +76,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('delete/card',[ClientController::class, "DeleteCard"]);
     Route::post('view/card',[ClientController::class, "ViewCard"]);
     Route::post('proceed',[VendorController::class, "Proceed"]);
+    Route::post('vendor/view/profile',[VendorController::class, "ViewProfile"]);
     
 });
 

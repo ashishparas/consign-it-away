@@ -65,6 +65,26 @@ class VendorController extends ApiController
          }
     }
 
+    public function ViewProfile(Request $request)
+    {
+        $rules =[];
+        $validateAttributes= parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $profile = User::select('id','fname','lname','phonecode','mobile_no','fax','paypal_id','bank_ac_no','routing_no','street_address','city','state','country','zipcode')->where('id', Auth::id())->first();
+            return parent::success("View profile successfully!",['profile' => $profile]);
+        }catch(\exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
+
+
+
+
+
 
     public function AddStore(Request $request){
         $rules = ['banner'=>'required','image' => 'required','name'=>'required','location'=>'required','description'=>'required','store_images'=> 'required'];
