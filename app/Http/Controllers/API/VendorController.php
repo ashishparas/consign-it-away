@@ -260,7 +260,7 @@ class VendorController extends ApiController
             return $validateAttributes;
         endif;
         try{
-            $manager = Manager::select('id','profile_picture','name','email','status')->where('user_id', Auth::id())->get();
+            $manager = Manager::select('id','profile_picture','name','email','phonecode','mobile_no','status')->where('user_id', Auth::id())->get();
             return parent::success("View staff successfully!",['manager' => $manager]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
