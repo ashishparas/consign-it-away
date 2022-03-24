@@ -20,7 +20,7 @@ class Manager extends Model
 
 
     public function getBaseUrlAttribute(){
-        return public_path('vendor');
+        return url('vendor');
     }
 
 
