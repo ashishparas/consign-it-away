@@ -31,10 +31,6 @@ Route::post('social/login',[AuthController::class, "SocialLogin"]);
 Route::post('forget/password',[AuthController::class, "ResetPassword"]);
 
 
-// stripe test
-Route::post('stripe',[AuthController::class, "customer"]);
-// end
-
 
 
 Route::group(['middleware' =>['auth:api']], function(){
