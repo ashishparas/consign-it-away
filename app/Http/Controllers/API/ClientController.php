@@ -355,6 +355,21 @@ class ClientController extends ApiController
    }
 
 
+   public function Search(Request $request){
+    $rules = ['search' => ''];
+    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
+
+
+
 
 
 
