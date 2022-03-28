@@ -14,5 +14,5 @@ class Address extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['user_id','address','city','state','zipcode','country'];
+    protected $fillable = ['user_id','type','address','city','state','zipcode','country'];
 }

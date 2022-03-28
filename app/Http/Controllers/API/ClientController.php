@@ -362,7 +362,9 @@ class ClientController extends ApiController
         return $validateAttributes;
     endif;
     try{
-
+        $input = $request->all();
+        $seacrh = $input['search'];
+        $product = Product::where('name','LIKE', '%'.$seacrh.'%')->get();
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
