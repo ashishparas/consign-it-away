@@ -20,6 +20,7 @@ use App\Models\Category;
 use App\Models\Discount;
 use App\Models\Manager;
 use App\Models\Product;
+use App\Models\Subscription;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
@@ -490,6 +491,39 @@ class VendorController extends ApiController
         try{
             $discount = Discount::where('user_id', Auth::id())->where('status', '2')->get();
             return parent::success("View expired discount successfully!",['discount' => $discount]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
+
+
+   public function Subscriptions(Request $request)
+   {
+       $rules = [];
+       $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $subscription = Subscription::get();
+        return parent::success("Subscription plans view successfully!",['subscription' => $subscription]);
+       }catch(\Exception $ex){
+           return parent::error($ex->getMessage());
+       }
+   }
+
+
+   public function SubscriptionPlanById(Request $request)
+   {
+        $rules = ['subscription_id' =>'required|exists:subscriptions,id'];
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+    
+            $subscription = Subscription::find($request->subscription_id);
+            return parent::success("Subscription plan View successfully!",['subscription' => $subscription]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
