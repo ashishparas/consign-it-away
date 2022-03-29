@@ -308,15 +308,17 @@ class AuthController extends ApiController {
 
         $user = User::create($input);
                 if($user->type === '1'):
-                    parent::sendOTPUser($user);
-                    $otp = 1111; //rand(1111, 9999);
-                    $email_data = [
-                        'name' => $user->name,
-                        'message' => 'your consign-it-away verification password is'.$otp,
-                    ];
-                //to()->send(new EmailVerificationMail($email_data));
-                    $user->email_otp = $otp;
-                    $user->save();
+
+                        parent::sendOTPUser($user);
+                        $otp = rand(1111, 9999);
+                        $data = [];
+                        $data['title'] = 'Hi '.$user->fname.' '.$user->lname;
+                        $data['message'] = 'Your consign-it-away verification code is '.$otp.' This help us secure your account by verifying your OTP. This let you to access your consign-it-away account.';
+                    
+                        $mail = Mail::to($input['email'])->send( new EmailVerificationMail($data));
+                        $user->email_otp = $otp;
+                        $user->save();
+
                 endif;
         
    
@@ -555,13 +557,13 @@ class AuthController extends ApiController {
                 $input = $request->all();
                 $User = \App\Models\User::select('fname','lname', 'email')->where('email', $input['email'])->first();
                
-                $OTP = 1111; //rand(1000,9999);
+                $OTP = rand(1000,9999);
                 $data = [];
-                $data['title'] = 'Hi @'.$User->fname.' '.$User->lname.'!';
-                $data['message'] = 'Your consign-it-away verification code is '.$OTP.' This help us secure your wamglamz account by verifying your OTP. This let you to access your consign-it-away account.';
+                $data['title'] = 'Hi '.$User->fname.' '.$User->lname;
+                $data['message'] = 'Your consign-it-away verification code is '.$OTP.' This help us secure your account by verifying your OTP. This let you to access your consign-it-away account.';
                
-                // $mail = Mail::to($input['email'])->send( new EmailVerificationMail($data));
-                \App\Models\User::where('email', $User->email)->update(['email_otp' => $OTP]);                
+                $mail = Mail::to($input['email'])->send( new EmailVerificationMail($data));
+                        \App\Models\User::where('email', $User->email)->update(['email_otp' => $OTP]);                
                
                 return parent::success('The email has been successfully',[]);
             

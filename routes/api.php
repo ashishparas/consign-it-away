@@ -81,6 +81,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('vendor/view/profile',[VendorController::class, "ViewProfile"]);
     Route::post('subscription',[VendorController::class, "Subscriptions"]);
     Route::post('subscription/by/id',[VendorController::class, "SubscriptionPlanById"]);
+    Route::post('search', [ClientController::class, "Search"]);
     
 });
 

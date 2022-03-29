@@ -23,6 +23,7 @@ class CreateAddressesTable extends Migration
             $table->string('state')->nullable();
             $table->string('zipcode')->nullable();
             $table->string('country')->nullable();
+            $table->enum('status',[1,2])->default(2)->comment("1->Saved, 2->Unsaved");
             $table->timestamps();
         });
     }

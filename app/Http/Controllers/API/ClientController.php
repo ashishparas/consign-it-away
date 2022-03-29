@@ -364,7 +364,13 @@ class ClientController extends ApiController
     try{
         $input = $request->all();
         $seacrh = $input['search'];
-        $product = Product::where('name','LIKE', '%'.$seacrh.'%')->get();
+        if(isset($seacrh)):
+            $product = Product::where('name','LIKE', '%'.$seacrh.'%')->get();
+        else:
+            $product = Product::get();
+        endif;
+        
+        return parent::success("View search result successfully!",['result' => $product]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
