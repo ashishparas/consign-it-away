@@ -20,6 +20,7 @@ use App\Models\Category;
 use App\Models\Discount;
 use App\Models\Manager;
 use App\Models\Product;
+use App\Models\Subcategory;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
@@ -524,6 +525,24 @@ class VendorController extends ApiController
     
             $subscription = Subscription::find($request->subscription_id);
             return parent::success("Subscription plan View successfully!",['subscription' => $subscription]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
+
+
+   public function SubCategories(Request $request)
+   {
+       
+        $rules = ['category_id' => 'required|exists:categories,id'];
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            $subcategories = Subcategory::where('category_id', $input['category_id'])->with('Category')->get();
+            return parent::success("Sub-Categories view successfully!",['subcategories' => $subcategories]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
