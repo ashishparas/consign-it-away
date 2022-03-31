@@ -23,8 +23,10 @@ use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
 use App\Models\Address;
 use App\Models\Card;
+use App\Models\Checkout;
 use App\Models\Contact;
 use App\Models\Favourite;
+use App\Models\Personal;
 use App\Models\Product;
 use App\Models\Rating;
 use GrahamCampbell\ResultType\Success;
@@ -71,7 +73,8 @@ class ClientController extends ApiController
     }
 
     public function Address(Request $request){
-        $rules = ['type'=>'required|in:1,2','address' =>'required','city' =>'required','state' =>'required','zipcode' => 'required','country' =>'required'];
+
+        $rules = ['type'=>'required|in:1,2','address' =>'required','city' =>'required','state' =>'required','zipcode' => 'required','country' =>'required','status' =>'required|in:1,2'];
 
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules),true);
 
@@ -81,6 +84,11 @@ class ClientController extends ApiController
 
         try{
             $input = $request->all();
+
+            if($input['status'] === '1' ):
+                Address::where('user_id', Auth::id())->update(['status' => '2']);
+            endif;
+
             $input['user_id'] = Auth::id();
             $address = Address::create($input);
             return parent::success("Address added successfully!",['address' => $address]);
@@ -281,7 +289,7 @@ class ClientController extends ApiController
 
     public function Card(Request $request)
    {
-       $rules = ['card_no' => 'required', 'card_holder_name' => 'required','expiry_date'=>'required'];
+       $rules = ['card_no' => 'required', 'card_holder_name' => 'required','expiry_date'=>'required','status' => 'required|in:1,2'];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
 
        if($validateAttributes):
@@ -290,6 +298,10 @@ class ClientController extends ApiController
        try{
            $input =  $request->all();
            $input['user_id'] =  Auth::id();
+           if($input['status'] === '1'):
+            Card::where('user_id', Auth::id())->update(['status' => '2']);
+           endif;
+
            $card = Card::create($input);
         return parent::success("Card Added successfully",['card' => $card]);
        }catch(\Exception $ex){
@@ -375,6 +387,30 @@ class ClientController extends ApiController
         return parent::error($ex->getMessage());
     }
    }
+
+
+   public function Personal(Request $request)
+   {
+       $rules = ['product_id' => 'required|exists:products,id','marital_status' => 'required|in:1,2,3', 'fname' =>'required','lname'=> 'required','email' =>'required','phonecode'=> 'required','mobile_no' => 'required','status' => 'required|in:1,2'];
+       $validateAttributes= parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+           $input['user_id'] = Auth::id();
+           if($input['status'] === '1'):
+            Personal::where('user_id', Auth::id())->update(['status' => '2']);
+           endif;
+
+           $personal = Personal::create($input);
+         
+        return parent::success("Personal details added successfully!",['personal' => $personal]);
+       }catch(\Exception $ex){
+           return parent::error($ex->getMessage());
+       }
+   }
+
 
 
 

@@ -507,7 +507,7 @@ class VendorController extends ApiController
        endif;
        try{
            $subscription = Subscription::get();
-        return parent::success("Subscription plans view successfully!",['subscription' => $subscription]);
+            return parent::success("Subscription plans view successfully!",['subscription' => $subscription]);
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
        }
@@ -540,6 +540,7 @@ class VendorController extends ApiController
             return $validateAttributes;
         endif;
         try{
+            
             $input = $request->all();
             $subcategories = Subcategory::where('category_id', $input['category_id'])->with('Category')->get();
             return parent::success("Sub-Categories view successfully!",['subcategories' => $subcategories]);

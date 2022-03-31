@@ -15,6 +15,6 @@ class Personal extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['user_id','product_id','mertial_status','fname','lname','email','phonecode','mobile_no','status'];
+    protected $fillable = ['user_id','marital_status','fname','lname','email','phonecode','mobile_no','status'];
     
 }
