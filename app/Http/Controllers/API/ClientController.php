@@ -128,7 +128,7 @@ class ClientController extends ApiController
         endif;
 
         try{
-            $addresses = Address::get();
+            $addresses = Address::where('user_id', Auth::id())->get();
             return parent::success('View addresses successfully!',['addresses' => $addresses]);         
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
@@ -409,6 +409,27 @@ class ClientController extends ApiController
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
        }
+   }
+
+
+   public function EditPersonal(Request $request)
+   {
+      // dd('hello');
+    $rules = ['personal_id' => 'required|exists:personals,id','marital_status' => 'required|in:1,2,3', 'fname' =>'required','lname'=> 'required','email' =>'required','phonecode'=> 'required','mobile_no' => 'required'];
+    $validateAttributes= parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+    if($validateAttributes):
+     return $validateAttributes;
+    endif;
+    try{
+
+        $input = $request->all();
+        $personal = Personal::FindOrfail($input['personal_id']);
+        $personal->fill($input);
+        $personal->save();
+     return parent::success("Personal details changed successfully!",['personal' => $personal]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
    }
 
 

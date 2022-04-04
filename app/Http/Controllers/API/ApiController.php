@@ -163,7 +163,7 @@ class ApiController extends \App\Http\Controllers\Controller {
         return response()->json(['status' => false, 'code' => $errorCode, 'data' => (object) [], 'error' => $message], $errorCode);
     }
 
-    public static function success($message= "",$data, $code = 200, $returnType = 'object') {
+    public static function success($message= "",$data=[], $code = 200, $returnType = 'object') {
         // print_r($returnType);die;
         if ($returnType == 'data')
             $data = $data;

@@ -84,6 +84,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('search', [ClientController::class, "Search"]);
     Route::post('subcategories',[VendorController::class, "SubCategories"]);
     Route::post('personal',[ClientController::class, "Personal"]);
+    Route::post('edit/personal',[ClientController::class, "EditPersonal"]);
+    Route::post('colours',[VendorController::class, "Colours"]);
     
 });
 

@@ -17,6 +17,7 @@ use App;
 use App\Models\Bank;
 use App\Models\Card;
 use App\Models\Category;
+use App\Models\Colour;
 use App\Models\Discount;
 use App\Models\Manager;
 use App\Models\Product;
@@ -28,6 +29,8 @@ use Illuminate\Support\Facades\Password;
 use PhpParser\Node\Stmt\Return_;
 use GrahamCampbell\ResultType\Success;
 use Symfony\Component\Console\Input\Input;
+
+use function PHPUnit\Framework\returnSelf;
 
 class VendorController extends ApiController
 {
@@ -544,6 +547,23 @@ class VendorController extends ApiController
             $input = $request->all();
             $subcategories = Subcategory::where('category_id', $input['category_id'])->with('Category')->get();
             return parent::success("Sub-Categories view successfully!",['subcategories' => $subcategories]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
+
+
+
+   public function Colours(Request $request)
+   {
+        $rules = [];
+        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $Colour = Colour::all();
+            return parent::success("View colours successfully!",['colours' => $Colour]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
