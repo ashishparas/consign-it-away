@@ -52,6 +52,11 @@ class Product extends Model
 
 
 
+    public function getVariantsAttribute($value)
+    {
+    return json_decode($value);
+    }
+
 
     public function getBaseUrlAttribute(){
         return public_path('/products');

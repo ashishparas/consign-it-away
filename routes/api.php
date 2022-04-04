@@ -45,7 +45,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('edit/vendor/profile',[VendorController::class, "EditVendorProfile"]);
     Route::post('add/store',[VendorController::class,"AddStore"]);
     Route::post('edit/store',[VendorController::class,"EditStore"]);
-    Route::post('create/product',[VendorController::class, "Product"]);
+    Route::post('create/product',[VendorController::class, "Product"])->middleware('advancedProduct');
     Route::post('get/categories',[VendorController::class, "getCategories"]);
     Route::post('resend/otp',[AuthController::class, "resendOTP"]); 
     Route::post('resend/email/otp',[AuthController::class, "ResendEmailOTP"]);
