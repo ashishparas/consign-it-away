@@ -74,7 +74,7 @@ class ClientController extends ApiController
 
     public function Address(Request $request){
 
-        $rules = ['type'=>'required|in:1,2','address' =>'required','city' =>'required','state' =>'required','zipcode' => 'required','country' =>'required','status' =>'required|in:1,2'];
+        $rules = ['type'=>'required|in:1,2','marital_status'=> 'required|in:1,2,3','fname'=>'required','lname' => 'required','email' =>'required','phonecode'=>'required','mobile_no'=>'required','address' =>'required','city' =>'required','state' =>'required','zipcode' => 'required','country' =>'required','status' =>'required|in:1,2'];
 
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules),true);
 
@@ -88,7 +88,7 @@ class ClientController extends ApiController
             if($input['status'] === '1' ):
                 Address::where('user_id', Auth::id())->update(['status' => '2']);
             endif;
-
+           
             $input['user_id'] = Auth::id();
             $address = Address::create($input);
             return parent::success("Address added successfully!",['address' => $address]);

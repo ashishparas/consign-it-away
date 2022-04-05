@@ -20,10 +20,10 @@ class RegisterMiddleware extends ApiController
         if($request->type === '1'){
 
             if($request->social_id === ''):
-                $rules = ['fname' => 'required', 'lname' => 'required', 'email' => 'required|email|unique:users', 'password' => 'required',  'mobile_no' => 'required', 'phonecode' => 'required', 'type' => 'required|in:1,2','marutal_status' =>'required|in:1,2,3','social_id'=>'','social_type'=> ''];
+                $rules = ['fname' => 'required', 'lname' => 'required', 'email' => 'required|email|unique:users', 'password' => 'required',  'mobile_no' => 'required', 'phonecode' => 'required', 'type' => 'required|in:1,2','marital_status' =>'required|in:1,2,3','social_id'=>'','social_type'=> ''];
             else:
 
-                $rules = ['fname' => 'required', 'lname' => 'required', 'email' => 'required|email|unique:users', 'password' => '',  'mobile_no' => 'required', 'phonecode' => 'required', 'type' => 'required|in:1,2','marutal_status' =>'required|in:1,2,3','social_id'=>'','social_type'=> ''];
+                $rules = ['fname' => 'required', 'lname' => 'required', 'email' => 'required|email|unique:users', 'password' => '',  'mobile_no' => 'required', 'phonecode' => 'required', 'type' => 'required|in:1,2','marital_status' =>'required|in:1,2,3','social_id'=>'','social_type'=> ''];
             endif;
             
             $rules = array_merge($this->requiredParams, $rules);
