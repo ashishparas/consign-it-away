@@ -439,7 +439,7 @@ class VendorController extends ApiController
         if (isset($request->banner)):
            $input['banner'] = parent::__uploadImage($request->file('banner'), public_path('discount'), false);
        endif;
-       $input['status'] = '2';
+       $input['status'] = '1';
        $input['user_id'] = Auth::id();
        $discount = Discount::create($input);
         return parent::success("Discount added successfully!",['discount' => $discount]);
