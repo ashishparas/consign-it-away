@@ -489,6 +489,21 @@ class VendorController extends ApiController
    }
 
 
+   public function ViewDiscount(Request $request)
+   {
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $discount = Discount::where('user_id', Auth::id())->where('status', '1')->get();
+        return parent::success("View discount successfully!",['discount' => $discount]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
+
    public function Subscriptions(Request $request)
    {
        $rules = [];

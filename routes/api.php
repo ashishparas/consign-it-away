@@ -72,7 +72,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('delete/product',[VendorController::class, "DeleteProduct"]);
     Route::post('add/discount',[VendorController::class, "Discount"]);
     Route::post('update/discount',[VendorController::class, "UpdateDiscount"]);
-    Route::post('expired/discount',[VendorController::class, "ExpiredDiscount"]);
+    Route::post('expired/discount',[VendorController::class, "ExpiredDiscount"]); 
+    Route::post('view/discount',[VendorController::class, "ViewDiscount"]);
     Route::post('add/card',[ClientController::class,"Card"]);
     Route::post('edit/card',[ClientController::class,"EditCard"]);
     Route::post('delete/card',[ClientController::class, "DeleteCard"]);
@@ -86,6 +87,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('personal',[ClientController::class, "Personal"]);
     Route::post('edit/personal',[ClientController::class, "EditPersonal"]);
     Route::post('colours',[VendorController::class, "Colours"]);
+    Route::post('change/profile/picture',[AuthController::class, "ChangeProfilePicture"]);
     
 });
 

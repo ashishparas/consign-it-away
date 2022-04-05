@@ -90,6 +90,10 @@ class ClientController extends ApiController
             endif;
            
             $input['user_id'] = Auth::id();
+            $phonecode = str_replace('+', '', $input['phonecode']);
+            $input['phonecode'] = '+'.$phonecode;
+            dd($input['phonecode']);
+            
             $address = Address::create($input);
             return parent::success("Address added successfully!",['address' => $address]);
         }catch(\exception $ex){
@@ -98,7 +102,7 @@ class ClientController extends ApiController
     }
 
     public function EditAddress(Request $request){
-        $rules = ['address_id' =>'required|exists:addresses,id','type'=>'required|in:1,2','address' =>'required','city' =>'required','state' =>'required','zipcode' => 'required','country' =>'required'];
+        $rules = ['address_id' => 'required|exists:addresses,id','type'=>'required|in:1,2','marital_status'=> 'required|in:1,2,3','fname'=>'required','lname' => 'required','email' =>'required','phonecode'=>'required','mobile_no'=>'required','address' =>'required','city' =>'required','state' =>'required','zipcode' => 'required','country' =>'required'];
 
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules),true);
 
@@ -110,7 +114,9 @@ class ClientController extends ApiController
             $input = $request->all();
             $input['user_id'] = Auth::id();
             $address = Address::FindOrfail($input['address_id']);
-            // dd($address);
+            $phonecode = str_replace('+','', $input['phonecode']);
+            $input['phonecode'] = '+'.$phonecode;
+          
             $address->fill($input);
             $address->save();
             // $updated = $address->first();

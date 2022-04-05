@@ -676,7 +676,28 @@ class AuthController extends ApiController {
         
     }
    
-    
+    public function ChangeProfilePicture(Request $request)
+    {
+        $rules = ['profile_pciture' => ''];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+
+            if (isset($request->profile_picture)):
+                $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
+            endif;
+        $user =  User::FindOrfail(Auth::id());
+        $user->profile_picture = $input['profile_picture'];
+        $user->save();
+        $user = $user->select('id','fname','lname','profile_picture')->where('id', Auth::id())->first();
+        return parent::success("Profile picture changed successfully!",['user' => $user]);
+
+        }catch(\exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
     
   
     
