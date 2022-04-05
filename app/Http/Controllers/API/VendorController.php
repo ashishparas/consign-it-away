@@ -572,7 +572,35 @@ class VendorController extends ApiController
         }
    }
 
+   public function CSV(Request $request){
 
+        $rules = ['uploads' => ''];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            $filename = $_FILES['uploads']['tmp_name'];
+            // dd($filename);
+            $open = fopen($filename, "r");
+            $data = fgetcsv($open, 1000, ",");
+            $brands = [];
+            $sql = '';
+            while (($data = fgetcsv($open, 1000, ",")) !== FALSE) 
+                {
+                   
+                   $sql .= "('".addslashes($data[0])."'),";
+                }
+                $sql = rtrim($sql,',');
+                // dd('insert into brands (name) values '.$sql);
+                // DB::enableQueryLog();
+                $query  = DB::insert('insert into brands (name) values '.$sql);
+               return parent::success("Brands added successfully!");
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
 
 
    

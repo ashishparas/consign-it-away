@@ -29,7 +29,7 @@ Route::post('register',[AuthController::class,"Register"])->middleware('register
 Route::post('login',[AuthController::class, "Login"]);
 Route::post('social/login',[AuthController::class, "SocialLogin"]);
 Route::post('forget/password',[AuthController::class, "ResetPassword"]);
-
+Route::post('csv',[VendorController::class, "CSV"]);
 
 
 
