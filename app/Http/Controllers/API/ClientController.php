@@ -26,7 +26,7 @@ use App\Models\Card;
 use App\Models\Checkout;
 use App\Models\Contact;
 use App\Models\Favourite;
-use App\Models\Personal;
+
 use App\Models\Product;
 use App\Models\Rating;
 use GrahamCampbell\ResultType\Success;
@@ -92,7 +92,7 @@ class ClientController extends ApiController
             $input['user_id'] = Auth::id();
             $phonecode = str_replace('+', '', $input['phonecode']);
             $input['phonecode'] = '+'.$phonecode;
-            dd($input['phonecode']);
+            // dd($input['phonecode']);
             
             $address = Address::create($input);
             return parent::success("Address added successfully!",['address' => $address]);
@@ -395,48 +395,7 @@ class ClientController extends ApiController
    }
 
 
-   public function Personal(Request $request)
-   {
-       $rules = ['product_id' => 'required|exists:products,id','marital_status' => 'required|in:1,2,3', 'fname' =>'required','lname'=> 'required','email' =>'required','phonecode'=> 'required','mobile_no' => 'required','status' => 'required|in:1,2'];
-       $validateAttributes= parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
-       if($validateAttributes):
-        return $validateAttributes;
-       endif;
-       try{
-           $input = $request->all();
-           $input['user_id'] = Auth::id();
-           if($input['status'] === '1'):
-            Personal::where('user_id', Auth::id())->update(['status' => '2']);
-           endif;
 
-           $personal = Personal::create($input);
-         
-        return parent::success("Personal details added successfully!",['personal' => $personal]);
-       }catch(\Exception $ex){
-           return parent::error($ex->getMessage());
-       }
-   }
-
-
-   public function EditPersonal(Request $request)
-   {
-      // dd('hello');
-    $rules = ['personal_id' => 'required|exists:personals,id','marital_status' => 'required|in:1,2,3', 'fname' =>'required','lname'=> 'required','email' =>'required','phonecode'=> 'required','mobile_no' => 'required'];
-    $validateAttributes= parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
-    if($validateAttributes):
-     return $validateAttributes;
-    endif;
-    try{
-
-        $input = $request->all();
-        $personal = Personal::FindOrfail($input['personal_id']);
-        $personal->fill($input);
-        $personal->save();
-     return parent::success("Personal details changed successfully!",['personal' => $personal]);
-    }catch(\Exception $ex){
-        return parent::error($ex->getMessage());
-    }
-   }
 
 
 

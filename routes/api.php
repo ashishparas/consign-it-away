@@ -88,6 +88,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('edit/personal',[ClientController::class, "EditPersonal"]);
     Route::post('colours',[VendorController::class, "Colours"]);
     Route::post('change/profile/picture',[AuthController::class, "ChangeProfilePicture"]);
+    Route::post("brands",[VendorController::class,"Brands"]);
     
 });
 

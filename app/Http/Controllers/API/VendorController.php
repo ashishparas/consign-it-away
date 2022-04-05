@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
 use App\Models\Bank;
+use App\Models\Brand;
 use App\Models\Card;
 use App\Models\Category;
 use App\Models\Colour;
@@ -316,8 +317,6 @@ class VendorController extends ApiController
 
    public function Product(Request $request){
         
-  
-       
 
         try{
             $input = $request->all();
@@ -603,6 +602,23 @@ class VendorController extends ApiController
    }
 
 
+   public function Brands(Request $request){
+       $rules = ['search' =>''];
+       $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+
+        $input = $request->all();
+        $brands = Brand::where('name','LIKE', "%".$request->search."%")->get();
+        return parent::success("View brands successfully!",['brands' => $brands]);
+
+       }catch(\exception $ex){
+        return parent::error($ex->getMessage());
+       }
+
+   }
    
 
 
