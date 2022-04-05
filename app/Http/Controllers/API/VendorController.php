@@ -72,8 +72,8 @@ class VendorController extends ApiController
 
 
     public function EditVendorProfile(Request $request){
-        $rules = ['profile_picture' => 'required','fname'=>'required','lname'=>'required','phonecode'=>'required','mobile_no' => 'required','fax' =>'required', 'paypal_id' =>'required','bank_ac_no' => 'required','routing_no' => 'required','street_address' => 'required', 'city' =>'required','country' =>'required','state' =>'required','zipcode'=> 'required'];
-        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+        $rules = ['profile_picture' => '','fname'=>'required','lname'=>'required','phonecode'=>'required','mobile_no' => 'required','fax' =>'required', 'paypal_id' =>'required','bank_ac_no' => 'required','routing_no' => 'required','street_address' => 'required', 'city' =>'required','country' =>'required','state' =>'required','zipcode'=> 'required'];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
         if($validateAttributes):
             return $validateAttributes;
         endif;
