@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\API\VendorController;
+use Facade\FlareClient\Http\Client;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -89,6 +91,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('colours',[VendorController::class, "Colours"]);
     Route::post('change/profile/picture',[AuthController::class, "ChangeProfilePicture"]);
     Route::post("brands",[VendorController::class,"Brands"]);
+    Route::post('open/cart',[ClientController::class, "OpenCart"]);
+    Route::post('add/to/cart',[ClientController::class, "AddToCart"]);
+    Route::post('cart/count',[ClientController::class, "TotalCartItems"]);
+    Route::post('add/quantity',[ClientController::class, "AddQuantity"]);
+    Route::post('delete/cart/item', [ClientController::class, "DeleteCartItems"]);
+
     
 });
 

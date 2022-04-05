@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
 use App\Models\Address;
 use App\Models\Card;
+use App\Models\Cart;
 use App\Models\Checkout;
 use App\Models\Contact;
 use App\Models\Favourite;
@@ -394,7 +395,93 @@ class ClientController extends ApiController
     }
    }
 
+   public function AddToCart(Request $request)
+   {
+    $rules=['product_id' => 'required|exists:products,id','quantity' =>'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $input['user_id'] = Auth::id();
+        $cart = Cart::create($input);
+        return parent::success("Product add to cart successfully!");
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
 
+   public function AddQuantity(Request $request)
+   {
+    $rules=['cart_id' => 'required|exists:carts,id','quantity' =>'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        
+        $cart = Cart::FindOrfail($input['cart_id']);
+        $cart->quantity = $input['quantity'];
+        $cart->save();
+        $cart = Cart::where('id', $input['cart_id'])->where('user_id', Auth::id())->with('product')->first();
+        return parent::success("Quantity added to cart successfully!",['cart' => $cart]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
+
+
+   public function DeleteCartItems(Request $request)
+   {
+    $rules=['cart_id' => 'required|exists:carts,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        
+        $cart = Cart::FindOrfail($input['cart_id']);
+        $cart->delete();
+       
+       
+        return parent::success("Delete cart item successfully!");
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }    
+
+   public function OpenCart(Request $request)
+   {
+       $rules = [];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $cart = Cart::with('Product')->get();
+        return parent::success("View cart successfully!",['cart' => $cart]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
+   public function TotalCartItems(Request $request)
+   {
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+    if($validateAttributes):
+     return $validateAttributes;
+    endif;
+    try{
+        $cart = Cart::where('user_id', Auth::id())->count();
+     return parent::success("View Total cart successfully!",['cart' => $cart]);
+    }catch(\Exception $ex){
+     return parent::error($ex->getMessage());
+    }
+   }
 
 
 
