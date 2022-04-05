@@ -81,7 +81,7 @@ class VendorController extends ApiController
 
             $input = $request->all();
          
-        if (isset($request->profile_picture)):
+        if (isset($request->profile_picture) && $request->profile_picture !== '' ):
            $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
        endif;
             $phonecode =  str_replace('+','', $input['phonecode']);
