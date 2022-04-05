@@ -315,8 +315,8 @@ class AuthController extends ApiController {
                         $data['title'] = 'Hi '.$user->fname.' '.$user->lname;
                         $data['message'] = 'Your consign-it-away verification code is '.$otp.' This help us secure your account by verifying your OTP. This let you to access your consign-it-away account.';
                     
-                        $mail = Mail::to($input['email'])->send( new EmailVerificationMail($data));
-                        $user->email_otp = $otp;
+                        // $mail = Mail::to($input['email'])->send( new EmailVerificationMail($data));
+                        $user->email_otp = 1111;//$otp;
                         $user->save();
 
                 endif;
