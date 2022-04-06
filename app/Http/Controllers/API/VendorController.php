@@ -613,7 +613,7 @@ class VendorController extends ApiController
         $brands = [];
         $input = $request->all();
         if(isset($request->search)):
-        $brands = Brand::where('name','LIKE', "%".$input['search']."%")->get();
+        $brands = Brand::where('name','LIKE', "%".$input['search']."%")->take(2000)->get();
         
         endif;
         
