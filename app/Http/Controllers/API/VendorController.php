@@ -603,6 +603,7 @@ class VendorController extends ApiController
 
 
    public function Brands(Request $request){
+       dd('hello');
        $rules = ['search' =>''];
        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
        if($validateAttributes):
