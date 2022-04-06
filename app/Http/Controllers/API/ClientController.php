@@ -484,6 +484,21 @@ class ClientController extends ApiController
    }
 
 
+   public function Checkout(Request $request){
+        $rules = [];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $address = Address::select('id','fname','lname','email','phonecode','mobile_no','address')->where('user_id', Auth::id())->where('status','1')->first();
+            $cart = Cart::where('user_id', Auth::id())->with('product','SoldBy')->get();
+            return parent::success("View Cart successfully!",['address' => $address,'cart' => $cart]);
+        }catch(\Exception  $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
+
 
 
 

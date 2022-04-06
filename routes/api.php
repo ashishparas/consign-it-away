@@ -96,6 +96,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('cart/count',[ClientController::class, "TotalCartItems"]);
     Route::post('add/quantity',[ClientController::class, "AddQuantity"]);
     Route::post('delete/cart/item', [ClientController::class, "DeleteCartItems"]);
+    Route::post('checkout',[ClientController::class, "Checkout"]);
 
     
 });

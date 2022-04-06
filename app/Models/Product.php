@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -69,6 +71,9 @@ class Product extends Model
         return $this->belongsTo(Category::class)->select('id','title');
     }
    
+    public function SoldBy(){
+        return $this->hasOne(User::class,'id')->select('id','fname','lname');
+    }
 
     
 

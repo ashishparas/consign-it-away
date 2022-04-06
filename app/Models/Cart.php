@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
+use App\Models\User;
 class Cart extends Model
 {
     use HasFactory;
@@ -17,7 +18,14 @@ class Cart extends Model
 
     protected $fillable = ['user_id','product_id','quantity'];
 
+  
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','name','image','price');
+        return $this->belongsTo(Product::class)->select('id','user_id','name','image','price');
     }
+
+    public function SoldBy(){
+        return $this->hasOneThrough(User::class, Product::class,'user_id','id');
+    }
+
+   
 }

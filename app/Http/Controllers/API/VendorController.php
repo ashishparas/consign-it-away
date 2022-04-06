@@ -612,6 +612,7 @@ class VendorController extends ApiController
 
         $input = $request->all();
         $brands = Brand::where('name','LIKE', "%".$request->search."%")->get();
+        dd($brands);
         return parent::success("View brands successfully!",['brands' => $brands]);
 
        }catch(\exception $ex){
