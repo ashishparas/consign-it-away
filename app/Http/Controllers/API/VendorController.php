@@ -613,8 +613,8 @@ class VendorController extends ApiController
         $input = $request->all();
         if(isset($request->seacrh)):
         $brands = Brand::where('name','LIKE', "%".$input['search']."%")->get();
-        else
-        $brands = Brand::->get();
+        else:
+        $brands = Brand::get();
         endif;
         
         return parent::success("View brands successfully!",['brands' => $brands]);
