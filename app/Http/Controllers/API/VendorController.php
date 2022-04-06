@@ -615,7 +615,7 @@ class VendorController extends ApiController
         if(isset($request->search)):
         $brands = Brand::where('name','LIKE', "%".$input['search']."%")->get();
         else:
-        $brands = Brand::get();
+        $brands = Brand::limit(1000)->get();
         endif;
         
         return parent::success("View brands successfully!",['brands' => $brands]);
