@@ -603,7 +603,7 @@ class VendorController extends ApiController
 
 
    public function Brands(Request $request){
-       dd('hello');
+      
        $rules = ['search' =>''];
        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
        if($validateAttributes):
@@ -612,7 +612,7 @@ class VendorController extends ApiController
        try{
 
         $input = $request->all();
-        if(isset($request->seacrh)):
+        if(isset($request->search)):
         $brands = Brand::where('name','LIKE', "%".$input['search']."%")->get();
         else:
         $brands = Brand::get();
@@ -620,7 +620,7 @@ class VendorController extends ApiController
         
         return parent::success("View brands successfully!",['brands' => $brands]);
 
-       }catch(\exception $ex){
+       }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
 
