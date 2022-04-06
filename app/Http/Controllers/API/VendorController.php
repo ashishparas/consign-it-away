@@ -610,7 +610,7 @@ class VendorController extends ApiController
         return $validateAttributes;
        endif;
        try{
-        $brand = [];
+        $brands = [];
         $input = $request->all();
         if(isset($request->search)):
         $brands = Brand::where('name','LIKE', "%".$input['search']."%")->get();
