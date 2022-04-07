@@ -65,6 +65,10 @@ class Product extends Model
         return public_path('/products');
     }
 
+    public function getImageAttribute($value){
+        return explode(',', $value);
+    }
+
     public function Rating(){
         return $this->hasOne(Rating::class);
     }

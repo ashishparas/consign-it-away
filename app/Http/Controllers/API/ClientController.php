@@ -27,7 +27,7 @@ use App\Models\Cart;
 
 use App\Models\Contact;
 use App\Models\Favourite;
-
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Rating;
 use GrahamCampbell\ResultType\Success;
@@ -493,12 +493,50 @@ class ClientController extends ApiController
         try{
             $address = Address::select('id','fname','lname','email','phonecode','mobile_no','address')->where('user_id', Auth::id())->where('status','1')->first();
             $cart = Cart::where('user_id', Auth::id())->with('product')->get();
+            
             return parent::success("View Cart successfully!",['address' => $address,'cart' => $cart]);
         }catch(\Exception  $ex){
             return parent::error($ex->getMessage());
         }
    }
 
+   public function Order(Request $request)
+   {
+       $rules = ['address_id' => 'required|exists:addresses,id', 'card_id' =>'required|exists:cards,id','items' =>'required','sub_total' => 'required','coupon_id' =>'','shipping_cost' => 'required','total_amount' => 'required','stripeToken' => 'required'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+            $input = $request->all();
+           
+            // Charge for product
+       
+            $stripe =  \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET'));
+            
+
+            // Token is created using Stripe Checkout or Elements!
+            // Get the payment token ID submitted by the form:
+        $token = $input['stripeToken'];
+        // $charge = \Stripe\Charge::create([
+        // 'amount' => $input['total_amount']*100,
+        // 'currency' => 'usd',
+        // 'description' => 'Charge customer to place order',
+        // 'source' => $token,
+        // ]);
+        $input['charge_id'] = md5(rand(11111,99999)); //$token['id'];
+        $input['user_id'] = Auth::id();
+        $order = Order::create($input);
+        if(!empty($order)):
+           
+        endif;
+       
+            
+
+       }catch(\Exception $ex){
+           return parent::error($ex->getMessage());
+       }
+   }
 
 
 

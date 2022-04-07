@@ -323,8 +323,24 @@ class VendorController extends ApiController
             $input['user_id'] = Auth::id();
 
             if (isset($request->image)):
-                $input['image'] = parent::__uploadImage($request->file('image'), public_path('products'), false);
+
+                if($files = $request->file('image')):
+                    foreach($files as $file):
+                        
+                       $images[] = parent::__uploadImage($file, public_path('products'), false);
+                     
+                    endforeach;
+                endif;
+    
+                $input['image'] = implode(',', $images);
+                
             endif;
+
+
+
+           
+
+
 
             $product = Product::create($input);
             return parent::success("Product created successfully!",['product' => $product]);
