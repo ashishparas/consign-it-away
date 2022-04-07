@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCheckoutsTable extends Migration
+class CreateOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,18 @@ class CreateCheckoutsTable extends Migration
      */
     public function up()
     {
-        Schema::create('checkouts', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
-            $table->bigInteger('product_id')->unsigned()->nullable();
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-
-            $table->bigInteger('personal_id')->nullable();
             $table->bigInteger('address_id')->nullable();
             $table->bigInteger('card_id')->nullable();
-            
-            $table->enum('status',[1,2])->default(2)->comment('1->Order Placed, 2->Order pending');
-
+            $table->string('charge_id')->nullable();
+            $table->text('items')->nullable();
+            $table->string('sub_total');
+            $table->string('coupon')->nullable();
+            $table->string('shipping_cost')->nullable();
+            $table->string('total_amount')->nullable();
             $table->timestamps();
         });
     }
@@ -38,6 +36,6 @@ class CreateCheckoutsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('checkouts');
+        Schema::dropIfExists('orders');
     }
 }

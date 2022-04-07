@@ -18,14 +18,12 @@ class Cart extends Model
 
     protected $fillable = ['user_id','product_id','quantity'];
 
-  
+    
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','user_id','name','image','price');
+        return $this->belongsTo(Product::class)->select('id','user_id','name','image','price')->with('User');
     }
 
-    public function SoldBy(){
-        return $this->hasOneThrough(User::class, Product::class,'user_id','id');
-    }
+    
 
    
 }

@@ -24,7 +24,7 @@ class AdvancedProducts extends ApiController
             'brand' => 'required', 'color' =>'required', 'quantity' => 'required',
             'weight' =>'required', 'condition'=>'required', 'dimensions' =>'required',
             'available_for_sale' => 'required|in:1,2','constomer_contact'=> 'required|in:1,2',
-            'inventory_track' => 'required|in:1,2','product_offer' => '','ships_from'=>'required', 'shipping_type' => 'required', 'meta_description' => '',
+            'inventory_track' => 'required|in:1,2','product_offer' => '','ships_from'=>'required', 'shipping_type' => 'required','free_shipping' => 'required|in:1,2', 'meta_description' => '',
             'meta_tags' => '', 'meta_keywords' => '', 'title' => 'required', 'variants' => '',
             'state'=> '','tags' =>'','advertisement' =>'', 'selling_fee' =>'required', 
             'amount' => 'required'

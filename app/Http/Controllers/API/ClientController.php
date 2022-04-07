@@ -24,7 +24,7 @@ use App\Mail\EmailVerificationMail;
 use App\Models\Address;
 use App\Models\Card;
 use App\Models\Cart;
-use App\Models\Checkout;
+
 use App\Models\Contact;
 use App\Models\Favourite;
 
@@ -492,7 +492,7 @@ class ClientController extends ApiController
         endif;
         try{
             $address = Address::select('id','fname','lname','email','phonecode','mobile_no','address')->where('user_id', Auth::id())->where('status','1')->first();
-            $cart = Cart::where('user_id', Auth::id())->with('product','SoldBy')->get();
+            $cart = Cart::where('user_id', Auth::id())->with('product')->get();
             return parent::success("View Cart successfully!",['address' => $address,'cart' => $cart]);
         }catch(\Exception  $ex){
             return parent::error($ex->getMessage());

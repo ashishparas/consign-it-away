@@ -40,6 +40,7 @@ class Product extends Model
         'product_offer',
         'ships_from',
         'shipping_type',
+        'free_shipping',
         'meta_description',
         'meta_tags',
         'meta_keywords',
@@ -71,8 +72,8 @@ class Product extends Model
         return $this->belongsTo(Category::class)->select('id','title');
     }
    
-    public function SoldBy(){
-        return $this->hasOne(User::class,'id')->select('id','fname','lname');
+    public function User(){
+        return $this->hasOne(User::class,'id','user_id')->select('id','fname','lname');
     }
 
     
