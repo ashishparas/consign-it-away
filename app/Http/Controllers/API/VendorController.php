@@ -333,12 +333,9 @@ class VendorController extends ApiController
                 endif;
     
                 $input['image'] = implode(',', $images);
-                
+
             endif;
 
-
-
-           
 
 
 

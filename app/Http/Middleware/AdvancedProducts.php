@@ -25,7 +25,7 @@ class AdvancedProducts extends ApiController
             'weight' =>'required', 'condition'=>'required', 'dimensions' =>'required',
             'available_for_sale' => 'required|in:1,2','constomer_contact'=> 'required|in:1,2',
             'inventory_track' => 'required|in:1,2','product_offer' => '','ships_from'=>'required', 'shipping_type' => 'required','free_shipping' => 'required|in:1,2', 'meta_description' => '',
-            'meta_tags' => '', 'meta_keywords' => '', 'title' => 'required', 'variants' => '',
+            'meta_tags' => '', 'meta_keywords' => '', 'title' => '', 'variants' => '',
             'state'=> '','tags' =>'','advertisement' =>'', 'selling_fee' =>'required', 
             'amount' => 'required'
 ];
@@ -37,7 +37,7 @@ class AdvancedProducts extends ApiController
                 'weight' =>'required', 'condition'=>'required', 'dimensions' =>'required',
                 'available_for_sale' => 'required|in:1,2','constomer_contact'=> 'required|in:1,2',
                 'inventory_track' => 'required|in:1,2','product_offer' => '','ships_from'=>'required', 'shipping_type' => 'required', 'meta_description' => '',
-                'meta_tags' => '', 'meta_keywords' => '', 'title' => 'required', 'variants' => 'required',
+                'meta_tags' => '', 'meta_keywords' => '', 'title' => '', 'variants' => 'required',
                 'state'=> '','tags' =>'','advertisement' =>'', 'selling_fee' =>'required', 
                 'amount' => 'required'
     ];
