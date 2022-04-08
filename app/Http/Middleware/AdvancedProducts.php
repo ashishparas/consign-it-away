@@ -20,6 +20,7 @@ class AdvancedProducts extends ApiController
        
         if($request->type === '1'){
             $rules = ['name'=> 'required','image'=>'required','category_id' =>'required',
+            'subcategory_id' => 'required|exists:subcategories,id',
             'description' => 'required', 'price' => 'required', 'discount' => '',
             'brand' => 'required', 'color' =>'required', 'quantity' => 'required',
             'weight' =>'required', 'condition'=>'required', 'dimensions' =>'required',
@@ -32,6 +33,8 @@ class AdvancedProducts extends ApiController
         }elseif($request->type === '2'){
            
             $rules = ['name'=> 'required','image'=>'required','category_id' =>'required',
+
+                'subcategory_id' => 'required|exists:subcategories,id',
                 'description' => 'required', 'price' => 'required', 'discount' => '',
                 'brand' => 'required', 'color' =>'required', 'quantity' => 'required',
                 'weight' =>'required', 'condition'=>'required', 'dimensions' =>'required',
