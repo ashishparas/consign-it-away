@@ -174,12 +174,20 @@ class ClientController extends ApiController
         endif;
 
         try{
-            $products = Product::select('id','name','image','amount')->get();
+          
+            $products = DB::table('products')
+                    ->select('products.id','products.name','products.image','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments'))
+                    ->leftJoin('ratings', 'ratings.product_id', 'products.id')
+                    ->groupBy('ratings.product_id')
+                    ->orderBy('AverageRating', 'desc')
 
-            foreach($products as $key => $product):
-                $products[$key]['rating']  = number_format($product->Rating()->avg('rating'),1);
-                $products[$key]['comment'] = $product->Rating()->count('comment');
-            endforeach;
+                    ->get();
+
+                    
+          
+            
+            // dd(DB::getQueryLog($products));
+            
             
             return parent::success("Product view successfully",['products' => $products]);
         }catch(\exception $ex){

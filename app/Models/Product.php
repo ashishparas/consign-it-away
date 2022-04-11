@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Rating;
 use Illuminate\Support\Facades\DB;
+use phpseclib3\Crypt\Common\Formats\Signature\Raw;
 
 class Product extends Model
 {
@@ -56,17 +57,9 @@ class Product extends Model
     ];
 
 
-    protected $appends = ['base_url','rating','ReviewCount'];
+    protected $appends = ['base_url'];
 
 
-    public function getReviewCountAttribute(){
-        return Rating::where('product_id', $this->id)->count();
-    }
-    
-    public function getRatingAttribute(){
-         $Rating = number_format(Rating::where('product_id', $this->id)->avg('rating'),1);
-        return $Rating;
-    }
 
     public function getVariantsAttribute($value)
     {
@@ -75,7 +68,7 @@ class Product extends Model
 
 
     public function getBaseUrlAttribute(){
-        return public_path('/products');
+        return url('/products');
     }
 
     public function getImageAttribute($value){
@@ -94,6 +87,14 @@ class Product extends Model
         return $this->hasOne(User::class,'id','user_id')->select('id','fname','lname');
     }
 
+
+    public function Rating(){
+        
+      return $this->hasOne(Rating::class,'product_id');
+      
+    }
+
+    
     
 
 

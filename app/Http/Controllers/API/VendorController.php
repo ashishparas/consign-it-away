@@ -360,7 +360,10 @@ class VendorController extends ApiController
            $input = $request->all();
             $limit = $input['limit'];
             $products = Product::select('id','name','image','amount','category_id')->where('user_id', Auth::id())->with(['Category'])->orderBy('id','DESC')->get(); 
-       
+            foreach($products as $key => $product):
+                $products[$key]['rating']  = number_format($product->Rating()->avg('rating'),1);
+                $products[$key]['comment'] = $product->Rating()->count('comment');
+            endforeach;
          
           
         return parent::success("View all products successfully!", ['products' => $products]);
