@@ -56,9 +56,13 @@ class Product extends Model
     ];
 
 
-    protected $appends = ['base_url','rating'];
+    protected $appends = ['base_url','rating','ReviewCount'];
 
 
+    public function getReviewCountAttribute(){
+        return Rating::where('product_id', $this->id)->count();
+    }
+    
     public function getRatingAttribute(){
          $Rating = number_format(Rating::where('product_id', $this->id)->avg('rating'),1);
         return $Rating;
