@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Password;
 use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
 use App\Models\Address;
+use App\Models\Brand;
 use App\Models\Card;
 use App\Models\Cart;
 
@@ -176,20 +177,16 @@ class ClientController extends ApiController
         try{
           
             $products = DB::table('products')
-                    ->select('products.id','products.name','products.image','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments'))
+                    ->select('products.id','products.name','products.image','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
+                    ->leftJoin('favourites', 'favourites.product_id', 'products.id')
                     ->groupBy('ratings.product_id')
                     ->orderBy('AverageRating', 'desc')
-
                     ->get();
 
-                    
-          
-            
-            // dd(DB::getQueryLog($products));
-            
-            
-            return parent::success("Product view successfully",['products' => $products]);
+            $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,14130,15097,13014,5808,6573])->get();
+
+            return parent::success("Product view successfully",['products' => $products,'brands' => $brands]);
         }catch(\exception $ex){
             return parent::error($ex->getMessage());
         }
