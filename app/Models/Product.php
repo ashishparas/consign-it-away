@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Rating;
 use Illuminate\Support\Facades\DB;
 
 class Product extends Model
@@ -18,7 +19,7 @@ class Product extends Model
     protected $primaryKey = "id";
 
 
-    protected $appends = ['base_url'];
+    
 
     protected $fillable = [
         'user_id',
@@ -55,6 +56,13 @@ class Product extends Model
     ];
 
 
+    protected $appends = ['base_url','rating'];
+
+
+    public function getRatingAttribute(){
+         $Rating = number_format(Rating::where('product_id', $this->id)->avg('rating'),1);
+        return $Rating;
+    }
 
     public function getVariantsAttribute($value)
     {
@@ -70,13 +78,14 @@ class Product extends Model
         return explode(',', $value);
     }
 
-    public function Rating(){
-        return $this->hasOne(Rating::class);
-    }
+    
+    
+
     public function Category(){
         return $this->belongsTo(Category::class)->select('id','title');
     }
    
+  
     public function User(){
         return $this->hasOne(User::class,'id','user_id')->select('id','fname','lname');
     }

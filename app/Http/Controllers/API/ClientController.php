@@ -462,7 +462,7 @@ class ClientController extends ApiController
        endif;
        try{
            $cart = Cart::with('Product')->get();
-        return parent::success("View cart successfully!",['cart' => $cart]);
+           return parent::success("View cart successfully!",['cart' => $cart]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }

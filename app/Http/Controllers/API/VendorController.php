@@ -340,6 +340,7 @@ class VendorController extends ApiController
 
 
             $product = Product::create($input);
+            $user = User::where('id',Auth::id())->update(['status' => '6']);
             return parent::success("Product created successfully!",['product' => $product]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
@@ -358,12 +359,9 @@ class VendorController extends ApiController
        try{
            $input = $request->all();
             $limit = $input['limit'];
-            $products = Product::select('id','image','amount','category_id')->with(['Category'])->Paginate($limit);
-            foreach($products as $key => $product):
-                $products[$key]['rating'] = number_format($product->Rating()->avg('rating'),1);
-                $products[$key]['comment'] = $product->Rating()->count('comment');
-            endforeach;
-            // $collection = $products->getCollection();
+            $products = Product::select('id','name','image','amount','category_id')->where('user_id', Auth::id())->with(['Category'])->orderBy('id','DESC')->get(); 
+       
+         
           
         return parent::success("View all products successfully!", ['products' => $products]);
        }catch(\Exception $ex){
