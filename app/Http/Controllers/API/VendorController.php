@@ -452,6 +452,30 @@ class VendorController extends ApiController
 
    }
 
+
+   public function editBankDetails(Request $request){
+    $rules = ['bank_ac_no' =>'required', 'routing_no' =>'required','bank_id'=>'required|exists:banks,id'];
+
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+
+        $input = $request->all();
+       
+        $bank = Bank::FindOrfail($request->bank_id);
+        $bank->fill($input);
+        $bank->save();
+
+        return parent::success("Bank added successfully!",['bank' => $bank]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+
+   }
+
    public function Discount(Request $request)
    {
        $rules = ['banner'=>'required','category_id'=>'required|exists:categories,id','percentage'=>'required','description'=>'required','start_date'=>'required', 'valid_till' =>'required'];
@@ -677,6 +701,49 @@ class VendorController extends ApiController
 
    }
 
+   public function ViewBankDetails(Request $request)
+   {
+       $rules = [];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $bank = Bank::where('user_id',Auth::id())->get();
+        return parent::success("View bank details successfully!",['bank' => $bank]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
+   public function getBankDetailsById(Request $request){
+    $rules = ['bank_id' => 'required|exists:banks,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $bank = Bank::where('user_id', Auth::id())->where('id', $request->bank_id)->first();
+        return parent::success("View bank details successfully!",['bank' => $bank]);
+    }catch(\exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
+   public function deleteBankDetails(Request $request){
+    $rules = ['bank_id' => 'required|exists:banks,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $bank = Bank::where('user_id', Auth::id())->where('id', $request->bank_id)->delete();
+        return parent::success("Delete bank details successfully!");
+    }catch(\exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
 
 
 

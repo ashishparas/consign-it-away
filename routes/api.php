@@ -99,8 +99,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('checkout',[ClientController::class, "Checkout"]);
     Route::post('order',[ClientController::class, "Order"]);
     Route::post('vendor/product/filter',[VendorController::class, "VendorProductFilter"]);
-
-    
+    Route::post('view/bank/details',[VendorController::class, "ViewBankDetails"]);
+    Route::post('get/bank/details/by/id', [VendorController::class, "getBankDetailsById"]); 
+    Route::post('delete/bank/details', [VendorController::class, "deleteBankDetails"]); 
+    Route::post('edit/bank/details', [VendorController::class, "editBankDetails"]);
 });
 
 
