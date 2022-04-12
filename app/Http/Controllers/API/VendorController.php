@@ -22,6 +22,7 @@ use App\Models\Colour;
 use App\Models\Discount;
 use App\Models\Manager;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\Subcategory;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\DB;
@@ -340,6 +341,17 @@ class VendorController extends ApiController
 
 
             $product = Product::create($input);
+
+            if($product):
+             
+                Stock::create([
+                    'product_id' => $product->id,
+                    'stock'      => $product->quantity,
+                ]);
+
+            endif;
+
+
             $user = User::where('id',Auth::id())->update(['status' => '6']);
             return parent::success("Product created successfully!",['product' => $product]);
         }catch(\Exception $ex){
@@ -639,6 +651,31 @@ class VendorController extends ApiController
 
    }
    
+   public function VendorProductFilter(Request $request)
+   {
+    // dd($request->all());
+        $rules = ['category_id' => 'required|exists:categories,id', 'quantity' => ''];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            // DB::enableQueryLog();
+            $product =  Product::select(['id','category_id','name','amount','image','quantity'])
+                        ->where('user_id' , Auth::id())
+                        ->where('category_id', $input['category_id'])
+                        ->where('quantity','>=', (int)$input['quantity'])
+                        ->with(['Category','Rating'])   
+                        ->orderBy('id','DESC')
+                        ->get();
+                        // dd(DB::getQueryLog($product));
+            return parent::success("View filter successfully!",['product' => $product]);    
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+
+   }
 
 
 

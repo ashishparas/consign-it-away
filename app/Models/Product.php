@@ -57,9 +57,14 @@ class Product extends Model
     ];
 
 
-    protected $appends = ['base_url'];
+    protected $appends = ['base_url','AvgRating'];
 
 
+    public function getAvgRatingAttribute()
+    {
+        $rating = Rating::where('product_id', $this->id)->avg('rating');
+        return number_format($rating,1);
+    }
 
     public function getVariantsAttribute($value)
     {
@@ -90,9 +95,11 @@ class Product extends Model
 
     public function Rating(){
         
-      return $this->hasOne(Rating::class,'product_id');
+      return $this->hasOne(Rating::class);
       
     }
+
+   
 
     
     
