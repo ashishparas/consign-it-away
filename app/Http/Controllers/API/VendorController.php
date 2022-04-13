@@ -363,21 +363,52 @@ class VendorController extends ApiController
 
    public function ViewProduct(Request $request)
    {
-       $rules = ['limit' => ''];
+       $rules = ['limit' => '','search'=>'','category_id' =>'', 'quantity' => ''];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
        if($validateAttributes):
         return $validateAttributes;
        endif;
        try{
+
            $input = $request->all();
+           $search = $input['search'];
+           $category_id = $input['category_id'];
+           $quantity = $input['quantity'];
+           if(isset($input['limit'])):
             $limit = $input['limit'];
-            $products = Product::select('id','name','image','amount','category_id','quantity')->where('user_id', Auth::id())->with(['Category'])->orderBy('id','DESC')->get(); 
-            foreach($products as $key => $product):
-                $products[$key]['rating']  = number_format($product->Rating()->avg('rating'),1);
-                $products[$key]['comment'] = $product->Rating()->count('comment');
-            endforeach;
+        endif;
+            if(isset($request->search) || isset($request->category_id) || isset($request->quantity)){
+              
+                $products = Product::select('products.id','products.name','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'))
+                        ->leftJoin('ratings','ratings.product_id','products.id')
+                        ->where('products.user_id', Auth::id())
+                        ->where('products.name','LIKE','%'.$request->search.'%')
+                        ->Where('products.category_id','LIKE','%'.$category_id.'%')
+                        ->Where('products.quantity','LIKE','%'.$quantity.'%')
+                        ->with(['Category'])
+                        ->groupBy('products.id')
+                        ->orderBy('AverageRating','DESC')
+                        ->get();
+
+            }else{
+
+                $products = Product::select('products.id','products.name','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'))
+                        ->leftJoin('ratings','ratings.product_id','products.id')
+                        ->where('products.user_id', Auth::id())
+                        ->with(['Category'])
+                        ->groupBy('products.id')
+                        ->orderBy('AverageRating','DESC')
+                        ->get();
+
+            }
+
+             
+
+            // foreach($products as $key => $product):
+            //     $products[$key]['rating']  = number_format($product->Rating()->avg('rating'),1);
+            //     $products[$key]['comment'] = $product->Rating()->count('comment');
+            // endforeach;
          
-          
         return parent::success("View all products successfully!", ['products' => $products]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
