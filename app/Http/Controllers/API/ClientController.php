@@ -185,10 +185,16 @@ class ClientController extends ApiController
                     ->get();
             $category = Category::select('id','title','image')->get();
 
+
             $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,14130,15097,13014,5808,6573])->get();
-             $products = array('name' => 'most_popular_products','most_popular' => $products);
-             $brands = array('name' => 'brands','all_brands' => $brands,'baseUrl' => url('brand'));
-            return parent::success("Product view successfully",['categories' =>  $category,'products' => $products,'brands' => $brands]);
+            // $category = array('name' => 'category' , 'items' => $category);
+            // $products = array('name' => 'most_popular_products','items' => $products);
+            // $brands = array('name' => 'brands','items' => $brands,'baseUrl' => url('brand'));
+            $arr = array(array('name' => 'Category','type'=> 1,'items'=> $category),
+            array('name' =>'Most Popular','type'=> 2,'items' =>$products),
+            array('name' => 'Brands','type' => 3,'items' => $brands)
+        );
+            return parent::success("Product view successfully",['home' => $arr]);
         }catch(\exception $ex){
             return parent::error($ex->getMessage());
         }
