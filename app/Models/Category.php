@@ -15,4 +15,10 @@ class Category extends Model
     protected $fillable = ['title','image', 'type'];
 
     protected $primaryKey = "id";
+
+    protected $appends = ['CategoryBaseUrl'];
+
+    public function getCategoryBaseUrlAttribute(){
+        return url('category');
+    }
 }

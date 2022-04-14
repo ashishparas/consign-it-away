@@ -6,6 +6,7 @@
 /public/discount
 /public/storage
 /public/brand
+/public/category
 /storage/*.key
 /vendor
 .env
