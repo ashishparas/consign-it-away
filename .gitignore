@@ -5,6 +5,7 @@
 /public/rating
 /public/discount
 /public/storage
+/public/brand
 /storage/*.key
 /vendor
 .env

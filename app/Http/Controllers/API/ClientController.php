@@ -185,7 +185,8 @@ class ClientController extends ApiController
                     ->get();
 
             $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,14130,15097,13014,5808,6573])->get();
-
+             $products = array('name' => 'most_popular_products','most_popular' => $products);
+             $brands = array('name' => 'brands','all_brands' => $brands,'baseUrl' => url('brand'));
             return parent::success("Product view successfully",['products' => $products,'brands' => $brands]);
         }catch(\exception $ex){
             return parent::error($ex->getMessage());
