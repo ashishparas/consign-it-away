@@ -31,6 +31,7 @@ use App\Models\Favourite;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Rating;
+use App\Models\RecentProducts;
 use GrahamCampbell\ResultType\Success;
 
 class ClientController extends ApiController
@@ -187,12 +188,17 @@ class ClientController extends ApiController
 
 
             $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,14130,15097,13014,5808,6573])->get();
-            // $category = array('name' => 'category' , 'items' => $category);
-            // $products = array('name' => 'most_popular_products','items' => $products);
-            // $brands = array('name' => 'brands','items' => $brands,'baseUrl' => url('brand'));
-            $arr = array(array('name' => 'Category','type'=> 1,'items'=> $category),
+            
+            $recentView = RecentProducts::select('recent_products.id','recent_products.user_id','recent_products.product_id',DB::raw('(favourites.status) as favourite'))
+            ->where('recent_products.user_id', Auth::id())
+            ->leftJoin('favourites', 'favourites.product_id', 'recent_products.product_id')
+            ->with(['Product'])
+            ->get();
+            $arr = array(
+            array('name' => 'Category','type'=> 1,'items'=> $category),
             array('name' =>'Most Popular','type'=> 2,'items' =>$products),
-            array('name' => 'Brands','type' => 3,'items' => $brands)
+            array('name' => 'Brands','type' => 3,'items' => $brands),
+            array('name' => 'Recent Viewed','type' => 4, 'items' => $recentView)
         );
             return parent::success("Product view successfully",['home' => $arr]);
         }catch(\exception $ex){
@@ -216,6 +222,13 @@ class ClientController extends ApiController
                
                 $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
             endforeach;
+
+            RecentProducts::updateOrCreate(['user_id'=> Auth::id(),'product_id' => $request->product_id],[
+                'user_id' => Auth::id(),
+                'product' => $request->product_id,
+                'updated_at' => Carbon::now()
+            ]);
+
             return parent::success("Product view successfully!",['product' => $product]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
