@@ -16,4 +16,13 @@ class Stock extends Model
 
 
     protected $fillable = ['product_id', 'stock'];
+
+
+    // protected $appends = ['stockStatus'];
+
+
+
+
+
+
 }

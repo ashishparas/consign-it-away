@@ -363,7 +363,7 @@ class VendorController extends ApiController
 
    public function ViewProduct(Request $request)
    {
-       $rules = ['limit' => '','search'=>'','category_id' =>'', 'quantity' => ''];
+       $rules = ['limit' => '','search'=>'','category_id' =>'', 'stock_status' => ''];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
        if($validateAttributes):
         return $validateAttributes;
@@ -373,27 +373,37 @@ class VendorController extends ApiController
            $input = $request->all();
            $search = $input['search'];
            $category_id = $input['category_id'];
-           $quantity = $input['quantity'];
+           $stock_status = $input['stock_status'];
            if(isset($input['limit'])):
             $limit = $input['limit'];
         endif;
-            if(isset($request->search) || isset($request->category_id) || isset($request->quantity)){
+            if(isset($request->search) || isset($request->category_id) || isset($request->stock_status)){
               
-                $products = Product::select('products.id','products.name','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'))
+                $products = Product::select('products.id','products.name','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
+                WHEN stocks.stock > 0 THEN "available"
+                WHEN stocks.stock = 0 THEN "not_available"
+                ELSE "not_available"
+               END ) as stock_status'))
                         ->leftJoin('ratings','ratings.product_id','products.id')
+                        ->leftJoin('stocks','stocks.product_id','products.id')
                         ->where('products.user_id', Auth::id())
                         ->where('products.name','LIKE','%'.$request->search.'%')
                         ->Where('products.category_id','LIKE','%'.$category_id.'%')
-                        ->Where('products.quantity','LIKE','%'.$quantity.'%')
-                        ->with(['Category'])
+                        ->having('stock_status',$stock_status)
+                        ->with(['Category','Stock'])
                         ->groupBy('products.id')
                         ->orderBy('AverageRating','DESC')
                         ->get();
 
             }else{
 
-                $products = Product::select('products.id','products.name','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'))
+                $products = Product::select('products.id','products.name','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
+                WHEN stocks.stock > 0 THEN "available"
+                WHEN stocks.stock = 0 THEN "not_available"
+                ELSE "not_available"
+               END ) as stock_status'))
                         ->leftJoin('ratings','ratings.product_id','products.id')
+                        ->leftJoin('stocks','stocks.product_id','products.id')
                         ->where('products.user_id', Auth::id())
                         ->with(['Category'])
                         ->groupBy('products.id')

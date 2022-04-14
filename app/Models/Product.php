@@ -99,6 +99,11 @@ class Product extends Model
       
     }
 
+
+    public function Stock(){
+        return $this->hasOne(Stock::class)->select('product_id','stock');
+    }
+
    
 
     
