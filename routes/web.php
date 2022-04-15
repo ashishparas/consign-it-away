@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,9 +20,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/PrivacyPolicy', function () {
+    return view('privacy_policy');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], function () {
     Route::get('/', ['uses' => 'AdminController@index']);

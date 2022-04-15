@@ -49,6 +49,10 @@ class AuthController extends ApiController {
     }
     
 
+   
+
+
+
     public function Login(Request $request) {
         try {
             $rules = ['email' => 'required', 'password' => 'required','type'=> 'required|in:1,2'];
