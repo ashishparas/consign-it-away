@@ -24,6 +24,10 @@ Route::get('/PrivacyPolicy', function () {
     return view('privacy_policy');
 });
 
+Route::get('terms_and_conditions', function(){
+    return view('terms_and_conditions');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
