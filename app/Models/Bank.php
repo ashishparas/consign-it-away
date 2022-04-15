@@ -15,5 +15,5 @@ class Bank extends Model
     protected $primaryKey ="id";
 
 
-    protected $fillable = ['user_id','bank_ac_no','routing_no'];
+    protected $fillable = ['user_id','name','bank_ac_no','routing_no'];
 }

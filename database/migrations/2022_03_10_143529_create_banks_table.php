@@ -17,6 +17,7 @@ class CreateBanksTable extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('name')->nullable();
             $table->string('bank_ac_no')->nullable();
             $table->string('routing_no')->nullable();
             $table->timestamps();

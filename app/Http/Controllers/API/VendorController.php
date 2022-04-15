@@ -473,7 +473,7 @@ class VendorController extends ApiController
    }
 
    public function AddBank(Request $request){
-    $rules = ['bank_ac_no' =>'required', 'routing_no' =>'required'];
+    $rules = ['name' => 'required','bank_ac_no' =>'required', 'routing_no' =>'required'];
 
     $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
 
@@ -495,7 +495,7 @@ class VendorController extends ApiController
 
 
    public function editBankDetails(Request $request){
-    $rules = ['bank_ac_no' =>'required', 'routing_no' =>'required','bank_id'=>'required|exists:banks,id'];
+    $rules = ['bank_ac_no' =>'required','name' => 'required', 'routing_no' =>'required','bank_id'=>'required|exists:banks,id'];
 
     $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
 
