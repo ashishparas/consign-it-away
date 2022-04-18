@@ -35,6 +35,7 @@ class User extends Authenticatable
         'status',
         'fax',
         'paypal_id',
+        'paypal_id_status',
         'bank_ac_no',
         'routing_no',
         'street_address',

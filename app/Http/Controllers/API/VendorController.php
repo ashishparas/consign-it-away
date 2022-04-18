@@ -493,6 +493,37 @@ class VendorController extends ApiController
 
    }
 
+   public function SetPrimaryPayment(Request $request)
+   {
+       $rules = ['payment_id' => ''];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+           $user = User::FindOrfail(Auth::id());
+            if($input['type'] === '1'){
+                
+                $user->fill(['paypal_id_status' => '1']);
+                $user->save();
+                Bank::where('user_id', Auth::id())->update(['status' => '2']);
+                $message = "payal Id";
+            }else if($input['type'] === '2'){
+
+                Bank::where('user_id', Auth::id())->update(['status' => '2']);
+
+                Bank::where('user_id', Auth::id())->where('id', $input['paypal_id'])->update(['status' => '1']);
+                $user->fill(['paypal_id_status' => '2']);
+                $user->save();
+                $message = "Bank account";
+            }
+            return parent::success("$message is set  to default");
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
 
    public function editBankDetails(Request $request){
     $rules = ['bank_ac_no' =>'required','name' => 'required', 'routing_no' =>'required','bank_id'=>'required|exists:banks,id'];
@@ -751,7 +782,8 @@ class VendorController extends ApiController
        endif;
        try{
            $bank = Bank::where('user_id',Auth::id())->get();
-        return parent::success("View bank details successfully!",['bank' => $bank]);
+           $paypal = User::select('id','paypal_id','paypal_id_status')->where('id',Auth::id())->first();
+        return parent::success("View bank details successfully!",['paypal_id' => $paypal ,'bank' => $bank]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
