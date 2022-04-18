@@ -495,7 +495,7 @@ class VendorController extends ApiController
 
    public function SetPrimaryPayment(Request $request)
    {
-       $rules = ['payment_id' => ''];
+       $rules = ['bank_id' => ''];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
        if($validateAttributes):
         return $validateAttributes;
@@ -510,10 +510,10 @@ class VendorController extends ApiController
                 Bank::where('user_id', Auth::id())->update(['status' => '2']);
                 $message = "payal Id";
             }else if($input['type'] === '2'){
-
+                
                 Bank::where('user_id', Auth::id())->update(['status' => '2']);
 
-                Bank::where('user_id', Auth::id())->where('id', $input['paypal_id'])->update(['status' => '1']);
+                Bank::where('user_id', Auth::id())->where('id', $input['bank_id'])->update(['status' => '1']);
                 $user->fill(['paypal_id_status' => '2']);
                 $user->save();
                 $message = "Bank account";
