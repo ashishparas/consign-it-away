@@ -59,8 +59,7 @@ class AuthController extends ApiController {
             
             $rules = array_merge($this->requiredParams, $rules);
             $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
-            if ($validateAttributes):
-              
+            if ($validateAttributes):         
                 return $validateAttributes;
             endif;
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -153,6 +152,7 @@ class ClientController extends ApiController
         endif;
 
         try{
+            
             $input = $request->all();
             $input['user_id'] =  Auth::id();
 
@@ -272,7 +272,7 @@ class ClientController extends ApiController
             $input = $request->all();
             $input['by'] = Auth::id();
             $input['to'] = $input['product_id'];
-            $favourite = Favourite::create($input);
+            $favourite = Favourite::updateOrCreate(['by' => Auth::id(),'product_id'=> $input['product_id']],$input);
             return parent::success("Product favourite successfully!",['favourite' => $favourite]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
