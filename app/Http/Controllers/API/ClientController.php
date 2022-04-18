@@ -284,12 +284,15 @@ class ClientController extends ApiController
 
     public function FavouriteList(Request $request){
         $rules = [];
-        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+        $validateAttributes = parent::validateAttributes($request,'GET', $rules, array_keys($rules), false);
         if($validateAttributes):
             return $validateAttributes;
         endif;
         try{
-            $favourites = Favourite::where('by', Auth::id())->where('status','1')->with('Product')->get();
+           $input = $request->all();
+          $limit =  (isset($input['limit']))? (int)$input['limit']:15; 
+       
+            $favourites = Favourite::where('by', Auth::id())->where('status','1')->with('Product')->paginate($limit);
             foreach($favourites as $key => $favourite):
                 $rating = Rating::where('product_id', $favourite->product->id)->avg('rating');
                 $comment = Rating::where('product_id', $favourite->product->id)->count('comment');

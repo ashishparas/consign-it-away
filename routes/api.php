@@ -65,7 +65,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('rating',[ClientController::class, "Rating"]);
     Route::post('favourite',[ClientController::class,"Favourite"]);
     Route::post('product/by/id',[ClientController::class,"ProductById"]);
-    Route::post('favourite/list',[ClientController::class,"FavouriteList"]);
+    Route::get('favourite/list',[ClientController::class,"FavouriteList"]);
     Route::post('delete/favourite',[ClientController::class,"DeleteFavourite"]);
     Route::post('add/staff',[VendorController::class, "Staff"]);
     Route::post('view/staff',[VendorController::class, "ViewStaff"]);
