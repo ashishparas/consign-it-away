@@ -396,7 +396,7 @@ class VendorController extends ApiController
                         ->get();
 
             }else{
-
+                    DB::enableQueryLog();
                 $products = Product::select('products.id','products.name','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
                 WHEN stocks.stock > 0 THEN "available"
                 WHEN stocks.stock = 0 THEN "not_available"
@@ -412,7 +412,7 @@ class VendorController extends ApiController
 
             }
 
-             
+             dd(DB::getQueryLog($products));
 
             // foreach($products as $key => $product):
             //     $products[$key]['rating']  = number_format($product->Rating()->avg('rating'),1);

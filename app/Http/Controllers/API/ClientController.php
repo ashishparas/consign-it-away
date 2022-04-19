@@ -293,7 +293,7 @@ class ClientController extends ApiController
           $limit =  (isset($input['limit']))? (int)$input['limit']:15; 
        
             $favourites = Favourite::where('by', Auth::id())->where('status','1')->with('Product')
-            // ->paginate($limit);
+            // ->simplePaginate($limit);   
             ->get();
             foreach($favourites as $key => $favourite):
                 $rating = Rating::where('product_id', $favourite->product->id)->avg('rating');
