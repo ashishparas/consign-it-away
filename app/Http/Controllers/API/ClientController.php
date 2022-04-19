@@ -309,7 +309,7 @@ class ClientController extends ApiController
 
 
     public function DeleteFavourite(Request $request){
-       
+     
         $rules = ['favourite_id' => 'required|exists:favourites,id'];
         $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
         if($validateAttributes):
@@ -317,9 +317,14 @@ class ClientController extends ApiController
 
         endif;
         try{
+            // DB::enableQueryLog();
             $input = $request->all();
-            Favourite::find($input['favourite_id'])->delete();
-            return parent::success("Favourite delete successfully!",[]);
+          
+            $favourite = Favourite::where('id',$input['favourite_id'])
+                                    ->where('by', Auth::id())
+                                    ->delete();
+            // dd(DB::getQueryLog($favourite));
+            return parent::success("Favourite delete successfully!");
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
