@@ -372,13 +372,14 @@ class VendorController extends ApiController
 
            $input = $request->all();
            $search = $input['search'];
-           $category_id = $input['category_id'];
+           $category_id = (int)$input['category_id'];
            $stock_status = $input['stock_status'];
            if(isset($input['limit'])):
             $limit = $input['limit'];
         endif;
             if(isset($request->search) || isset($request->category_id) || isset($request->stock_status)){
-              
+          
+                // DB::enableQueryLog();
                 $products = Product::select('products.id','products.name','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
                 WHEN stocks.stock > 0 THEN "available"
                 WHEN stocks.stock = 0 THEN "not_available"
@@ -389,11 +390,12 @@ class VendorController extends ApiController
                         ->where('products.user_id', Auth::id())
                         ->where('products.name','LIKE','%'.$request->search.'%')
                         ->Where('products.category_id','LIKE','%'.$category_id.'%')
-                        ->having('stock_status',$stock_status)
+                        ->having('stock_status','LIKE','%'.$stock_status.'%')
                         ->with(['Category','Stock'])
                         ->groupBy('products.id')
                         ->orderBy('AverageRating','DESC')
                         ->get();
+                        // dd(DB::getQueryLog($products));
 
             }else{
                     // DB::enableQueryLog();
