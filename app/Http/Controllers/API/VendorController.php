@@ -614,7 +614,7 @@ class VendorController extends ApiController
 
    public function ViewDiscount(Request $request)
    {
-       dd(Auth::id());
+    //    dd(Auth::id());
     $rules = ['status' => 'required|in:1,2'];
     $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
     if($validateAttributes):
