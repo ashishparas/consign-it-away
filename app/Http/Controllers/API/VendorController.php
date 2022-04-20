@@ -863,11 +863,31 @@ class VendorController extends ApiController
         return $validateAttributes;
        endif;
        try{
-           $input = $request->all();
-        // User::
+            $input = $request->all();
+            $user = User::FindOrfail(Auth::id());
+            $user->paypal_id = $input['paypal'];
+            $user->save();
+            return parent::success("Paypal Id updated successfully!");
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
+   }
+
+
+   public function DeleteDiscount(Request $request)
+   {
+       $rules = ['discount_id' => 'required|exists:discounts,id'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            Discount::where('id', $request->discount_id)->where('user_id', Auth::id())->delete();
+            return parent::success("Discount deleted successfully!");
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
    }
 
 
