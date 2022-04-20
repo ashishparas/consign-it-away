@@ -620,7 +620,7 @@ class VendorController extends ApiController
         return $validateAttributes;
     endif;
     try{
-        $discount = Discount::where('user_id', Auth::id())->where('status', '1')->with('Category')->get();
+        $discount = Discount::where('user_id', Auth::id())->with('Category')->get();
         return parent::success("View discount successfully!",['discount' => $discount]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
