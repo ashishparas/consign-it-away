@@ -16,6 +16,12 @@ class Discount extends Model
 
     protected $fillable= ['category_id','user_id','banner','percentage','description', 'start_date', 'valid_till','status'];
 
+    protected $appends = ['DiscountBaseUrl'];
+
+     public function getDiscountBaseUrlAttribute()
+     {
+         return url('discount/');
+     }
 
     public function Category(){
         return $this->belongsTo(Category::class)->select('id','title');   

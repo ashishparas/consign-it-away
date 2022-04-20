@@ -61,6 +61,9 @@ class Product extends Model
     protected $appends = ['base_url','favourite'];
 
 
+   
+
+
     public function getFavouriteAttribute()
     {
        $favourite = Favourite::where('product_id', $this->id)->where('by', Auth::id())->first();
@@ -78,7 +81,7 @@ class Product extends Model
         return url('/products');
     }
 
-    public function getImageAttribute($value){
+    public function getImagesAttribute($value){
         return explode(',', $value);
     }
 

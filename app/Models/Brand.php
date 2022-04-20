@@ -18,7 +18,7 @@ class Brand extends Model
     protected $fillable = ['name','image'];
 
 
-    protected $appends = ['baseUrl'];
+    protected $appends = ['base_url'];
 
     public function getBaseUrlAttribute(){
         return url('brand');
