@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Rating;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use phpseclib3\Crypt\Common\Formats\Signature\Raw;
 
@@ -57,14 +58,15 @@ class Product extends Model
     ];
 
 
-    protected $appends = ['base_url'];
+    protected $appends = ['base_url','favourite'];
 
 
-    // public function getAvgRatingAttribute()
-    // {
-    //     $rating = Rating::where('product_id', $this->id)->avg('rating');
-    //     return number_format($rating,1);
-    // }
+    public function getFavouriteAttribute()
+    {
+       $favourite = Favourite::where('product_id', $this->id)->where('by', Auth::id())->first();
+       $fvrt = (!$favourite)? null:$favourite->status;
+       return $fvrt; 
+    }
 
     public function getVariantsAttribute($value)
     {

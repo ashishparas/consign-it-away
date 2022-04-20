@@ -169,6 +169,7 @@ class ClientController extends ApiController
     }
 
     public function Home(Request $request){
+        // dd(Auth::id());
         $rules = [];
         $validateAttributes=parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
         if($validateAttributes):
@@ -177,8 +178,8 @@ class ClientController extends ApiController
 
         try{
           
-            $products = DB::table('products')
-                    ->select('products.id','products.name','products.image','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+            $products = Product::
+                    select('products.id','products.name','products.image','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id')
                     // ->where('favourites.by', Auth::id())
