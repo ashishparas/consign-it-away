@@ -614,14 +614,46 @@ class VendorController extends ApiController
 
    public function ViewDiscount(Request $request)
    {
-    $rules = [];
-    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
+    $rules = ['status' => 'required|in:1,2'];
+    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
-        $discount = Discount::where('user_id', Auth::id())->with('Category')->get();
-        return parent::success("View discount successfully!",['discount' => $discount]);
+    
+        $input = $request->all();
+        $disc = [];
+        $discounts = Discount::where('user_id', Auth::id())->with('Category')->get();
+        if($input['status'] == '1'){
+           
+        foreach($discounts as $discount):
+
+        $date1 = Carbon::createFromFormat('Y-m-d H:i a', $discount['valid_till']); 
+        $date2 = Carbon::now();  
+       
+        $result = $date1->gt($date2);
+     
+        if($result):
+            array_push($disc,$discount);
+        endif;
+     endforeach;
+        }else if($input['status'] == '2'){
+
+            foreach($discounts as $discount):
+
+                $date1 = Carbon::createFromFormat('Y-m-d H:i a', $discount['valid_till']); 
+                $date2 = Carbon::now();  
+               
+                $result = $date1->lt($date2);
+             
+                if($result):
+                    array_push($disc,$discount);
+                endif;
+             endforeach;
+
+        }
+     
+        return parent::success("View discount successfully!",['discount' => $disc]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
