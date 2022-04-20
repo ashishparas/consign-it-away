@@ -614,6 +614,7 @@ class VendorController extends ApiController
 
    public function ViewDiscount(Request $request)
    {
+       dd(Auth::id());
     $rules = ['status' => 'required|in:1,2'];
     $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
     if($validateAttributes):
@@ -853,6 +854,21 @@ class VendorController extends ApiController
    }
 
 
+
+   public function EditPaypalId(Request $request)
+   {
+       $rules = ['paypal' => 'required'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+        // User::
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
 
 
 

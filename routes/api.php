@@ -104,6 +104,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('get/bank/details/by/id', [VendorController::class, "getBankDetailsById"]); 
     Route::post('delete/bank/details', [VendorController::class, "deleteBankDetails"]); 
     Route::post('edit/bank/details', [VendorController::class, "editBankDetails"]);
+    Route::post('edit/paypal/id',[VendorController::class, "EditPaypalId"]);
 });
 
 
