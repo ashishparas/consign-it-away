@@ -219,15 +219,31 @@ class ClientController extends ApiController
             return $validateAttributes;
         endif;
         try{
+
             $input = $request->all();
             $product = Product::FindOrfail($input['product_id']);
             $product['rating'] = number_format($product->Rating()->avg('rating'),1);
-            $product['comment'] = $product->Rating()->select('id','product_id','from','rating','comment')->get();
+            $product['comment'] = $product->Rating()->select('id','product_id','from','rating','comment')
+            ->get();
             foreach($product['comment'] as $key => $commentUser):
                
             $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
             endforeach;
+            $product['soldBy'] = User::select('id','fname','lname','profile_picture')->where('id', $product->user_id)->first();
+            $product['soldByOtherSellers'] = Product::select('id','user_id','image','amount')->where('name','LIKE','%'.$product->name.'%')->whereNotIn('id',[$product->id])->with('User')->get();
 
+            $OtherProducts = Product::select('products.id','products.user_id','products.name','products.image','products.amount',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(product_id) as TotalRating'))
+                    ->leftJoin('ratings','ratings.product_id','products.id')
+                    ->where('products.user_id', $product->user_id)
+                    ->groupBy('products.id')
+                    ->get();
+
+            $product['otherProducts'] = $OtherProducts;
+            $product['SimilarProducts'] = Product::select('products.id','products.user_id','products.name','products.image','products.amount',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(product_id) as TotalRating'))
+            ->leftJoin('ratings','ratings.product_id','products.id')
+            ->where('products.name','LIKE', '%'.$product->name.'%')
+            ->groupBy('products.id')
+            ->get();
             RecentProducts::updateOrCreate(['user_id'=> Auth::id(),'product_id' => $request->product_id],[
                 'user_id' => Auth::id(),
                 'product' => $request->product_id,

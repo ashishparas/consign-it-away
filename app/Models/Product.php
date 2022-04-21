@@ -66,9 +66,12 @@ class Product extends Model
 
     public function getFavouriteAttribute()
     {
-       $favourite = Favourite::where('product_id', $this->id)->where('by', Auth::id())->first();
-       $fvrt = (!$favourite)? null:$favourite->status;
-       return $fvrt; 
+       $favourite = Favourite::select('id','status')
+       ->where('product_id', $this->id)
+       ->where('by', Auth::id())
+       ->first();
+       $favourite['status'] = (!$favourite)? null:$favourite->status;
+       return $favourite;
     }
 
     public function getVariantsAttribute($value)
@@ -101,7 +104,7 @@ class Product extends Model
     }
 
 
-    public function Rating(){
+    public function Rating(){   
         
       return $this->hasOne(Rating::class);
       
