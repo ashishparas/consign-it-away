@@ -34,7 +34,6 @@ Route::post('forget/password',[AuthController::class, "ResetPassword"]);
 Route::post('csv',[VendorController::class, "CSV"]);
 
 
-
 Route::group(['middleware' =>['auth:api']], function(){
     
 });
