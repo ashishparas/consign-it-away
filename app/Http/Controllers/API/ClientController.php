@@ -179,7 +179,7 @@ class ClientController extends ApiController
         try{
         //   DB::enableQueryLog();
             $products = Product::
-                    select('products.id','products.name','products.image','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                    select('products.id','products.name','products.image as images','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id')
                     // ->where('favourites.by', Auth::id())
@@ -225,7 +225,7 @@ class ClientController extends ApiController
             $product['comment'] = $product->Rating()->select('id','product_id','from','rating','comment')->get();
             foreach($product['comment'] as $key => $commentUser):
                
-                $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
+            $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
             endforeach;
 
             RecentProducts::updateOrCreate(['user_id'=> Auth::id(),'product_id' => $request->product_id],[

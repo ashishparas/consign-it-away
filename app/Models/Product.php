@@ -81,10 +81,13 @@ class Product extends Model
         return url('/products');
     }
 
-    // public function getImagesAttribute($value){
-    //     return explode(',', $value);
-    // }
+    public function getImagesAttribute($value){
+        return explode(',', $value);
+    }
 
+    public function getImageAttribute($value){
+        return explode(',', $value);
+    }
     
     
 
