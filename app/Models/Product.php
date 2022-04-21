@@ -81,10 +81,10 @@ class Product extends Model
         return $ft;
     }
 
-    public function getVariantsAttribute($value)
-    {
-    return json_decode($value);
-    }
+    // public function getVariantsAttribute($value)
+    // {
+    // return json_decode($value);
+    // }
 
 
     public function getBaseUrlAttribute(){
