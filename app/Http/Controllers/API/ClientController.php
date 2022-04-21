@@ -177,16 +177,16 @@ class ClientController extends ApiController
         endif;
 
         try{
-          DB::enableQueryLog();
+        //   DB::enableQueryLog();
             $products = Product::
                     select('products.id','products.name','products.image','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id')
                     // ->where('favourites.by', Auth::id())
-                    ->groupBy('ratings.product_id')
+                    ->groupBy('products.id')
                     ->orderBy('AverageRating', 'desc')
                     ->get();
-                    dd(DB::getQueryLog($products));
+                    // dd(DB::getQueryLog($products));
             $category = Category::select('id','title','image')->get();
 
 
