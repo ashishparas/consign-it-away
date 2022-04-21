@@ -185,12 +185,13 @@ class ClientController extends ApiController
                     // ->where('favourites.by', Auth::id())
                     ->groupBy('products.id')
                     ->orderBy('AverageRating', 'desc')
+                    ->take(5)
                     ->get();
                     // dd(DB::getQueryLog($products));
             $category = Category::select('id','title','image')->get();
 
 
-            $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,14130,15097,13014,5808,6573])->get();
+            $brands = Brand::whereIn('id',[9372,11739,41,9496,2494])->get();
             
             
             $recentView = RecentProducts::select('products.id','products.name','products.image','products.amount','recent_products.id','recent_products.user_id','recent_products.product_id','favourites.id as favourite_id',DB::raw('(favourites.status) as favourite'))

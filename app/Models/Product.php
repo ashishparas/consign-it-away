@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Rating;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use phpseclib3\Crypt\Common\Formats\Signature\Raw;
@@ -58,7 +59,7 @@ class Product extends Model
     ];
 
 
-    protected $appends = ['base_url','favourite'];
+    protected $appends = ['base_url','favourite','FavouriteId'];
 
 
    
@@ -66,12 +67,18 @@ class Product extends Model
 
     public function getFavouriteAttribute()
     {
-       $favourite = Favourite::select('id','status')
-       ->where('product_id', $this->id)
-       ->where('by', Auth::id())
-       ->first();
-       $favourite['status'] = (!$favourite)? null:$favourite->status;
-       return $favourite;
+       $favourite = Favourite::where('product_id', $this->id)->where('by', Auth::id())->first();
+       $fvrt = (!$favourite)? null:$favourite->status;
+       return $fvrt; 
+    }
+
+    public function getFavouriteIdAttribute(){
+  
+       $favourite = Favourite::where('product_id', $this->id)
+        ->where('by', Auth::id())
+        ->first();
+        $ft = (!$favourite)?null:$favourite->id; 
+        return $ft;
     }
 
     public function getVariantsAttribute($value)
