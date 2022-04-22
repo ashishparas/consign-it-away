@@ -224,7 +224,8 @@ class ClientController extends ApiController
             $input = $request->all();
             $product = Product::FindOrfail($input['product_id']);
             $product['rating'] = number_format($product->Rating()->avg('rating'),1);
-            $product['comment'] = $product->Rating()->select('id','product_id','from','rating','comment')
+            $product['RatingCount'] = $product->Rating()->count('product_id');
+            $product['comment'] = $product->Rating()->select('id','product_id','from','upload','rating','comment','created_at')
             ->get();
             foreach($product['comment'] as $key => $commentUser):
                
