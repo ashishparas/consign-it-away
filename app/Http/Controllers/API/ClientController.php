@@ -617,6 +617,22 @@ class ClientController extends ApiController
    }
 
 
+   public function ViewOrder(Request $request)
+   {
+       $rules = [];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $items = Item::where('user_id',Auth::id())->with(['Product'])->get();
+            return parent::success("View Orders successfully!",['orders' => $items]);
+       }catch(\Exception $ex){
+           return parent::error($ex->getMessage());
+       }
+   }
+
+
 
 
 

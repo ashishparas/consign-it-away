@@ -564,6 +564,10 @@ class VendorController extends ApiController
        endif;
        $input['status'] = '1';
        $input['user_id'] = Auth::id();
+       $start_date = date('Y-m-d H:i:s a', strtotime($request->start_date));
+       $valid_till = date('Y-m-d H:i:s a', strtotime($request->valid_till));
+       $input['start_date'] = $start_date;
+       $input['valid_till'] = $valid_till;  
        $discount = Discount::create($input);
         return parent::success("Discount added successfully!",['discount' => $discount]);
        }catch(\Exception $ex){
@@ -587,6 +591,8 @@ class VendorController extends ApiController
        $discount = Discount::find($input['discount_id']);
        $input['status'] = '1';
        $input['user_id'] = Auth::id();
+       $start_date = date('Y-m-d H:i:s a', strtotime($request->start_date));
+       $valid_till = date('Y-m-d H:i:s a', strtotime($request->valid_till));
        $discount->fill($input);
        $discount->save();
         return parent::success("Discount updated successfully!",['discount' => $discount]);
