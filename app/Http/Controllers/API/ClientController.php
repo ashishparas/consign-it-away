@@ -508,8 +508,8 @@ class ClientController extends ApiController
         $cart = Cart::FindOrfail($input['cart_id']);
         $cart->delete();
        
-       
-        return parent::success("Delete cart item successfully!");
+        $cart = Cart::where('user_id', Auth::id())->with('Product')->get();
+        return parent::success("Delete cart item successfully!",['cart' => $cart]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
@@ -523,7 +523,7 @@ class ClientController extends ApiController
         return $validateAttributes;
        endif;
        try{
-           $cart = Cart::with('Product')->get();
+           $cart = Cart::where('user_id' , Auth::id())->with('Product')->get();
            return parent::success("View cart successfully!",['cart' => $cart]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
