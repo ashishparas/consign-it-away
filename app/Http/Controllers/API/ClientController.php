@@ -487,7 +487,7 @@ class ClientController extends ApiController
         $cart = Cart::FindOrfail($input['cart_id']);
         $cart->quantity = $input['quantity'];
         $cart->save();
-        $cart = Cart::where('id', $input['cart_id'])->where('user_id', Auth::id())->with('product')->first();
+        $cart = Cart::where('user_id', Auth::id())->with('product')->get();
         return parent::success("Quantity added to cart successfully!",['cart' => $cart]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
