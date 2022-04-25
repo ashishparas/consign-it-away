@@ -27,6 +27,7 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Favourite;
+use App\Models\Item;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Rating;
@@ -223,6 +224,8 @@ class ClientController extends ApiController
 
             $input = $request->all();
             $product = Product::FindOrfail($input['product_id']);
+            $cart_status = Cart::where('product_id',$product->id)->first();
+            $product['CartStatus'] = ($cart_status)? 'added_to_cart':'not_in_cart';
             $product['rating'] = number_format($product->Rating()->avg('rating'),1);
             $product['RatingCount'] = $product->Rating()->count('product_id');
             $product['comment'] = $product->Rating()->select('id','product_id','from','upload','rating','comment','created_at')
@@ -586,12 +589,28 @@ class ClientController extends ApiController
         $input['charge_id'] = md5(rand(11111,99999)); //$token['id'];
         $input['user_id'] = Auth::id();
         $order = Order::create($input);
+     
         if(!empty($order)):
+            
+            $items = Cart::where('user_id', Auth::id())->get();
+         
+            foreach($items as $item):
+                $product = Product::where('id', $item->product_id)->first();
+            
+                Item::create([
+                    'user_id' => Auth::id(),
+                    'order_id' => $order->id,
+                    'product_id' => $product->id,
+                    'price' => $product->amount,
+                ]);
+            endforeach;
+            Cart::where('user_id', Auth::id())->delete();
+
            
         endif;
        
             
-
+        return parent::success("Your order Placed successfully!");
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
        }

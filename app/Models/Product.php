@@ -122,6 +122,8 @@ class Product extends Model
         return $this->hasOne(Stock::class)->select('product_id','stock');
     }
 
+
+  
    
 
     
