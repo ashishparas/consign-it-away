@@ -476,7 +476,7 @@ class ClientController extends ApiController
 
    public function AddQuantity(Request $request)
    {
-    $rules=['cart_id' => 'required|exists:carts,id','quantity' =>'required'];
+    $rules=['cart_id' => 'required|exists:carts,id','quantity' =>'required|numeric|min:1'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
     if($validateAttributes):
         return $validateAttributes;
