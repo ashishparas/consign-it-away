@@ -207,7 +207,8 @@ class ClientController extends ApiController
             array('name' => 'Brands','type' => 3,'items' => $brands),
             array('name' => 'Recent Viewed','type' => 4, 'items' => $recentView)
         );
-            return parent::success("Product view successfully",['home' => $arr]);
+        $cart = Cart::where('user_id', Auth::id())->count();
+            return parent::success("Product view successfully",['home' => $arr,'cart_count' => $cart]);
         }catch(\exception $ex){
             return parent::error($ex->getMessage());
         }
