@@ -27,6 +27,10 @@ class Cart extends Model
         return $this->belongsTo(Product::class)->select('id','user_id','name','image','price');
     }
 
+    public function test(){
+        
+    }
+
    
   
 }
