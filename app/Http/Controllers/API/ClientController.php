@@ -137,7 +137,7 @@ class ClientController extends ApiController
         endif;
 
         try{
-            $addresses = Address::where('user_id', Auth::id())->get();
+            $addresses = Address::where('user_id', Auth::id())->orderBy('created_at','DESC')->get();
             return parent::success('View addresses successfully!',['addresses' => $addresses]);         
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
@@ -644,6 +644,33 @@ class ClientController extends ApiController
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
        }
+   }
+
+   public function SetDefaultAddress(Request $request){
+     
+    $rules = ['address_id' => 'required|exists:addresses,id','status' => 'required|in:1,2'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+
+        if($request->status == '1'):
+            Address::where('user_id', Auth::id())->update(['status' => '2']);
+        endif;
+        
+        $address = Address::where('id',$request->address_id)
+        ->where('user_id',Auth::id())
+        ->update(['status' => $request->status]);
+        
+        $addr = Address::where('id', $request->address_id)->first();
+        
+
+        return parent::success("Address set as default",['address' => $addr]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
    }
 
 
