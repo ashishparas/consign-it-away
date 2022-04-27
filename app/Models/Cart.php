@@ -22,7 +22,7 @@ class Cart extends Model
     public function VendorName(){
         return $this->hasOne(User::class, 'id', 'vendor_id')->select('id','fname','lname');
     }
-
+ 
     public function Product(){
         return $this->belongsTo(Product::class)->select('id','user_id','name','image','price');
     }
