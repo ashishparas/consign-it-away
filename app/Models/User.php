@@ -94,4 +94,12 @@ class User extends Authenticatable
             return [];
         return DB::table('role_user')->whereIN('role_id', $role->pluck('role_id'))->pluck('user_id')->toArray();
     }
+
+
+
+
+
+
+
+
 }

@@ -460,7 +460,7 @@ class ClientController extends ApiController
 
    public function AddToCart(Request $request)
    {
-    $rules=['product_id' => 'required|exists:products,id','quantity' =>'required'];
+    $rules=['product_id' => 'required|exists:products,id','quantity' =>'required','vendor_id' => 'required|exists:users,id'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
     if($validateAttributes):
         return $validateAttributes;
@@ -524,7 +524,9 @@ class ClientController extends ApiController
         return $validateAttributes;
        endif;
        try{
-           $cart = Cart::where('user_id' , Auth::id())->with('Product')->get();
+           $cart = Cart::where('user_id' , Auth::id())
+           ->with('Product')
+           ->orderBy('created_at','DESC')->get();
            return parent::success("View cart successfully!",['cart' => $cart]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -554,10 +556,21 @@ class ClientController extends ApiController
             return $validateAttributes;
         endif;
         try{
-            $address = Address::select('id','fname','lname','email','phonecode','mobile_no','address')->where('user_id', Auth::id())->where('status','1')->first();
-            $cart = Cart::where('user_id', Auth::id())->with('product')->get();
+            $address = Address::select('id','fname','lname','email','phonecode','mobile_no','address')->where('user_id', Auth::id())
+            ->where('status','1')
+            ->first();
+
+            $carts = Cart::select('id','user_id','product_id','vendor_id')
+            ->where('user_id', Auth::id())
+            ->with(['VendorName'])
+            ->groupBy('vendor_id')
+            ->get();
+            foreach($carts as $key =>  $cart){
+                $carts[$key]['soldBy'] = Cart::select('id','vendor_id','product_id')
+                ->where('vendor_id', $cart->vendor_id)->with(['Product'])->get();
+            }
             
-            return parent::success("View Cart successfully!",['address' => $address,'cart' => $cart]);
+            return parent::success("View Cart successfully!",['address' => $address,'cart' => $carts]);
         }catch(\Exception  $ex){
             return parent::error($ex->getMessage());
         }
