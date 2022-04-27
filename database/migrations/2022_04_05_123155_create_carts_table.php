@@ -20,6 +20,8 @@ class CreateCartsTable extends Migration
 
             $table->bigInteger('product_id')->unsigned()->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->bigInteger('vendor_id')->unsigned()->nullable()->after('product_id');
+            $table->foreign('vendor_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('quantity')->nullable();
             $table->timestamps();
         });

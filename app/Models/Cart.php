@@ -16,14 +16,17 @@ class Cart extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['user_id','product_id','quantity'];
+    protected $fillable = ['user_id','product_id','vendor_id','quantity'];
 
     
+    public function VendorName(){
+        return $this->hasOne(User::class, 'id', 'vendor_id')->select('id','fname','lname');
+    }
+ 
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','user_id','name','image','price')->with('User');
+        return $this->belongsTo(Product::class)->select('id','user_id','name','image','price');
     }
 
-    
-
    
+  
 }
