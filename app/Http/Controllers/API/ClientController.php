@@ -488,7 +488,7 @@ class ClientController extends ApiController
         $cart = Cart::FindOrfail($input['cart_id']);
         $cart->quantity = $input['quantity'];
         $cart->save();
-        $cart = Cart::where('user_id', Auth::id())->with('product')->get();
+        $cart = Cart::where('user_id', Auth::id())->with('product')->orderBy('created_at','DESC')->get();
         return parent::success("Quantity added to cart successfully!",['cart' => $cart]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -550,6 +550,7 @@ class ClientController extends ApiController
 
 
    public function Checkout(Request $request){
+    //    dd(Auth::id());
         $rules = [];
         $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
         if($validateAttributes):
@@ -560,17 +561,18 @@ class ClientController extends ApiController
             ->where('status','1')
             ->first();
 
-            $carts = Cart::select('id','user_id','product_id','vendor_id','quantity')
+            $carts = Cart::select('id','user_id','product_id','vendor_id')
             ->where('user_id', Auth::id())
             ->with(['VendorName'])
             ->groupBy('vendor_id')
             ->get();
+            // dd($carts->toArray());
             foreach($carts as $key =>  $cart){
-                $carts[$key]['soldBy'] = Cart::select('id','vendor_id','product_id')
+                $carts[$key]['soldBy'] = Cart::select('id','vendor_id','product_id','quantity')
                 ->where('vendor_id', $cart->vendor_id)->with(['Product'])->get();
             }
             
-            return parent::success("View Cart successfully!",['address' => $address,'cart' => $carts]);
+            return parent::success("View Cart successfully!",['address' => $address,'cart' => $carts,'coupon_amount' => 0]);
         }catch(\Exception  $ex){
             return parent::error($ex->getMessage());
         }
