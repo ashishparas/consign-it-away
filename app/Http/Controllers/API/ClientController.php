@@ -664,7 +664,7 @@ class ClientController extends ApiController
         ->where('user_id',Auth::id())
         ->update(['status' => $request->status]);
         
-        $addr = Address::where('user_id', Auth::id())->get();
+        $addr = Address::where('user_id', Auth::id())->orderBy('created_at', 'DESC')->get();
         
 
         return parent::success("Address set as default",['addresses' => $addr]);
