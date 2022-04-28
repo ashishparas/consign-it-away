@@ -667,7 +667,7 @@ class ClientController extends ApiController
         $addr = Address::where('user_id', Auth::id())->get();
         
 
-        return parent::success("Address set as default",['address' => $addr]);
+        return parent::success("Address set as default",['addresses' => $addr]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
