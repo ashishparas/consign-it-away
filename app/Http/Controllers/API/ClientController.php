@@ -568,8 +568,12 @@ class ClientController extends ApiController
             ->get();
             // dd($carts->toArray());
             foreach($carts as $key =>  $cart){
+
                 $carts[$key]['soldBy'] = Cart::select('id','vendor_id','product_id','quantity')
-                ->where('vendor_id', $cart->vendor_id)->with(['Product'])->get();
+                ->where('vendor_id', $cart->vendor_id)
+                ->where('user_id', Auth::id())
+                ->with(['Product'])
+                ->get();
             }
             
             return parent::success("View Cart successfully!",['address' => $address,'cart' => $carts,'coupon_amount' => 0]);
