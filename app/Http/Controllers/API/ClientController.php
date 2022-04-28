@@ -556,11 +556,11 @@ class ClientController extends ApiController
             return $validateAttributes;
         endif;
         try{
-            $address = Address::select('id','fname','lname','email','phonecode','mobile_no','address')->where('user_id', Auth::id())
+            $address = Address::select('id','fname','lname','email','phonecode','mobile_no','address','status')->where('user_id', Auth::id())
             ->where('status','1')
             ->first();
 
-            $carts = Cart::select('id','user_id','product_id','vendor_id')
+            $carts = Cart::select('id','user_id','product_id','vendor_id','quantity')
             ->where('user_id', Auth::id())
             ->with(['VendorName'])
             ->groupBy('vendor_id')
@@ -664,7 +664,7 @@ class ClientController extends ApiController
         ->where('user_id',Auth::id())
         ->update(['status' => $request->status]);
         
-        $addr = Address::where('id', $request->address_id)->first();
+        $addr = Address::where('user_id', Auth::id())->get();
         
 
         return parent::success("Address set as default",['address' => $addr]);
