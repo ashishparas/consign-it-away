@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('address_id')->nullable();
             $table->bigInteger('card_id')->nullable();
             $table->string('charge_id')->nullable();
+            $table->string('vendor_id')->nullable();
             $table->text('items')->nullable();
             $table->string('sub_total');
             $table->string('coupon')->nullable();
