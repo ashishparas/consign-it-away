@@ -621,9 +621,13 @@ class ClientController extends ApiController
                     'user_id' => Auth::id(),
                     'order_id' => $order->id,
                     'product_id' => $product->id,
+                    'address_id' => $input['address_id'],
+                    'vendor_id' => $item->vendor_id,
                     'price' => $product->amount,
+                    'quantity' => $item->quantity
                 ]);
             endforeach;
+
             Cart::where('user_id', Auth::id())->delete();
 
            
@@ -689,8 +693,20 @@ class ClientController extends ApiController
        endif;
        try{
            $input = $request->all();
-
-        return parent::success("View order details successfully");
+        $item = Item::where('user_id',Auth::id())
+                ->where('id', $input['order_id'])
+                ->with(['Product'])
+                ->first();
+        $address = Address::where('id', $item->address_id)
+                ->where('user_id', Auth::id())
+                ->first();
+       
+             
+                    
+                  
+                    
+            
+        return parent::success("View order details successfully",['shipping_address'=>  $address,'order' =>  $item ]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }

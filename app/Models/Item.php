@@ -16,10 +16,15 @@ class Item extends Model
 
     protected $primarykey="id";
 
-    protected  $fillable = ['user_id','product_id','order_id','price','color','size','status'];
+    protected  $fillable = ['user_id','vendor_id','product_id','address_id','order_id','price','quantity','color','size','status'];
 
 
     public function Product(){
         return $this->belongsTo(Product::class)->select('id','user_id','name','amount','image')->with('User');
     }
+
+    public function SoldBy(){
+        return $this->hasOne(User::class,'id','vendor_id')->select('id','name','fname','lname');
+    }
+   
 }

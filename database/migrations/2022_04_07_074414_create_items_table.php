@@ -17,10 +17,13 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->bigInteger('vendor_id')->nullable();
             $table->bigInteger('order_id')->unsigned()->nullable();
+            $table->bigInteger('address_id')->nullable();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->bigInteger('product_id')->nullable();
             $table->string('price')->nullable();
+            $table->string('quantity')->nullable();
             $table->string('size')->nullable();
             $table->string('colour')->nullable();
             $table->enum('status',[1,2,3])->default(1)->comment('1->placed,2->shipped,3->delivered');

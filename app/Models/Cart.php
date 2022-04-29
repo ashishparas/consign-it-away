@@ -16,7 +16,7 @@ class Cart extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['user_id','product_id','vendor_id','quantity'];
+    protected $fillable = ['user_id','vendor_id','product_id','vendor_id','quantity'];
 
     
     public function VendorName(){
