@@ -557,7 +557,7 @@ class ClientController extends ApiController
             return $validateAttributes;
         endif;
         try{
-            $address = Address::select('id','fname','lname','email','phonecode','mobile_no','address','status')->where('user_id', Auth::id())
+            $address = Address::select('id','fname','lname','email','phonecode','mobile_no','address','city','state','country','zipcode','status')->where('user_id', Auth::id())
             ->where('status','1')
             ->first();
 
@@ -677,6 +677,23 @@ class ClientController extends ApiController
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
+
+   }
+
+   public function ViewOrderById(Request $request)
+   {
+       $rules = ['order_id' => 'required|exists:items,id'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+
+        return parent::success("View order details successfully");
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
    }
 
 
