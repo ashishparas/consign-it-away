@@ -49,7 +49,7 @@ class VendorController extends ApiController
          try{
 
             $input = $request->all();
-        
+            dd($input);
         if (isset($request->profile_picture)):
            $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
        endif;
