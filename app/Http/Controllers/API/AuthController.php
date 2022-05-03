@@ -528,7 +528,7 @@ class AuthController extends ApiController {
                 'minutes' => trans('front/password.minutes'),
             ]);
         });
-        return parent::success('Email has been send',[]);
+        return parent::success('Email has been send');
 //        dd($request->only('email'));
         $response = Password::sendResetLink($request->only('email'), function (Message $message) {
                     $message->subject(trans('front/password.reset'));

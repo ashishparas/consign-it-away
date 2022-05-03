@@ -34,12 +34,13 @@ Route::post('forget/password',[AuthController::class, "ResetPassword"]);
 Route::post('csv',[VendorController::class, "CSV"]);
 
 
-Route::group(['middleware' =>['auth:api']], function(){
+// Route::group(['middleware' =>['auth:api']], function(){
     
-});
+// });
 
 
 Route::middleware(['auth:sanctum'])->group(function(){
+    
     Route::post('logout',[AuthController::class, "Logout"]);
     Route::post('otp/verification',[AuthController::class,"VerifyOTP"]);
     Route::post('create/profile',[VendorController::class, "CreateProfile"]);
