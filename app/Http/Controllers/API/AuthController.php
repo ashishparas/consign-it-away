@@ -565,10 +565,10 @@ class AuthController extends ApiController {
                 $data['title'] = 'Hi '.$User->fname.' '.$User->lname;
                 $data['message'] = 'Your consign-it-away verification code is '.$OTP.' This help us secure your account by verifying your OTP. This let you to access your consign-it-away account.';
                
-                $mail = Mail::to($input['email'])->send( new EmailVerificationMail($data));
-                        \App\Models\User::where('email', $User->email)->update(['email_otp' => $OTP]);                
+                // $mail = Mail::to($input['email'])->send( new EmailVerificationMail($data));
+            \App\Models\User::where('email', $User->email)->update(['email_otp' => $OTP]);                
                
-                return parent::success('The email has been successfully',[]);
+                return parent::success('The email has been successfully');
             
         } catch (\Exception $ex){
             return parent::error($ex->getMessage());
