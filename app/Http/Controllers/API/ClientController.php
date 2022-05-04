@@ -227,7 +227,7 @@ class ClientController extends ApiController
 
             $input = $request->all();
             $product = Product::FindOrfail($input['product_id']);
-            $cart_status = Cart::where('product_id',$product->id)->first();
+            $cart_status = Cart::where('product_id',$product->id)->where('user_id', Auth::id())->first();
             $product['CartStatus'] = ($cart_status)? 'added_to_cart':'not_in_cart';
             $product['rating'] = number_format($product->Rating()->avg('rating'),1);
             $product['RatingCount'] = $product->Rating()->count('product_id');
@@ -730,7 +730,9 @@ class ClientController extends ApiController
            endif;
            $items = array();
            if($input['type'] === '1'){
-            $product = RecentProducts::where('user_id', Auth::id())->with(['Product'])->simplePaginate($limit);
+            $product = RecentProducts::where('user_id', Auth::id())
+            ->with(['Product'])
+            ->simplePaginate($limit);
             $items = array('name'=>'recent_products','items' => $product);
            }else{
 
