@@ -33,6 +33,7 @@ use App\Models\Product;
 use App\Models\Rating;
 use App\Models\RecentProducts;
 use GrahamCampbell\ResultType\Success;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class ClientController extends ApiController
 {
@@ -192,7 +193,7 @@ class ClientController extends ApiController
             $category = Category::select('id','title','image')->get();
 
 
-            $brands = Brand::whereIn('id',[9372,11739,41,9496,2494])->get();
+            $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,162])->get();
             
             
             $recentView = RecentProducts::select('products.id','products.name','products.image','products.amount','recent_products.id','recent_products.user_id','recent_products.product_id','favourites.id as favourite_id',DB::raw('(favourites.status) as favourite'))
@@ -200,6 +201,7 @@ class ClientController extends ApiController
             ->leftJoin('favourites', 'favourites.product_id', 'recent_products.product_id')
             ->join('products', 'products.id', '=', 'recent_products.product_id')
             ->where('recent_products.user_id', Auth::id())
+            ->take(5)
             ->get();
             $arr = array(
             array('name' => 'Category','type'=> 1,'items'=> $category),
@@ -467,6 +469,13 @@ class ClientController extends ApiController
     endif;
     try{
         $input = $request->all();
+
+        $cart = Cart::where('product_id',$input['product_id'])->where('user_id', Auth::id());
+        if($cart->count() > 0):
+            return parent::error("The product already added in your cart");
+        endif;
+        // dd($cart);
+
         $input['user_id'] = Auth::id();
         $cart = Cart::create($input);
         return parent::success("Product add to cart successfully!");
@@ -700,12 +709,6 @@ class ClientController extends ApiController
         $address = Address::where('id', $item->address_id)
                 ->where('user_id', Auth::id())
                 ->first();
-       
-             
-                    
-                  
-                    
-            
         return parent::success("View order details successfully",['shipping_address'=>  $address,'order' =>  $item ]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -713,6 +716,41 @@ class ClientController extends ApiController
    }
 
 
+   public function RecentlyViewProducts(Request $request)
+   {
+       $rules = ['type' => 'Required|in:1,2','limit' => ''];
+       $validateAttributes = parent::validateAttributes($request,'GET', $rules, array_keys($rules), false);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+           if(isset($input['limit'])):
+            $limit = ($input['limit'])? $input['limit']:15;
+           endif;
+           $items = array();
+           if($input['type'] === '1'){
+            $product = RecentProducts::where('user_id', Auth::id())->with(['Product'])->simplePaginate($limit);
+            $items = array('name'=>'recent_products','items' => $product);
+           }else{
+
+            $most_popular = Product::
+                    select('products.id','products.name','products.image as images','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                    ->leftJoin('ratings', 'ratings.product_id', 'products.id')
+                    ->leftJoin('favourites', 'favourites.product_id', 'products.id')
+                    // ->where('favourites.by', Auth::id())
+                    ->groupBy('products.id')
+                    ->orderBy('AverageRating', 'desc')
+                    ->take(5)
+                    ->simplePaginate($limit);   
+                    $items = array('name'=>'most_populars','items' => $most_popular);
+           }
+           
+        return parent::success("View products successfully", ['products' =>  $items]);
+       }catch(\exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
 
 
 

@@ -109,6 +109,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('view/orders', [ClientController::class, "ViewOrder"]);
     Route::post('set/default/address',[ClientController::class, "SetDefaultAddress"]);
     Route::post('view/order/by/id', [ClientController::class,"ViewOrderById"]);
+    Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
 });
 
 
