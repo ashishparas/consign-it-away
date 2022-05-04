@@ -194,7 +194,7 @@ class ClientController extends ApiController
 
 
             $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,162])->get();
-            
+            // dd($brands->toArray());
             
             $recentView = RecentProducts::select('products.id','products.name','products.image','products.amount','recent_products.id','recent_products.user_id','recent_products.product_id','favourites.id as favourite_id',DB::raw('(favourites.status) as favourite'))
             ->where('recent_products.user_id', Auth::id())
@@ -733,7 +733,7 @@ class ClientController extends ApiController
             $product = RecentProducts::where('user_id', Auth::id())
             ->with(['Product'])
             ->simplePaginate($limit);
-            $items = array('name'=>'recent_products','items' => $product);
+            $items =$product;
            }else{
 
             $most_popular = Product::
@@ -745,7 +745,7 @@ class ClientController extends ApiController
                     ->orderBy('AverageRating', 'desc')
                     ->take(5)
                     ->simplePaginate($limit);   
-                    $items = array('name'=>'most_populars','items' => $most_popular);
+                    $items = $most_popular;
            }
            
         return parent::success("View products successfully", ['products' =>  $items]);
