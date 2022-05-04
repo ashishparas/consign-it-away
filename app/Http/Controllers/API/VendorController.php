@@ -778,6 +778,8 @@ class VendorController extends ApiController
         $input = $request->all();
         if(isset($request->search)):
         $brands = Brand::where('name','LIKE', "%".$input['search']."%")->take(2000)->get();
+        else:
+            $brands = Brand::inRandomOrder()->take(2000)->get();
         
         endif;
         
