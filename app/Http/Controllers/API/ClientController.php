@@ -33,6 +33,7 @@ use App\Models\Product;
 use App\Models\Rating;
 use App\Models\RecentProducts;
 use GrahamCampbell\ResultType\Success;
+use Illuminate\Cache\RateLimiting\Limit;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class ClientController extends ApiController
@@ -194,7 +195,7 @@ class ClientController extends ApiController
 
 
             $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,162])->get();
-            // dd($brands->toArray());
+         
             
             $recentView = RecentProducts::select('products.id','products.name','products.image','products.amount','recent_products.id','recent_products.user_id','recent_products.product_id','favourites.id as favourite_id',DB::raw('(favourites.status) as favourite'))
             ->where('recent_products.user_id', Auth::id())
@@ -718,7 +719,7 @@ class ClientController extends ApiController
 
    public function RecentlyViewProducts(Request $request)
    {
-       $rules = ['type' => 'Required|in:1,2','limit' => ''];
+       $rules = ['limit' => ''];
        $validateAttributes = parent::validateAttributes($request,'GET', $rules, array_keys($rules), false);
        if($validateAttributes):
         return $validateAttributes;
@@ -728,13 +729,30 @@ class ClientController extends ApiController
            if(isset($input['limit'])):
             $limit = ($input['limit'])? $input['limit']:15;
            endif;
-           $items = array();
-           if($input['type'] === '1'){
+         
+         
             $product = RecentProducts::where('user_id', Auth::id())
             ->with(['Product'])
             ->simplePaginate($limit);
-            $items =$product;
-           }else{
+           
+        return parent::success("View products successfully", ['products' =>  $product]);
+       }catch(\exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
+   public function MostPopularsProducts(Request $request){
+    $rules = ['limit' => ''];
+    $validateAttributes = parent::validateAttributes($request,'GET',$rules, array_keys($rules), false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+
+        $input = $request->all();
+        if(isset($input['limit'])){
+            $limit = ($input['limit'])? $input['limit']:15;
+        }
 
             $most_popular = Product::
                     select('products.id','products.name','products.image as images','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
@@ -743,17 +761,14 @@ class ClientController extends ApiController
                     // ->where('favourites.by', Auth::id())
                     ->groupBy('products.id')
                     ->orderBy('AverageRating', 'desc')
-                    ->take(5)
                     ->simplePaginate($limit);   
-                    $items = $most_popular;
-           }
-           
-        return parent::success("View products successfully", ['products' =>  $items]);
-       }catch(\exception $ex){
-        return parent::error($ex->getMessage());
-       }
-   }
+        
 
+        return parent::success("View Most popular Products successfully!",['products'=> $most_popular]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
 
 
 
