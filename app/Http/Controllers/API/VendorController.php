@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\API;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
+use App\Models\AttributeOption;
 use App\Models\Bank;
 use App\Models\Brand;
 use App\Models\Card;
@@ -25,6 +25,9 @@ use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Subcategory;
 use App\Models\Subscription;
+use App\Models\Variant;
+use App\Models\VariantItems;
+use Attribute;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
@@ -87,8 +90,7 @@ class VendorController extends ApiController
            $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
        endif;
             $phonecode =  str_replace('+','', $input['phonecode']);
-            $input['phonecode'] = '+'.$phonecode;
-            
+            $input['phonecode'] = '+'.$phonecode;            
             $fullname = $input['fname'].' '.$input['lname'];
             $input['name'] = $fullname;
         
@@ -123,9 +125,6 @@ class VendorController extends ApiController
 
 
 
-
-
-
     public function AddStore(Request $request){
         $rules = ['banner'=>'required','image' => 'required','name'=>'required','location'=>'required','description'=>'required','store_images'=> 'required'];
         $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
@@ -155,9 +154,6 @@ class VendorController extends ApiController
             endif;
 
             $input['photos'] = implode(',', $images);
-
-            
-
             $model = new Store();
             $input['user_id'] = Auth::id();
             $model = $model->fill($input);
@@ -318,9 +314,10 @@ class VendorController extends ApiController
 
    public function Product(Request $request){
         
-
         try{
             $input = $request->all();
+            $input['is_variant'] = $request->type;
+           
             $input['user_id'] = Auth::id();
 
             if (isset($request->image)):
@@ -338,19 +335,53 @@ class VendorController extends ApiController
             endif;
 
 
+            $create = Product::create($input);
+            $product = Product::where('id', $create->id)->first();
 
-
-            $product = Product::create($input);
 
             if($product):
-             
+
+            //  adding quantity to stock Dev:Ashish Mehra
                 Stock::create([
                     'product_id' => $product->id,
                     'stock'      => $product->quantity,
                 ]);
+            // Adding Attributes
+            
+           $arribute_json = json_decode($product->variants, true);
+          // dd($arribute_json);
+           $atrributes = array_keys($arribute_json);
+                
+           for($i=0; $i < count($atrributes); $i++){
+                $saveAttr = \App\Models\Attribute::create([
+                    'name' => $atrributes[$i],
+                    'product_id' => $product->id
+                ]);
+                if($saveAttr){
+                    $options = $arribute_json[$saveAttr->name];
+                  
+                    for($j=0; $j<count($options); $j++){
+                        AttributeOption::updateOrCreate(['name' => $options[$j]],[
+                            'name'=> $options[$j],
+                            'attr_id' => $saveAttr->id
+                        ]);
+                    } 
+                }
+                
+                
+              
 
+           } // end for loop
+
+           $product['product_variants'] = \App\Models\Attribute::where('product_id', $product->id)->with(['Option'])->get();
+        //    $arr = [];
+        //    $push = array();
+        //    foreach($vars as $var){
+        //         $Option = AttributeOption::where('attr_id', $var->id)->get();
+        //         array_push($push, $Option );
+        //    }
+        //   $product['product_variants'] =    array('variants'=> $vars,'options' => $push);
             endif;
-
 
             $user = User::where('id',Auth::id())->update(['status' => '6']);
             return parent::success("Product created successfully!",['product' => $product]);
@@ -359,6 +390,37 @@ class VendorController extends ApiController
         }
    }
 
+
+   public function AddVariant(Request $request){
+    $rules = ['product_id' => 'required|exists:products,id','varients' =>'required','quantity'=>'required','price' =>'required'];
+    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        // dd($input);
+        $variant = VariantItems::create([
+            'product_id' => $input['product_id'],
+            'quantity' => $input['quantity'],
+            'price' => $input['price']
+        ]);
+        if($variant):
+
+            $varient_items = json_decode($input['varients'],true);
+           
+           
+            foreach($varient_items as $varient_item):
+                $varient_item['variant_item_id'] = $variant->id;
+                Variant::create($varient_item);
+            endforeach;
+            
+        endif;
+        return parent::success("Variants added successfully!");
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
 
 
    public function ViewProduct(Request $request)

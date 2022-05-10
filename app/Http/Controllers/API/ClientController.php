@@ -763,7 +763,6 @@ class ClientController extends ApiController
                     ->orderBy('AverageRating', 'desc')
                     ->simplePaginate($limit);   
         
-
         return parent::success("View Most popular Products successfully!",['products'=> $most_popular]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());

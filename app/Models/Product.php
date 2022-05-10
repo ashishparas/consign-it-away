@@ -45,6 +45,7 @@ class Product extends Model
         'product_offer',
         'ships_from',
         'shipping_type',
+        'is_variant',
         'free_shipping',
         'meta_description',
         'meta_tags',
