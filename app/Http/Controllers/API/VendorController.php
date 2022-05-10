@@ -962,6 +962,21 @@ class VendorController extends ApiController
    }
 
 
+   public function ViewStaffById(Request $request)
+   {
+        $rules = ['store_id' => 'required|exists:managers,store_id'];
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            $staff = Manager::where('store_id', $request->store_id)->get();
+            return parent::success("View staff details successfully!",['staff' => $staff]);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
 
 
 
