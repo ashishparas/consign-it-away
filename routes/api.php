@@ -111,6 +111,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('view/order/by/id', [ClientController::class,"ViewOrderById"]);
     Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
     Route::get('most/popular/products',[ClientController::class, "MostPopularsProducts"]);
+    Route::post('add/variant',[VendorController::class, "AddVariant"]);
 });
 
 

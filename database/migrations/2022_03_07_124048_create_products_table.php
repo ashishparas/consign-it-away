@@ -37,6 +37,7 @@ class CreateProductsTable extends Migration
             $table->enum('product_offer', [1,2])->default(2)->comment('1->show,2->hide');
             $table->string('ships_from')->nullable();
             $table->string('shipping_type')->nullable();
+            $table->enum('is_variant',[1,2])->default(2)->comment('2-> Yes, 1->No');
             $table->enum('free_shipping',[0,1,2])->default(0)->comment('0->Default,1->Free Shipping,2->No free shipping');
             $table->text('meta_description')->nullable();
             $table->text('meta_tags')->nullable();
