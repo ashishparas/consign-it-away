@@ -347,31 +347,33 @@ class VendorController extends ApiController
                     'stock'      => $product->quantity,
                 ]);
             // Adding Attributes
-            
-           $arribute_json = json_decode($product->variants, true);
-          // dd($arribute_json);
-           $atrributes = array_keys($arribute_json);
-                
-           for($i=0; $i < count($atrributes); $i++){
-                $saveAttr = \App\Models\Attribute::create([
-                    'name' => $atrributes[$i],
-                    'product_id' => $product->id
-                ]);
-                if($saveAttr){
-                    $options = $arribute_json[$saveAttr->name];
-                  
-                    for($j=0; $j<count($options); $j++){
-                        AttributeOption::updateOrCreate([
-                            'name'=> $options[$j],
-                            'attr_id' => $saveAttr->id
-                        ]);
-                    } 
-                }
-                
-                
-              
+        if($product->variants){
+            $arribute_json = json_decode($product->variants, true);
 
-           } // end for loop
+            $atrributes = array_keys($arribute_json);
+                 
+            for($i=0; $i < count($atrributes); $i++){
+                 $saveAttr = \App\Models\Attribute::create([
+                     'name' => $atrributes[$i],
+                     'product_id' => $product->id
+                 ]);
+                 if($saveAttr){
+                     $options = $arribute_json[$saveAttr->name];
+                   
+                     for($j=0; $j<count($options); $j++){
+                         AttributeOption::updateOrCreate([
+                             'name'=> $options[$j],
+                             'attr_id' => $saveAttr->id
+                         ]);
+                     } 
+                 }
+                 
+                 
+               
+ 
+            } // end for loop
+        }
+           
 
            $product['product_variants'] = \App\Models\Attribute::where('product_id', $product->id)->with(['Option'])->get();
         //    $arr = [];
