@@ -16,4 +16,12 @@ class Variant extends Model
 
 
     protected $fillable = ['product_id','attr_id','option_id','variant_item_id'];
+
+
+    public function Attributes(){
+        return $this->hasOne(AttributeOption::class,'id','option_id')->select('id','name');
+    }
+
+
+   
 }
