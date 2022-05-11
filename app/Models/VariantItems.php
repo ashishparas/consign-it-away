@@ -15,4 +15,9 @@ class VariantItems extends Model
 
 
     protected $fillable = ['product_id','quantity', 'price'];
+
+
+    public function variants(){
+        return $this->hasMany(Variant::class,"variant_item_id")->select('id','product_id','variant_item_id','option_id')->with(['Attributes']);
+    }
 }

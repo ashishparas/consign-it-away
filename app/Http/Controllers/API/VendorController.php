@@ -361,7 +361,7 @@ class VendorController extends ApiController
                     $options = $arribute_json[$saveAttr->name];
                   
                     for($j=0; $j<count($options); $j++){
-                        AttributeOption::updateOrCreate(['name' => $options[$j]],[
+                        AttributeOption::updateOrCreate([
                             'name'=> $options[$j],
                             'attr_id' => $saveAttr->id
                         ]);
@@ -416,7 +416,11 @@ class VendorController extends ApiController
             endforeach;
             
         endif;
-        return parent::success("Variants added successfully!");
+            $variants = VariantItems::
+                        where('variant_items.product_id', $input['product_id'])
+                        ->with(['variants'])
+                        ->get();
+        return parent::success("Variants added successfully!",['varients' => $variants]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
@@ -659,7 +663,7 @@ class VendorController extends ApiController
        $discount->fill($input);
        $discount->save();
         return parent::success("Discount updated successfully!",['discount' => $discount]);
-       }catch(\Exception $ex){
+       }catch(\Exception $ex){ 
         return parent::error($ex->getMessage());
        }
    }
