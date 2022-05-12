@@ -16,4 +16,11 @@ class Store extends Model
 
 
     protected $fillable = ['banner','user_id','store_image','name','location','description','photos'];
+
+
+
+    public function staff(){
+        return $this->hasMany(Manager::class);
+    }
+
 }

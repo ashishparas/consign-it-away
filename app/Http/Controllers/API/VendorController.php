@@ -985,6 +985,26 @@ class VendorController extends ApiController
    }
 
 
+   public function StoreById(Request $request)
+   {
+       $rules = ['store_id' => 'required|exists:stores,id'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+            $input = $request->all();
+            $store = Store::where('id', $input['store_id'])->with(['staff'])->first();
+        return parent::success("View store details successfully!",['store' => $store]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+
+   }
+
+
+
+
 
 
 
