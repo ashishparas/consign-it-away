@@ -113,6 +113,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('most/popular/products',[ClientController::class, "MostPopularsProducts"]);
     Route::post('add/variant',[VendorController::class, "AddVariant"]);
     Route::post('view/staff/by/id',[VendorController::class, "ViewStaffById"]);
+    Route::post('view/store/by/id',[VendorController::class, "StoreById"]);
 });
 
 
