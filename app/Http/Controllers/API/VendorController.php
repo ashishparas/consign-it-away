@@ -1002,6 +1002,30 @@ class VendorController extends ApiController
 
    }
 
+   public function DeleteAttributes(Request $request)
+   {
+       $rules = ['variant_id' => 'required|exists:variant_items,id','product_id' => 'required|exists:products,id'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+           $variant = VariantItems::FindOrfail($input['variant_id']);
+           $variant->delete();
+
+           $variants = VariantItems::select('id','product_id','quantity','price')
+                        ->where('variant_items.product_id', $input['product_id'])
+                        ->with(['variants'])
+                        ->get();
+
+        return parent::success("Attribute deleted successfully!",['variants' => $variants]);
+       }catch(\Exception $ex){
+           return parent::error($ex->getMessage());
+       }
+   }
+
+
 
 
 
