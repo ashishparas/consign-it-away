@@ -580,6 +580,7 @@ class ClientController extends ApiController
             return $validateAttributes;
         endif;
         try{
+            
             $address = Address::select('id','fname','lname','email','phonecode','mobile_no','address','city','state','country','zipcode','status')->where('user_id', Auth::id())
             ->where('status','1')
             ->first();

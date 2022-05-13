@@ -313,7 +313,7 @@ class AuthController extends ApiController {
                 if($user->type === '1'):
 
                         parent::sendOTPUser($user);
-                        $otp = rand(1111, 9999);
+                        $otp = 1111;//rand(1111, 9999);
                         $data = [];
                         $data['title'] = 'Hi '.$user->fname.' '.$user->lname;
                         $data['message'] = 'Your consign-it-away verification code is '.$otp.' This help us secure your account by verifying your OTP. This let you to access your consign-it-away account.';
