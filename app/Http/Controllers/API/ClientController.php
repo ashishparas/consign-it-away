@@ -32,6 +32,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Rating;
 use App\Models\RecentProducts;
+use App\Models\VariantItems;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Cache\RateLimiting\Limit;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -234,6 +235,17 @@ class ClientController extends ApiController
             $product['RatingCount'] = $product->Rating()->count('product_id');
             $product['comment'] = $product->Rating()->select('id','product_id','from','upload','rating','comment','created_at')
             ->get();
+
+            // product variant attributes
+
+            $Attrvariants = VariantItems::select('id','product_id','quantity','price')
+                        ->where('variant_items.product_id', $input['product_id'])
+                        ->with(['variants'])
+                        ->get();
+
+            // end code
+            $product['product_variants'] = $Attrvariants;
+
             foreach($product['comment'] as $key => $commentUser):
                
             $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
