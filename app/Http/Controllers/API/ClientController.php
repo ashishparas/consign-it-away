@@ -32,6 +32,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Rating;
 use App\Models\RecentProducts;
+use App\Models\Store;
 use App\Models\VariantItems;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -722,7 +723,11 @@ class ClientController extends ApiController
         $address = Address::where('id', $item->address_id)
                 ->where('user_id', Auth::id())
                 ->first();
-        return parent::success("View order details successfully",['shipping_address'=>  $address,'order' =>  $item ]);
+
+        $store = Store::select('id','store_image','name','description')
+        ->where('id', $item->product->store_id)
+        ->first();
+        return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
