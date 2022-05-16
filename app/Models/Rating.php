@@ -18,8 +18,10 @@ class Rating extends Model
 
    
     public function User(){
-        return $this->hasOne(User::class,'from');
+        return $this->hasOne(User::class,'id','from')->select('id','name','fname','lname','profile_picture');
     }
+
+    
 
   
 

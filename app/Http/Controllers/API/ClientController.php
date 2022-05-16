@@ -221,6 +221,7 @@ class ClientController extends ApiController
 
 
     public function ProductById(Request $request){
+
         $rules = ['product_id'=> 'required|exists:products,id'];
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
         if($validateAttributes):
@@ -251,8 +252,12 @@ class ClientController extends ApiController
                
             $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
             endforeach;
-            $product['soldBy'] = User::select('id','fname','lname','profile_picture')->where('id', $product->user_id)->first();
-            $product['soldByOtherSellers'] = Product::select('id','user_id','image','amount')->where('name','LIKE','%'.$product->name.'%')->whereNotIn('id',[$product->id])->with('User')->get();
+            $product['soldBy'] = Store::select('id','banner','name')->where('id', $product->store_id)->first();
+            $product['soldByOtherSellers'] = Product::select('id','user_id','image','amount')
+                                            ->where('name','LIKE','%'.$product->name.'%')
+                                            ->whereNotIn('id',[$product->id])
+                                            ->with('User')
+                                            ->get();
 
             $OtherProducts = Product::select('products.id','products.user_id','products.name','products.image','products.amount',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(product_id) as TotalRating'))
                     ->leftJoin('ratings','ratings.product_id','products.id')
@@ -590,7 +595,7 @@ class ClientController extends ApiController
             ->with(['VendorName'])
             ->groupBy('vendor_id')
             ->get();
-            // dd($carts->toArray());
+           
             foreach($carts as $key =>  $cart){
 
                 $carts[$key]['soldBy'] = Cart::select('id','vendor_id','product_id','quantity')
@@ -782,10 +787,46 @@ class ClientController extends ApiController
                     ->simplePaginate($limit);   
         
         return parent::success("View Most popular Products successfully!",['products'=> $most_popular]);
-    }catch(\Exception $ex){
-        return parent::error($ex->getMessage());
-    }
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
    }
+
+
+   public function ClientViewStore(Request $request)
+   {
+       $rules = ['store_id' => 'required|exists:stores,id','product_id'=> 'required|exists:products,id'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+            $input = $request->all();
+            $store = Store::where('id', $input['store_id'])->first();
+            $products = Product::select('id','image','name','amount')
+                                ->where('user_id',$store->user_id)
+                                ->where('store_id',$store->id)
+                                ->get();
+
+            foreach($products as $key => $product):
+                $products[$key]['rating'] = number_format($product->Rating()->avg('rating'),1);
+                $products[$key]['RatingCount'] = $product->Rating()->count('product_id');
+            endforeach;
+           
+            $Product_ratings = Rating::where('product_id', $input['product_id'])->with(['User'])->get();
+            $Averagerating = Rating::where('product_id', $input['product_id'])->with(['User'])->avg('rating',1);
+            $ratingCount = Rating::where('product_id', $input['product_id'])->with(['User'])->count();
+        return parent::success("View store details successfully!",['AverageRating'=> Number_format($Averagerating,1) ,'RatingCount'=> $ratingCount,'store' => $store,'products' => $products,'product_ratings' => $Product_ratings]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+
+   }
+
+
+
+
+
 
 
 
