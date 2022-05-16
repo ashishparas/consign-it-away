@@ -51,6 +51,7 @@ class CreateProductsTable extends Migration
             $table->enum('advertisement', [1,2])->default(2)->comment('1->Yes,2->No');
             $table->string('selling_fee')->nullable();
             $table->string('amount')->nullable();
+            $table->enum('status',[1,2])->default(2)->comment('1->Product Lised, 2->Not Listed Yes');
             $table->timestamps();
         });
     }

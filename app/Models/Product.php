@@ -57,7 +57,8 @@ class Product extends Model
         'tags',
         'advertisement',
         'selling_fee',
-        'amount'
+        'amount',
+        'status'
     ];
 
 

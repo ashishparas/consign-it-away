@@ -320,6 +320,10 @@ class VendorController extends ApiController
            
             $input['user_id'] = Auth::id();
 
+            if($input['is_variant'] === '1'):
+                $input['status'] = '1';
+            endif;
+           
             if (isset($request->image)):
 
                 if($files = $request->file('image')):
@@ -1024,6 +1028,32 @@ class VendorController extends ApiController
            return parent::error($ex->getMessage());
        }
    }
+
+
+
+   public function SubmitProduct(Request $request)
+   {
+       $rules = ['product_id' => 'required|exists:products,id'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+           Product::where('id', $input['product_id'])->where('is_variant','2')->update(['status' => '1']);
+        return parent::success("Product submitted successfully!");
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
+
+
+
+
+
+
+
 
 
 
