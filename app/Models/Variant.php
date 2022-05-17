@@ -19,9 +19,13 @@ class Variant extends Model
 
 
     public function Attributes(){
-        return $this->hasOne(AttributeOption::class,'id','option_id')->select('id','name');
+        return $this->hasOne(Attribute::class,'id','attr_id')->select('id','name')->with(['AttrOption']);
     }
 
+  
 
+    public function variantPrice(){
+        return $this->hasOne(VariantItems::class,'id', 'variant_item_id')->select('id','price','quantity');
+    }
    
 }

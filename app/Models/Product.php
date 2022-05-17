@@ -58,7 +58,7 @@ class Product extends Model
         'advertisement',
         'selling_fee',
         'amount',
-        'status'
+        'status'    
     ];
 
 

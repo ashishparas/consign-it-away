@@ -33,7 +33,9 @@ use App\Models\Product;
 use App\Models\Rating;
 use App\Models\RecentProducts;
 use App\Models\Store;
+use App\Models\Variant;
 use App\Models\VariantItems;
+use Attribute;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Cache\RateLimiting\Limit;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -240,10 +242,18 @@ class ClientController extends ApiController
 
             // product variant attributes
 
-            $Attrvariants = VariantItems::select('id','product_id','quantity','price')
-                        ->where('variant_items.product_id', $input['product_id'])
-                        ->with(['variants'])
-                        ->get();
+            // $Attrvariants = VariantItems::select('id','product_id','quantity','price')
+            //             ->where('variant_items.product_id', $input['product_id'])
+            //             ->with(['variants'])
+            //             ->get();
+
+                $Attrvariants = App\Models\Attribute::select('id','product_id','name')
+                                            ->where('product_id', $input['product_id'])
+                                            ->with(['Option'])
+                                            ->get();
+            // $Attrvariants = VariantItems::where('product_id', $request->product_id)
+            //                             ->with(['variants'])
+            //                             ->get();
 
             // end code
             $product['product_variants'] = $Attrvariants;
@@ -821,6 +831,43 @@ class ClientController extends ApiController
         return parent::error($ex->getMessage());
        }
 
+   }
+
+  
+   public function SearchVariants(Request $request)
+   {
+    $rules = ['variant' => 'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $variants = json_decode($request->variant, true);
+        $arr = [];
+        foreach($variants as $variant){
+            $combination = Variant::where('product_id', $variant['product_id'])
+                    ->where('attr_id', $variant['attr_id'])
+                    ->where('option_id', $variant['option_id'])
+                    ->where('variant_item_id', $variant['variant_id'])
+                    ->first();
+            //    dd($combination);
+            if(is_null($combination) === true){
+               
+                return parent::error("This variant not available");
+            }else{
+                array_push($arr, $combination->variant_item_id);
+            
+            }
+        }
+        // dd($arr);
+        $variantItem = VariantItems::whereIn('id', $arr)->first()->toArray();
+      
+        return parent::success("view variant successfully!",['variants' =>  $variantItem]);
+        
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
    }
 
 

@@ -365,7 +365,7 @@ class VendorController extends ApiController
                      $options = $arribute_json[$saveAttr->name];
                    
                      for($j=0; $j<count($options); $j++){
-                         AttributeOption::updateOrCreate([
+                         AttributeOption::create([
                              'name'=> $options[$j],
                              'attr_id' => $saveAttr->id
                          ]);

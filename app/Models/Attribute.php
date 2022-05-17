@@ -20,7 +20,16 @@ class Attribute extends Model
 
 
     public function Option(){
-        return $this->hasMany(\App\Models\AttributeOption::class,'attr_id');
+        return $this->hasMany(\App\Models\AttributeOption::class,'attr_id')->with(['vaients']);
     }
+
+    public function AttrOption(){
+        return $this->hasOne(\App\Models\AttributeOption::class,'attr_id');
+    }
+
+   
+
+
+    
 
 }
