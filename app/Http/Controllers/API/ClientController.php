@@ -242,10 +242,11 @@ class ClientController extends ApiController
 
             // product variant attributes
 
-            // $Attrvariants = VariantItems::select('id','product_id','quantity','price')
-            //             ->where('variant_items.product_id', $input['product_id'])
-            //             ->with(['variants'])
-            //             ->get();
+            $SelectedVariants = VariantItems::select('id','product_id','quantity','price')
+                        ->where('variant_items.product_id', $input['product_id'])
+                        ->with(['variants'])
+                        ->take(1)
+                        ->get();
 
                 $Attrvariants = App\Models\Attribute::select('id','product_id','name')
                                             ->where('product_id', $input['product_id'])
@@ -256,6 +257,7 @@ class ClientController extends ApiController
             //                             ->get();
 
             // end code
+            $product['SelectedVariant'] = $SelectedVariants;
             $product['product_variants'] = $Attrvariants;
 
             foreach($product['comment'] as $key => $commentUser):
