@@ -42,7 +42,7 @@ class ApiController extends \App\Http\Controllers\Controller {
     public static $locale = '';
 //    public $requiredParams = ['device_id' => 'required', 'device_token' => 'required', 'device_type' => 'in:ios,android|required', 'client_id' => 'required', 'client_secret' => 'required'];
 //    public $requiredParams = ['device_id' => 'required', 'device_type' => 'in:ios,android|required', 'client_id' => 'required', 'client_secret' => 'required'];
-    public $requiredParams = ['device_type' => 'required|in:ios,android', 'device_token' => 'required'];
+    public $requiredParams = ['device_type' => 'required|in:ios,android,web', 'device_token' => 'required'];
     protected static $_allowedURIwithoutAuth = ['api/login', 'api/customer/login', 'api/configuration/{type}', 'api/customer/verify-login', 'api/customer/registeration', 'api/customer/resend-otp', 'api/salon/register', 'api/salon/{id}', 'api/customer/register', 'api/customer/{id}'];
 
     public static function validateClientSecret() {
