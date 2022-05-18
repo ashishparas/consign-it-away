@@ -5,7 +5,8 @@ namespace Database\Seeders;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-class SubscriptionsTableSeeder extends Seeder
+
+class SubscriptionPlanSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +15,7 @@ class SubscriptionsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('subscriptions')->insert([
+        DB::table('subscription_plans')->insert([
             [
                 'name' => 'Bronze',
                 'monthly_price' => '0.00',
