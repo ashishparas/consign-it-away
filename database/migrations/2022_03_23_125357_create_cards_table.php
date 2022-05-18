@@ -19,7 +19,8 @@ class CreateCardsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('card_no')->nullable();
             $table->string('card_holder_name')->nullable();
-            $table->string('expiry_date')->nullable();
+            $table->string('expiry_month')->nullable();
+            $table->string('expiry_Year')->nullable();
             $table->enum('status',[1,2])->default(1)->comment('1->Active, 2->Inactive');
             $table->timestamps();
         });

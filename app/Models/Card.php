@@ -16,5 +16,5 @@ class Card extends Model
 
 
 
-    protected $fillable = ['user_id', 'card_no','card_holder_name','expiry_date','status'];
+    protected $fillable = ['user_id', 'card_no','card_holder_name','expiry_month','expiry_year','status'];
 }

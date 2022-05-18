@@ -10,6 +10,7 @@ use \App\Models\Role;
 use Carbon\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 // use Twilio\Rest\Client;
+use Stripe;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
@@ -1046,6 +1047,107 @@ class VendorController extends ApiController
         return parent::error($ex->getMessage());
        }
    }
+
+
+   public function AddVendorcard(Request $request)
+   {
+       $rules = ['card_holder_name' => 'required','card_no' => 'required','expiry_date' =>'required'];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+
+        $input = $request->all();
+        $expiry_date = explode('/',$input['expiry_date']);
+        $input['expiry_month'] = $expiry_date[0];
+        $input['expiry_year'] = $expiry_date[1];
+        $input['user_id'] =  Auth::id();
+        // dd($input);
+        $card = Card::create($input);
+        // dd($cards['card_holder_name']);
+        // $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        $cardTokenArray=\Stripe\Token::create([
+            'card' => [
+              'number' => $card['card_no'],
+              'exp_month' => $card['expiry_month'],
+              'exp_year' => $card['expiry_year'],
+              'cvc' => '123',
+            ],
+          ]);
+
+          $CardToken=$cardTokenArray['id']; 
+
+       
+        $customer = \Stripe\Customer::create ([
+            'email' => Auth::user()->email, 
+            'name' => Auth::user()->name,
+            'address' => [
+                'line1' => '510 Townsend St',
+                'postal_code' => '98140',
+                'city' => 'San Francisco',
+                'state' => 'CA',
+                'country' => 'US',
+              ],
+           'source'  => $CardToken          
+          ]);
+            //  $customer->id;
+
+            $plan = \Stripe\Plan::create([
+                "product" => [ 
+                    "name" => "Bronze Subscription" 
+                ], 
+                "amount" => '99', 
+                "currency" => "USD", 
+                "interval" => 'month', 
+                "interval_count" => 1 
+            ]); 
+
+            $subscription = \Stripe\Subscription::create([
+                "customer" => $customer['id'], 
+                "items" => array( 
+                    array( 
+                        "plan" => $plan['id'], 
+                    ), 
+                ),
+                // "trial_end"=> strtotime(date('Y-m-d')),
+                "metadata" => ["SellerID" => 'sel_'.md5(1111,9999)]
+            ]);
+            // echo '<pre>';
+            // print_r($subscription); exit;
+            $data = [
+                'user_id' => Auth::id(),
+                'name'    => $subscription['object'],
+                'stripe_status' => $subscription['status'],
+                'stripe_price' => $subscription['items']['data'][0]['plan']['amount'],
+                'subscription_id' => $subscription->id,
+                'subscription_item_id' => $subscription['items']['data'][0]['id'],
+                'quantity'     => '1',
+                'stripe_id'    =>  $subscription['customer'], //$subscription['items']['data'][0]['id'],
+                'trial_ends_at' => $subscription['current_period_end'],
+                'ends_at'   => $subscription['current_period_end'],
+                'body'  => json_encode($subscription),
+            ];
+
+            Subscription::create($data);
+
+        return parent::success("Subscription buy successfully");
+       }catch(\exception $ex){
+           return parent::error($ex->getMessage());
+       }
+   }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
