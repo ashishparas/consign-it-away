@@ -24,8 +24,8 @@ class CreateVariantsTable extends Migration
             $table->bigInteger('product_id')->unsigned()->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
 
-            $table->Integer('variant_item_id')->unsigned()->nullable();
-            $table->foreign('variant_item_id')->references('id')->on('variant_items')->onDelete('cascade');
+            $table->Integer('variant_item_id')->nullable();
+            
 
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();
