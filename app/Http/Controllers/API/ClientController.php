@@ -192,7 +192,7 @@ class ClientController extends ApiController
                     ->where('products.status', '1')
                     ->groupBy('products.id')
                     ->orderBy('AverageRating', 'desc')
-                    ->take(5)
+                    // ->take(5)
                     ->get();
                     // dd(DB::getQueryLog($products));
             $category = Category::select('id','title','image')->get();
@@ -206,7 +206,7 @@ class ClientController extends ApiController
             ->leftJoin('favourites', 'favourites.product_id', 'recent_products.product_id')
             ->join('products', 'products.id', '=', 'recent_products.product_id')
             ->where('recent_products.user_id', Auth::id())
-            ->take(5)
+            // ->take(5)
             ->get();
             $arr = array(
             array('name' => 'Category','type'=> 1,'items'=> $category),

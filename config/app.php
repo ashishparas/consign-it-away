@@ -162,6 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
+    
         /*
          * Package Service Providers...
          */
@@ -232,7 +233,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         // 'FCM'      => LaravelFCM\Facades\FCM::class,
 	    // 'FCMGroup' => LaravelFCM\Facades\FCMGroup::class, // Optional
-
+       
     ],
 
 ];
