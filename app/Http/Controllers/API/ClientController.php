@@ -839,6 +839,7 @@ class ClientController extends ApiController
   
    public function SearchVariants(Request $request)
    {
+
     $rules = ['variant' => 'required'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
     if($validateAttributes):
@@ -860,7 +861,6 @@ class ClientController extends ApiController
                 return parent::error("This variant not available");
             }else{
                 array_push($arr, $combination->variant_item_id);
-            
             }
         }
         // dd($arr);

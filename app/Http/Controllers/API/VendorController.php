@@ -26,6 +26,7 @@ use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Subcategory;
 use App\Models\Subscription;
+use App\Models\SubscriptionPlan;
 use App\Models\Variant;
 use App\Models\VariantItems;
 use Attribute;
@@ -740,7 +741,7 @@ class VendorController extends ApiController
     }
    }
 
-   public function Subscriptions(Request $request)
+   public function SubscriptionsPlan(Request $request)
    {
        $rules = [];
        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
@@ -748,7 +749,7 @@ class VendorController extends ApiController
         return $validateAttributes;
        endif;
        try{
-           $subscription = Subscription::get();
+           $subscription = SubscriptionPlan::get();
             return parent::success("Subscription plans view successfully!",['subscription' => $subscription]);
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
