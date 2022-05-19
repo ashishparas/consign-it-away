@@ -28,6 +28,7 @@ use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Favourite;
 use App\Models\Item;
+use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Rating;
@@ -872,6 +873,40 @@ class ClientController extends ApiController
         return parent::error($ex->getMessage());
     }
    }
+
+
+   public function CreateOffer(Request $request)
+   {
+       $rules = ['product_id' => 'required|exists:products,id','name'=>'required','email'=>'required','phonecode' =>'required','mobile_no'=>'required','quantity'=>'required','offer_price'=>'required','comment' =>''];
+
+       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input =  $request->all();
+           $phonecode = str_replace('+','',$input['phonecode']);
+           $input['phonecode'] = '+'.$phonecode;
+         
+           $input['user_id'] = Auth::id();
+           $offer = Offer::create($input);
+            return parent::success("Offer sent successfully!",['offer' =>  $offer]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
