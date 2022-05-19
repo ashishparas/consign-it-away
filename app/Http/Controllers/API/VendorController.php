@@ -749,8 +749,11 @@ class VendorController extends ApiController
         return $validateAttributes;
        endif;
        try{
-           $subscription = SubscriptionPlan::get();
-            return parent::success("Subscription plans view successfully!",['subscription' => $subscription]);
+           $subscriptions = SubscriptionPlan::get();
+           foreach($subscriptions as $key => $subscription):
+            $subscriptions[$key]['features'] = json_decode($subscription->features);
+           endforeach;
+            return parent::success("Subscription plans view successfully!",['subscription' => $subscriptions]);
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
        }
