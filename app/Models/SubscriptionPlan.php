@@ -14,5 +14,5 @@ class SubscriptionPlan extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['name','monthly_price','yearly_price','status'];
+    protected $fillable = ['name','monthly_price','yearly_price','content','status'];
 }
