@@ -14,6 +14,13 @@ class SubscriptionPlan extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['name','monthly_price','yearly_price','content','features','status'];
+    protected $fillable = ['name','monthly_price','yearly_price','content','features','status','active_img','inactive_img'];
+
+    protected $appends = ['baseUrl'];
+
+    public function getBaseUrlAttribute()
+    {
+        return asset('/Icons');
+    }
 
 }
