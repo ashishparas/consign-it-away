@@ -1055,33 +1055,36 @@ class VendorController extends ApiController
 
    public function AddVendorcard(Request $request)
    {
-       $rules = ['card_holder_name' => 'required','card_no' => 'required','expiry_date' =>'required'];
+       $rules = ['card_holder_name' => 'required','card_no' => 'required','expiry_date' =>'required','cvv' =>'required','subscription_price'=>'required','subscription_type'=>'required|in:month,year','PaymentToken'=>'required','save_card' =>'required|in:1,2'];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
        if($validateAttributes):
         return $validateAttributes;
        endif;
        try{
-
-        $input = $request->all();
-        $expiry_date = explode('/',$input['expiry_date']);
-        $input['expiry_month'] = $expiry_date[0];
-        $input['expiry_year'] = $expiry_date[1];
-        $input['user_id'] =  Auth::id();
-        // dd($input);
-        $card = Card::create($input);
+            $input = $request->all();
+            if($input['save_card'] === '1'){
+            
+                $expiry_date = explode('/',$input['expiry_date']);
+                $input['expiry_month'] = $expiry_date[0];
+                $input['expiry_year'] = $expiry_date[1];
+                $input['user_id'] =  Auth::id();
+            // dd($input);
+            $card = Card::create($input);
+            }
+        
         // dd($cards['card_holder_name']);
         // $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-        $cardTokenArray=\Stripe\Token::create([
-            'card' => [
-              'number' => $card['card_no'],
-              'exp_month' => $card['expiry_month'],
-              'exp_year' => $card['expiry_year'],
-              'cvc' => '123',
-            ],
-          ]);
-
-          $CardToken=$cardTokenArray['id']; 
+        // $cardTokenArray=\Stripe\Token::create([
+        //     'card' => [
+        //       'number' => $card['card_no'],
+        //       'exp_month' => $card['expiry_month'],
+        //       'exp_year' => $card['expiry_year'],
+        //       'cvc' => '123',
+        //     ],
+        //   ]);
+          $CardToken=$input['PaymentToken']; 
+        //   $CardToken=$cardTokenArray['id']; 
 
        
         $customer = \Stripe\Customer::create ([
@@ -1102,9 +1105,9 @@ class VendorController extends ApiController
                 "product" => [ 
                     "name" => "Bronze Subscription" 
                 ], 
-                "amount" => '99', 
-                "currency" => "USD", 
-                "interval" => 'month', 
+                "amount" => ($input['subscription_price']*100),
+                "currency" => "USD",
+                "interval" => $input['subscription_type'], 
                 "interval_count" => 1 
             ]); 
 
@@ -1118,8 +1121,7 @@ class VendorController extends ApiController
                 // "trial_end"=> strtotime(date('Y-m-d')),
                 "metadata" => ["SellerID" => 'sel_'.md5(1111,9999)]
             ]);
-            // echo '<pre>';
-            // print_r($subscription); exit;
+         
             $data = [
                 'user_id' => Auth::id(),
                 'name'    => $subscription['object'],
@@ -1134,9 +1136,9 @@ class VendorController extends ApiController
                 'body'  => json_encode($subscription),
             ];
 
-            Subscription::create($data);
+            $subscription  = Subscription::create($data);
 
-        return parent::success("Subscription buy successfully");
+        return parent::success("Subscription buy successfully",['subcription' => $subscription ]);
        }catch(\exception $ex){
            return parent::error($ex->getMessage());
        }
