@@ -81,7 +81,7 @@ class Product extends Model
         ->where('by', Auth::id())
         ->first();
         $ft = (!$favourite)?null:$favourite->id; 
-        return $ft;
+        return (string)$ft;
     }
 
     // public function getVariantsAttribute($value)
