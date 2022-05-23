@@ -15,7 +15,7 @@ class Variant extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['product_id','attr_id','option_id','variant_item_id'];
+    protected $fillable = ['product_id','attr_id','option_id','variant_item_id','price','quantity'];
 
 
     public function Attributes(){

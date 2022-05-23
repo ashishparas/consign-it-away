@@ -14,6 +14,7 @@ use Stripe;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
+use App\Models\Attribute as ModelsAttribute;
 use App\Models\AttributeOption;
 use App\Models\Bank;
 use App\Models\Brand;
@@ -408,26 +409,46 @@ class VendorController extends ApiController
     try{
         $input = $request->all();
         // dd($input);
-        $variant = VariantItems::create([
-            'product_id' => $input['product_id'],
-            'quantity' => $input['quantity'],
-            'price' => $input['price']
-        ]);
-        if($variant):
+        // $variant = VariantItems::create([
+        //     'product_id' => $input['product_id'],
+        //     'quantity' => $input['quantity'],
+        //     'price' => $input['price']
+        // ]);
+        // if($variant):
 
             $varient_items = json_decode($input['varients'],true);
-           
-           
-            foreach($varient_items as $varient_item):
-                $varient_item['variant_item_id'] = $variant->id;
-                Variant::create($varient_item);
-            endforeach;
+        //    dd($varient_items);
+           $attr_id = [];
+           $option_id = [];
+           for($i=0; $i<count($varient_items); $i++){
+                    array_push($attr_id,$varient_items[$i]['attr_id']);
+                    array_push($option_id,$varient_items[$i]['option_id']);
+           }
+         //  dd($attr_id);
+            // foreach($varient_items as $varient_item):
+                $varient_item['variant_item_id'] = '1';//$variant->id;
+                  Variant::create([
+                    'attr_id' => implode(",", $attr_id),
+                    'option_id' =>  implode(",", $option_id),
+                    'product_id'  => $input['product_id'],
+                    'quantity' => $input['quantity'],
+                    'price' => $input['price']
+                ]);
+            // endforeach;
             
-        endif;
-            $variants = VariantItems::
-                        where('variant_items.product_id', $input['product_id'])
-                        ->with(['variants'])
+        // endif;
+            $variants = Variant::
+                        where('product_id', $input['product_id'])
                         ->get();
+            foreach($variants as $key => $variant){
+                $option_id = explode(",",$variant['option_id']);
+                // dd($attr_id);
+                $variants[$key]['attributes'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
+                ->join("attribute_options","attributes.id","attribute_options.attr_id")
+                ->whereIn('attribute_options.id', $option_id)
+                ->get();
+
+            }
         return parent::success("Variants added successfully!",['varients' => $variants]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());

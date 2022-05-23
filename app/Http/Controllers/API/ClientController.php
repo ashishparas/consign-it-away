@@ -187,7 +187,7 @@ class ClientController extends ApiController
         try{
         //   DB::enableQueryLog();
             $products = Product::
-                    select('products.id','products.name','products.image as images','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, CONVERT(favourites.id, CHAR) as favourite_id'))
+                    select('products.id','products.name','products.image as images','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id')
                     ->where('products.status', '1')
@@ -202,7 +202,7 @@ class ClientController extends ApiController
             $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,162])->get();
          
             
-            $recentView = RecentProducts::select('products.id','products.name','products.image','products.amount','recent_products.id','recent_products.user_id','recent_products.product_id',DB::raw("CONVERT(favourites.id, CHAR) as favourite_id"),DB::raw('(favourites.status) as favourite'))
+            $recentView = RecentProducts::select('products.id','products.name','products.image','products.amount','recent_products.id','recent_products.user_id','recent_products.product_id',DB::raw("CONVERT(favourites.id, CHAR)"),DB::raw('(favourites.status) as favourite'))
             ->where('recent_products.user_id', Auth::id())
             ->leftJoin('favourites', 'favourites.product_id', 'recent_products.product_id')
             ->join('products', 'products.id', '=', 'recent_products.product_id')
@@ -243,11 +243,22 @@ class ClientController extends ApiController
 
             // product variant attributes
 
-            $SelectedVariants = VariantItems::select('id','product_id','quantity','price')
-                        ->where('variant_items.product_id', $input['product_id'])
-                        ->with(['variants'])
-                        ->take(1)
-                        ->get();
+            // $SelectedVariants = VariantItems::select('id','product_id','quantity','price')
+            //             ->where('variant_items.product_id', $input['product_id'])
+            //             ->with(['variants'])
+            //             ->take(1)
+            //             ->get();
+            $variants = Variant:: where('product_id', $input['product_id'])->take(1)->orderBy('created_at','DESC')->get();
+                        foreach($variants as $key => $variant){
+                            $option_id = explode(",",$variant['option_id']);
+                            // dd($attr_id);
+                            
+             $variants[$key]['variants'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
+                            ->join("attribute_options","attributes.id","attribute_options.attr_id")
+                            ->whereIn('attribute_options.id', $option_id)
+                            ->get();
+            
+                        }        
 
                 $Attrvariants = App\Models\Attribute::select('id','product_id','name')
                                             ->where('product_id', $input['product_id'])
@@ -258,7 +269,7 @@ class ClientController extends ApiController
             //                             ->get();
 
             // end code
-            $product['SelectedVariant'] = $SelectedVariants;
+            $product['SelectedVariant'] = $variants;
             $product['product_variants'] = $Attrvariants;
 
             foreach($product['comment'] as $key => $commentUser):
@@ -402,13 +413,19 @@ class ClientController extends ApiController
        endif;
        try{
            $input =  $request->all();
+           $explode = explode("/", $input['expiry_date']);
+           $input['expiry_month'] = $explode[0];
+           $input['expiry_year'] = $explode[1];
            $input['user_id'] =  Auth::id();
            if($input['status'] === '1'):
             Card::where('user_id', Auth::id())->update(['status' => '2']);
            endif;
 
            $card = Card::create($input);
-        return parent::success("Card Added successfully",['card' => $card]);
+         
+        $NewCard = Card::where('id',$card->id)->first();
+        $NewCard['expiry_date'] = $NewCard['expiry_month'].'/'.$NewCard['expiry_year'];
+        return parent::success("Card Added successfully",['card' => $NewCard]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }

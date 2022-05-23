@@ -23,6 +23,9 @@ class Attribute extends Model
         return $this->hasMany(\App\Models\AttributeOption::class,'attr_id')->with(['VariantItem']);
     }
 
+
+   
+
     public function AttrOption(){
         return $this->hasOne(\App\Models\AttributeOption::class,'attr_id');
     }
