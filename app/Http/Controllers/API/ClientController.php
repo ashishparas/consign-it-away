@@ -885,6 +885,7 @@ class ClientController extends ApiController
        // $variantItem = VariantItems::whereIn('id', $arr)->first()->toArray();
        $variants = Variant:: where('product_id', $input['product_id'])->get();
        foreach($variants as $key => $variant){
+        //    $att_id = 
            $option_id = explode(",",$variant['option_id']);
            // dd($attr_id);
            $variants[$key]['attributes'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))

@@ -176,7 +176,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         LaravelFCM\FCMServiceProvider::class,
-        Johnpaulmedina\Usps\UspsServiceProvider::class,
+        // Johnpaulmedina\Usps\UspsServiceProvider::class,
 
     ],
 
@@ -234,7 +234,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         // 'FCM'      => LaravelFCM\Facades\FCM::class,
 	    // 'FCMGroup' => LaravelFCM\Facades\FCMGroup::class, // Optional
-        'Usps' => Johnpaulmedina\Usps\Facades\Usps::class,
+        // 'Usps' => Johnpaulmedina\Usps\Facades\Usps::class,
        
     ],
 
