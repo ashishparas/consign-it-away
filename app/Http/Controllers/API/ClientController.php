@@ -866,7 +866,7 @@ class ClientController extends ApiController
     try{
         $input = $request->all();
         $combinations = json_decode($request->variant, true);
-      
+    //   dd($combinations['attr_id']);
         $arr = [];
         // foreach($variants as $variant){
         //     $combination = Variant::where('product_id', $variant['product_id'])
@@ -884,20 +884,24 @@ class ClientController extends ApiController
         // }
         // dd($arr);
        // $variantItem = VariantItems::whereIn('id', $arr)->first()->toArray();
-       $variants = Variant:: where('product_id', $input['product_id'])->first();
-    //    foreach($variants as $key => $variant){
-           $attr_id = explode(",",$combinations['attr_id']);
-           $option_id = explode(",",$combinations['option_id']);
-           dd($attr_id);
-           $variants['attributes'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
-           ->join("attribute_options","attributes.id","attribute_options.attr_id")
-           ->whereIn('attribute_options.id', $option_id)
-           ->get();
-
-    //    }
-
+            $variants = Variant:: where('product_id', $input['product_id'])
+            ->where('attr_id', $combinations['attr_id'])
+            ->where('option_id', $combinations['option_id'])
+            ->first();
+ 
+            $attr_id = explode(",",$combinations['attr_id']);
+            $option_id = explode(",",$combinations['option_id']);
+            if($variants):
+                $variants['attributes'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
+                ->join("attribute_options","attributes.id","attribute_options.attr_id")
+                ->whereIn('attribute_options.attr_id', $attr_id)
+                ->whereIn('attribute_options.id', $option_id)
+                ->get();
+            endif;
       
-        return parent::success("view variant successfully!",['variants' =>  $variants]);
+            
+
+            return parent::success("view variant successfully!",['variants' =>  $variants]);
         
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
