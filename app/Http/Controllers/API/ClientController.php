@@ -810,7 +810,7 @@ class ClientController extends ApiController
         }
 
             $most_popular = Product::
-                    select('products.id','products.name','products.image as images','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                    select('products.id','products.user_id','products.name','products.image as images','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id')
                     // ->where('favourites.by', Auth::id())

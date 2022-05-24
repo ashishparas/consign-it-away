@@ -445,7 +445,6 @@ class VendorController extends ApiController
                 ->join("attribute_options","attributes.id","attribute_options.attr_id")
                 ->whereIn('attribute_options.id', $option_id)
                 ->get();
-
             }
         return parent::success("Variants added successfully!",['varients' => $variants]);
     }catch(\Exception $ex){
