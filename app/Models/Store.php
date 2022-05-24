@@ -17,7 +17,11 @@ class Store extends Model
 
     protected $fillable = ['banner','user_id','store_image','name','location','description','photos'];
 
+    protected $appends = ['base_url'];
 
+    public function getBaseUrlAttribute(){
+        return asset('vendor');
+    }
 
     public function staff(){
         return $this->hasMany(Manager::class);

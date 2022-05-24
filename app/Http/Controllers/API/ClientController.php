@@ -865,7 +865,8 @@ class ClientController extends ApiController
     endif;
     try{
         $input = $request->all();
-        $variants = json_decode($request->variant, true);
+        $combinations = json_decode($request->variant, true);
+      
         $arr = [];
         // foreach($variants as $variant){
         //     $combination = Variant::where('product_id', $variant['product_id'])
@@ -883,17 +884,17 @@ class ClientController extends ApiController
         // }
         // dd($arr);
        // $variantItem = VariantItems::whereIn('id', $arr)->first()->toArray();
-       $variants = Variant:: where('product_id', $input['product_id'])->get();
-       foreach($variants as $key => $variant){
-        //    $att_id = 
-           $option_id = explode(",",$variant['option_id']);
-           // dd($attr_id);
-           $variants[$key]['attributes'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
+       $variants = Variant:: where('product_id', $input['product_id'])->first();
+    //    foreach($variants as $key => $variant){
+           $attr_id = explode(",",$combinations['attr_id']);
+           $option_id = explode(",",$combinations['option_id']);
+           dd($attr_id);
+           $variants['attributes'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
            ->join("attribute_options","attributes.id","attribute_options.attr_id")
            ->whereIn('attribute_options.id', $option_id)
            ->get();
 
-       }
+    //    }
 
       
         return parent::success("view variant successfully!",['variants' =>  $variants]);
