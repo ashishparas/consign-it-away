@@ -437,9 +437,7 @@ class VendorController extends ApiController
             // endforeach;
             
         // endif;
-            $variants = Variant::
-                        where('product_id', $input['product_id'])
-                        ->get();
+            $variants = Variant:: where('product_id', $input['product_id'])->get();
             foreach($variants as $key => $variant){
                 $option_id = explode(",",$variant['option_id']);
                 // dd($attr_id);

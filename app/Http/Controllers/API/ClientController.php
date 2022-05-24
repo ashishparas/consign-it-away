@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
 use Stripe;
-use Usps;
+//use Usps;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
@@ -858,8 +858,7 @@ class ClientController extends ApiController
   
    public function SearchVariants(Request $request)
    {
-
-    $rules = ['variant' => 'required'];
+    $rules = ['variant' => 'required','product_id' => 'required|exists:products,id'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
     if($validateAttributes):
         return $validateAttributes;
@@ -868,24 +867,35 @@ class ClientController extends ApiController
         $input = $request->all();
         $variants = json_decode($request->variant, true);
         $arr = [];
-        foreach($variants as $variant){
-            $combination = Variant::where('product_id', $variant['product_id'])
-                    ->where('attr_id', $variant['attr_id'])
-                    ->where('option_id', $variant['option_id'])
-                    ->where('variant_item_id', $variant['variant_id'])
-                    ->first();
+        // foreach($variants as $variant){
+        //     $combination = Variant::where('product_id', $variant['product_id'])
+        //             ->where('attr_id', $variant['attr_id'])
+        //             ->where('option_id', $variant['option_id'])
+        //             ->where('variant_item_id', $variant['variant_id'])
+        //             ->first();
             //    dd($combination);
-            if(is_null($combination) === true){
+            // if(is_null($combination) === true){
                
-                return parent::error("This variant not available");
-            }else{
-                array_push($arr, $combination->variant_item_id);
-            }
-        }
+            //     return parent::error("This variant not available");
+            // }else{
+            //     array_push($arr, $combination->variant_item_id);
+            // }
+        // }
         // dd($arr);
-        $variantItem = VariantItems::whereIn('id', $arr)->first()->toArray();
+       // $variantItem = VariantItems::whereIn('id', $arr)->first()->toArray();
+       $variants = Variant:: where('product_id', $input['product_id'])->get();
+       foreach($variants as $key => $variant){
+           $option_id = explode(",",$variant['option_id']);
+           // dd($attr_id);
+           $variants[$key]['attributes'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
+           ->join("attribute_options","attributes.id","attribute_options.attr_id")
+           ->whereIn('attribute_options.id', $option_id)
+           ->get();
+
+       }
+
       
-        return parent::success("view variant successfully!",['variants' =>  $variantItem]);
+        return parent::success("view variant successfully!",['variants' =>  $variants]);
         
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
