@@ -15,5 +15,5 @@ class Offer extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['user_id','product_id','name','email','phonecode','mobile_no','quantity','offer_price','comment','status'];
+    protected $fillable = ['user_id','vendor_id','product_id','name','email','phonecode','mobile_no','quantity','offer_price','comment','status'];
 }

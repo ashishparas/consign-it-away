@@ -34,4 +34,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'usps' => [
+		'username' => "ConsignItAway",
+		'testmode' => false,
+	],
+
 ];

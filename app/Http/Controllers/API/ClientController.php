@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
 use Stripe;
+use Usps;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
@@ -894,7 +895,7 @@ class ClientController extends ApiController
 
    public function CreateOffer(Request $request)
    {
-       $rules = ['product_id' => 'required|exists:products,id','name'=>'required','email'=>'required','phonecode' =>'required','mobile_no'=>'required','quantity'=>'required','offer_price'=>'required','comment' =>''];
+       $rules = ['product_id' => 'required|exists:products,id','vendor_id'=>'required|exists:users,id','name'=>'required','email'=>'required','phonecode' =>'required','mobile_no'=>'required','quantity'=>'required','offer_price'=>'required','comment' =>''];
 
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
        if($validateAttributes):
@@ -912,6 +913,26 @@ class ClientController extends ApiController
         return parent::error($ex->getMessage());
        }
    }
+
+   public function USPS(Request $request)
+   {
+        $rules = [];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+
+
+
+            return parent::success("view address successfully!");
+
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
+
+
 
 
 

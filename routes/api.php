@@ -32,7 +32,7 @@ Route::post('login',[AuthController::class, "Login"]);
 Route::post('social/login',[AuthController::class, "SocialLogin"]);
 Route::post('forget/password',[AuthController::class, "ResetPassword"]);
 Route::post('csv',[VendorController::class, "CSV"]);
-
+Route::post('usps',[ClientController::class, "USPS"]);
 
 // Route::group(['middleware' =>['auth:api']], function(){
     

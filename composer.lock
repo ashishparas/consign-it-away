@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b61e6d99d2f0cf9b7f8ce8ef460ac231",
+    "content-hash": "0901c334cc2df85c006717c969a21635",
     "packages": [
         {
             "name": "apility/laravel-fcm",
@@ -1355,6 +1355,67 @@
                 }
             ],
             "time": "2022-03-20T21:55:58+00:00"
+        },
+        {
+            "name": "johnpaulmedina/laravel-usps",
+            "version": "v8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/johnpaulmedina/laravel-usps.git",
+                "reference": "560809e46d33a7561081b1ceb1b45de8bd3f2ce1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/johnpaulmedina/laravel-usps/zipball/560809e46d33a7561081b1ceb1b45de8bd3f2ce1",
+                "reference": "560809e46d33a7561081b1ceb1b45de8bd3f2ce1",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^8.0",
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Johnpaulmedina\\Usps\\UspsServiceProvider"
+                    ],
+                    "aliases": {
+                        "Usps": "Johnpaulmedina\\Usps\\Facades\\Usps"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Johnpaulmedina\\Usps\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Paul Medina",
+                    "email": "jp@leadtrust.io"
+                },
+                {
+                    "name": "Vincent Gabriel"
+                }
+            ],
+            "description": "USPS API for Laravel 8",
+            "homepage": "https://github.com/johnpaulmedina/laravel-usps/",
+            "keywords": [
+                "laravel",
+                "laravel usps",
+                "laravel8",
+                "usps"
+            ],
+            "support": {
+                "issues": "https://github.com/johnpaulmedina/laravel-usps/issues",
+                "source": "https://github.com/johnpaulmedina/laravel-usps/tree/v8.0"
+            },
+            "time": "2022-05-14T07:23:01+00:00"
         },
         {
             "name": "laravel/cashier",
