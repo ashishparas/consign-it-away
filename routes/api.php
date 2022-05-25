@@ -120,6 +120,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('search/variant',[ClientController::class, "SearchVariants"]);
     Route::post('buy/subscription',[VendorController::class, "VendorBuySubscription"]);
     Route::post('create/offer',[ClientController::class, "CreateOffer"]);
+    Route::get("product/filter",[ClientController::class,"ProductFilter"]);
 });
 
 

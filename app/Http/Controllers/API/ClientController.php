@@ -835,6 +835,8 @@ class ClientController extends ApiController
        try{
             $input = $request->all();
             $store = Store::where('id', $input['store_id'])->first();
+            $about = User::select('id','name','fname','lname','profile_picture')->where('id',$store->user_id)->first();
+
             $products = Product::select('id','image','name','amount')
                                 ->where('user_id',$store->user_id)
                                 ->where('store_id',$store->id)
@@ -848,7 +850,7 @@ class ClientController extends ApiController
             $Product_ratings = Rating::where('product_id', $input['product_id'])->with(['User'])->get();
             $Averagerating = Rating::where('product_id', $input['product_id'])->with(['User'])->avg('rating',1);
             $ratingCount = Rating::where('product_id', $input['product_id'])->with(['User'])->count();
-        return parent::success("View store details successfully!",['AverageRating'=> Number_format($Averagerating,1) ,'RatingCount'=> $ratingCount,'store' => $store,'products' => $products,'product_ratings' => $Product_ratings]);
+        return parent::success("View store details successfully!",['AverageRating'=> Number_format($Averagerating,1) ,'RatingCount'=> $ratingCount,'store' => $store,'products' => $products,'product_ratings' => $Product_ratings,'about' => $about]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
@@ -938,7 +940,7 @@ class ClientController extends ApiController
             return $validateAttributes;
         endif;
         try{
-
+                $XML_request = "<?xml version='1.0'?>";
 
 
             return parent::success("view address successfully!");
@@ -948,6 +950,38 @@ class ClientController extends ApiController
         }
    }
 
+
+   public function ProductFilter(Request $request)
+   {
+     $rules = ['limit' =>'required','page'=>'required','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>''];
+     $validateAttributes = parent::validateAttributes($request,'GET',$rules, array_keys($rules),false);
+     if($validateAttributes):
+        return $validateAttributes;
+     endif;
+     try{
+        $input = $request->all();
+        $price = array_map('intval', explode(",", $input['price']));
+    
+        $limit = (isset($input['limit']))? $input['limit']:15;
+        $page =  (isset($input['limit']))? $input['page']:1;
+      
+        $product = Product::select('id','image','name','price')
+        ->whereBetween('price', $price)->get();
+      
+        return parent::success("filter product view successfully!",['product' =>  $product]);
+     }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+     }
+   }
+
+
+
+
+
+
+
+
+   
 
 
 
