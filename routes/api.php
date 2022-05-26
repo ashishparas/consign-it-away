@@ -32,8 +32,10 @@ Route::post('login',[AuthController::class, "Login"]);
 Route::post('social/login',[AuthController::class, "SocialLogin"]);
 Route::post('forget/password',[AuthController::class, "ResetPassword"]);
 Route::post('csv',[VendorController::class, "CSV"]);
-Route::post('usps',[ClientController::class, "USPS"]);
-
+Route::post('usps/address/verify',[ClientController::class, "UspsVerifyAddress"]);
+Route::post('find/address/by/zip',[ClientController::class, "UspsFindAddressByZip"]); 
+Route::post('track/courier',[ClientController::class, "UspsTrackCourier"]); 
+Route::post('find/rate',[ClientController::class, "UspsFindRate"]); 
 // Route::group(['middleware' =>['auth:api']], function(){
     
 // });
@@ -121,6 +123,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('buy/subscription',[VendorController::class, "VendorBuySubscription"]);
     Route::post('create/offer',[ClientController::class, "CreateOffer"]);
     Route::get("product/filter",[ClientController::class,"ProductFilter"]);
+    Route::post('offer/by/id',[ClientController::class, "getOfferDetailBy"]);
 });
 
 

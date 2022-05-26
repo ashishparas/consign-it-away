@@ -932,7 +932,7 @@ class ClientController extends ApiController
        }
    }
 
-   public function USPS(Request $request)
+   public function UspsVerifyAddress(Request $request)
    {
         $rules = [];
         $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), false);
@@ -940,10 +940,164 @@ class ClientController extends ApiController
             return $validateAttributes;
         endif;
         try{
-                $XML_request = "<?xml version='1.0'?>";
+            
+            $input_xml = <<<EOXML
+            <AddressValidateRequest USERID="778CONSI5321">
+                <Address ID="1">
+                    <Address1></Address1>
+                    <Address2>8 Wildwood Drive</Address2>
+                    <City>Old Lyme</City>
+                    <State>CT</State>
+                    <Zip5>06371</Zip5>
+                    <Zip4></Zip4>
+                </Address>
+            </AddressValidateRequest>
+            EOXML;
+            
+            $fields = array('API' => 'Verify','XML' => $input_xml);
+            
+            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            
+            // Convert the XML result into array
+            $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
+
+            return parent::success("view address successfully!", $array_data);
+
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
 
 
-            return parent::success("view address successfully!");
+
+   public function UspsFindAddressByZip(Request $request)
+   {
+        $rules = ['zipcode' =>'required'];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            
+            $input_xml = <<<EOXML
+            <ZipCodeLookupRequest USERID="778CONSI5321">
+                <Address ID="0">
+                    <Address1></Address1>
+                    <Address2>6406 Ivy Lane</Address2>
+                    <City>Greenbelt</City>
+                    <State>MD</State>
+                </Address>
+            </ZipCodeLookupRequest>
+            EOXML;
+            
+            $fields = array('API' => 'ZipCodeLookup','XML' => $input_xml);
+            
+            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            
+            // Convert the XML result into array
+            $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
+
+            return parent::success("view address successfully!", $array_data);
+
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
+
+   public function UspsTrackCourier(Request $request)
+   {
+        $rules = ['track_id' =>'required'];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            
+            $input_xml = <<<EOXML
+                    <TrackRequest USERID="778CONSI5321">
+                        <TrackID ID="$request->track_id"></TrackID>
+                    </TrackRequest>
+            EOXML;
+            
+            $fields = array('API' => 'TrackV2','XML' => $input_xml);
+            
+            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            
+            // Convert the XML result into array
+            $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
+
+            return parent::success("view address successfully!", $array_data);
+
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
+
+
+   public function UspsFindRate(Request $request)
+   {
+        $rules = ['original_zip'=>'required','destination_zip'=>'required','pounds'=>'required','ounces'=>'required','width'=>'required','height'=>'required','length'=>'required'];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            
+            $input_xml = <<<EOXML
+                <RateV4Request USERID="778CONSI5321">
+                <Revision>2</Revision>
+                <Package ID="1">
+                <Service>PRIORITY</Service>
+                <ZipOrigination>$request->original_zip</ZipOrigination>
+                <ZipDestination>$request->destination_zip</ZipDestination>
+                <Pounds>$request->pounds</Pounds>
+                <Ounces>$request->ounces</Ounces>
+                <Container></Container>
+                <Width>$request->width</Width>
+                <Length>$request->length</Length>
+                <Height>$request->height</Height>
+                <Girth></Girth>
+                <Machinable>TRUE</Machinable>
+                </Package>
+                </RateV4Request>
+            EOXML;
+            
+            $fields = array('API' => 'RateV4','XML' => $input_xml);
+            
+            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            
+            // Convert the XML result into array
+            $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
+
+            return parent::success("view address successfully!", $array_data);
 
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
@@ -961,17 +1115,30 @@ class ClientController extends ApiController
      try{
         $input = $request->all();
         $price = array_map('intval', explode(",", $input['price']));
-    
         $limit = (isset($input['limit']))? $input['limit']:15;
-        $page =  (isset($input['limit']))? $input['page']:1;
-      
-        $product = Product::select('id','image','name','price')
-        ->whereBetween('price', $price)->get();
-      
+        $page  = (isset($input['limit']))? $input['page']:1;
+        $product = Product::select('id','image','name','price')->whereBetween('price', $price)->get();
         return parent::success("filter product view successfully!",['product' =>  $product]);
      }catch(\Exception $ex){
         return parent::error($ex->getMessage());
      }
+   }
+
+
+   public function getOfferDetailBy(Request $request)
+   {
+       $rules = ['offer_id' => 'required|exists:offers,id'];
+       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+           $offer = Offer::where('id',$request->offer_id)->first();
+        return parent::success("View offer details successfully!", $offer);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
    }
 
 
