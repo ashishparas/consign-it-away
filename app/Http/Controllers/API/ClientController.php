@@ -242,6 +242,7 @@ class ClientController extends ApiController
             ->get();
 
             $variants = Variant:: where('product_id', $input['product_id'])->take(1)->orderBy('created_at','DESC')->get();
+            // dd($variants->toArray());   
                         foreach($variants as $key => $variant){
                             $option_id = explode(",",$variant['option_id']);
                             // dd($attr_id);
@@ -264,26 +265,26 @@ class ClientController extends ApiController
                
             $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
             endforeach;
-            $product['soldBy'] = Store::select('id','banner','name')->where('id', $product->store_id)->first();
+            // $product['soldBy'] = Store::select('id','banner','name')->where('id', $product->store_id)->first();
             $product['soldBy']['base_url'] = asset('vendor/');
             $product['soldByOtherSellers'] = Product::select('id','user_id','image','amount')
                                             ->where('name','LIKE','%'.$product->name.'%')
                                             ->whereNotIn('id',[$product->id])
                                             ->with('User')
-                                            ->get();
+                                            ->get()->makeHidden(['soldBy','CartStatus']);
 
             $OtherProducts = Product::select('products.id','products.user_id','products.name','products.image','products.amount',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(product_id) as TotalRating'))
                     ->leftJoin('ratings','ratings.product_id','products.id')
                     ->where('products.user_id', $product->user_id)
                     ->groupBy('products.id')
-                    ->get();
+                    ->get()->makeHidden(['soldBy','CartStatus']);
 
             $product['otherProducts'] = $OtherProducts;
             $product['SimilarProducts'] = Product::select('products.id','products.user_id','products.name','products.image','products.amount',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(product_id) as TotalRating'))
             ->leftJoin('ratings','ratings.product_id','products.id')
             ->where('products.name','LIKE', '%'.$product->name.'%')
             ->groupBy('products.id')
-            ->get();
+            ->get()->makeHidden(['soldBy','CartStatus']);
             RecentProducts::updateOrCreate(['user_id'=> Auth::id(),'product_id' => $request->product_id],[
                 'user_id' => Auth::id(),
                 'product' => $request->product_id,

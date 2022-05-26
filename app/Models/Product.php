@@ -62,7 +62,7 @@ class Product extends Model
     ];
 
 
-    protected $appends = ['base_url','favourite','FavouriteId','CartStatus'];
+    protected $appends = ['base_url','favourite','FavouriteId','CartStatus','soldBy'];
 
 
 
@@ -72,6 +72,10 @@ class Product extends Model
         return $cart;
     }
        
+    public function getSoldByAttribute(){
+        return Store::select('id','banner','name')->where('id', $this->store_id)->first();
+       
+    }
 
 
    
