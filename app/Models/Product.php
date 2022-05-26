@@ -74,7 +74,7 @@ class Product extends Model
        
     public function getSoldByAttribute(){
         $store =  Store::select('id','banner','name')->where('id', $this->store_id)->first();
-        dd($store);
+      
         return $store;
        
     }

@@ -266,7 +266,7 @@ class ClientController extends ApiController
             $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
             endforeach;
             // $product['soldBy'] = Store::select('id','banner','name')->where('id', $product->store_id)->first();
-            // $product['soldBy']['base_url'] = asset('vendor/');
+            $product['soldBy']['base_url'] = asset('vendor/');
             $product['soldByOtherSellers'] = Product::select('id','user_id','image','amount')
                                             ->where('name','LIKE','%'.$product->name.'%')
                                             ->whereNotIn('id',[$product->id])
