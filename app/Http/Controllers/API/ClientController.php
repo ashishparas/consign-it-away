@@ -259,8 +259,8 @@ class ClientController extends ApiController
                                             ->with(['Option'])
                                             ->get();
             // end code
-            $product['SelectedVariant'] = $variants;
-            $product['product_variants'] = $Attrvariants;
+            // $product['SelectedVariant'] = $variants;
+            // $product['product_variants'] = $Attrvariants;
             foreach($product['comment'] as $key => $commentUser):
                
             $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
