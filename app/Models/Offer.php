@@ -16,4 +16,10 @@ class Offer extends Model
 
 
     protected $fillable = ['user_id','vendor_id','product_id','name','email','phonecode','mobile_no','quantity','offer_price','comment','status'];
+
+
+
+    public function Product(){
+        return $this->belongsTo(Product::class)->select('id','name','image','amount');
+    }
 }

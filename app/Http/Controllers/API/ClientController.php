@@ -1100,10 +1100,16 @@ class ClientController extends ApiController
      endif;
      try{
         $input = $request->all();
-        $price = array_map('intval', explode(",", $input['price']));
+        $product = new Product();
+        
         $limit = (isset($input['limit']))? $input['limit']:15;
         $page  = (isset($input['limit']))? $input['page']:1;
-        $product = Product::select('id','image','name','price')->whereBetween('price', $price)->get();
+        if(isset($request->price)){
+            $price = array_map('intval', explode(",", $input['price']));
+            $product = $product->select('id','image','name','price')->whereBetween('price', $price);
+        }
+        
+        $product = $product->get();
         return parent::success("filter product view successfully!",['product' =>  $product]);
      }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -1120,7 +1126,7 @@ class ClientController extends ApiController
        endif;
        try{
            $input = $request->all();
-           $offer = Offer::where('id',$request->offer_id)->first();
+           $offer = Offer::where('id',$request->offer_id)->with(['Product'])->first();
         return parent::success("View offer details successfully!", $offer);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
