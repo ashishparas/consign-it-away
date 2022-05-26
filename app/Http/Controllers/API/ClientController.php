@@ -290,7 +290,7 @@ class ClientController extends ApiController
                 'updated_at' => Carbon::now()
             ]);
 
-            return parent::success("Product view successfully!",['product' => $product]);
+            return parent::success("Product view successfully!",['product' => $product->jsonserialize()]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
