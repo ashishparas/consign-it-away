@@ -62,7 +62,16 @@ class Product extends Model
     ];
 
 
-    protected $appends = ['base_url','favourite','FavouriteId'];
+    protected $appends = ['base_url','favourite','FavouriteId','CartStatus'];
+
+
+
+    public function getCartStatusAttribute(){
+        $cart_status = Cart::where('product_id',$this->id)->where('user_id', Auth::id())->first();
+        $cart = (!empty($cart_status))? 'added_to_cart':'not_in_cart';
+        return $cart;
+    }
+       
 
 
    

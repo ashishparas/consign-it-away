@@ -236,8 +236,6 @@ class ClientController extends ApiController
             $input = $request->all();
             $product = Product::FindOrfail($input['product_id'])->first();
           
-            $cart_status = Cart::where('product_id',$product->id)->where('user_id', Auth::id())->first();
-            $product['CartStatus'] = ($cart_status)? 'added_to_cart':'not_in_cart';
             $product['rating'] = number_format($product->Rating()->avg('rating'),1);
             $product['RatingCount'] = $product->Rating()->count('product_id');
             $product['comment'] = $product->Rating()->select('id','product_id','from','upload','rating','comment','created_at')
@@ -259,14 +257,9 @@ class ClientController extends ApiController
                                             ->where('product_id', $input['product_id'])
                                             ->with(['Option'])
                                             ->get();
-            // $Attrvariants = VariantItems::where('product_id', $request->product_id)
-            //                             ->with(['variants'])
-            //                             ->get();
-
             // end code
             $product['SelectedVariant'] = $variants;
             $product['product_variants'] = $Attrvariants;
-
             foreach($product['comment'] as $key => $commentUser):
                
             $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
