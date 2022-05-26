@@ -124,6 +124,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('create/offer',[ClientController::class, "CreateOffer"]);
     Route::get("product/filter",[ClientController::class,"ProductFilter"]);
     Route::post('offer/by/id',[ClientController::class, "getOfferDetailBy"]);
+    Route::post('user/chat',[ClientController::class, "UserChat"]);
 });
 
 

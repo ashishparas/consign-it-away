@@ -1141,6 +1141,60 @@ class ClientController extends ApiController
        }
    }
 
+   public function UserChat(Request $request){
+    $rules = ['reciever_id' => 'required'];
+    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+        endif;
+    try{
+        // Dev:Ashish Mehra
+        $input = $request->all();
+        $reciever_id = $input['reciever_id'];
+        $user_id = Auth::id();
+        if(!empty($user_id) && $reciever_id!=''){
+            // $userId = $tokenDecode->id;
+    //   mycode
+    $sql = "SELECT DISTINCT sender.fname as senderName, sender.id as sender_id, sender.profile_picture as sender_profile_picture,receiver.fname as receiverName, receiver.id as receiver_id, receiver.profile_picture as receiver_profile_picture,msg.message,msg.created_on,msg.status as readStatus,msg.MessageType,IF((select COUNT(*) from chat_deleteTB where deleteByuserID='".$user_id."' AND ChatParticipantID='".$reciever_id."'>0),1,0) as chatDelRow FROM user_chat msg INNER JOIN users sender ON msg.source_user_id = sender.id
+    INNER JOIN users receiver ON msg.target_user_id = receiver.id WHERE ((msg.source_user_id='".$user_id."' AND msg.target_user_id='".$reciever_id."') OR 
+    (msg.source_user_id='".$reciever_id."' AND msg.target_user_id='".$user_id."')) HAVING IF(chatDelRow=1,(msg.created_on>(select deletedDate from chat_deleteTB where deleteByuserID='".$user_id."' AND ChatParticipantID='".$reciever_id."')),'1999-01-01 05:06:23') ORDER BY msg.created_on ASC";
+    // mycodeEnds
+            // DB::enableQuerylog();
+            $RecentChat = DB::select($sql);
+            // dd(DB::getQueryLog());
+            // $checkBlock = DB::select("SELECT * FROM `block_users` WHERE ((block_id='".$user_id."' AND block_by_id='".$reciever_id."') OR (block_id='".$reciever_id."' AND block_by_id='".$user_id."')) AND status='2'");
+           
+            // if($checkBlock)
+            // {
+            //     $blockStatus=1;
+            //     $block_by_id=$checkBlock['block_by_id'];
+            // }
+            // else
+            // {
+            //     $blockStatus=0; 
+            //     $block_by_id=0;
+            // }
+        
+            if(!empty($RecentChat)) {
+     return $response=array("status"=>true,"code"=>200,"message"=>"View Messages successfully!","data" =>$RecentChat,"blockStatus" => 0,"BlockByID" =>0);  
+            // return parent::success(['message' => 'View Messages successfully!','data' => $RecentChat,"blockStatus" => $blockStatus,"BlockByID" =>$block_by_id]);
+            }else {
+                return $response=array("status"=>true,'data'=> [], "message"=>"Data not found");  
+                
+            }
+        }else{
+            $response=array("status"=>false,"message"=>"empty token"); 
+            // return parent::error('empty Token');
+        }
+       
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
+
+
 
 
 
