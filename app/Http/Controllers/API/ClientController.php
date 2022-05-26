@@ -261,10 +261,10 @@ class ClientController extends ApiController
             // end code
             // $product['SelectedVariant'] = $variants;
             // $product['product_variants'] = $Attrvariants;
-            foreach($product['comment'] as $key => $commentUser):
+            // foreach($product['comment'] as $key => $commentUser):
                
-            $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
-            endforeach;
+            // $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
+            // endforeach;
             // $product['soldBy'] = Store::select('id','banner','name')->where('id', $product->store_id)->first();
             $product['soldBy']['base_url'] = asset('vendor/');
             $product['soldByOtherSellers'] = Product::select('id','user_id','image','amount')
