@@ -227,14 +227,15 @@ class ClientController extends ApiController
     public function ProductById(Request $request){
 
         $rules = ['product_id'=> 'required|exists:products,id'];
-        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
         if($validateAttributes):
             return $validateAttributes;
         endif;
         try{
 
             $input = $request->all();
-            $product = Product::FindOrfail($input['product_id']);
+            $product = Product::FindOrfail($input['product_id'])->first();
+          
             $cart_status = Cart::where('product_id',$product->id)->where('user_id', Auth::id())->first();
             $product['CartStatus'] = ($cart_status)? 'added_to_cart':'not_in_cart';
             $product['rating'] = number_format($product->Rating()->avg('rating'),1);
@@ -242,13 +243,6 @@ class ClientController extends ApiController
             $product['comment'] = $product->Rating()->select('id','product_id','from','upload','rating','comment','created_at')
             ->get();
 
-            // product variant attributes
-
-            // $SelectedVariants = VariantItems::select('id','product_id','quantity','price')
-            //             ->where('variant_items.product_id', $input['product_id'])
-            //             ->with(['variants'])
-            //             ->take(1)
-            //             ->get();
             $variants = Variant:: where('product_id', $input['product_id'])->take(1)->orderBy('created_at','DESC')->get();
                         foreach($variants as $key => $variant){
                             $option_id = explode(",",$variant['option_id']);
