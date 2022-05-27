@@ -49,8 +49,13 @@ class ClientController extends ApiController
 
 
     public function ClientViewProfile(Request $request){
-
+        $rules = [];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
         try{
+            array_push($this->LoginAttributes,'google_id','apple_id','facebook_id','amazon_id');
             $user = User::select($this->LoginAttributes)->where('id',Auth::id())->first();
             return parent::success("Profile View successfully!",['user' => $user]);
         }catch(\Exception $ex){
@@ -258,6 +263,7 @@ class ClientController extends ApiController
                                             ->where('product_id', $input['product_id'])
                                             ->with(['Option'])
                                             ->get();
+                                           
             // end code
             $product['SelectedVariant'] = $variants;
             $product['product_variants'] = $Attrvariants;
@@ -1093,6 +1099,7 @@ class ClientController extends ApiController
 
    public function ProductFilter(Request $request)
    {
+    
      $rules = ['limit' =>'required','page'=>'required','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>''];
      $validateAttributes = parent::validateAttributes($request,'GET',$rules, array_keys($rules),false);
      if($validateAttributes):
@@ -1104,9 +1111,13 @@ class ClientController extends ApiController
         
         $limit = (isset($input['limit']))? $input['limit']:15;
         $page  = (isset($input['limit']))? $input['page']:1;
+        $product =  $product->select('id','image','name','price','color');
         if(isset($request->price)){
             $price = array_map('intval', explode(",", $input['price']));
-            $product = $product->select('id','image','name','price')->whereBetween('price', $price);
+            $product = $product->whereBetween('price', $price);
+        }
+        if(isset($request->color)){
+            $product->where('color', $request->color);
         }
         
         $product = $product->get();
@@ -1127,7 +1138,7 @@ class ClientController extends ApiController
        try{
            $input = $request->all();
            $offer = Offer::where('id',$request->offer_id)->with(['Product'])->first();
-        return parent::success("View offer details successfully!", $offer);
+           return parent::success("View offer details successfully!", $offer);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }

@@ -21,44 +21,14 @@ class Product extends Model
 
     protected $primaryKey = "id";
 
-
-    
-
     protected $fillable = [
-        'user_id',
-        'category_id',
-        'subcategory_id',
-        'store_id',
-        'name',
-        'image',
-        'description',
-        'price',
-        'discount',
-        'brand',
-        'color',
-        'quantity',
-        'weight',
-        'condition',
-        'dimensions',
-        'available_for_sale',
-        'customer_contact',
-        'inventory_track',
-        'product_offer',
-        'ships_from',
-        'shipping_type',
-        'is_variant',
-        'free_shipping',
-        'meta_description',
-        'meta_tags',
-        'meta_keywords',
-        'title',
-        'variants',
-        'state',
-        'tags',
-        'advertisement',
-        'selling_fee',
-        'amount',
-        'status'    
+        'user_id','category_id','subcategory_id','store_id','name','image',
+        'description','price','discount','brand','color','quantity','weight',
+        'condition','dimensions','available_for_sale', 'customer_contact',
+        'inventory_track','product_offer','ships_from','shipping_type',
+        'is_variant','free_shipping','meta_description','meta_tags',
+        'meta_keywords','title','variants','state','tags','advertisement',
+        'selling_fee','amount','status'    
     ];
 
 
@@ -80,9 +50,6 @@ class Product extends Model
     }
 
 
-   
-
-
     public function getFavouriteAttribute()
     {
        $favourite = Favourite::where('product_id', $this->id)->where('by', Auth::id())->first();
@@ -98,12 +65,6 @@ class Product extends Model
         $ft = (!$favourite)?null:$favourite->id; 
         return (string)$ft;
     }
-
-    // public function getVariantsAttribute($value)
-    // {
-    // return json_decode($value);
-    // }
-
 
     public function getBaseUrlAttribute(){
         return url('/products');
