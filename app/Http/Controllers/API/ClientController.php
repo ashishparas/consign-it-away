@@ -55,7 +55,6 @@ class ClientController extends ApiController
             return $validateAttributes;
         endif;
         try{
-            array_push($this->LoginAttributes,'google_id','apple_id','facebook_id','amazon_id');
             $user = User::select($this->LoginAttributes)->where('id',Auth::id())->first();
             return parent::success("Profile View successfully!",['user' => $user]);
         }catch(\Exception $ex){
@@ -1145,25 +1144,36 @@ class ClientController extends ApiController
    }
 
    public function UserChat(Request $request){
-    $rules = ['reciever_id' => 'required'];
-    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+    $rules = ['reciever_id' => 'required','page'=>'','limit'=>''];
+    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules),false);
     if($validateAttributes):
         return $validateAttributes;
         endif;
     try{
         // Dev:Ashish Mehra
         $input = $request->all();
+        $limit = 15;
+        $page = 0;
+        if(isset($request->limit)){
+            $limit = ($request->limit)? $request->limit:15;
+        }
+        if(isset($request->page)){
+            $page=($request->page)? $request->page:0;
+        }
+        $offset = $page*$limit;
+        dd($offset);
         $reciever_id = $input['reciever_id'];
         $user_id = Auth::id();
         if(!empty($user_id) && $reciever_id!=''){
-            // $userId = $tokenDecode->id;
+        
     //   mycode
     $sql = "SELECT DISTINCT sender.fname as senderName, sender.id as sender_id, sender.profile_picture as sender_profile_picture,receiver.fname as receiverName, receiver.id as receiver_id, receiver.profile_picture as receiver_profile_picture,msg.message,msg.created_on,msg.status as readStatus,msg.MessageType,IF((select COUNT(*) from chat_deleteTB where deleteByuserID='".$user_id."' AND ChatParticipantID='".$reciever_id."'>0),1,0) as chatDelRow FROM user_chat msg INNER JOIN users sender ON msg.source_user_id = sender.id
     INNER JOIN users receiver ON msg.target_user_id = receiver.id WHERE ((msg.source_user_id='".$user_id."' AND msg.target_user_id='".$reciever_id."') OR 
-    (msg.source_user_id='".$reciever_id."' AND msg.target_user_id='".$user_id."')) HAVING IF(chatDelRow=1,(msg.created_on>(select deletedDate from chat_deleteTB where deleteByuserID='".$user_id."' AND ChatParticipantID='".$reciever_id."')),'1999-01-01 05:06:23') ORDER BY msg.created_on ASC";
+    (msg.source_user_id='".$reciever_id."' AND msg.target_user_id='".$user_id."')) HAVING IF(chatDelRow=1,(msg.created_on>(select deletedDate from chat_deleteTB where deleteByuserID='".$user_id."' AND ChatParticipantID='".$reciever_id."')),'1999-01-01 05:06:23') ORDER BY msg.created_on ASC LIMIT $limit OFFSET $offset";
     // mycodeEnds
             // DB::enableQuerylog();
             $RecentChat = DB::select($sql);
+            
             // dd(DB::getQueryLog());
             // $checkBlock = DB::select("SELECT * FROM `block_users` WHERE ((block_id='".$user_id."' AND block_by_id='".$reciever_id."') OR (block_id='".$reciever_id."' AND block_by_id='".$user_id."')) AND status='2'");
            

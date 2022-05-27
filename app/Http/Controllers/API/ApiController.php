@@ -182,10 +182,6 @@ class ApiController extends \App\Http\Controllers\Controller {
 
 
 
-    public static function abc($data, $message="200"){
-        return response()->json(['status' => true, 'code' => $message, 'data' => $data], $message);
-    }
-
     public static function successCreated($data, $code = 201) {
         if (!is_array($data))
             $data = ['message' => $data];
