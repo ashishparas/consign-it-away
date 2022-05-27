@@ -1161,7 +1161,7 @@ class ClientController extends ApiController
             $page=($request->page)? $request->page:0;
         }
         $offset = $page*$limit;
-        dd($offset);
+    
         $reciever_id = $input['reciever_id'];
         $user_id = Auth::id();
         if(!empty($user_id) && $reciever_id!=''){
