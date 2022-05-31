@@ -7,6 +7,7 @@
 /public/storage
 /public/brand
 /public/category
+/public/chatImage
 /storage/*.key
 /vendor
 .env
