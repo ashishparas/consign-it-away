@@ -35,6 +35,7 @@ use App\Models\Product;
 use App\Models\Rating;
 use App\Models\RecentProducts;
 use App\Models\Store;
+use App\Models\UserChat;
 use App\Models\Variant;
 use App\Models\VariantItems;
 use Attribute;
@@ -1167,14 +1168,29 @@ class ClientController extends ApiController
         if(!empty($user_id) && $reciever_id!=''){
         
     //   mycode
-    $sql = "SELECT DISTINCT sender.fname as senderName, sender.id as sender_id, sender.profile_picture as sender_profile_picture,receiver.fname as receiverName, receiver.id as receiver_id, receiver.profile_picture as receiver_profile_picture,msg.message,msg.created_on,msg.status as readStatus,msg.MessageType,IF((select COUNT(*) from chat_deleteTB where deleteByuserID='".$user_id."' AND ChatParticipantID='".$reciever_id."'>0),1,0) as chatDelRow FROM user_chat msg INNER JOIN users sender ON msg.source_user_id = sender.id
-    INNER JOIN users receiver ON msg.target_user_id = receiver.id WHERE ((msg.source_user_id='".$user_id."' AND msg.target_user_id='".$reciever_id."') OR 
-    (msg.source_user_id='".$reciever_id."' AND msg.target_user_id='".$user_id."')) HAVING IF(chatDelRow=1,(msg.created_on>(select deletedDate from chat_deleteTB where deleteByuserID='".$user_id."' AND ChatParticipantID='".$reciever_id."')),'1999-01-01 05:06:23') ORDER BY msg.created_on ASC LIMIT $limit OFFSET $offset";
+    // $sql = "SELECT DISTINCT sender.fname as senderName ,sender.id as sender_id, sender.profile_picture as sender_profile_picture,receiver.fname as receiverName, receiver.id as receiver_id, receiver.profile_picture as receiver_profile_picture,msg.message,msg.created_on,msg.status as readStatus,msg.MessageType,IF((select COUNT(*) from chat_deleteTB where deleteByuserID='".$user_id."' AND ChatParticipantID='".$reciever_id."'>0),1,0) as chatDelRow FROM user_chat msg INNER JOIN users sender ON msg.source_user_id = sender.id
+    // INNER JOIN users receiver ON msg.target_user_id = receiver.id WHERE ((msg.source_user_id='".$user_id."' AND msg.target_user_id='".$reciever_id."') OR 
+    // (msg.source_user_id='".$reciever_id."' AND msg.target_user_id='".$user_id."')) HAVING IF(chatDelRow=1,(msg.created_on>(select deletedDate from chat_deleteTB where deleteByuserID='".$user_id."' AND ChatParticipantID='".$reciever_id."')),'1999-01-01 05:06:23') ORDER BY msg.created_on ASC LIMIT $limit OFFSET $offset";
+    
     // mycodeEnds
             // DB::enableQuerylog();
-            $RecentChat = DB::select($sql);
+
+            $RecentChat = UserChat::from( 'user_chat as msg' )
+            ->select(DB::raw('DISTINCT sender.fname as senderName, sender.id as sender_id, sender.profile_picture as sender_profile_picture,receiver.fname as receiverName,receiver.id as receiver_id,receiver.profile_picture as receiver_profile_picture,msg.message,msg.created_on,msg.status as readStatus,msg.MessageType',DB::raw('IF((select COUNT(*) from chat_deleteTB where deleteByuserID=2 AND ChatParticipantID=3>0),1,0) as chatDelRow')))
+            ->join('users as sender', 'msg.source_user_id' ,'=' ,'sender.id')
+            ->join('users as receiver', 'msg.target_user_id', '=', 'receiver.id')
+            ->where('msg.source_user_id',Auth::id())
+            ->where('msg.target_user_id', $request->reciever_id)
+            ->orWhere('msg.source_user_id',$request->reciever_id)
+            ->where('msg.target_user_id', Auth::id())
+            ->orderBy('msg.created_on','DESC')
+            ->offset($offset)
+            ->take($limit)
+            ->get();
+
+           // $RecentChat = DB::select($sql);
             
-            // dd(DB::getQueryLog());
+            // dd(DB::getQueryLog($RecentChat));
             // $checkBlock = DB::select("SELECT * FROM `block_users` WHERE ((block_id='".$user_id."' AND block_by_id='".$reciever_id."') OR (block_id='".$reciever_id."' AND block_by_id='".$user_id."')) AND status='2'");
            
             // if($checkBlock)
