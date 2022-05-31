@@ -21,10 +21,12 @@ use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
 use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
+use App\Models\ChatImage;
 use App\Models\Store;
 use GrahamCampbell\ResultType\Success;
 
 use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\returnSelf;
 
 class AuthController extends ApiController {
 
@@ -702,7 +704,27 @@ class AuthController extends ApiController {
         }
     }
     
-  
+  public function ChatImageUrl(Request $request){
+      $rules = ['image' => 'required'];
+      $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+      if($validateAttributes):
+        return $validateAttributes;
+      endif;
+      try{
+          $input = $request->all();
+          if (isset($request->image)):
+           
+            $input['image'] = parent::__uploadImage($request->file('image'), public_path('chatImage'), false);
+        endif;
+        $input['user_id'] = Auth::id();
+      
+        $image = ChatImage::create($input);
+        return parent::success("Image upload successfully!",$image);
+      }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+      }
+
+  }
     
     
   
