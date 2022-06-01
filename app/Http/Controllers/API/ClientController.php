@@ -41,6 +41,7 @@ use App\Models\VariantItems;
 use Attribute;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Cache\RateLimiting\Limit;
+use phpDocumentor\Reflection\DocBlock\Tags\InvalidTag;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class ClientController extends ApiController
@@ -919,6 +920,8 @@ class ClientController extends ApiController
          
            $input['user_id'] = Auth::id();
            $offer = Offer::create($input);
+           $offer['product_id'] = intval($offer['product_id']);
+           $offer['vendor_id'] = intval($offer['vendor_id']);
             return parent::success("Offer sent successfully!",['offer' =>  $offer]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());

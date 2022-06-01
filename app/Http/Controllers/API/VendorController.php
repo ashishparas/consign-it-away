@@ -23,6 +23,7 @@ use App\Models\Category;
 use App\Models\Colour;
 use App\Models\Discount;
 use App\Models\Manager;
+use App\Models\Offer;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Subcategory;
@@ -1162,7 +1163,25 @@ class VendorController extends ApiController
        }
    }
 
+public function OfferStatusById(Request $request)
+{
+    $rules = ['offer_id'=>'required','status'=>'required|in:1,2,3'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input =  $request->all();
+        $model = new Offer();
+        $update = $model->where('id',$input['offer_id'])->update(['status'=> $input['status']]);
 
+        $model = $model->where('id', $input['offer_id'])->first();
+        $message = ($model->status =='2')? 'Offer accepted successfully!':'Offer rejected successfully!';
+        return parent::success($message, $model);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 
