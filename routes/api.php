@@ -126,6 +126,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('offer/by/id',[ClientController::class, "getOfferDetailBy"]);
     Route::post('user/chat',[ClientController::class, "UserChat"]);
     Route::post('chat/image/url',[AuthController::class, "ChatImageUrl"]);
+    Route::post('offer/status/by/id',[VendorController::class, "OfferStatusById"]);
 });
 
 
