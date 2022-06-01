@@ -17,9 +17,9 @@ class UserChat extends Model
 
     protected $fillable = ['roomID','source_user_id','target_user_id','message','MessageType','status','modified_on','created_on'];
 
-    protected $appends = ['Offer'];
+    // protected $appends = ['Offer'];
 
-    public function getOfferAttribute(){
-        return Offer::where('id', intval($this->message))->first();
-    }
+    // public function getOfferAttribute(){
+    //     return Offer::where('id', intval($this->message))->first();
+    // }
 }
