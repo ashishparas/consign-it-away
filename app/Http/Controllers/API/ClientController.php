@@ -1183,7 +1183,7 @@ class ClientController extends ApiController
             ->where('msg.target_user_id', $request->reciever_id)
             ->orWhere('msg.source_user_id',$request->reciever_id)
             ->where('msg.target_user_id', Auth::id())
-            ->orderBy('msg.created_on','ASC')
+            ->orderBy('msg.created_on','DESC')
             ->offset($offset)
             ->take($limit)
             ->get();
