@@ -1165,15 +1165,17 @@ class VendorController extends ApiController
 
 public function OfferStatusById(Request $request)
 {
-    $rules = ['offer_id'=>'required','status'=>'required|in:1,2,3'];
-    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+    $rules = ['offer_id'=>'required','status'=>'required|in:1,2,3','offer_price'=>'','quantity'=>''];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
         $input =  $request->all();
         $model = new Offer();
-        $update = $model->where('id',$input['offer_id'])->update(['status'=> $input['status']]);
+        $model = $model->FindOrfail($request->offer_id);
+        $model->fill($input);
+        $model->save();
 
         $model = $model->where('id', $input['offer_id'])->first();
         $message = ($model->status =='2')? 'Offer accepted successfully!':'Offer rejected successfully!';
