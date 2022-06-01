@@ -56,6 +56,7 @@ class ClientController extends ApiController
             return $validateAttributes;
         endif;
         try{
+            array_push($this->LoginAttributes,'apple_id','google_id','amazon_id','facebook_id');
             $user = User::select($this->LoginAttributes)->where('id',Auth::id())->first();
             return parent::success("Profile View successfully!",['user' => $user]);
         }catch(\Exception $ex){
@@ -1205,7 +1206,8 @@ class ClientController extends ApiController
             // }
         
             if(!empty($RecentChat)) {
-     return $response=array("status"=>true,"code"=>200,"message"=>"View Messages successfully!","data" =>$RecentChat,"blockStatus" => 0,"BlockByID" =>0);  
+                $offer = Offer::where('vendor_id',$request->reciever_id)->take(1)->orderBy('created_at',"DESC")->first();
+     return $response=array("status"=>true,"code"=>200,"message"=>"View Messages successfully!","offer" => $offer,"data" =>$RecentChat,"blockStatus" => 0,"BlockByID" =>0);  
             // return parent::success(['message' => 'View Messages successfully!','data' => $RecentChat,"blockStatus" => $blockStatus,"BlockByID" =>$block_by_id]);
             }else {
                 return $response=array("status"=>true,'data'=> [], "message"=>"Data not found");  
