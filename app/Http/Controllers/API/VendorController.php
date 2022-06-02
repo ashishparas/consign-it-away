@@ -1197,7 +1197,7 @@ public function OfferStatusById(Request $request)
         }else if(strtolower($input['type']) == 'vendor'){
             $input['status'] = $input['offer_status'];
         }
-        dd($input);
+       
         $model->fill($input);
         $model->save();
 
