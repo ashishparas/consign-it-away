@@ -1024,9 +1024,10 @@ class VendorController extends ApiController
         return $validateAttributes;
        endif;
        try{
+           $products = [];
             $input = $request->all();
             $store = Store::where('id', $input['store_id'])->with(['Product'])->first();
-            
+
             $about = User::select('id','name','fname','lname','profile_picture')
                             ->where('id',$store->user_id)
                             ->first();
@@ -1039,7 +1040,7 @@ class VendorController extends ApiController
             $products[$key]['rating'] = number_format($product->Rating()->avg('rating'),1);
             $products[$key]['RatingCount'] = $product->Rating()->count('product_id');
             endforeach;
-        return parent::success("View store details successfully!",['store' => $store,'product'=> $product,'about'=> $about]);
+        return parent::success("View store details successfully!",['store' => $store,'product'=> $products,'about'=> $about]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
@@ -1181,15 +1182,22 @@ class VendorController extends ApiController
 
 public function OfferStatusById(Request $request)
 {
-    $rules = ['offer_id'=>'required','status'=>'required|in:1,2,3','offer_price'=>'','quantity'=>''];
+    $rules = ['offer_id'=>'required','offer_status'=>'required|in:1,2,3','offer_price'=>'','quantity'=>'','type'=>'required|in:vendor,client'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
         $input =  $request->all();
+     
         $model = new Offer();
         $model = $model->FindOrfail($request->offer_id);
+        if(strtolower($input['type']) == 'client'){
+            $input['client_status'] = $input['offer_status'];
+        }else if(strtolower($input['type']) == 'vendor'){
+            $input['status'] = $input['offer_status'];
+        }
+        dd($input);
         $model->fill($input);
         $model->save();
 
