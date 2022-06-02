@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Product;
 class Store extends Model
 {
     use HasFactory;
@@ -25,6 +25,10 @@ class Store extends Model
 
     public function staff(){
         return $this->hasMany(Manager::class);
+    }
+
+    public function Product(){
+        return $this->hasMany(Product::class)->select('id','store_id','name','image','amount');
     }
 
 }

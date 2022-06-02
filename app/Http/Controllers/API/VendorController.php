@@ -1025,8 +1025,21 @@ class VendorController extends ApiController
        endif;
        try{
             $input = $request->all();
-            $store = Store::where('id', $input['store_id'])->with(['staff'])->first();
-        return parent::success("View store details successfully!",['store' => $store]);
+            $store = Store::where('id', $input['store_id'])->with(['Product'])->first();
+            
+            $about = User::select('id','name','fname','lname','profile_picture')
+                            ->where('id',$store->user_id)
+                            ->first();
+            $products = Product::select('id','image','name','amount')
+            ->where('user_id',$store->user_id)
+            ->where('store_id',$store->id)
+            ->get();
+
+            foreach($products as $key => $product):
+            $products[$key]['rating'] = number_format($product->Rating()->avg('rating'),1);
+            $products[$key]['RatingCount'] = $product->Rating()->count('product_id');
+            endforeach;
+        return parent::success("View store details successfully!",['store' => $store,'product'=> $product,'about'=> $about]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
