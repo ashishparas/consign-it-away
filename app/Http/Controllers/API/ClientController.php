@@ -1150,6 +1150,7 @@ class ClientController extends ApiController
 
    public function UserChat(Request $request){
     $rules = ['reciever_id' => 'required','page'=>'','limit'=>''];
+
     $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules),false);
     if($validateAttributes):
         return $validateAttributes;
@@ -1209,7 +1210,9 @@ class ClientController extends ApiController
             // }
         
             if(!empty($RecentChat)) {
-                $offer = Offer::where('vendor_id',$request->reciever_id)->orWhere('vendor_id', Auth::id())->take(1)->orderBy('created_at',"DESC")->with('Product')->first();
+             
+
+            $offer = Offer::where('vendor_id',$request->reciever_id)->orWhere('vendor_id', Auth::id())->take(1)->orderBy('created_at',"DESC")->with('Product')->first();
      return $response=array("status"=>true,"code"=>200,"message"=>"View Messages successfully!","offer" => $offer,"data" =>$RecentChat,"blockStatus" => 0,"BlockByID" =>0);  
             // return parent::success(['message' => 'View Messages successfully!','data' => $RecentChat,"blockStatus" => $blockStatus,"BlockByID" =>$block_by_id]);
             }else {
