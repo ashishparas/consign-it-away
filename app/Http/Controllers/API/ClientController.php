@@ -780,7 +780,7 @@ class ClientController extends ApiController
            endif;
          
          
-            $product = RecentProducts::where('user_id', Auth::id())
+            $product = RecentProducts::orderBy('created_at', 'DESC')
             ->with(['Product'])
             ->simplePaginate($limit);
            
@@ -1209,7 +1209,7 @@ class ClientController extends ApiController
             // }
         
             if(!empty($RecentChat)) {
-                $offer = Offer::where('user_id',Auth::id())->take(1)->orderBy('created_at',"DESC")->with('Product')->first();
+                $offer = Offer::where('vendor_id',$request->reciever_id)->orWhere('vendor_id', Auth::id())->take(1)->orderBy('created_at',"DESC")->with('Product')->first();
      return $response=array("status"=>true,"code"=>200,"message"=>"View Messages successfully!","offer" => $offer,"data" =>$RecentChat,"blockStatus" => 0,"BlockByID" =>0);  
             // return parent::success(['message' => 'View Messages successfully!','data' => $RecentChat,"blockStatus" => $blockStatus,"BlockByID" =>$block_by_id]);
             }else {
