@@ -29,6 +29,7 @@ class CreateOffersTable extends Migration
             $table->string('offer_price')->nullable();
             $table->text('comment')->nullable();
             $table->enum('status',[1,2,3])->default(1)->comment('1->Pending,2->Accepted,3->Rejected');
+            $table->enum('isCheckout',[0,1])->default(0)->comment("0->ischeckout_true, 1->ischeckout_false");
             $table->timestamps();
         });
     }
