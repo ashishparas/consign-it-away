@@ -543,8 +543,11 @@ class VendorController extends ApiController
 
 
    public function getCategories(Request $request){
-    ini_set('display_errors',1);
-    error_reporting(E_ALL);
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
     try{
         $category = Category::get();
         return parent::success("Category view successfully",['category' => $category]);

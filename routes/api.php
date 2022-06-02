@@ -40,6 +40,11 @@ Route::post('find/rate',[ClientController::class, "UspsFindRate"]);
     
 // });
 
+Route::post('get/categories',[VendorController::class, "getCategories"]);
+Route::post("brands",[VendorController::class,"Brands"]);
+Route::post('product/by/id',[ClientController::class,"ProductById"]);
+Route::get('most/popular/products',[ClientController::class, "MostPopularsProducts"]);
+Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
 
 Route::middleware(['auth:sanctum'])->group(function(){
     
@@ -51,7 +56,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('edit/store',[VendorController::class,"EditStore"]);
     Route::post('create/product',[VendorController::class, "Product"])->middleware('advancedProduct');
     Route::post('submit/product',[VendorController::class, "SubmitProduct"]);
-    Route::post('get/categories',[VendorController::class, "getCategories"]);
     Route::post('resend/otp',[AuthController::class, "resendOTP"]); 
     Route::post('resend/email/otp',[AuthController::class, "ResendEmailOTP"]);
     Route::post('client/view/profile',[ClientController::class, "ClientViewProfile"]);
@@ -67,7 +71,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('home',[ClientController::class,"Home"]);
     Route::post('rating',[ClientController::class, "Rating"]);
     Route::post('favourite',[ClientController::class,"Favourite"]);
-    Route::post('product/by/id',[ClientController::class,"ProductById"]);
     Route::get('favourite/list',[ClientController::class,"FavouriteList"]);
     Route::post('delete/favourite',[ClientController::class,"DeleteFavourite"]);
     Route::post('add/staff',[VendorController::class, "Staff"]);
@@ -94,7 +97,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('edit/personal',[ClientController::class, "EditPersonal"]);
     Route::post('colours',[VendorController::class, "Colours"]);
     Route::post('change/profile/picture',[AuthController::class, "ChangeProfilePicture"]);
-    Route::post("brands",[VendorController::class,"Brands"]);
+    
     Route::post('open/cart',[ClientController::class, "OpenCart"]);
     Route::post('add/to/cart',[ClientController::class, "AddToCart"]);
     Route::post('cart/count',[ClientController::class, "TotalCartItems"]);
@@ -112,8 +115,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('view/orders', [ClientController::class, "ViewOrder"]);
     Route::post('set/default/address',[ClientController::class, "SetDefaultAddress"]);
     Route::post('view/order/by/id', [ClientController::class,"ViewOrderById"]);
-    Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
-    Route::get('most/popular/products',[ClientController::class, "MostPopularsProducts"]);
+    
+    
     Route::post('add/variant',[VendorController::class, "AddVariant"]);
     Route::post('view/staff/by/id',[VendorController::class, "ViewStaffById"]);
     Route::post('view/store/by/id',[VendorController::class, "StoreById"]);
