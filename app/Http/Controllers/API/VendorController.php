@@ -1026,7 +1026,7 @@ class VendorController extends ApiController
        try{
            $products = [];
             $input = $request->all();
-            $store = Store::where('id', $input['store_id'])->with(['Product'])->first();
+            $store = Store::where('id', $input['store_id'])->first();
 
             $about = User::select('id','name','fname','lname','profile_picture')
                             ->where('id',$store->user_id)

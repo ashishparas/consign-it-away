@@ -1111,11 +1111,31 @@ class ClientController extends ApiController
      endif;
      try{
         $input = $request->all();
-        $product = new Product();
-        
         $limit = (isset($input['limit']))? $input['limit']:15;
         $page  = (isset($input['limit']))? $input['page']:1;
+        $product = new Product();
         $product =  $product->select('id','image','name','price','color');
+        if($request->type === '2'){
+            if(isset($request->price)){
+                $price = array_map('intval', explode(",", $input['price']));
+                $product = $product->whereBetween('price', $price);
+            }
+            if(isset($request->color)){
+                $product->where('color', $request->color);
+            }
+            $product = $product->get();
+            dd($product->toArray());
+            $RecentlyViewProduct = RecentProducts::where('name', 'Apple Watch SE')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'DESC')
+            ->with(['Product'])
+            ->get();
+            dd($RecentlyViewProduct->toArray());
+        }
+       
+        
+       
+        
         if(isset($request->price)){
             $price = array_map('intval', explode(",", $input['price']));
             $product = $product->whereBetween('price', $price);
