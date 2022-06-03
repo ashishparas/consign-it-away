@@ -922,6 +922,7 @@ class ClientController extends ApiController
            $offer = Offer::create($input);
            $offer['product_id'] = intval($offer['product_id']);
            $offer['vendor_id'] = intval($offer['vendor_id']);
+           $offer['vendor'] = User::select('id','name','fname','lname','profile_picture')->where('id',$offer['vendor_id'])->first();
             return parent::success("Offer sent successfully!",['offer' =>  $offer]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -1142,7 +1143,7 @@ class ClientController extends ApiController
             ->get();
             $products = $RecentlyViewProduct;
 
-            
+
         }else if($request->type === '1'){
      
             $mostPopular = new Product();
