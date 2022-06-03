@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="56.319" height="55.032" viewBox="0 0 56.319 55.032">
+  <g id="upload_banner" transform="translate(-166.222 -81.395)">
+    <path id="Path_35126" data-name="Path 35126" d="M9611.035,171.23h-25.279c-3.5,0-3.871-3.622-3.871-3.622V130.516c0-3.624,3.871-3.871,3.871-3.871h37.717s3.875.287,3.875,3.871v26.227" transform="translate(-9413.999 -44)" fill="none" stroke="#48bf91" stroke-linecap="round" stroke-width="2.5"/>
+    <path id="Path_35127" data-name="Path 35127" d="M9581.965,156.88l10.635-10.368,5.725,6.178,12.105-12.336,9.889,10.318" transform="translate(-9413.975 -39.552)" fill="none" stroke="#48bf91" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+    <g id="Group_5312" data-name="Group 5312" transform="translate(205.398 119.284)">
+      <line id="Line_141" data-name="Line 141" y2="15.893" transform="translate(7.946 0)" fill="none" stroke="#48bf91" stroke-linecap="round" stroke-width="2.5"/>
+      <line id="Line_142" data-name="Line 142" y2="15.893" transform="translate(15.893 7.946) rotate(90)" fill="none" stroke="#48bf91" stroke-linecap="round" stroke-width="2.5"/>
+    </g>
+    <g id="Ellipse_1518" data-name="Ellipse 1518" transform="translate(178.632 88.413)" fill="none" stroke="#48bf91" stroke-width="2.5">
+      <circle cx="5.96" cy="5.96" r="5.96" stroke="none"/>
+      <circle cx="5.96" cy="5.96" r="4.71" fill="none"/>
+    </g>
+  </g>
+</svg>
