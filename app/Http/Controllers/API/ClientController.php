@@ -1104,7 +1104,7 @@ class ClientController extends ApiController
    public function ProductFilter(Request $request)
    {
     
-     $rules = ['limit' =>'required','page'=>'required','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>''];
+     $rules = ['limit' =>'required','page'=>'','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>''];
      $validateAttributes = parent::validateAttributes($request,'GET',$rules, array_keys($rules),false);
      if($validateAttributes):
         return $validateAttributes;
@@ -1112,40 +1112,94 @@ class ClientController extends ApiController
      try{
         $input = $request->all();
         $limit = (isset($input['limit']))? $input['limit']:15;
-        $page  = (isset($input['limit']))? $input['page']:1;
-        $product = new Product();
-        $product =  $product->select('id','image','name','price','color');
+        $page  = (isset($input['page']))? $input['page']:0;
+        $offset = $limit*$page; 
+        $products = [];
+        // Recent View products
         if($request->type === '2'){
+            $product = new Product();
+            $product =  $product->select('id','user_id','store_id','image','name','price','color','brand');
             if(isset($request->price)){
                 $price = array_map('intval', explode(",", $input['price']));
                 $product = $product->whereBetween('price', $price);
             }
             if(isset($request->color)){
-                $product->where('color', $request->color);
+                $product= $product->where('color', $request->color);
             }
+            if(isset($request->brand)){
+                $product = $product->where('brand', $request->brand);
+            }
+
             $product = $product->get();
-            dd($product->toArray());
-            $RecentlyViewProduct = RecentProducts::where('name', 'Apple Watch SE')
+            $ProductID  = array_column($product->toArray(),'id');
+            // dd($arr);
+            $RecentlyViewProduct = RecentProducts::whereIn('product_id', $ProductID )
             ->where('user_id', Auth::id())
             ->orderBy('created_at', 'DESC')
             ->with(['Product'])
+            ->take($limit)
+            ->skip($offset)
             ->get();
-            dd($RecentlyViewProduct->toArray());
+            $products = $RecentlyViewProduct;
+
+            
+        }else if($request->type === '1'){
+     
+            $mostPopular = new Product();
+       
+            $mostPopular = $mostPopular
+            ->select('products.id','products.user_id','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                    ->leftJoin('ratings', 'ratings.product_id', 'products.id')
+                    ->leftJoin('favourites', 'favourites.product_id', 'products.id');
+
+                    if(isset($request->price)){
+                        $price = array_map('intval', explode(",", $input['price']));
+                        $mostPopular = $mostPopular->whereBetween('price', $price);
+                    }
+                    if(isset($request->color)){
+                        $mostPopular = $mostPopular->where('color', $request->color);
+                    }
+
+                    if(isset($request->brand)){
+                        $mostPopular = $mostPopular->where('brand', $request->brand);
+                    }
+                    
+                    // ->where('favourites.by', Auth::id())
+                    $mostPopular= $mostPopular->groupBy('products.id')
+                                            ->orderBy('AverageRating', 'desc')
+                                            ->take($limit)
+                                            ->skip($offset)
+                                            ->get();
+
+                    $products = $mostPopular;
+                 
+
+        }else if($request->type === '3'){
+            $newProducts = new Product();
+            $newProducts = $newProducts->select('id','user_id','store_id','name','image','price');
+            
+            if(isset($request->price)){
+                $price = array_map('intval', explode(",", $input['price']));
+                $newProducts = $newProducts->whereBetween('price', $price);
+            }
+            if(isset($request->color)){
+                $newProducts = $newProducts->where('color', $request->color);
+            }
+
+            if(isset($request->brand)){
+                $newProducts = $newProducts->where('brand', $request->brand);
+            }
+
+            $newProducts = $newProducts->orderBy('created_at','DESC')
+                                    ->take($limit)
+                                    ->skip($offset)
+                                    ->get();
+            $products = $newProducts;
         }
        
         
-       
-        
-        if(isset($request->price)){
-            $price = array_map('intval', explode(",", $input['price']));
-            $product = $product->whereBetween('price', $price);
-        }
-        if(isset($request->color)){
-            $product->where('color', $request->color);
-        }
-        
-        $product = $product->get();
-        return parent::success("filter product view successfully!",['product' =>  $product]);
+    
+        return parent::success("filter product view successfully!", $products);
      }catch(\Exception $ex){
         return parent::error($ex->getMessage());
      }

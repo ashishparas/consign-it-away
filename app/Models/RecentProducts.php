@@ -22,7 +22,7 @@ protected $fillable = ['user_id','product_id','updated_at'];
 
 
 public function Product(){
-    return $this->belongsTo(Product::class)->select('id','name','image','amount');
+    return $this->belongsTo(Product::class)->select('id','name','image','price','brand');
 }
 
 
