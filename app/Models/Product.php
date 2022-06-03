@@ -67,7 +67,7 @@ class Product extends Model
     }
 
     public function getBaseUrlAttribute(){
-        return url('/products');
+        return asset('/products');
     }
 
     public function getImagesAttribute($value){
@@ -86,7 +86,7 @@ class Product extends Model
    
   
     public function User(){
-        return $this->hasOne(User::class,'id','user_id')->select('id','fname','lname');
+        return $this->hasOne(User::class,'id','user_id')->select('id','name','fname','lname','email','phonecode','mobile_no','profile_picture');
     }
 
 
@@ -103,7 +103,9 @@ class Product extends Model
 
 
   
-  
+  public function Offer(){
+      return $this->hasOne(Offer::class);
+  }
    
 
     

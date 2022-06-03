@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\API\AuthController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -30,9 +32,13 @@ Route::get('terms_and_conditions', function(){
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], function () {
-    Route::get('/', ['uses' => 'AdminController@index']);
+//    Route::get('/post', [AdminController::class, "index"]); 
+   Route::get('/order-management',[AdminController::class, "orderManagement"]);
+   Route::get('shipping-order-details/{id}',[AdminController::class, "ShippingOrderDetails"]);
+   Route::get('vendor-management',[VendorController::class,"index"]);
+   Route::get('subscription-plan',[VendorController::class,"SubscriptionPlan"]);
  });

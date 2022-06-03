@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AccessControlMiddleware;
 use App\Http\Middleware\AdvancedProducts;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -68,5 +69,6 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\CheckRole::class,
         'registerUser' => \App\Http\Middleware\RegisterMiddleware::class,
         'advancedProduct' => \App\Http\Middleware\AdvancedProducts::class,
+        'admin'  => AccessControlMiddleware::class,
     ];
 }
