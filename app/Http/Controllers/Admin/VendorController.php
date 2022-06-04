@@ -8,6 +8,7 @@ use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 class VendorController extends Controller
 {
     public function index(){
