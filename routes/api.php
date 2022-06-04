@@ -44,7 +44,7 @@ Route::post('get/categories',[VendorController::class, "getCategories"]);
 Route::post("brands",[VendorController::class,"Brands"]);
 Route::post('product/by/id',[ClientController::class,"ProductById"]);
 Route::get('most/popular/products',[ClientController::class, "MostPopularsProducts"]);
-Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
+
 Route::post('search', [ClientController::class, "Search"]);
 
 Route::middleware(['auth:sanctum'])->group(function(){
@@ -92,7 +92,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('vendor/view/profile',[VendorController::class, "ViewProfile"]);
     Route::post('subscription/plan',[VendorController::class, "SubscriptionsPlan"]);
     Route::post('subscription/by/id',[VendorController::class, "SubscriptionPlanById"]);
-    
+    Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
     Route::post('subcategories',[VendorController::class, "SubCategories"]);
     Route::post('personal',[ClientController::class, "Personal"]);
     Route::post('edit/personal',[ClientController::class, "EditPersonal"]);
