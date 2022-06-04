@@ -136,7 +136,7 @@
                                             <img class="mr-3" src="{{asset('public/products/'.$product->image[0])}}" alt="image" />
                                             <div class="d-block d-lg-flex flex-column">
                                                 <h6 class="mb-0">{{($product->soldBy == null)?'No Store Added':$product->soldBy->name}}</h6>
-                                                <small class="grey_cl">{{$product->user->name}}</small>
+                                                <small class="grey_cl">{{($product->user ==null)?'No-name':$product->user->name}}</small>
                                             </div>
                                         </div>
                                     </td>

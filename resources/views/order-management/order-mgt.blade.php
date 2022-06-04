@@ -160,7 +160,7 @@
                           <td class="product_tuc">
                             <div class="d-flex align-items-center">
                               <img class="mr-3" src="{{asset('public/products/'.$item->product->image[0])}}" alt="image"/>
-                              <h6 class="mb-0">{{$item->product->name}}</h6>
+                              <h6 class="mb-0">{{($item->product == null)?'No-name':$item->product->name}}</h6>
                             </div>
                           </td>
                           <td><span class="orange_cl">{{(isset($item->product->soldBy))?$item->product->soldBy->name:'NO-Name'}}</span></td>
