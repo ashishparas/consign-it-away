@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
+use App\Http\Middleware\AccessControlMiddleware;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,11 +36,25 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], function () {
-//    Route::get('/post', [AdminController::class, "index"]); 
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admin'], function () {
+       // Route::get('/post', [AdminController::class, "index"]); 
    Route::get('/order-management',[AdminController::class, "orderManagement"]);
    Route::get('shipping-order-details/{id}',[AdminController::class, "ShippingOrderDetails"]);
    Route::get('vendor-management',[VendorController::class,"index"]);
    Route::get('subscription-plan',[VendorController::class,"SubscriptionPlan"]);
  });
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  

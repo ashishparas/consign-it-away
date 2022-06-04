@@ -22,7 +22,7 @@ class AccessControlMiddleware
                if(Auth::user()->type === '4'){
                 return $next($request);
                }else{
-                   dd('abort');
+                  
                    return abort(403);
                }
         }else{

@@ -1,0 +1,4 @@
+[27-May-2022 21:44:03 UTC] PHP Fatal error:  Uncaught Error: Class "Tests\TestCase" not found in /home/phpparastechnolo/public_html/consign-it-away/tests/Feature/ExampleTest.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/phpparastechnolo/public_html/consign-it-away/tests/Feature/ExampleTest.php on line 8
