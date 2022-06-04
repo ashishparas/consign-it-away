@@ -1197,6 +1197,35 @@ class ClientController extends ApiController
                                     ->skip($offset)
                                     ->get();
             $products = $newProducts;
+        }else if($request->status === '4'){
+            $brand = new Product();
+       
+            $brand = $brand
+            ->select('products.id','products.user_id','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                    ->leftJoin('ratings', 'ratings.product_id', 'products.id')
+                    ->leftJoin('favourites', 'favourites.product_id', 'products.id');
+
+                    if(isset($request->price)){
+                        $price = array_map('intval', explode(",", $input['price']));
+                        $brand = $brand->whereBetween('price', $price);
+                    }
+                    if(isset($request->color)){
+                        $brand = $brand->where('color', $request->color);
+                    }
+
+                    if(isset($request->brand)){
+                        $brand = $brand->where('brand', $request->brand);
+                    }
+                    
+                    // ->where('favourites.by', Auth::id())
+                    $brand= $brand->groupBy('products.id')
+                                            ->orderBy('AverageRating', 'desc')
+                                            ->take($limit)
+                                            ->skip($offset)
+                                            ->get();
+
+                    $products = $brand;
+
         }
        
         
