@@ -1105,8 +1105,8 @@ class ClientController extends ApiController
 
    public function ProductFilter(Request $request)
    {
-    
-     $rules = ['limit' =>'required','page'=>'','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>''];
+   
+     $rules = ['limit' =>'required','page'=>'','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>'','search'=>'','type'=>'required|in:1,2,3,4'];
      $validateAttributes = parent::validateAttributes($request,'GET',$rules, array_keys($rules),false);
      if($validateAttributes):
         return $validateAttributes;
@@ -1131,6 +1131,10 @@ class ClientController extends ApiController
             if(isset($request->brand)){
                 $product = $product->where('brand', $request->brand);
             }
+            if(isset($request->search)){
+                // dd($request->search);
+                $product = $product->where('name','LIKE', '%'.$request->search.'%');
+            }
 
             $product = $product->get();
             $ProductID  = array_column($product->toArray(),'id');
@@ -1150,10 +1154,13 @@ class ClientController extends ApiController
             $mostPopular = new Product();
        
             $mostPopular = $mostPopular
-            ->select('products.id','products.user_id','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+            ->select('products.id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id');
-
+         
+                if(isset($request->search)){
+                    $mostPopular = $mostPopular->where('products.name', 'LIKE', '%'.$request->search.'%');
+                }
                     if(isset($request->price)){
                         $price = array_map('intval', explode(",", $input['price']));
                         $mostPopular = $mostPopular->whereBetween('price', $price);
@@ -1178,8 +1185,12 @@ class ClientController extends ApiController
 
         }else if($request->type === '3'){
             $newProducts = new Product();
-            $newProducts = $newProducts->select('id','user_id','store_id','name','image','price');
+            $newProducts = $newProducts->select('id','user_id','store_id','name','image','price','brand');
             
+            if(isset($request->search)){
+                $newProducts = $newProducts->where('name', 'LIKE', '%'.$request->search.'%');
+            }
+
             if(isset($request->price)){
                 $price = array_map('intval', explode(",", $input['price']));
                 $newProducts = $newProducts->whereBetween('price', $price);
@@ -1197,14 +1208,17 @@ class ClientController extends ApiController
                                     ->skip($offset)
                                     ->get();
             $products = $newProducts;
-        }else if($request->status === '4'){
+        }else if($request->type === '4'){
+         
             $brand = new Product();
-       
-            $brand = $brand
-            ->select('products.id','products.user_id','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                DB::enableQueryLog();
+            $brand = $brand->select('products.id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id');
 
+                    if(isset($request->search)){
+                        $brand = $brand->where('products.brand', 'LIKE', '%'.$request->search.'%');
+                    }
                     if(isset($request->price)){
                         $price = array_map('intval', explode(",", $input['price']));
                         $brand = $brand->whereBetween('price', $price);
@@ -1223,13 +1237,11 @@ class ClientController extends ApiController
                                             ->take($limit)
                                             ->skip($offset)
                                             ->get();
-
+                                            // dd(DB::getQueryLog($brand));
                     $products = $brand;
 
         }
        
-        
-    
         return parent::success("filter product view successfully!", $products);
      }catch(\Exception $ex){
         return parent::error($ex->getMessage());
