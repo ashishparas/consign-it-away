@@ -42,3 +42,4 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
    Route::get('vendor-management',[VendorController::class,"index"]);
    Route::get('subscription-plan',[VendorController::class,"SubscriptionPlan"]);
  });
+ 
