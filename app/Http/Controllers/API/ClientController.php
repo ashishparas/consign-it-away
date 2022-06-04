@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
 use App\Models\Address;
 use App\Models\Brand;
+use App\Models\cancellation;
 use App\Models\Card;
 use App\Models\Cart;
 use App\Models\Category;
@@ -1306,6 +1307,36 @@ DB::enableQueryLog();
         return parent::error($ex->getMessage());
     }
 }
+
+public function CancelOrder(Request $request){
+    $rules = ['reason'=>'required','image[]'=>'','product_id'=>'required|exists:products,id','item_id'=>'required|exists:items,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        // dd($request->all());
+        if (isset($request->image)):
+            if($files = $request->file('image')):
+                foreach($files as $file):
+                    
+                   $images[] = parent::__uploadImage($file, public_path('cancel'), false);
+                 
+                endforeach;
+            endif;
+
+            $input['image'] = implode(',', $images);
+
+        endif;
+        $input['user_id'] = Auth::id();
+        cancellation::create($input); 
+        return parent::success("Your cancellation process being initiated");
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
 
 
 

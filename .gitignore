@@ -8,6 +8,7 @@
 /public/brand
 /public/category
 /public/chatImage
+/public/cancel
 /public/assets
 /storage/*.key
 /vendor

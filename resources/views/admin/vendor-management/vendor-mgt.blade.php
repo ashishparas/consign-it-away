@@ -9,7 +9,7 @@
       <div class="col-md-12">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb pl-0">
-            <li class="breadcrumb-item"><img src="assets/img/vendor.svg"> Vendor Management</li>
+            <li class="breadcrumb-item"><img src="{{asset('public/assets/img/vendor.svg')}}"> Vendor Management</li>
             <!-- <li class="breadcrumb-item">Running Orders</li>
             <li class="breadcrumb-item active">Shipping Orders Details</li> -->
           </ol>
