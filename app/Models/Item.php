@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 class Item extends Model
 {
     use HasFactory;
@@ -31,6 +33,10 @@ class Item extends Model
 
     public function Rating(){
         return $this->hasOne(Rating::class,'product_id','product_id')->select('id','product_id',DB::raw('AVG(rating) as rating, COUNT(comment) as RatingCount'));
+    }
+
+    public function MyRating(){
+        return $this->hasOne(Rating::class,'product_id','product_id')->where('from', Auth::id());
     }
 
     public function Customer(){
