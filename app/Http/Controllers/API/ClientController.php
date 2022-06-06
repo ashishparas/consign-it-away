@@ -1111,7 +1111,7 @@ class ClientController extends ApiController
    public function ProductFilter(Request $request)
    {
    
-     $rules = ['limit' =>'required','page'=>'','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>'','search'=>'','type'=>'required|in:1,2,3,4'];
+     $rules = ['limit' =>'','page'=>'','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>'','search'=>'','type'=>'required|in:1,2,3,4'];
      $validateAttributes = parent::validateAttributes($request,'GET',$rules, array_keys($rules),false);
      if($validateAttributes):
         return $validateAttributes;
@@ -1146,10 +1146,8 @@ class ClientController extends ApiController
                 $RecentlyViewProduct = $RecentlyViewProduct->where('name','LIKE', '%'.$request->search.'%');
             }
 
-            $RecentlyViewProduct = $RecentlyViewProduct->groupBy('products.id')
-            ->take($limit)
-            ->skip($offset)
-            ->get();
+            $RecentlyViewProduct = $RecentlyViewProduct->groupBy('products.id')->paginate($limit);
+            
             foreach($RecentlyViewProduct as $key => $recent){
                 // dd($recent->toArray());
                 $RecentlyViewProduct[$key]['images'] = explode(',', $recent->images);
@@ -1186,12 +1184,11 @@ class ClientController extends ApiController
                     }
                     
                     // ->where('favourites.by', Auth::id())
-                    $mostPopular= $mostPopular->groupBy('products.id')
+                    $mostPopular = $mostPopular->groupBy('products.id')
                                             ->orderBy('AverageRating', 'desc')
-                                            ->take($limit)
-                                            ->skip($offset)
-                                            ->get();
-
+                                            ->paginate($limit);
+                                           
+                     
                     $products = $mostPopular;
                  
 
@@ -1215,10 +1212,7 @@ class ClientController extends ApiController
                 $newProducts = $newProducts->where('brand', $request->brand);
             }
 
-            $newProducts = $newProducts->orderBy('created_at','DESC')
-                                    ->take($limit)
-                                    ->skip($offset)
-                                    ->get();
+            $newProducts = $newProducts->orderBy('created_at','DESC')->paginate($limit);
             $products = $newProducts;
         }else if($request->type === '4'){
          
@@ -1246,9 +1240,7 @@ class ClientController extends ApiController
                     // ->where('favourites.by', Auth::id())
                     $brand= $brand->groupBy('products.id')
                                             ->orderBy('AverageRating', 'desc')
-                                            ->take($limit)
-                                            ->skip($offset)
-                                            ->get();
+                                            ->paginate($limit);
                                             // dd(DB::getQueryLog($brand));
                     $products = $brand;
 
