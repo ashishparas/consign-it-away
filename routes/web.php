@@ -33,15 +33,18 @@ Route::get('terms_and_conditions', function(){
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+
 
 
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admin'], function () {
        // Route::get('/post', [AdminController::class, "index"]); 
-   Route::get('/order-management',[AdminController::class, "orderManagement"]);
-   Route::get('shipping-order-details/{id}',[AdminController::class, "ShippingOrderDetails"]);
-   Route::get('vendor-management',[VendorController::class,"index"]);
-   Route::get('subscription-plan',[VendorController::class,"SubscriptionPlan"]);
+            Route::get('/home', [HomeController::class, 'index'])->name('home');
+            Route::get('/order-management',[AdminController::class, "orderManagement"]);
+            Route::get('shipping-order-details/{id}',[AdminController::class, "ShippingOrderDetails"]);
+            Route::get('vendor-management',[VendorController::class,"index"]);
+            Route::get('subscription-plan',[VendorController::class,"SubscriptionPlan"]);
+            Route::get('vendor-products',[VendorController::class, "VendorProducts"]);
+            Route::get('product/detail/vendor/{id}',[VendorController::class,"ViewProductDetailsById"]);
  });
  
  

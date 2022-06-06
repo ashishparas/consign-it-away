@@ -26,4 +26,19 @@ class VendorController extends Controller
     }
 
 
+    public function VendorProducts()
+    {
+        $products = Product::select('id','name','image','quantity','status','price')->get();
+        // dd($products->toArray());
+        return view('admin.vendor-management.vendor-products', compact('products'));
+    }
+
+
+    public function ViewProductDetailsById($id){
+       
+        $product = Product::where('id', $id)->with(['PorductRating'])->first();
+       // dd($product->toArray());
+        return view('admin.vendor-management.product-details-vendor', compact('product'));
+    }
+
 }

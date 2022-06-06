@@ -27,7 +27,7 @@
         <a href="javascript:void(0)" class="has-chevron collapsed" data-toggle="collapse" data-target="#invoice" aria-expanded="false" aria-controls="invoice"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/supply-chain.svg')}}" alt="img">Product Management </span>
         </a>
         <ul id="invoice" class="collapse listing-nav pl-0" aria-labelledby="invoice" data-parent="#side-nav-accordion">
-          <li> <a href="javascript:void(0)">Vender Products</a> </li>
+          <li> <a href="{{url('/admin/vendor-products')}}">Vender Products</a> </li>
           <li> <a href="javascript:void(0)">Third Party Products</a> </li>
           <li> <a href="javascript:void(0)">Consignment Percentage</a> </li>
           <li> <a href="javascript:void(0)">Manage Shipping</a> </li>
