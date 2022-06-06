@@ -1209,6 +1209,25 @@ public function OfferStatusById(Request $request)
     }
 }
 
+public function ViewDiscountById(Request $request){
+    $rules = ['discount_id'=>'required|exists:discounts,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+            $input = $request->all();
+            $discount = Discount::where('id', $request->discount_id)->first();
+            return parent::success("View discount successfully!",$discount);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+
+}
+
+
+
+
 
 
 
