@@ -54,7 +54,7 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                    <div class="invalid-feedback">Please provide a valid email.</div>
+                    {{-- <div class="invalid-feedback">Please provide a valid email.</div> --}}
                   </div>
                 </div>
                 <div class="mb-2">
@@ -67,7 +67,7 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                    <div class="invalid-feedback">Please provide a password.</div>
+                    {{-- <div class="invalid-feedback">Please provide a password.</div> --}}
                   </div>
                 </div>
 				<button type="submit" class="btn btn-primary mt-4 d-block w-100 p-2">
