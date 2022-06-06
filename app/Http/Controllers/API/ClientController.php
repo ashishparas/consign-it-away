@@ -1125,32 +1125,39 @@ class ClientController extends ApiController
         // Recent View products
         if($request->type === '2'){
             $product = new Product();
-            $product =  $product->select('id','user_id','store_id','image','name','price','color','brand');
+         
+        $RecentlyViewProduct = RecentProducts::select('products.id','recent_products.product_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as FavouriteId'))
+            ->Join('products', 'recent_products.product_id', 'products.id')
+            ->leftJoin('ratings', 'ratings.product_id', 'products.id')
+            ->leftJoin('favourites', 'favourites.product_id', 'products.id');
+
             if(isset($request->price)){
                 $price = array_map('intval', explode(",", $input['price']));
-                $product = $product->whereBetween('price', $price);
+                $RecentlyViewProduct = $RecentlyViewProduct->whereBetween('price', $price);
             }
             if(isset($request->color)){
-                $product= $product->where('color', $request->color);
+                $RecentlyViewProduct= $RecentlyViewProduct->where('color', $request->color);
             }
             if(isset($request->brand)){
-                $product = $product->where('brand', $request->brand);
+                $RecentlyViewProduct = $RecentlyViewProduct->where('brand', $request->brand);
             }
             if(isset($request->search)){
                 // dd($request->search);
-                $product = $product->where('name','LIKE', '%'.$request->search.'%');
+                $RecentlyViewProduct = $RecentlyViewProduct->where('name','LIKE', '%'.$request->search.'%');
             }
 
-            $product = $product->get();
-            $ProductID  = array_column($product->toArray(),'id');
-            // dd($arr);
-            $RecentlyViewProduct = RecentProducts::whereIn('product_id', $ProductID )
-            ->where('user_id', Auth::id())
-            ->orderBy('created_at', 'DESC')
-            ->with(['Product'])
+            $RecentlyViewProduct = $RecentlyViewProduct->groupBy('products.id')
             ->take($limit)
             ->skip($offset)
             ->get();
+            foreach($RecentlyViewProduct as $key => $recent){
+                // dd($recent->toArray());
+                $RecentlyViewProduct[$key]['images'] = explode(',', $recent->images);
+                $RecentlyViewProduct[$key]['soldBy'] =  Store::select('id','banner','name')->where('id', $recent->store_id)->first();
+                $RecentlyViewProduct[$key]['base_url'] = asset('products');
+            }
+            // dd($RecentlyViewProduct->toArray());
+            
             $products = $RecentlyViewProduct;
 
 
