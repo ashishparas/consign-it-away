@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 
@@ -48,11 +49,11 @@
                     <div class="card-header header_bg" data-toggle="collapse" role="button" data-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
                       <div class="d-flex justify-content-between">
                           <div>
-                              <h5 class="mb-1">Bronze</h5>
-                              <p class="pb-0 mb-0">Lorem Ipsum is simply dummy text of the printing & typesetting industry.</p>
+                              <h5 class="mb-1">{{$subscription->name}}</h5>
+                              <p class="pb-0 mb-0">{{$subscription->content}}</p>
                           </div>
                           <span>
-                             <a href="#" class="badge badge-dark p-2"><strong>$ 0.00</strong> Only</a>
+                             <a href="#" class="badge badge-dark p-2"><strong>$ {{$subscription->monthly_price}}</strong> Only</a>
                           </span>
                       </div>
                     </div>
@@ -60,21 +61,19 @@
                     <div id="collapseSeven" class="collapse show" data-parent="#accordionExample3">
                       <div class="card-body">
                           <ul class="free_lisitng subscription_listing">
+                          <?php 
+                          $features = json_decode($subscription->features, true); 
+                          foreach($features as $feature){   ?>
+                           
+                     
                               <li>
                                 <span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
                                 <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
                               </svg></span>
-                              Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
-                              <li><span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                              </svg></span>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est. Nunc aliquet sed lectus non volutpat. </li>
-                              <li> <span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                              </svg></span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est.</li>
-                              <li><span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                              </svg></span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est. Nunc aliquet sed lectus.</li>
+                              <?php echo  $feature['name']; ?>
+                            </li>
+                         <?php } ?>
+                            
                             </ul>
                             <div class="col-md-12 text-center pb-3">
                               <button type="button" class="btn green_btn_light p-2">Edit</button>
@@ -94,15 +93,16 @@
 
             <div role="tabpanel" class="tab-pane fade" id="tab14">
                 <div class="accordion mt-4" id="accordionExample3">
+                  @foreach ($subscriptions as $subscription)
                     <div class="card">
                       <div class="card-header header_bg" data-toggle="collapse" role="button" data-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h5 class="mb-1">Free Plan</h5>
-                                <p class="pb-0 mb-0">Lorem Ipsum is simply dummy text of the printing & typesetting industry.</p>
+                                <h5 class="mb-1">{{$subscription->name}}</h5>
+                                <p class="pb-0 mb-0">{{$subscription->content}}</p>
                             </div>
                             <span>
-                               <a href="#" class="badge badge-dark p-2"><strong>$ 0.00</strong> Only</a>
+                               <a href="#" class="badge badge-dark p-2"><strong>$ {{$subscription->yearly_price}}</strong> Only</a>
                             </span>
                         </div>
                       </div>
@@ -110,21 +110,16 @@
                       <div id="collapseSeven" class="collapse show" data-parent="#accordionExample3">
                         <div class="card-body">
                             <ul class="free_lisitng subscription_listing">
+                                <?php
+                                $features = json_decode($subscription->features,true);
+                                foreach($features as $feature){
+                                ?>
                                 <li>
                                   <span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
                                   <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
-                                <li><span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est. Nunc aliquet sed lectus non volutpat. </li>
-                                <li> <span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est.</li>
-                                <li><span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est. Nunc aliquet sed lectus.</li>
+                                </svg></span>{{$feature['name']}}</li>
+
+                                <?php } ?>
                               </ul>
                               <div class="col-md-12 text-center pb-3">
                                 <button type="button" class="btn green_btn_light p-2">Edit</button>
@@ -134,86 +129,8 @@
                         </div>
                       </div>
                     </div>
-                    <div class="card">
-                      <div class="card-header header_bg" data-toggle="collapse" role="button" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h5 class="mb-1">Monthly Plan</h5>
-                                <p class="pb-0 mb-0">Lorem Ipsum is simply dummy text of the printing & typesetting industry.</p>
-                            </div>
-                            <span>
-                                <a href="#" class="badge badge-dark p-2"><strong>$ 9.99</strong> Only</a>
-                             </span>
-                        </div>
-                      </div>
-      
-                      <div id="collapseEight" class="collapse" data-parent="#accordionExample3">
-                        <div class="card-body">
-                            <ul class="free_lisitng subscription_listing">
-                                <li>
-                                  <span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
-                                <li><span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est. Nunc aliquet sed lectus non volutpat. </li>
-                                <li> <span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est.</li>
-                                <li><span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est. Nunc aliquet sed lectus.</li>
-                              </ul>
-                              <div class="col-md-12 text-center pb-3">
-                                <button type="button" class="btn green_btn_light p-2">Edit</button>
-                                <button type="button" class="btn orange_btn_light p-2">Delete</button>
-        
-                              </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
-                      <div class="card-header header_bg" data-toggle="collapse" role="button" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h5 class="mb-1">Yearly Plan</h5>
-                                <p class="pb-0 mb-0">Lorem Ipsum is simply dummy text of the printing & typesetting industry.</p>
-                            </div>
-                            <span>
-                                <a href="#" class="badge badge-dark p-2"><strong>$ 39.99</strong> Only</a>
-                             </span>
-                        </div>
-                      </div>
-      
-                      <div id="collapseNine" class="collapse" data-parent="#accordionExample3">
-                        <div class="card-body">
-                            <ul class="free_lisitng subscription_listing">
-                                <li>
-                                  <span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
-                                <li><span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est. Nunc aliquet sed lectus non volutpat. </li>
-                                <li> <span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est.</li>
-                                <li><span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est. Nunc aliquet sed lectus.</li>
-                              </ul>
-                              <div class="col-md-12 text-center pb-3">
-                                <button type="button" class="btn green_btn_light p-2">Edit</button>
-                                <button type="button" class="btn orange_btn_light p-2">Delete</button>
-        
-                              </div>
-                        </div>
-                      </div>
-                    </div>
+                    @endforeach
+                  
                   </div>
             </div>
             <div role="tabpanel" class="tab-pane fade" id="tab15">
@@ -274,21 +191,17 @@
                       <div id="collapseEight" class="collapse" data-parent="#accordionExample3">
                         <div class="card-body">
                             <ul class="free_lisitng subscription_listing">
+                              <?php 
+                                
+
+                                ?>
                                 <li>
                                   <span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
                                   <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
                                 </svg></span>
                                 Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
-                                <li><span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est. Nunc aliquet sed lectus non volutpat. </li>
-                                <li> <span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est.</li>
-                                <li><span><svg xmlns="http://www.w3.org/2000/svg" width="13.709" height="10.967" viewBox="0 0 13.709 10.967">
-                                  <path id="Icon_metro-spell-check" data-name="Icon metro-spell-check" d="M22.064,18.723l-8.911,9.6-4.8-6.169,1.756-1.5,3.042,3.17,7.54-6.469Z" transform="translate(-8.355 -17.352)" fill="#858585"></path>
-                                </svg></span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et pretium nunc. Proin nec rhoncus purus. Curabitur vel eleifend est. Nunc aliquet sed lectus.</li>
+
+
                               </ul>
                               <div class="col-md-12 text-center pb-3">
                                 <button type="button" class="btn green_btn_light p-2">Edit</button>

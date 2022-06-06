@@ -42,7 +42,7 @@ Route::post('find/rate',[ClientController::class, "UspsFindRate"]);
 
 Route::post('get/categories',[VendorController::class, "getCategories"]);
 Route::post("brands",[VendorController::class,"Brands"]);
-Route::post('product/by/id',[ClientController::class,"ProductById"]);
+
 Route::get('most/popular/products',[ClientController::class, "MostPopularsProducts"]);
 
 Route::post('search', [ClientController::class, "Search"]);
@@ -56,6 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('add/store',[VendorController::class,"AddStore"]);
     Route::post('edit/store',[VendorController::class,"EditStore"]);
     Route::post('create/product',[VendorController::class, "Product"])->middleware('advancedProduct');
+    Route::post('product/by/id',[ClientController::class,"ProductById"]);
     Route::post('submit/product',[VendorController::class, "SubmitProduct"]);
     Route::post('resend/otp',[AuthController::class, "resendOTP"]); 
     Route::post('resend/email/otp',[AuthController::class, "ResendEmailOTP"]);
