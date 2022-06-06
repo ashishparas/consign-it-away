@@ -717,7 +717,7 @@ class VendorController extends ApiController
 
    public function ViewDiscount(Request $request)
    {
-       
+    
     $rules = ['status' => 'required'];
     $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
     if($validateAttributes):
@@ -726,17 +726,18 @@ class VendorController extends ApiController
     try{
     
         $input = $request->all();
+     
         $disc = [];
         $discounts = Discount::where('user_id', Auth::id())->with('Category')->get();
         if($input['status'] == '1'){
-           
+         
         foreach($discounts as $discount):
-
+        //dd($discount['valid_till']);
         $date1 = Carbon::createFromFormat('Y-m-d H:i a', $discount['valid_till']); 
         $date2 = Carbon::now();  
-       
+      
         $result = $date1->gt($date2);
-     
+           
         if($result):
             array_push($disc,$discount);
         endif;
