@@ -1147,7 +1147,7 @@ class ClientController extends ApiController
             }
 
             $RecentlyViewProduct = $RecentlyViewProduct->groupBy('products.id')->paginate($limit);
-            
+
             foreach($RecentlyViewProduct as $key => $recent){
                 // dd($recent->toArray());
                 $RecentlyViewProduct[$key]['images'] = explode(',', $recent->images);
@@ -1164,7 +1164,7 @@ class ClientController extends ApiController
             $mostPopular = new Product();
        
             $mostPopular = $mostPopular
-            ->select('products.id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+            ->select('products.id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id');
          
