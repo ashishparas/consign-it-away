@@ -14,6 +14,7 @@ use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
 use Illuminate\Support\Facades\DB;
+use LaravelFCM\Facades\FCM as FacadesFCM;
 
 class ApiController extends \App\Http\Controllers\Controller {
 
@@ -245,19 +246,19 @@ class ApiController extends \App\Http\Controllers\Controller {
 
     public static function pushNotofication($data = [], $deviceToken) {
      
+    //  dd($data);
+       // $DeviceType = UserDevice::where('user_id', $data['to'])->first();
      
-        $DeviceType = UserDevice::where('user_id', $data['to'])->first();
-     
-        if($DeviceType['type'] == 'android'):
-            unset($data['payload']['notification']);
-        elseif($DeviceType['type'] == 'ios'):
-                unset($data['payload']['data']);
-        endif;
+        // if($DeviceType['type'] == 'android'):
+        //     unset($data['payload']['notification']);
+        // elseif($DeviceType['type'] == 'ios'):
+        //         unset($data['payload']['data']);
+        // endif;
               
         $optionBuilder = new OptionsBuilder();
         // $optionBuilder->setTimeToLive(60 * 20);
-        $notificationBuilder = new PayloadNotificationBuilder($data['title']);
-        $notificationBuilder->setBody($data['body'])->setSound('default');
+        $notificationBuilder = new PayloadNotificationBuilder($data['notification']['title']);
+        $notificationBuilder->setBody($data['notification']['body'])->setSound('default');
       
         $dataBuilder = new PayloadDataBuilder();
         
@@ -265,16 +266,16 @@ class ApiController extends \App\Http\Controllers\Controller {
             $data['priority'] = 'high';
             $data['content_available'] = true;
             
-        if( $DeviceType->type== 'android'): //
-                $dataBuilder->addData($data);
-                $dataBuilder->addData($data['payload']['data']); 
+        // if( $DeviceType->type== 'android'): //
+        //         $dataBuilder->addData($data);
+        //         $dataBuilder->addData($data['payload']['data']); 
               
                 // $dataBuilder->addData($data['payload']);
-        elseif($DeviceType->type == 'ios'):
-            $dataBuilder->addData($data);
-                // $dataBuilder->addData(['notification' => $data['payload']['notification']]);
+        // elseif($DeviceType->type == 'ios'):
+        //     $dataBuilder->addData($data);
+        //         // $dataBuilder->addData(['notification' => $data['payload']['notification']]);
                 
-        endif;
+        // endif;
         
         $option = $optionBuilder->build();
       

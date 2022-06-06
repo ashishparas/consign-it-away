@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Password;
 use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
 use App\Models\ChatImage;
+use App\Models\Notification;
 use App\Models\Store;
 use GrahamCampbell\ResultType\Success;
 
@@ -725,6 +726,29 @@ class AuthController extends ApiController {
       }
 
   }
+
+
+  public function Notification(Request $request){
+      $rules= ['receiver_id' => 'required'];
+      $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+      if($validateAttributes):
+        return $validateAttributes;
+      endif;
+      try{
+          $input = $request->all();
+          $notification = Notification::where('receiver_id', $input['receiver_id'])->get();
+        return parent::success("View Notification successfully!");
+      }catch(\Exception $ex){
+          return parent::error($ex->getMessage());
+      }
+
+  }
+
+
+
+
+
+
     
     
   

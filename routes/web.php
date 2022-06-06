@@ -20,7 +20,7 @@ use App\Http\Middleware\AccessControlMiddleware;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Route::get('/PrivacyPolicy', function () {

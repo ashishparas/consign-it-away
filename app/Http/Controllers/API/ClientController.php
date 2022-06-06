@@ -682,14 +682,19 @@ class ClientController extends ApiController
                     'price' => $product->amount,
                     'quantity' => $item->quantity
                 ]);
+//         $store = Store::where('id',$product->store_id)->first();
+//         $body = $item->id .'has been ordered from'.($store->name ==null)?'':$store->name;
+//  $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+//        $arrayToSend = array('notification' => $notification,'priority'=>'high');
+
+//         parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
             endforeach;
 
             Cart::where('user_id', Auth::id())->delete();
 
            
         endif;
-       
-            
+
         return parent::success("Your order Placed successfully!");
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
