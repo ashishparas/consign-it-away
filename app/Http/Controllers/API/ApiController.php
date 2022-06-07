@@ -341,11 +341,11 @@ class ApiController extends \App\Http\Controllers\Controller {
     private static function savePushNotification($data, $userId, $receiver_id) {
       
         try {
-
+              
             if (isset($data['payload']))
             
                 $DeviceType = UserDevice::where('user_id', $data['to'])->first();
-                
+              
                 if(strtolower($DeviceType['type']) == 'android'):
                         unset($data['payload']['notification']);
                 elseif(strtolower($DeviceType['type']) == 'ios'):
@@ -362,7 +362,7 @@ class ApiController extends \App\Http\Controllers\Controller {
             \App\Models\Notification::create($data);
             return true;
         } catch (\Exception $ex) {
-            
+            dd($ex->getMessage());
         }
     }
 
@@ -565,8 +565,13 @@ class ApiController extends \App\Http\Controllers\Controller {
             // $userDevice->type = $request->device_type;
             // $userDevice->token = $request->device_token;
             // $userDevice->save();
-            \App\Models\UserDevice::updateOrCreate(['user_id'=> $user->id],['user_id' => $user->id,'type' =>  $request->device_type, 'token' =>  $request->device_token]);
-            
+            // dd($user->toArray());
+            $userDevice = UserDevice::updateOrCreate(['user_id'=> $user->id],
+            ['user_id' => $user->id,
+            'type' =>  $request->device_type,
+            'token' =>  $request->device_token
+            ]);
+        
         // endif;
         return true;
     }
