@@ -730,13 +730,14 @@ class AuthController extends ApiController {
 
   public function Notification(Request $request){
       $rules= [];
+   
       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
       if($validateAttributes):
         return $validateAttributes;
       endif;
       try{
           $input = $request->all();
-          $notification = Notification::where('receiver_id', Auth::id())->orderBy('created_at','DESC')->get();
+          $notification = Notification::where('receiver_id', Auth::id())->get();
         return parent::success("View Notification successfully!", $notification);
       }catch(\Exception $ex){
           return parent::error($ex->getMessage());
