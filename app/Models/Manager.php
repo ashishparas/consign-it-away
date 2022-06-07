@@ -24,7 +24,7 @@ class Manager extends Model
     }
 
     public function Store(){
-        return $this->belongsTo(Store::class)->select('id','name','banner');
+        return $this->belongsTo(Store::class)->select('id','name','banner','location');
     }
 
 

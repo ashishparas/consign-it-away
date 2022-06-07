@@ -683,17 +683,21 @@ class ClientController extends ApiController
                     'quantity' => $item->quantity
                 ]);
                 if($item){
-                   dd('item');
+                    $store = Store::where('id',$product->store_id)->first();
+                   $StoreName = (!$store->name)?'No-name':$store->name;
+                    $body = '#00'.$item->id.' has been ordered from '.$StoreName;
+                   
+             $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+                   $arrayToSend = array('notification' => $notification,'priority'=>'high');
+                  
+                   parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
                 }
-        $store = Store::where('id',$product->store_id)->first();
-        $body = $item->id .'has been ordered from'.($store->name ==null)?'':$store->name;
- $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');
-       $arrayToSend = array('notification' => $notification,'priority'=>'high');
+        
 
-        parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
+       
             endforeach;
 
-            Cart::where('user_id', Auth::id())->delete();
+           // Cart::where('user_id', Auth::id())->delete();
 
            
         endif;

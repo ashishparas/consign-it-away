@@ -261,13 +261,17 @@ class VendorController extends ApiController
     }
 
     public function ViewStaff(Request $request){
-        $rules = [];
+        $rules = ['search' => ''];
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
         if($validateAttributes):
             return $validateAttributes;
         endif;
         try{
-            $manager = Manager::select('id','profile_picture','name','email','phonecode','mobile_no','status')->where('user_id', Auth::id())->get();
+            $manager = Manager::select('id','store_id','profile_picture','name','email','phonecode','mobile_no','status','active_status');
+            if(isset($request->search)){
+                $manager= $manager->where('name','LIKE', '%'.$request->search.'%');
+            }
+            $manager = $manager->where('user_id', Auth::id())->with(['Store'])->get();
             return parent::success("View staff successfully!",['manager' => $manager]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());

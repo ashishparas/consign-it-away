@@ -257,7 +257,7 @@ class ApiController extends \App\Http\Controllers\Controller {
               
         $optionBuilder = new OptionsBuilder();
         // $optionBuilder->setTimeToLive(60 * 20);
-        dd($data);
+       
         $notificationBuilder = new PayloadNotificationBuilder($data['notification']['title']);
         $notificationBuilder->setBody($data['notification']['body'])->setSound('default');
       
@@ -314,7 +314,7 @@ class ApiController extends \App\Http\Controllers\Controller {
 
 
     public static function pushNotifications($data = [], $userId, $receiver_id ,$saveNotification = true) {
-  dd($data);
+ 
         if ($saveNotification) {
           
             self::savePushNotification($data, $userId, $receiver_id);
