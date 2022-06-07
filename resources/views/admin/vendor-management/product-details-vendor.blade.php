@@ -65,12 +65,12 @@
                             <h5 class="mb-4">Store Manager</h5>
                             <div class="media fs-14 pb-4 mb-3 border-bottom">
                               <div class="mr-2 align-self-center">
-                                <img src="{{asset('public/assets/img/product-img1.png')}}" class="ms-img-round" alt="people">
+                                <img src="{{asset('public/vendor/'.$product->store->manager->profile_picture)}}" class="ms-img-round" alt="people">
                               </div>
                               <div class="media-body d-flex justify-content-between call_img align-items-center">
                                 <div>
-                                <h6 class="pb-0 mb-0">Rogger Estin</h6>
-                                <p class="fs-13 my-1 text-disabled">rogger_estin@gmail.com</p>
+                                <h6 class="pb-0 mb-0">{{($product->store->manager ==null)?'':$product->store->manager->name}}</h6>
+                                <p class="fs-13 my-1 text-disabled">{{($product->store->manager ==null)?'':$product->store->manager->email;}}</p>
                               </div>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                 <div class="media-body d-flex justify-content-center call_img align-items-center">
                                 <div class="call_img">
                                     <img src="assets/img/call.jpg" alt="" class="mr-2">
-                                    <span class="green_cl">+91-9878765654</span>
+                          <span class="green_cl">{{($product->store->manager ==null)? '':$product->store->manager->phonecode.'-'.$product->store->manager->mobile_no}}</span>
                                 </div>
                                 </div>
                               </div>
@@ -88,33 +88,43 @@
                     </div>
 
                     <div class="col-md-7 col-xl-7">
-                        <h6 class="green_cl">{{$product->name}}</h6>
-                        <h5 class="fs-15 pr-4">{{$product->description}}</h5>
+                        <h6 class="green_cl"> {{$product->name}} </h6>
+                        <h5 class="fs-15 pr-4"> {{$product->description}} </h5>
                              <div class="d-flex align-items-center pb-0">
+                  <?php
+                      $rating = (empty($product->PorductRating))?0:$product->PorductRating->rating;
+                     
+                  ?>
                                 <ul class="ms-star-rating rating-fill-block mb-0 rating-star">
+                                  <?php
+                                  for($i=0; $i < (int)$rating; $i++){ ?>
                                     <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
-                                    <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                    <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                    <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                    <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
+                                  <?php  } ?>
+                                
+                            
+                            {{-- <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
+                            <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
+                            <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
+                            <li class="ms-rating-item rated"><i class="material-icons">star</i> </li> --}}
                                   </ul>
                                   <span class="grey_cl fs-14 pt-1">(159)</span>
                                 </div>
 
                                 <div class="d-flex pt-3 justify-content-between align-items-center">
-                                    <h5 class="orange_cl fs-15 mb-0">$180.00</h5>
-                                    <span class="badge red_badge p-2 px-3">Out Of Stock</span>
+                                    <h5 class="orange_cl fs-15 mb-0">$ {{$product->price}}</h5>
+                                    <span class="badge red_badge p-2 px-3">{{($product->quantity >0)? 'In-Stock':'Out-of-stock'}}</span>
                                 </div>
                                 <p class="blue_cl pt-2 font-weight-bold">50% Discount Applied</p>
                                 <div class="view_store d-flex align-items-center py-2 px-3 mt-4">
-                                    <div class="shop_img mr-2"><img src="assets/img/shop_img.png" class="ms-img-round"/></div>
+                                    <div class="shop_img mr-2"><img src="{{asset('public/vendor/'.$product->soldBy->banner)}}" class="ms-img-round"/></div>
                                     <div>
                                         <h6 class="black_cl mb-0">Vendor</h6>
-                                        <h5 class="blue_cl mb-0">Kevin Retail Private Ltd</h5>
+                                        <h5 class="blue_cl mb-0">{{(empty($product->soldBy))?'No-Store added':$product->soldBy->name}}</h5>
                                     </div>
                                     <button type="button" class="btn btn-gradient-dark ml-auto mt-0 py-2 text-white">View Store</button>
                                 </div>
                                 <div class="row pt-4">
+                                  
                                     <div class="col-md-4 col-lg-4 align-items-center">
                                         <h6 class="mb-0">Gender</h6>
                                     </div>
@@ -136,18 +146,17 @@
                                     </div>
                                     <div class="col-md-8 col-lg-8 mt-4">
                                         <div class="d-flex align-items-center">
-                                        <button type="button" class="btn grey_badge black_cl mt-0">Watches</button>
-                                        <button type="button" class="btn grey_badge black_cl mt-0 mx-2">Other</button>
+                                        <button type="button" class="btn grey_badge black_cl mt-0">{{$product->tag}}</button>
+                                        {{-- <button type="button" class="btn grey_badge black_cl mt-0 mx-2">Other</button> --}}
                                     </div>
                                     </div>
                                     <div class="col-md-4 col-lg-4 mt-4 align-items-start">
                                         <h6 class="mb-0">Description</h6>
                                     </div>
                                     <div class="col-md-8 col-lg-8 mt-4">
-                                            <p class="fs-16 grey_cl">Festina men's watch F20560/4 with a stainless steel case and a 
-                                                mineral glass fitted with a stainless steel bracelet.</p>
-                                                <p class="mb-0 fs-16 grey_cl">Festina watches are the perfect blend of elegance and functionality. Festina offers distinguished designs, constant
-                                                     technological innovation and excellent value for money.</p>
+                                            <p class="fs-16 grey_cl">{{$product->description}}</p>
+                                                {{-- <p class="mb-0 fs-16 grey_cl">Festina watches are the perfect blend of elegance and functionality. Festina offers distinguished designs, constant
+                                                     technological innovation and excellent value for money.</p> --}}
                              
                                     </div>
                                     <div class="col-md-4 col-lg-4 mt-4 align-items-start">

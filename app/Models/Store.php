@@ -27,6 +27,10 @@ class Store extends Model
         return $this->hasMany(Manager::class);
     }
 
+    public function Manager(){
+        return $this->hasOne(Manager::class);
+    }
+
     public function Product(){
         return $this->hasMany(Product::class)->select('id','store_id','name','image','amount');
     }

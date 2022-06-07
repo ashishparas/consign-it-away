@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
 use App\Models\Product;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
@@ -36,9 +37,16 @@ class VendorController extends Controller
 
     public function ViewProductDetailsById($id){
        
-        $product = Product::where('id', $id)->with(['PorductRating'])->first();
-       // dd($product->toArray());
+        $product = Product::where('id', $id)->with(['PorductRating','Store'])->first();
+    //    dd($product->toArray());
         return view('admin.vendor-management.product-details-vendor', compact('product'));
+    }
+
+
+    public function ViewReports(){
+        $contacts = Contact::orderBy('created_at','DESC')->get();
+        // dd($contacts->toArray());
+        return view('admin.report.report-management',compact('contacts'));
     }
 
 }

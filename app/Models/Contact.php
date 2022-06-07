@@ -15,4 +15,12 @@ class Contact extends Model
     protected $primaryKey = "id";
 
     protected $fillable = ['user_id','image','name','email','phonecode','mobile_no','order_no','comment'];
+
+    protected $appends = ['baseUrl'];
+
+
+
+    public function getBaseUrlAttribute(){
+        return asset('public/vendor');
+    }
 }

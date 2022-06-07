@@ -106,7 +106,11 @@ class Product extends Model
   }
    
   public function PorductRating(){
-      return $this->hasMany(Rating::class,'product_id', 'id')->select(DB::raw('AVG(rating) as rating, COUNT(comment) as ratingsCount'));
+      return $this->hasOne(Rating::class,'product_id', 'id')->select('product_id',DB::raw('AVG(rating) as rating, COUNT(comment) as ratingsCount'));
+  }
+
+  public function Store(){
+      return $this->belongsTo(Store::class)->select('id','name','banner')->with('Manager');
   }
 
     

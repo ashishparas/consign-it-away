@@ -8,7 +8,7 @@
     <!-- Navigation -->
     <ul class="accordion ms-main-aside fs-14" id="side-nav-accordion">
       <li class="menu-item">
-        <a href="{{url('/home')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/home.svg')}}" alt="img">Dashboard </span>
+        <a href="{{url('/admin/home')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/home.svg')}}" alt="img">Dashboard </span>
         </a>
       </li>
       <li class="menu-item">
@@ -46,7 +46,7 @@
         </a>
       </li>
       <li class="menu-item">
-        <a href="javascript:void(0)"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/warning.svg')}}" alt="img">Report Management</span>
+        <a href="{{url('/admin/report-management')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/warning.svg')}}" alt="img">Report Management</span>
         </a>
       </li>
     </ul>
