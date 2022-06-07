@@ -1245,8 +1245,14 @@ class ClientController extends ApiController
                     $products = $brand;
 
         }
-       
-        return parent::success("filter product view successfully!", $products);
+     
+        return  response()->json([
+                    'status' => true,
+                    'code' => 200,
+                    'message'=> 'filter product view successfully!', 
+                    'products' => $products
+            ]);
+        // parent::success("filter product view successfully!", $products);
      }catch(\Exception $ex){
         return parent::error($ex->getMessage());
      }
