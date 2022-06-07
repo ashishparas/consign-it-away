@@ -1209,7 +1209,7 @@ public function OfferStatusById(Request $request)
         return parent::error($ex->getMessage());
     }
 }
-
+//
 public function ViewDiscountById(Request $request){
     $rules = ['discount_id'=>'required|exists:discounts,id'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
@@ -1220,6 +1220,26 @@ public function ViewDiscountById(Request $request){
             $input = $request->all();
             $discount = Discount::where('id', $request->discount_id)->first();
             return parent::success("View discount successfully!",$discount);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+
+}
+
+
+public function ChangeStaffStatus(Request $request){
+    $rules = ['staff_id'=>'required|exists:managers,id','active_status'=>'required|in:1,2'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+            $input = $request->all();
+            $manager = new Manager();
+            $manager = $manager->FindOrfail($request->staff_id);
+            $manager->fill($input);
+            $manager->save();
+            return parent::success("View discount successfully!",$manager);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }

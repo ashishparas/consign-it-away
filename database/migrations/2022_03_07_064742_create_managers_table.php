@@ -25,6 +25,7 @@ class CreateManagersTable extends Migration
             $table->string('phonecode')->nullable();
             $table->string('mobile_no')->nullable();
             $table->enum('status',[1,2])->default(1)->comment('1->staff, 2->manager');
+            $table->enum('active_status',[1,2])->default(1)->comment('1->active,2->unactive');
             
             $table->timestamps();
         });

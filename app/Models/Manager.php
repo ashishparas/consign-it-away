@@ -16,7 +16,7 @@ class Manager extends Model
 
     protected $appends = ['base_url'];
 
-    protected $fillable = ['store_id','user_id','profile_picture','name','email','phonecode','mobile_no','status'];
+    protected $fillable = ['store_id','user_id','profile_picture','name','email','phonecode','mobile_no','status','active_status'];
 
 
     public function getBaseUrlAttribute(){

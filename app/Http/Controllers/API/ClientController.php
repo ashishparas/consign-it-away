@@ -667,13 +667,13 @@ class ClientController extends ApiController
         $order = Order::create($input);
      
         if(!empty($order)):
-            
+        
             $items = Cart::where('user_id', Auth::id())->get();
          
             foreach($items as $item):
                 $product = Product::where('id', $item->product_id)->first();
             
-                Item::create([
+               $item =  Item::create([
                     'user_id' => Auth::id(),
                     'order_id' => $order->id,
                     'product_id' => $product->id,
@@ -682,6 +682,9 @@ class ClientController extends ApiController
                     'price' => $product->amount,
                     'quantity' => $item->quantity
                 ]);
+                if($item){
+                   dd('item');
+                }
         $store = Store::where('id',$product->store_id)->first();
         $body = $item->id .'has been ordered from'.($store->name ==null)?'':$store->name;
  $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');

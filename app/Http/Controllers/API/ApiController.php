@@ -257,6 +257,7 @@ class ApiController extends \App\Http\Controllers\Controller {
               
         $optionBuilder = new OptionsBuilder();
         // $optionBuilder->setTimeToLive(60 * 20);
+        dd($data);
         $notificationBuilder = new PayloadNotificationBuilder($data['notification']['title']);
         $notificationBuilder->setBody($data['notification']['body'])->setSound('default');
       
@@ -283,7 +284,7 @@ class ApiController extends \App\Http\Controllers\Controller {
       
         $data = $dataBuilder->build();
         
-        // $deviceToken = "cd68yAvp4kimo2nwzxI2rc:APA91bF5txT99DFHCKrr5VxZWp5WQetE3ULVE2zgT-bPLkaUKyN_Z1uREQBrqvHlGNx6MLkbLs59bqOsrkNcYqJIQ8KUfnaCyvFFruwbzbyQQnr6PrcfIbJtOXtFVVftn76r01KyHjk4";
+        $deviceToken="doRF6VhJTr-2NFzxlfI39T:APA91bG_9rxoV8Yf7nUN7NBVG1QuPN-y6pJU57houmef1Jkx5RNrST_c6xjMwBnoCElgD7UrYbB4HWLvDr0vD3jmjmXexvpdr7QpRXt6e0vyqfTfSvGoMnnMlK0tqKmh2FstyofV0dX9";
 
         $downstreamResponse = FCM::sendTo($deviceToken, $option, $notification, $data);
 //        $downstreamResponse->numberFailure();
@@ -313,7 +314,7 @@ class ApiController extends \App\Http\Controllers\Controller {
 
 
     public static function pushNotifications($data = [], $userId, $receiver_id ,$saveNotification = true) {
-   ;
+  dd($data);
         if ($saveNotification) {
           
             self::savePushNotification($data, $userId, $receiver_id);
@@ -326,7 +327,7 @@ class ApiController extends \App\Http\Controllers\Controller {
         //   return true;
         // if (User::whereId($userId)->where('is_notify', '1')->get()->isEmpty() === true)
         //   return true;
-       
+     
         foreach (\App\Models\UserDevice::whereUserId($receiver_id)->get() as $userDevice):
               
             self::pushNotofication($data, $userDevice->token);
