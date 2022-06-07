@@ -745,6 +745,26 @@ class AuthController extends ApiController {
 
   }
 
+  public function ReadNotification(Request $request){
+      $rules = ['notification_id'=>'required','is_read'=>'required|in:0,1'];
+      $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+      if($validateAttributes):
+        return $validateAttributes;
+      endif;
+      try{
+          $input = $request->all();
+          $notification =   new Notification();
+          $notification =   $notification->FindOrfail($request->notification_id);
+                            $notification->fill($input);
+                            $notification->save();
+        return parent::success("Notification read successfully!", $notification);
+      }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+      }
+  }
+
+
+
 
 
 

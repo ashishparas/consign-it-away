@@ -136,6 +136,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('notification',[AuthController::class,'Notification']);
     Route::post('view/discount/by/id',[VendorController::class, "ViewDiscountById"]);
     Route::post('change/staff/status',[VendorController::class, "ChangeStaffStatus"]);
+    Route::post('read/notification',[AuthController::class, "ReadNotification"]);
 });
 
 
