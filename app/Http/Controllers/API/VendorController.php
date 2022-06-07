@@ -1009,7 +1009,7 @@ class VendorController extends ApiController
         endif;
         try{
             $input = $request->all();
-            $staff = Manager::where('store_id', $request->store_id)->get();
+            $staff = Manager::where('store_id', $request->store_id)->with(['Store'])->get();
             return parent::success("View staff details successfully!",['staff' => $staff]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());

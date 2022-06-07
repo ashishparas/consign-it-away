@@ -23,6 +23,9 @@ class Manager extends Model
         return url('vendor/');
     }
 
+    public function Store(){
+        return $this->belongsTo(Store::class)->select('id','name','banner');
+    }
 
 
 
