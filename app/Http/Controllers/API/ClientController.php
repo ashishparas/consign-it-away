@@ -669,7 +669,7 @@ class ClientController extends ApiController
         if(!empty($order)):
         
             $items = Cart::where('user_id', Auth::id())->get();
-         
+            
             foreach($items as $item):
                 $product = Product::where('id', $item->product_id)->first();
             
@@ -683,6 +683,7 @@ class ClientController extends ApiController
                     'quantity' => $item->quantity
                 ]);
                 if($item){
+                    
                     $store = Store::where('id',$product->store_id)->first();
                    $StoreName = (!$store->name)?'No-name':$store->name;
                     $body = '#00'.$item->id.' has been ordered from '.$StoreName;

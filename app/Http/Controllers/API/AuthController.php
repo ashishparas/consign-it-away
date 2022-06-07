@@ -24,6 +24,7 @@ use App\Mail\EmailVerificationMail;
 use App\Models\ChatImage;
 use App\Models\Notification;
 use App\Models\Store;
+use App\Models\UserDevice;
 use GrahamCampbell\ResultType\Success;
 
 use function PHPUnit\Framework\isEmpty;
@@ -80,6 +81,7 @@ class AuthController extends ApiController {
       
                 $token = $user->createToken('consign-it-away')->plainTextToken;  
                 $user['store'] = Store::select('id')->where('user_id', Auth::id())->orderBy('created_at','DESC')->first();
+             
                 parent::addUserDeviceData($user, $request);
               
                 return parent::success('Login Successfully!',['token' => $token, 'user' => $user]);
@@ -261,8 +263,10 @@ class AuthController extends ApiController {
             $device = \App\Models\UserDevice::where('user_id', Auth::id())->get();
           
             if ($device->isEmpty() === false)
-                \App\Models\UserDevice::destroy($device->first()->id);
-
+               // \App\Models\UserDevice::destroy($device->first()->id);
+               $model = new UserDevice();
+               $model = $model->FindOrfail($device->first()->id)->update(['type' =>'','token'=>'']);
+              
             return parent::success('Logout Successfully',[]);
         } catch (\Exception $ex) {
             return parent::error($ex->getMessage());
