@@ -246,20 +246,21 @@ class ApiController extends \App\Http\Controllers\Controller {
 
     public static function pushNotofication($data = [], $deviceToken) {
      
-    //  dd($data);
-       // $DeviceType = UserDevice::where('user_id', $data['to'])->first();
      
-        // if($DeviceType['type'] == 'android'):
-        //     unset($data['payload']['notification']);
-        // elseif($DeviceType['type'] == 'ios'):
-        //         unset($data['payload']['data']);
-        // endif;
+        $DeviceType = UserDevice::where('user_id', $data['to'])->first();
+       // dd($DeviceType);
+     
+        if(strtolower($DeviceType['type']) == 'android'):
+            unset($data['payload']['notification']);
+        elseif(strtolower($DeviceType['type']) == 'ios'):
+                unset($data['payload']['data']);
+        endif;
               
         $optionBuilder = new OptionsBuilder();
         // $optionBuilder->setTimeToLive(60 * 20);
        
-        $notificationBuilder = new PayloadNotificationBuilder($data['notification']['title']);
-        $notificationBuilder->setBody($data['notification']['body'])->setSound('default');
+        $notificationBuilder = new PayloadNotificationBuilder($data['title']);
+        $notificationBuilder->setBody($data['body'])->setSound('default');
       
         $dataBuilder = new PayloadDataBuilder();
         
@@ -267,16 +268,16 @@ class ApiController extends \App\Http\Controllers\Controller {
             $data['priority'] = 'high';
             $data['content_available'] = true;
             
-        // if( $DeviceType->type== 'android'): //
-        //         $dataBuilder->addData($data);
-        //         $dataBuilder->addData($data['payload']['data']); 
+        if( strtolower($DeviceType->type) == 'android'): //
+                $dataBuilder->addData($data);
+                $dataBuilder->addData($data['payload']['data']); 
               
                 // $dataBuilder->addData($data['payload']);
-        // elseif($DeviceType->type == 'ios'):
-        //     $dataBuilder->addData($data);
-        //         // $dataBuilder->addData(['notification' => $data['payload']['notification']]);
+        elseif(strtolower($DeviceType->type) == 'ios'):
+            $dataBuilder->addData($data);
+                // $dataBuilder->addData(['notification' => $data['payload']['notification']]);
                 
-        // endif;
+        endif;
         
         $option = $optionBuilder->build();
       
@@ -284,7 +285,7 @@ class ApiController extends \App\Http\Controllers\Controller {
       
         $data = $dataBuilder->build();
         
-        $deviceToken="doRF6VhJTr-2NFzxlfI39T:APA91bG_9rxoV8Yf7nUN7NBVG1QuPN-y6pJU57houmef1Jkx5RNrST_c6xjMwBnoCElgD7UrYbB4HWLvDr0vD3jmjmXexvpdr7QpRXt6e0vyqfTfSvGoMnnMlK0tqKmh2FstyofV0dX9";
+        $deviceToken = "doRF6VhJTr-2NFzxlfI39T:APA91bG_9rxoV8Yf7nUN7NBVG1QuPN-y6pJU57houmef1Jkx5RNrST_c6xjMwBnoCElgD7UrYbB4HWLvDr0vD3jmjmXexvpdr7QpRXt6e0vyqfTfSvGoMnnMlK0tqKmh2FstyofV0dX9";
 
         $downstreamResponse = FCM::sendTo($deviceToken, $option, $notification, $data);
 //        $downstreamResponse->numberFailure();
@@ -313,28 +314,29 @@ class ApiController extends \App\Http\Controllers\Controller {
     }
 
 
-    public static function pushNotifications($data = [], $userId, $receiver_id ,$saveNotification = true) {
- 
-        if ($saveNotification) {
-          
-            self::savePushNotification($data, $userId, $receiver_id);
-        }
-
-//        echo $userId;
-//        dd(User::whereId($userId)->where('is_notify', '1')->get()->isEmpty());
-//        
-        //  if (User::whereId($userId)->where('is_login', '1')->get()->isEmpty() === true)
-        //   return true;
-        // if (User::whereId($userId)->where('is_notify', '1')->get()->isEmpty() === true)
-        //   return true;
-     
-        foreach (\App\Models\UserDevice::whereUserId($receiver_id)->get() as $userDevice):
-              
-            self::pushNotofication($data, $userDevice->token);
+    public static function pushNotifications($data = [], $userId, $receiver_id ,$saveNotification = true) 
+    {
       
-        endforeach;
-        return true;
-    }
+             if ($saveNotification) {
+               
+                 self::savePushNotification($data, $userId, $receiver_id);
+             }
+     
+     //        echo $userId;
+     //        dd(User::whereId($userId)->where('is_notify', '1')->get()->isEmpty());
+     //        
+             //  if (User::whereId($userId)->where('is_login', '1')->get()->isEmpty() === true)
+             //   return true;
+             // if (User::whereId($userId)->where('is_notify', '1')->get()->isEmpty() === true)
+             //   return true;
+            
+             foreach (UserDevice::whereUserId($receiver_id)->get() as $userDevice):
+                   if(!empty($userDevice)):
+                         self::pushNotofication($data, $userDevice->token);      
+                       endif;
+             endforeach;
+             return true;
+         }
 
     private static function savePushNotification($data, $userId, $receiver_id) {
       
@@ -344,19 +346,19 @@ class ApiController extends \App\Http\Controllers\Controller {
             
                 $DeviceType = UserDevice::where('user_id', $data['to'])->first();
                 
-                if($DeviceType['type'] == 'android'):
+                if(strtolower($DeviceType['type']) == 'android'):
                         unset($data['payload']['notification']);
-                elseif($DeviceType['type'] == 'ios'):
+                elseif(strtolower($DeviceType['type']) == 'ios'):
                         unset($data['payload']['data']);
-                endif;
+                endif;  
             
-            
-            
+              
+                $data['body'] = $data['body'];
                 $data['data'] = json_encode($data['payload']);
                 $data['created_by']  = $userId;
                 $data['receiver_id']  = $receiver_id;
             // $data += ['action_id' => $receiver_id];
-       
+          
             \App\Models\Notification::create($data);
             return true;
         } catch (\Exception $ex) {
