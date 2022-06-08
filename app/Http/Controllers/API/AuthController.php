@@ -804,18 +804,5 @@ class AuthController extends ApiController {
   
     
    
-    
-    
-    
-    
-    
-    
-   
-    
-    
-   
-
-   
-
 
 }
