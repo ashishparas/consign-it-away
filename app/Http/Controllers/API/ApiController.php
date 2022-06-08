@@ -362,7 +362,7 @@ class ApiController extends \App\Http\Controllers\Controller {
             \App\Models\Notification::create($data);
             return true;
         } catch (\Exception $ex) {
-            dd($ex->getMessage());
+           // dd($ex->getMessage());
         }
     }
 

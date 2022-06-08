@@ -692,6 +692,8 @@ class ClientController extends ApiController
                    $arrayToSend = array('to'=>$item->vendor_id,'title' =>'product Order','body' => $body,'payload' => array('notification'=>$notification,'data'=>$notification),'priority'=>'high');
                   
                    parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
+                //    below client notification
+                   parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
                 }
         
 
