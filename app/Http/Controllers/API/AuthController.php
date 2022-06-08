@@ -742,7 +742,9 @@ class AuthController extends ApiController {
       endif;
       try{
           $input = $request->all();
-          $notification = Notification::where('receiver_id', Auth::id())->get();
+          //DB::enableQueryLog();
+          $notification = Notification::where('receiver_id', Auth::id())->orderBy('id', 'DESC')->get();
+         // dd(DB::getQueryLog($notification));
         return parent::success("View Notification successfully!", $notification);
       }catch(\Exception $ex){
           return parent::error($ex->getMessage());
