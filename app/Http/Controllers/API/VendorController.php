@@ -564,13 +564,21 @@ class VendorController extends ApiController
    }
 
    public function ViewStore(Request $request){
-    $rules = [];
+    $rules = ['search' =>''];
     $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
-        $store = Store::where('user_id',Auth::id())->get();
+         $input = $request->all();
+
+
+        $store = new Store();
+        if($request->search){
+            $store = $store->where('name','LIKE', $request->search);
+        }
+        
+        $store = $store->where('user_id',Auth::id())->get();
         return parent::success("View all stores successfully", ['stores' => $store ]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
