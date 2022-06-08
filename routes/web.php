@@ -46,6 +46,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('vendor-products',[VendorController::class, "VendorProducts"]);
             Route::get('product/detail/vendor/{id}',[VendorController::class,"ViewProductDetailsById"]);
             Route::get('report-management',[VendorController::class, "ViewReports"]);
+            Route::get('running-orders',[VendorController::class, "RunningOrders"]);
+            Route::get('vendor-edit-profile/{id}',[VendorController::class, "VendorEditProfile"]);
  });
  
  

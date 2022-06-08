@@ -136,7 +136,7 @@
         <div class="ms-panel">
           <div class="ms-panel-header d-flex justify-content-between">
               <h4 class="mb-0">Running Orders</h4>
-              <a class="btn green_btn" href="running-orders.html">View All</a>
+              <a class="btn green_btn" href="{{url('/admin/running-orders')}}">View All</a>
           </div>
           <div class="ms-panel-body">
             <div class="running_orders_summary table-responsive">

@@ -143,7 +143,7 @@
                                     <td>{{($product->user==null)?'Mobile no not given':$product->user->phonecode.''.$product->user->mobile_no}}</td>
                                     <td>{{($product->user ==null)?'No Email':$product->user->email}}</td>
                                     <td><span class="green_cl">Active</span></td>
-                                    <td><a href="vendor-profile-edit.html" class="btn orange_btn">View</a></td>
+                                    <td><a href="{{url('admin/vendor-edit-profile/'.$product->user->id)}}" class="btn orange_btn">View</a></td>
                                 </tr>
                                 @endforeach
 

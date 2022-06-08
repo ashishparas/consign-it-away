@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
+use App\Models\Item;
 use App\Models\Product;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
@@ -48,5 +49,47 @@ class VendorController extends Controller
         // dd($contacts->toArray());
         return view('admin.report.report-management',compact('contacts'));
     }
+
+    public function RunningOrders()
+    {
+        $items = Item::with('Product')
+        ->whereIn('status',['1','2','3'])
+                        ->take(10)
+                        ->orderBy('created_at','DESC')
+                        ->get();
+                        // dd($items->toArray());
+        return view('admin.order.running-orders',compact('items'));
+    }
+
+    public function VendorEditProfile($id){
+        // dd($id);
+        return view('admin/vendor-management.vendor-profile-edit');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
