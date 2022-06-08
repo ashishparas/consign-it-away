@@ -17,7 +17,15 @@ class Store extends Model
 
     protected $fillable = ['banner','user_id','store_image','name','location','description','photos'];
 
-    protected $appends = ['base_url'];
+    protected $appends = ['base_url','Photos'];
+
+
+
+    public function getPhotosAttribute($value){
+        return explode(",", $value);
+    }
+
+
 
     public function getBaseUrlAttribute(){
         return asset('vendor');
