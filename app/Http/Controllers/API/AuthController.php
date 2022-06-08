@@ -778,7 +778,7 @@ class AuthController extends ApiController {
       try{
           $input = $request->all();
           $model = new User();
-          $model = $model->FindOrfail(Auth::id())->select($this->LoginAttributes);
+          $model = $model->FindOrfail(Auth::id());
           $model->fill($input);
           $model->save();
           return parent::success("you have switch user successfully!",$model);
