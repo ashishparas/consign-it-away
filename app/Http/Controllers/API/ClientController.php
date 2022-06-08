@@ -693,7 +693,7 @@ class ClientController extends ApiController
                   
                    parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
                 //    below client notification
-                   parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
+                   parent::pushNotifications($arrayToSend, $item->vendor_id ,Auth::id());
                 }
         
 
