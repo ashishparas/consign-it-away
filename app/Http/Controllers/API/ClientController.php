@@ -700,7 +700,7 @@ class ClientController extends ApiController
        
             endforeach;
 
-           // Cart::where('user_id', Auth::id())->delete();
+           Cart::where('user_id', Auth::id())->delete();
 
            
         endif;
