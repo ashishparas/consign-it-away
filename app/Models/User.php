@@ -34,6 +34,8 @@ class User extends Authenticatable
         'mobile_otp',
         'profile_picture',
         'status',
+        'is_switch',
+        'switch_status',
         'fax',
         'paypal_id',
         'paypal_id_status',
