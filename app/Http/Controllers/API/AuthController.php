@@ -234,6 +234,7 @@ class AuthController extends ApiController {
         // dd(isEmpty($check_user));   
         if($check_user):
             $token = $check_user->createToken('Consign-it-away')->plainTextToken;
+            parent::addUserDeviceData($check_user, $request);
             return parent::success("User already exists.",['token' =>  $token,'user'=> $check_user],200);
         else:
             return parent::success('This user not exists.',['status' =>'not_exist'],201);
@@ -766,6 +767,28 @@ class AuthController extends ApiController {
         return parent::error($ex->getMessage());
       }
   }
+
+  public function SwitchUser(rEQUEST $request)
+  {
+      $rules = ['type'=> 'required|in:1,2'];
+      $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+      if($validateAttributes):
+        return $validateAttributes;
+      endif;
+      try{
+          $input = $request->all();
+          $model = new User();
+          $model = $model->FindOrfail(Auth::id())->select($this->LoginAttributes);
+          $model->fill($input);
+          $model->save();
+          return parent::success("you have switch user successfully!",$model);
+
+      }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+      }
+  }
+
+
 
 
 
