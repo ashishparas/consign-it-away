@@ -250,6 +250,7 @@ class ClientController extends ApiController
             ->get();
 
             $variants = Variant:: where('product_id', $input['product_id'])->take(1)->orderBy('created_at','DESC')->get();
+             dd($Attrvariants->toArray());     
             // dd($variants->toArray());   
                         foreach($variants as $key => $variant){
                             $option_id = explode(",",$variant['option_id']);
@@ -266,7 +267,7 @@ class ClientController extends ApiController
                                             ->where('product_id', $input['product_id'])
                                             ->with(['Option'])
                                             ->get();
-                                           
+                                     
             // end code
             $product['SelectedVariant'] = $variants;
             $product['product_variants'] = $Attrvariants;
