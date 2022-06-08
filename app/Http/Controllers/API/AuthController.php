@@ -264,10 +264,10 @@ class AuthController extends ApiController {
           
             if ($device->isEmpty() === false)
                // \App\Models\UserDevice::destroy($device->first()->id);
-               $model = new UserDevice();
-               $model = $model->FindOrfail($device->first()->id)->update(['type' =>'','token'=>'']);
+             
+                UserDevice::FindOrfail($device->first()->id)->update(['token'=>'']);
               
-            return parent::success('Logout Successfully',[]);
+            return parent::success('Logout Successfully');
         } catch (\Exception $ex) {
             return parent::error($ex->getMessage());
         }
