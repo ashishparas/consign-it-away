@@ -422,7 +422,7 @@ class VendorController extends ApiController
         // if($variant):
 
             $varient_items = json_decode($input['varients'],true);
-        //    dd($varient_items);
+         //  dd($varient_items);
            $attr_id = [];
            $option_id = [];
            for($i=0; $i<count($varient_items); $i++){
@@ -443,6 +443,7 @@ class VendorController extends ApiController
             
         // endif;
             $variants = Variant:: where('product_id', $input['product_id'])->get();
+            
             foreach($variants as $key => $variant){
                 $option_id = explode(",",$variant['option_id']);
                 // dd($attr_id);
