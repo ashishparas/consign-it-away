@@ -1399,6 +1399,24 @@ public function CancelOrder(Request $request){
     }
 }
 
+public function DeleteAddress(Request $request)
+{
+    $rules = ['address_id' => 'required|exists:addresses,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+
+        $address = Address::FindOrfail($request->address_id);
+        $address->delete();
+        return parent::success("Address deleted successfully!");
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
 
 
 
