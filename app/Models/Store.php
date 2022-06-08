@@ -36,7 +36,7 @@ class Store extends Model
     }
 
     public function Manager(){
-        return $this->hasOne(Manager::class);
+        return $this->hasOne(Manager::class)->where('status','2');
     }
 
     public function Product(){
