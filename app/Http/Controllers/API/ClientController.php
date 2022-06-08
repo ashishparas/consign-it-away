@@ -669,7 +669,7 @@ class ClientController extends ApiController
         if(!empty($order)):
         
             $items = Cart::where('user_id', Auth::id())->get();
-            
+          
             foreach($items as $item):
                 $product = Product::where('id', $item->product_id)->first();
             

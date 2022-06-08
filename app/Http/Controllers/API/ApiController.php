@@ -248,48 +248,57 @@ class ApiController extends \App\Http\Controllers\Controller {
      
      
         $DeviceType = UserDevice::where('user_id', $data['to'])->first();
-       // dd($DeviceType);
-     
-        if(strtolower($DeviceType['type']) == 'android'):
-            unset($data['payload']['notification']);
-        elseif(strtolower($DeviceType['type']) == 'ios'):
-                unset($data['payload']['data']);
-        endif;
-              
-        $optionBuilder = new OptionsBuilder();
-        // $optionBuilder->setTimeToLive(60 * 20);
        
-        $notificationBuilder = new PayloadNotificationBuilder($data['title']);
-        $notificationBuilder->setBody($data['body'])->setSound('default');
-      
-        $dataBuilder = new PayloadDataBuilder();
-        
-        // $dataBuilder->addData(['to' => $data['to']]);
-            $data['priority'] = 'high';
-            $data['content_available'] = true;
+             if( $DeviceType){
+                
+                if(strtolower($DeviceType['type']) == 'android'):
+                    unset($data['payload']['notification']);
+                elseif(strtolower($DeviceType['type']) == 'ios'):
+                        unset($data['payload']['data']);
+                endif; 
+                
+                
+                  $optionBuilder = new OptionsBuilder();
+                // $optionBuilder->setTimeToLive(60 * 20);
+       
+                $notificationBuilder = new PayloadNotificationBuilder($data['title']);
+                $notificationBuilder->setBody($data['body'])->setSound('default');
+              
+                $dataBuilder = new PayloadDataBuilder();
+                
+                // $dataBuilder->addData(['to' => $data['to']]);
+                    $data['priority'] = 'high';
+                    $data['content_available'] = true;
             
         if( strtolower($DeviceType->type) == 'android'): //
                 $dataBuilder->addData($data);
                 $dataBuilder->addData($data['payload']['data']); 
               
                 // $dataBuilder->addData($data['payload']);
-        elseif(strtolower($DeviceType->type) == 'ios'):
-            $dataBuilder->addData($data);
-                // $dataBuilder->addData(['notification' => $data['payload']['notification']]);
+                elseif(strtolower($DeviceType->type) == 'ios'):
+                    $dataBuilder->addData($data);
+                        // $dataBuilder->addData(['notification' => $data['payload']['notification']]);
+                        
+                endif;
+        
+                $option = $optionBuilder->build();
+              
+                $notification = $notificationBuilder->build();
+              
+                $data = $dataBuilder->build();
                 
-        endif;
+                // $deviceToken = "doRF6VhJTr-2NFzxlfI39T:APA91bG_9rxoV8Yf7nUN7NBVG1QuPN-y6pJU57houmef1Jkx5RNrST_c6xjMwBnoCElgD7UrYbB4HWLvDr0vD3jmjmXexvpdr7QpRXt6e0vyqfTfSvGoMnnMlK0tqKmh2FstyofV0dX9";
         
-        $option = $optionBuilder->build();
-      
-        $notification = $notificationBuilder->build();
-      
-        $data = $dataBuilder->build();
+                $downstreamResponse = FCM::sendTo($deviceToken, $option, $notification, $data);
+        //        $downstreamResponse->numberFailure();
+                
+                 return $downstreamResponse->numberSuccess() == '1' ? true : false;
+                
+             }
         
-        // $deviceToken = "doRF6VhJTr-2NFzxlfI39T:APA91bG_9rxoV8Yf7nUN7NBVG1QuPN-y6pJU57houmef1Jkx5RNrST_c6xjMwBnoCElgD7UrYbB4HWLvDr0vD3jmjmXexvpdr7QpRXt6e0vyqfTfSvGoMnnMlK0tqKmh2FstyofV0dX9";
-
-        $downstreamResponse = FCM::sendTo($deviceToken, $option, $notification, $data);
-//        $downstreamResponse->numberFailure();
-        return $downstreamResponse->numberSuccess() == '1' ? true : false;
+              
+      
+       
     }
 
 //    public function pushNotificationiOS($data, $devicetokens, $customData = null) {
@@ -345,12 +354,16 @@ class ApiController extends \App\Http\Controllers\Controller {
             if (isset($data['payload']))
             
                 $DeviceType = UserDevice::where('user_id', $data['to'])->first();
-              
+             if($DeviceType){
+                
                 if(strtolower($DeviceType['type']) == 'android'):
                         unset($data['payload']['notification']);
                 elseif(strtolower($DeviceType['type']) == 'ios'):
                         unset($data['payload']['data']);
                 endif;  
+                 
+             }
+                
             
               
                 $data['body'] = $data['body'];
