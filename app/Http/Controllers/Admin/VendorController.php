@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminStaff;
 use App\Models\Contact;
 use App\Models\Item;
 use App\Models\Product;
@@ -64,6 +65,16 @@ class VendorController extends Controller
     public function VendorEditProfile($id){
         // dd($id);
         return view('admin/vendor-management.vendor-profile-edit');
+    }
+
+
+    public function StaffManagement(){
+        $AdminStaffs = AdminStaff::orderBy('created_at','DESC')->get();
+        return view('admin.staff.staff_mgt', compact('AdminStaffs'));
+    }
+
+    public function AddStaff(){
+        return view('admin.staff.add_staff_mgt');
     }
 
 

@@ -38,7 +38,7 @@
         </a>
       </li>
       <li class="menu-item">
-        <a href="javascript:void(0)"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/staff-users.svg')}}" alt="img">Staff Management</span>
+        <a href="{{url('/admin/staff-management')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/staff-users.svg')}}" alt="img">Staff Management</span>
         </a>
       </li>
       <li class="menu-item">
