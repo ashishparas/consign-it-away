@@ -26,7 +26,7 @@ class Attribute extends Model
 
    
 
-    public function AttrOption(){
+    public function Attributes(){
         return $this->hasOne(\App\Models\AttributeOption::class,'attr_id');
     }
 
