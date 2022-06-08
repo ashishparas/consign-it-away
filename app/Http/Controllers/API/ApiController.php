@@ -363,9 +363,7 @@ class ApiController extends \App\Http\Controllers\Controller {
                 endif;  
                  
              }
-                
-            
-              
+
                 $data['body'] = $data['body'];
                 $data['data'] = json_encode($data['payload']);
                 $data['created_by']  = $userId;
