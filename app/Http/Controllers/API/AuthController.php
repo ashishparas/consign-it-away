@@ -770,7 +770,7 @@ class AuthController extends ApiController {
       }
   }
 
-  public function SwitchUser(rEQUEST $request)
+  public function SwitchUser(Request $request)
   {
       $rules = ['type'=> 'required|in:1,2'];
       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
@@ -778,12 +778,16 @@ class AuthController extends ApiController {
         return $validateAttributes;
       endif;
       try{
-          $input = $request->all();
-          $model = new User();
-          $model = $model->FindOrfail(Auth::id());
-          $model->fill($input);
-          $model->save();
-          return parent::success("you have switch user successfully!",$model);
+            $input = $request->all();
+            $model = new User();
+            $model = $model->FindOrfail(Auth::id());
+                     $model->fill($input);
+                     $model->save();
+                   
+          $user = $model->FindOrfail($model->id);
+                    $user->fill(['is_switch' =>'1','switch_status' => $model->status]);
+                    $user->save();
+          return parent::success("you have switch user successfully!",$user);
 
       }catch(\Exception $ex){
         return parent::error($ex->getMessage());
