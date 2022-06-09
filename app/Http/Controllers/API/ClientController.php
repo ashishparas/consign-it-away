@@ -28,6 +28,7 @@ use App\Models\Card;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Contact;
+use App\Models\Discount;
 use App\Models\Favourite;
 use App\Models\Item;
 use App\Models\Offer;
@@ -218,11 +219,16 @@ class ClientController extends ApiController
             ->where('recent_products.user_id', Auth::id())
             // ->take(5)
             ->get();
+            $discount = Discount::orderBy('id','DESC')->take(5)->get();
+
+
+
             $arr = array(
             array('name' => 'Category','type'=> 1,'items'=> $category),
             array('name' =>'Most Popular','type'=> 2,'items' =>$products),
             array('name' => 'Brands','type' => 3,'items' => $brands),
-            array('name' => 'Recent Viewed','type' => 4, 'items' => $recentView)
+            array('name' => 'Recent Viewed','type' => 4, 'items' => $recentView),
+            array('name' => 'discount','type' => 5, 'items' => $discount)
         );
         $cart = Cart::where('user_id', Auth::id())->count();
             return parent::success("Product view successfully",['home' => $arr,'cart_count' => $cart]);
