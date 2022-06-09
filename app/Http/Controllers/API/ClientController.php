@@ -369,15 +369,19 @@ class ClientController extends ApiController
         try{
            $input = $request->all();
           $limit =  (isset($input['limit']))? (int)$input['limit']:15; 
-       
+          
             $favourites = Favourite::where('by', Auth::id())->where('status','1')->with('Product')
             ->simplePaginate($limit);   
             // ->get();
+            // dd($favourites->toArray());
             foreach($favourites as $key => $favourite):
-                $rating = Rating::where('product_id', $favourite->product->id)->avg('rating');
-                $comment = Rating::where('product_id', $favourite->product->id)->count('comment');
-                $favourites[$key]['product']['rating'] = number_format($rating,1);
-                $favourites[$key]['product']['comment'] = $comment;
+                if($favourite->product){
+                    $rating = Rating::where('product_id', $favourite->product->id)->avg('rating');
+                    $comment = Rating::where('product_id', $favourite->product->id)->count('comment');
+                    $favourites[$key]['product']['rating'] = number_format($rating,1);
+                    $favourites[$key]['product']['comment'] = $comment;
+                }
+                
             endforeach;
             return parent::success("View favourite list successfully",['favourite' => $favourites]);
         }catch(\Exception $ex){
