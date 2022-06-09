@@ -933,8 +933,10 @@ class ClientController extends ApiController
                 ->whereIn('attribute_options.id', $option_id)
                 ->get();
                 $message = "view variant successfully!";
-            endif;
+            else:
                 $message="Variant not found!";
+            endif;
+                
             
 
             return parent::success($message,['variants' =>  $variants]);

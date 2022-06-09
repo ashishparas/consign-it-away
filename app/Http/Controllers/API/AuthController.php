@@ -779,7 +779,9 @@ class AuthController extends ApiController {
       endif;
       try{
             $input = $request->all();
-            $model = new User();
+            $user = [];
+            if(Auth::user()->type !== $request->type):
+                $model = new User();
             $model = $model->FindOrfail(Auth::id());
                      $model->fill($input);
                      $model->save();
@@ -787,6 +789,9 @@ class AuthController extends ApiController {
           $user = $model->FindOrfail($model->id);
                     $user->fill(['is_switch' =>'1','switch_status' => $model->status]);
                     $user->save();
+            endif;
+
+            
           return parent::success("you have switch user successfully!",$user);
 
       }catch(\Exception $ex){
