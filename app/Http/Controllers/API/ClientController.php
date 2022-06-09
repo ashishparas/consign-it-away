@@ -229,10 +229,10 @@ class ClientController extends ApiController
             array('name' =>'Most Popular','type'=> 2,'items' =>$products),
             array('name' => 'Brands','type' => 3,'items' => $brands),
             array('name' => 'Recent Viewed','type' => 4, 'items' => $recentView),
-            array('name' => 'discount','type' => 5, 'items' => $discount)
+           
         );
         $cart = Cart::where('user_id', Auth::id())->count(); 
-            return parent::success("Product view successfully",['home' => $arr,'cart_count' => $cart]);
+            return parent::success("Product view successfully",['home' => $arr,'cart_count' => $cart,'discount' => $discount]);
         }catch(\exception $ex){
             return parent::error($ex->getMessage());
         }
@@ -371,8 +371,8 @@ class ClientController extends ApiController
           $limit =  (isset($input['limit']))? (int)$input['limit']:15; 
        
             $favourites = Favourite::where('by', Auth::id())->where('status','1')->with('Product')
-            // ->simplePaginate($limit);   
-            ->get();
+            ->simplePaginate($limit);   
+            // ->get();
             foreach($favourites as $key => $favourite):
                 $rating = Rating::where('product_id', $favourite->product->id)->avg('rating');
                 $comment = Rating::where('product_id', $favourite->product->id)->count('comment');
