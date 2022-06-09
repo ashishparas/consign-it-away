@@ -31,6 +31,14 @@ Route::get('terms_and_conditions', function(){
     return view('terms_and_conditions');
 });
 
+Route::get('return_and_refund', function(){
+    return view('return_and_refund');
+});
+Route::get('license', function(){
+    return view('license');
+});
+
+
 Auth::routes();
 
 
