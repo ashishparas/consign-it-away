@@ -21,6 +21,7 @@ use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
 use PhpParser\Node\Stmt\Return_;
 use App\Mail\EmailVerificationMail;
+use App\Models\Category;
 use App\Models\ChatImage;
 use App\Models\Notification;
 use App\Models\Store;
@@ -799,6 +800,20 @@ class AuthController extends ApiController {
       }
   }
 
+  public function ViewSubCategories(Request $request){
+      $rules = ['category_id' => 'required|exists:categories,id'];
+      $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+      if($validateAttributes):
+        return $validateAttributes;
+      endif;
+      try{
+          $input = $request->all();
+          $category = Category::with('Subcategories')->get();
+        return parent::success("View sub-categories successfully!",  $category);
+      }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+      }
+  }
 
 
 
