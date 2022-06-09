@@ -102,7 +102,7 @@ class Product extends Model
 
   
   public function Offer(){
-      return $this->hasOne(Offer::class);
+      return $this->hasOne(Offer::class)->where('user_id', Auth::id());
   }
    
   public function PorductRating(){

@@ -31,6 +31,7 @@ use App\Models\Contact;
 use App\Models\Discount;
 use App\Models\Favourite;
 use App\Models\Item;
+use App\Models\Notification;
 use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Product;
@@ -304,6 +305,8 @@ class ClientController extends ApiController
                 'product' => $request->product_id,
                 'updated_at' => Carbon::now()
             ]);
+
+            
 
             return parent::success("Product view successfully!",['product' => $product->jsonserialize()]);
         }catch(\Exception $ex){
@@ -769,8 +772,8 @@ class ClientController extends ApiController
 
    public function ViewOrderById(Request $request)
    {
-       $rules = ['order_id' => 'required|exists:items,id'];
-       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+       $rules = ['order_id' => 'required|exists:items,id','type'=>'','notification_id'=>''];
+       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
        if($validateAttributes):
         return $validateAttributes;
        endif;
@@ -787,6 +790,13 @@ class ClientController extends ApiController
         $store = Store::select('id','store_image','name','description')
         ->where('id', $item->product->store_id)
         ->first();
+
+        if(isset($request->type) && isset($request->notification_id)){
+            if($request->type === '1'):
+                Notification::where('id', $request->notification_id)->update(['is_read' => '1']);
+            endif;
+        }
+
         return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -1405,8 +1415,18 @@ public function CancelOrder(Request $request){
 
         endif;
         $input['user_id'] = Auth::id();
-        cancellation::create($input); 
-        return parent::success("Your cancellation process being initiated");
+        $cancel = cancellation::create($input); 
+     
+        if($cancel){
+            $item = new Item();
+            $item = $item->FindOrfail($cancel->item_id);
+                    $item->fill(['status'=> '4']);
+                    $item->save();
+            
+            //$item = Item::where('id', (int)$cancel->item_id)->update(['status' => '4']);
+         
+        }
+        return parent::success("Your cancellation process being initiated",$item);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
