@@ -1151,7 +1151,7 @@ class ClientController extends ApiController
    public function ProductFilter(Request $request)
    {
    
-     $rules = ['limit' =>'','page'=>'','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>'','search'=>'','type'=>'required|in:1,2,3,4'];
+     $rules = ['limit' =>'','page'=>'','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>'','search'=>'','type'=>'required|in:1,2,3,4,5','subcategory_id'=>''];
      $validateAttributes = parent::validateAttributes($request,'GET',$rules, array_keys($rules),false);
      if($validateAttributes):
         return $validateAttributes;
@@ -1283,6 +1283,36 @@ class ClientController extends ApiController
                                             ->paginate($limit);
                                             // dd(DB::getQueryLog($brand));
                     $products = $brand;
+
+        }else if($request->type === '5'){
+         
+            $sub_category = new Product();
+             
+                $sub_category = $sub_category->select('products.id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                    ->leftJoin('ratings', 'ratings.product_id', 'products.id')
+                    ->leftJoin('favourites', 'favourites.product_id', 'products.id');
+
+                    if(isset($request->subcategory_id)){
+                        $sub_category = $sub_category->where('products.subcategory_id',$request->subcategory_id);
+                    }
+                    if(isset($request->price)){
+                        $price = array_map('intval', explode(",", $input['price']));
+                        $sub_category = $sub_category->whereBetween('price', $price);
+                    }
+                    if(isset($request->color)){
+                        $sub_category = $sub_category->where('color', $request->color);
+                    }
+
+                    if(isset($request->brand)){
+                        $sub_category = $sub_category->where('brand', $request->brand);
+                    }
+                    
+                    // ->where('favourites.by', Auth::id())
+                    $sub_category= $sub_category->groupBy('products.id')
+                                            ->orderBy('AverageRating', 'desc')
+                                            ->paginate($limit);
+                                            // dd(DB::getQueryLog($brand));
+                    $products = $sub_category;
 
         }
      
