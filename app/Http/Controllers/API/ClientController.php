@@ -889,6 +889,7 @@ class ClientController extends ApiController
     endif;
     try{
         $input = $request->all();
+        $message = '';
         $combinations = json_decode($request->variant, true);
     //   dd($combinations['attr_id']);
         $arr = [];
@@ -921,11 +922,12 @@ class ClientController extends ApiController
                 ->whereIn('attribute_options.attr_id', $attr_id)
                 ->whereIn('attribute_options.id', $option_id)
                 ->get();
+                $message = "view variant successfully!";
             endif;
-      
+                $message="Variant not found!";
             
 
-            return parent::success("view variant successfully!",['variants' =>  $variants]);
+            return parent::success($message,['variants' =>  $variants]);
         
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
