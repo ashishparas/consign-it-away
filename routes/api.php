@@ -139,6 +139,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('read/notification',[AuthController::class, "ReadNotification"]);
     Route::post('switch/user',[AuthController::class, "SwitchUser"]);
     Route::post('delete/address',[ClientController::class, "DeleteAddress"]);
+    Route::post('view/subcategories',[AuthController::class, "ViewSubCategories"]);
 
 });
 

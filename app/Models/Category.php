@@ -21,4 +21,9 @@ class Category extends Model
     public function getCategoryBaseUrlAttribute(){
         return url('category');
     }
+
+
+    public function Subcategories(){
+        return $this->hasMany(Subcategory::class);
+    }
 }
