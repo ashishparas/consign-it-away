@@ -198,7 +198,7 @@ class ClientController extends ApiController
         try{
         //   DB::enableQueryLog();
             $products = Product::
-                    select('products.id','products.name','products.image as images','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                    select('products.id','products.name','products.image as images', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id, products.price as amount'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id')
                     ->where('products.status', '1')
@@ -213,13 +213,18 @@ class ClientController extends ApiController
             $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,162])->get();
          
             
-            $recentView = RecentProducts::select('products.id','products.name','products.image','products.amount','recent_products.id','recent_products.user_id','recent_products.product_id',DB::raw("CONVERT(favourites.id, CHAR) as FavouriteId"),DB::raw('(favourites.status) as favourite'))
+            $recentView = RecentProducts::select('products.id','products.name','products.image','recent_products.id','recent_products.user_id','recent_products.product_id',DB::raw("CONVERT(favourites.id, CHAR) as FavouriteId, products.price as amount"),DB::raw('(favourites.status) as favourite'))
             ->where('recent_products.user_id', Auth::id())
             ->leftJoin('favourites', 'favourites.product_id', 'recent_products.product_id')
             ->join('products', 'products.id', '=', 'recent_products.product_id')
             ->where('recent_products.user_id', Auth::id())
             // ->take(5)
             ->get();
+            foreach($recentView as $key => $value):
+                $images = explode(",", $value->image);
+                $recentView[$key]['images'] = $images;
+            endforeach;
+
             $discount = Discount::orderBy('id','DESC')->take(5)->get();
 
 
