@@ -106,4 +106,40 @@
 
 
 
+<div class="modal fade" id="view_detail" tabindex="-1" role="dialog" aria-labelledby="view_detail">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title has-icon ms-icon-round">Staff Details </h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+       <div class="d-flex align-items-center justify-content-between">
+         <div class="vector_img">
+          <img src="{{asset('public/assets/img/photo_vector_88x88.png')}}" alt="img">
+         </div>
+         <div class="fs-15 black_cl">#001</div>
+       </div>
+       <h3 class="pt-2 pb-0 mb-0">Jack Aranda</h3>
+       <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2">
+          Email:
+          <span class="fs-16">jackaranda@gmail.com</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2">
+          Contact:
+          <span class="fs-16">+91-9878767656</span>
+        </li>
+      </ul>
+      <span class="badge green_badge p-2 round mt-2">Transactions Management</span>
+        <p class="text-center"><a class="btn btn-primary px-5" role="submit" href="edit_staff_mgt.html">Edit</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+
 @endsection
