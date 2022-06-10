@@ -1376,7 +1376,20 @@ public function FilterProductByStore(request $request)
     }
 }
 
-
+public function ViewStaffDetailsById(Request $request){
+    $rules = ['staff_id'=> 'required|exists:managers,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $staff = Manager::FindOrfail($request->staff_id)->first();  
+        return parent::success("View staff detsils successfully!", $staff);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 
