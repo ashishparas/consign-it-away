@@ -1345,6 +1345,45 @@ public function ChangeProfilePicture(Request $request){
 }
 
 
+public function FilterProductByStore(request $request)
+{
+    $rules = ['category_id' =>'required|exists:categories,id','store_id'=>'required|exists:stores,id','stock'=>''];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input =$request->all();
+
+        $products = Product::select('products.id','products.user_id','products.image','products.name','products.price','products.quantity','stocks.stock')
+            ->leftJoin('stocks','products.id','stocks.product_id')
+            ->where('products.user_id', Auth::id())
+            ->where('products.store_id',$request->store_id)
+            ->where('products.category_id', $request->category_id);
+            if(isset($request->stock)){
+                $products= $products->where('stocks.stock','LIKE','%'.$request->stock.'%');
+            }
+         
+            $products = $products->get();
+
+            foreach($products as $key => $product):
+            $products[$key]['rating'] = number_format($product->Rating()->avg('rating'),1);
+            $products[$key]['RatingCount'] = $product->Rating()->count('product_id');
+            endforeach;
+        return parent::success('View product successfully!',$products);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
+
+
+
+
+
+
+
 
 
 
