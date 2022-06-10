@@ -80,15 +80,15 @@
                         <label for="validationCustom02">Role</label>
                         <div class="input-group mb-2">
                                 <select class="@error('role') is-invalid @enderror  form-control" name="role">
-                                    <option value="0">Select Role </option>
-                                    <option value="1">Select Role 1</option>
-                                    <option value="2">Select Role 2</option>
-                                    <option value="3">Select Role 3</option>
-                                    <option value="4">Select Role 4</option>
-                                    <option value="5">Select Role 5</option>
-                                    <option value="6">Select Role 6</option>
-                                    <option value="7">Select Role 7</option>
-                                    <option value="8">Select Role 8</option>
+                                    <option value="0">--select Role--</option>
+                                    <option value="1">Order Management</option>
+                                    <option value="2">Vendor Management</option>
+                                    <option value="3">Subscription Management</option>
+                                    <option value="4">Product Management</option>
+                                    <option value="5">Transaction Management</option>
+                                    <option value="6">Staff Management</option>
+                                    <option value="7">Return & Refund</option>
+                                    <option value="8">Report Management</option>
                                   </select>
                         </div>
                         @error('Role')
