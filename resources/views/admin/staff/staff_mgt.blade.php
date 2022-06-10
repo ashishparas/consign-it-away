@@ -132,7 +132,7 @@
         </li>
       </ul>
       <span class="badge green_badge p-2 round mt-2">Transactions Management</span>
-        <p class="text-center"><a class="btn btn-primary px-5" role="submit" href="edit_staff_mgt.html">Edit</a></p>
+        <p class="text-center"><a class="btn btn-primary px-5" role="submit" href="javascript:void(0)">Edit</a></p>
       </div>
     </div>
   </div>
