@@ -140,8 +140,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('switch/user',[AuthController::class, "SwitchUser"]);
     Route::post('delete/address',[ClientController::class, "DeleteAddress"]);
     Route::post('view/subcategories',[AuthController::class, "ViewSubCategories"]);
-
     Route::post('edit/store/manager/details', [VendorController::class,"EditStoreManagerDetails"]);
+    Route::post('filter/product/by/store',[VendorController::class, "FilterProductByStore"]);
+    Route::post('change/profile/picture',[VendorController::class, "ChangeProfilePicture"]);
 
 });
 

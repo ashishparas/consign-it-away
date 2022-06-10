@@ -1319,7 +1319,30 @@ public function EditStoreManagerDetails(Request $request){
     }
 }
 
+public function ChangeProfilePicture(Request $request){
+    $rules = ['profile_picture' => 'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+     try{
 
+        $input = $request->all();
+       
+    if (isset($request->profile_picture)):
+       $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('vendor'), false);
+   endif;
+ 
+        $model = new User();
+        $user = $model->FindOrfail(Auth::id());
+        $user->fill($input);
+        $user->save();
+        $user = $model->select($this->LoginAttributes)->where('id', Auth::id())->first();
+        return parent::success('Profile created successfully!',['user' =>  $user]);
+     }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+     }
+}
 
 
 
