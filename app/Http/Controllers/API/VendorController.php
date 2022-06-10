@@ -1264,7 +1264,7 @@ public function ChangeStaffStatus(Request $request){
 
 public function EditStoreManagerDetails(Request $request){
     $rules = ['store_id'=> 'required|exists:stores,id','banner'=>'','image' => '','name'=>'required','location'=>'required','description'=>'required','manager_id' =>'Required|exists:managers,id',
-'manager_name'=>'required','manager_email'=>'required','manager_mobile_no' =>'required','manager_status'=>'required|in:1,2'];
+'manager_name'=>'required','manager_email'=>'required','manager_mobile_no' =>'required','manager_status'=>'required|in:1,2','manager_image' =>''];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
     
     if($validateAttributes):
@@ -1301,17 +1301,28 @@ public function EditStoreManagerDetails(Request $request){
         $model = $model->fill($input);
         $store = $model->save();
        
+       
+
         $manager = new Manager();
         $manager = $manager->FindOrfail($request->manager_id);
+        
+            Manager::where('store_id', $request->store_id)->update(['status' =>'1']);
+
         $data = [
             'name' => $request->manager_name,
             'email' => $request->manager_email,
             'mobile_no' => $request->manager_mobile_no,
-            'status' => $request->manager_status
+            'status' => $request->manager_status,
+            
         ];
+
+        if (isset($request->manager_image)):
+            $data['image'] = parent::__uploadImage($request->file('manager_image'), public_path('vendor'), false);
+        endif;
+
         $manager->fill($data);
         $manager->save();
-        $mng = Manager::where('store_id',$input['store_id'])->where('status','2')->first();
+        $mng = Manager::where('id',$input['manager_id'])->where('status','2')->first();
         return parent::success("Store edited successfully!",['store' => $model,'manager'=> $mng]);
         // return parent::success('Store added successfully!',[]);
     }catch(\Exception $ex){
