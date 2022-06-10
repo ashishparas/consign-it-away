@@ -62,7 +62,7 @@
         <div class="col-xl-6 col-md-6">
             <div class="ms-panel">
                 <div class="ms-panel-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Vendor Account Request</h4>
+                    <h4 class="mb-0">Vendor Products Request</h4>
                     <span class="requests_counts">43</span>
                 </div>
                 <div class="ms-panel-body auto_scroll">
