@@ -223,6 +223,7 @@ class ClientController extends ApiController
             foreach($recentView as $key => $value):
                 $images = explode(",", $value->image);
                 $recentView[$key]['images'] = $images;
+                $recentView[$key]['base_url'] = asset('/products');
             endforeach;
 
             $discount = Discount::orderBy('id','DESC')->take(5)->get();
