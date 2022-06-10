@@ -141,6 +141,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('delete/address',[ClientController::class, "DeleteAddress"]);
     Route::post('view/subcategories',[AuthController::class, "ViewSubCategories"]);
 
+    Route::post('edit/store/manager/details', [VendorController::class,"EditStoreManagerDetails"]);
+
 });
 
 

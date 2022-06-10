@@ -9,6 +9,7 @@
 /public/category
 /public/chatImage
 /public/cancel
+/public/admin_staff
 /public/assets
 /storage/*.key
 /vendor

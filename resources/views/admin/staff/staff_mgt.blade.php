@@ -9,6 +9,9 @@
 
 <div class="ms-content-wrapper">
     <!--breadcrumbs-->
+    @if(!empty($message))
+    <div class="alert alert-success"> {{ $message }}</div>  
+  @endif
     <div class="row">
       <div class="col-md-12">
         <nav aria-label="breadcrumb">
@@ -26,7 +29,7 @@
                 <div class="ms-panel-header border-0 d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">Staff Management</h3>
                     <span>
-                        <a href="{{url('admin/add-staff')}}" class="btn green_btn">+ Add Product</a>
+                        <a href="{{url('admin/add-staff')}}" class="btn green_btn">+ Add Staff</a>
                     </span>
                 </div>
             </div>
@@ -50,22 +53,41 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($AdminStaffs as $item)
+                    @foreach ($AdminStaffs as $item)  
                     <tr>
-                        <td>#D8799</td>
+                        <td>#{{$item->id}}</td>
                         <td class="product_tuc">
                           <div class="d-block d-lg-flex align-items-center product-img">
-                            <img class="mr-3" src="assets/img/46-46.png" alt="image"/>
-                            <h6 class="mb-0">Men Blue Slim Fit Faded Opaque Faded</h6>
+                            <img class="mr-3" src="{{asset('public/admin_staff/'.$item->image)}}" alt="image"/>
+                            <h6 class="mb-0"></h6>
                           </div>
                         </td>
-                        <td>jackaranda@gmail.com</td>
-                         <td>+91-9878767656</td>
-                        <td>Transactions Mgt.</td>
+                        <td>{{$item->email}}</td>
+                         <td>{{$item->mobile_no}}</td>
+                        <td><?php
+                            if($item->role == '1'){
+                              echo 'Order-Management';
+                            }elseif($item->role == '2'){
+                              echo 'Vendor-management';
+                            }elseif($item->role == '3'){
+                              echo 'Subscription-management';
+                            }elseif($item->role == '4'){
+                              echo 'Product-Management';
+                            }elseif($item->role == '5'){
+                              echo 'Transaction-Management';
+                            }elseif($item->role == '6'){
+                              echo 'Staff-Management';
+                            }elseif($item->role == '7'){
+                                echo 'Return and Refund';
+                            }elseif($item->role == '8'){
+                              echo 'Report-Management';
+                            }
+                        ?></td>
                         <td>
                             <div class="d-flex align-items-center">
                             <a class="btn orange_btn mr-1" href="javascript:;" data-toggle="modal" data-target="#view_detail">View</a>
-                            <button class="btn delete_btn_red mt-0 px-2"><img src="assets/img/delete_white.svg" width="14px" height="14px" alt=""></button>
+                            <a href="{{url('/admin/delete/staff/'.$item->id)}}" class="btn delete_btn_red mt-0 px-2"><img src="{{asset('public/assets/img/delete_white.svg')}}" width="14px" height="14px" alt=""></a>
+                    
                         </div>
                         </td>
                     </tr>
