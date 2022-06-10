@@ -139,7 +139,7 @@
 </div>
 
 
-<script>
+
 
 
 @endsection
