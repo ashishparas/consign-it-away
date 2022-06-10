@@ -714,7 +714,7 @@ class ClientController extends ApiController
                        'title' =>'product Order',
                        'body' => $body,
                        'payload' => array('order_id'=>$item->id,'image'=>$product->image[0],'base_url'=> asset('/products'),'notification'=>$notification,'data'=>$notification),'priority'=>'high');
-                  dd($arrayToSend);
+                 
                    parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
                 //    below client notification
                    parent::pushNotifications($arrayToSend, $item->vendor_id ,Auth::id());
