@@ -34,6 +34,14 @@ class Product extends Model
 
     protected $appends = ['base_url','favourite','FavouriteId','CartStatus','soldBy'];
 
+    
+
+
+   
+
+
+
+   
 
 
     public function getCartStatusAttribute(){
