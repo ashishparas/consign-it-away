@@ -576,7 +576,7 @@ class VendorController extends ApiController
 
         $store = new Store();
         if($request->search){
-            $store = $store->where('name','LIKE', $request->search);
+            $store = $store->where('name','LIKE', '%'.$request->search.'%');
         }
         
         $store = $store->where('user_id',Auth::id())->get();
