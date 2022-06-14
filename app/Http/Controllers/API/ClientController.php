@@ -261,7 +261,7 @@ class ClientController extends ApiController
             $product['RatingCount'] = $product->Rating()->count('product_id');
             $product['comment'] = $product->Rating()->select('id','product_id','from','upload','rating','comment','created_at')
             ->get();
-            $product['product_specifications'] = Product::select('weight','brand','color','dimensions','description','condition')->where('id', $request->product_id)->first();
+            $product['product_specifications'] = Product::select('weight','brand','color','quantity')->where('id', $request->product_id)->first()->makeHidden(['soldBy','CartStatus','base_url','FavouriteId','favourite']);
 
             $variants = Variant:: where('product_id', $input['product_id'])->take(1)->orderBy('created_at','DESC')->get();
              
