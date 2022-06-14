@@ -359,7 +359,13 @@ class ClientController extends ApiController
             $input['by'] = Auth::id();
             $input['to'] = $input['product_id'];
             $favourite = Favourite::updateOrCreate(['by' => Auth::id(),'product_id'=> $input['product_id']],$input);
-            return parent::success("Product favourite successfully!",['favourite' => $favourite]);
+            $message = '';
+            if($request->status === '1'):
+                $message = 'Product favourite successfully!';
+                elseif($request->status === '2'):
+                    $message = 'Product Unfavourite successfully!';
+            endif;
+            return parent::success($message, ['favourite' => $favourite]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
@@ -676,14 +682,14 @@ class ClientController extends ApiController
 
             // Token is created using Stripe Checkout or Elements!
             // Get the payment token ID submitted by the form:
-        $token = $input['stripeToken'];
+        // $token = $input['stripeToken'];
         // $charge = \Stripe\Charge::create([
-        // 'amount' => $input['total_amount']*100,
+        // 'amount' => ($input['total_amount'] * 100),
         // 'currency' => 'usd',
         // 'description' => 'Charge customer to place order',
         // 'source' => $token,
         // ]);
-        $input['charge_id'] = md5(rand(11111,99999)); //$token['id'];
+        $input['charge_id'] = md5(rand(11111,99999)); //$charge['id'];
         $input['user_id'] = Auth::id();
         $order = Order::create($input);
      
