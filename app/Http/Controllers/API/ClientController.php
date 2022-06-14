@@ -682,7 +682,7 @@ class ClientController extends ApiController
 
             // Token is created using Stripe Checkout or Elements!
             // Get the payment token ID submitted by the form:
-        // $token = $input['stripeToken'];
+           $token = $input['stripeToken'];
         // $charge = \Stripe\Charge::create([
         // 'amount' => ($input['total_amount'] * 100),
         // 'currency' => 'usd',
@@ -746,13 +746,23 @@ class ClientController extends ApiController
 
    public function ViewOrder(Request $request)
    {
-       $rules = [];
-       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+       $rules = ['type' => 'required|in:1,2,3'];
+       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
        if($validateAttributes):
         return $validateAttributes;
        endif;
+
        try{
-           $items = Item::where('user_id',Auth::id())->with(['Product'])->get();
+            $input  = $request->all();
+            if($request->type === '1'){
+                $items = Item::where('user_id',Auth::id())->where('status','1')->with(['Product'])->get();
+            }else if($request->type === '2'){
+                $items = Item::where('user_id',Auth::id())->where('status','2')->with(['Product'])->get();
+            }else if($request->type === '3'){
+                $items = Item::where('user_id',Auth::id())->where('status','3')->with(['Product'])->get();
+            }
+
+           
             return parent::success("View Orders successfully!",['orders' => $items]);
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
