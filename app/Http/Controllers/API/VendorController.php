@@ -480,7 +480,7 @@ class VendorController extends ApiController
             if(isset($request->search) || isset($request->category_id) || isset($request->stock_status)){
           
                 // DB::enableQueryLog();
-                $products = Product::select('products.id','products.name','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
+                $products = Product::select('products.id','products.name','products.description','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
                 WHEN stocks.stock > 0 THEN "available"
                 WHEN stocks.stock = 0 THEN "not_available"
                 ELSE "not_available"
@@ -579,7 +579,7 @@ class VendorController extends ApiController
             $store = $store->where('name','LIKE', $request->search);
         }
         
-        $store = $store->where('user_id',Auth::id())->get();
+        $store = $store->where('user_id',Auth::id())->where('status','1')->get();
         return parent::success("View all stores successfully", ['stores' => $store ]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -1419,6 +1419,30 @@ public function DeleteStore(Request $request){
         return parent::error($ex->getMessage());
     }
 }
+
+public function ChangeStoreStatus(Request $request)
+{
+    $rules = ['store_id'=>'required|exists:stores,id','status' =>'required|in:1,2'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $store = Store::FindOrfail($request->store_id);
+                $store->fill($input);
+                $store->save();
+        
+        return parent::success("Store Deactivated successfully!", $store);
+    }catch(\Exception $ex){
+        return parent::success($ex->getMessage());
+    }
+}
+
+
+
+
+
 
 
 

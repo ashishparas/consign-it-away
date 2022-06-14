@@ -37,12 +37,6 @@ class Product extends Model
     
 
 
-   
-
-
-
-   
-
 
     public function getCartStatusAttribute(){
         $cart_status = Cart::where('product_id',$this->id)->where('user_id', Auth::id())->first();
@@ -121,7 +115,8 @@ class Product extends Model
       return $this->belongsTo(Store::class)->select('id','name','banner')->with('Manager');
   }
 
-    
+
+  
     
 
 
