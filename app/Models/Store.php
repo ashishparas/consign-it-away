@@ -17,7 +17,7 @@ class Store extends Model
 
     protected $fillable = ['banner','user_id','store_image','name','location','description','photos'];
 
-    protected $appends = ['base_url','Photos'];
+    protected $appends = ['base_url'];
 
 
 
