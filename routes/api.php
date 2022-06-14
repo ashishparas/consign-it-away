@@ -144,6 +144,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('filter/product/by/store',[VendorController::class, "FilterProductByStore"]);
     Route::post('change/profile/picture',[VendorController::class, "ChangeProfilePicture"]);
     Route::post('view/staff/detail/by/id',[VendorController::class,"ViewStaffDetailsById"]);
+    Route::post('delete/store',[VendorController::class,"DeleteStore"]);
 
 });
 
