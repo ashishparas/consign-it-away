@@ -579,7 +579,7 @@ class VendorController extends ApiController
             $store = $store->where('name','LIKE', $request->search);
         }
         
-        $store = $store->where('user_id',Auth::id())->where('status','1')->get();
+        $store = $store->where('user_id',Auth::id())->get();
         return parent::success("View all stores successfully", ['stores' => $store ]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -1432,8 +1432,13 @@ public function ChangeStoreStatus(Request $request)
         $store = Store::FindOrfail($request->store_id);
                 $store->fill($input);
                 $store->save();
+                if( $store->status ==='1'):
+                    $message = "Store Activated successfully!";
+                else:
+                    $message = "Store Deactivated successfully!";
+                endif;
         
-        return parent::success("Store Deactivated successfully!", $store);
+        return parent::success($message,  $store);
     }catch(\Exception $ex){
         return parent::success($ex->getMessage());
     }
