@@ -1402,6 +1402,23 @@ public function ViewStaffDetailsById(Request $request){
     }
 }
 
+public function DeleteStore(Request $request){
+    $rules = ['store_id' => 'required|exists:stores,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $store = Store::FindOrfail($request->store_id);
+                    $store->delete();
+
+        return parent::success("Store delete successfully!");
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
 
 
 
