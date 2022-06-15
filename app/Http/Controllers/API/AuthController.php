@@ -305,8 +305,13 @@ class AuthController extends ApiController {
         ]);
             $input['cus_id'] = $customer->id;
         endif;
-        
-        $input['status'] = '1';
+        if($input['type'] === '1'){
+            $input['status'] = '1';
+        }else if($input['type'] === '2'){
+            $input['vendor_status'] = '1';
+        }
+       
+
                 $field = array();
                 $social_source  =  strtolower($input['social_type']); 
                 $social_id      =  $input['social_id'];  
@@ -780,18 +785,18 @@ class AuthController extends ApiController {
       endif;
       try{
             $input = $request->all();
-            $user = [];
-            if(Auth::user()->type !== $request->type):
-                $model = new User();
-            $model = $model->FindOrfail(Auth::id());
-                     $model->fill($input);
-                     $model->save();
-                   
-          $user = $model->FindOrfail($model->id);
-                    $user->fill(['is_switch' =>'1','switch_status' => $model->status]);
+            $user = User::FindOrfail(Auth::id());
+            if(Auth::user()->type === '1'){
+                if($request->type === '2'){
+                    $user->fill(['type' => '2', 'vendor_status'=>'1']);
                     $user->save();
-            endif;
-
+                }
+            }else if(Auth::user()->type === '2'){
+                if($request->type === '1'){
+                    $user->fill(['type' => '1', 'status'=>'1']);
+                    $user->save();
+                }
+            }
             
           return parent::success("you have switch user successfully!",$user);
 
