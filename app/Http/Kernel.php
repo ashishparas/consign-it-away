@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\CheckRole::class,
         'registerUser' => \App\Http\Middleware\RegisterMiddleware::class,
         'advancedProduct' => \App\Http\Middleware\AdvancedProducts::class,
+        'UpdateProduct' =>\App\Http\Middleware\UpdateProduct::class,
         'admin'  => AccessControlMiddleware::class,
     ];
 }
