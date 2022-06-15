@@ -34,7 +34,7 @@ use function PHPUnit\Framework\returnSelf;
 class AuthController extends ApiController {
 
     public $successStatus = 200;
-    private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','mobile_no_found','profile_picture','marital_status','type','status','is_switch','switch_status','token','created_at','updated_at'];
+    private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','mobile_no_found','profile_picture','marital_status','type','status','is_switch','vendor_status','token','created_at','updated_at'];
 //    public static $_mediaBasePath = 'uploads/users/';
     public function formatValidator($validator) {
         $messages = $validator->getMessageBag();
