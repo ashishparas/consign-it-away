@@ -35,7 +35,7 @@ class User extends Authenticatable
         'profile_picture',
         'status',
         'is_switch',
-        'switch_status',
+        'vendor_status',
         'fax',
         'paypal_id',
         'paypal_id_status',
