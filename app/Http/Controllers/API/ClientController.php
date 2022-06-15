@@ -289,20 +289,20 @@ class ClientController extends ApiController
                
             $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
             endforeach; 
-            $product['soldByOtherSellers'] = Product::select('id','user_id','image','amount')
+            $product['soldByOtherSellers'] = Product::select('id','user_id','image',DB::raw('price as amount'))
                                             ->where('name','LIKE','%'.$product->name.'%')
                                             ->whereNotIn('id',[$product->id])
                                             ->with('User')
                                             ->get()->makeHidden(['soldBy','CartStatus']);
 
-            $OtherProducts = Product::select('products.id','products.user_id','products.name','products.image','products.amount',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(product_id) as TotalRating'))
+            $OtherProducts = Product::select('products.id','products.user_id','products.name','products.image',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(product_id) as TotalRating, products.price as amount'))
                     ->leftJoin('ratings','ratings.product_id','products.id')
                     ->where('products.user_id', $product->user_id)
                     ->groupBy('products.id')
                     ->get()->makeHidden(['soldBy','CartStatus']);
 
             $product['otherProducts'] = $OtherProducts;
-            $product['SimilarProducts'] = Product::select('products.id','products.user_id','products.name','products.image','products.amount',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(product_id) as TotalRating'))
+            $product['SimilarProducts'] = Product::select('products.id','products.user_id','products.name','products.image',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(product_id) as TotalRating, products.price as amount'))
             ->leftJoin('ratings','ratings.product_id','products.id')
             ->where('products.name','LIKE', '%'.$product->name.'%')
             ->groupBy('products.id')
@@ -672,6 +672,7 @@ class ClientController extends ApiController
        if($validateAttributes):
         return $validateAttributes;
        endif;
+
        try{
             $input = $request->all();
            
@@ -710,7 +711,7 @@ class ClientController extends ApiController
                     'quantity' => $item->quantity
                 ]);
                 if($item){
-                    
+                  
                     $store = Store::where('id',$product->store_id)->first();
                    $StoreName = (!$store->name)?'No-name':$store->name;
                     $body = '#00'.$item->id.' has been ordered from '.$StoreName;
