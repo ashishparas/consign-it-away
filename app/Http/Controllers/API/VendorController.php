@@ -220,7 +220,7 @@ class VendorController extends ApiController
 
 
     public function Staff(Request $request){
-        $rules = ['store_id' => 'required|exists:stores,id','profile_picture' => '','name'=>'required','email'=>'required','phonecode' =>'required', 'mobile_no' => 'required','status' =>'required|in:1,2'];
+        $rules = ['store_id' => 'required|exists:stores,id','profile_picture' => '','name'=>'required','email'=>'required','phonecode' =>'required', 'mobile_no' => 'required','status' =>'required|in:1,2','type' => 'required|in:1,2'];
         $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
         if($validateAttributes):
             return $validateAttributes;
@@ -233,7 +233,9 @@ class VendorController extends ApiController
             endif;
             $input['user_id']= Auth::id();
             $staff = Manager::create($input);
-            User::FindOrfail(Auth::id())->update(['status' => '4']);
+            if($request->type === '1'){
+                User::FindOrfail(Auth::id())->update(['status' => '4']);
+            }
             $user = User::select($this->LoginAttributes)->where('id', Auth::id())->first();
             
             return parent::success("Staff added successfully!",['staff' => $staff,'user' =>$user]);
@@ -1191,6 +1193,9 @@ class VendorController extends ApiController
             ];
 
             $subscription  = Subscription::create($data);
+            $user = User::FindOrfail(Auth::id());
+                    $user->fill(['status' => '6']);
+                    $user->save();
 
         return parent::success("Subscription buy successfully",['subcription' => $subscription ]);
        }catch(\exception $ex){
