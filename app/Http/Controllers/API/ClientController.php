@@ -50,7 +50,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 class ClientController extends ApiController
 {
     public $successStatus = 200;
-    private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','profile_picture','marital_status','type','status','is_switch','switch_status','token','created_at','updated_at'];
+    private $LoginAttributes  = ['id','fname','lname','email','phonecode','mobile_no','profile_picture','vendor_status','type','status','is_switch','switch_status','token','created_at','updated_at'];
 
 
     public function ClientViewProfile(Request $request){
