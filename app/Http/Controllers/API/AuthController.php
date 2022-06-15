@@ -786,14 +786,23 @@ class AuthController extends ApiController {
       try{
             $input = $request->all();
             $user = User::FindOrfail(Auth::id());
+
             if(Auth::user()->type === '1'){
                 if($request->type === '2'){
-                    $user->fill(['type' => '2', 'vendor_status'=>'1']);
+                    $data = ['type' => '2'];
+                    if(Auth::user()->vendor_status === '0'):
+                        $data['vendor_status'] = '1';
+                    endif;
+                    $user->fill($data);
                     $user->save();
                 }
             }else if(Auth::user()->type === '2'){
                 if($request->type === '1'){
-                    $user->fill(['type' => '1', 'status'=>'1']);
+                    $data = ['type' => '1'];
+                    if(Auth::user()->status === '0'):
+                        $data['status'] = '1';
+                    endif;
+                    $user->fill($data);
                     $user->save();
                 }
             }
