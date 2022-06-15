@@ -1113,7 +1113,7 @@ class VendorController extends ApiController
 
    public function ViewStaffById(Request $request)
    {
-        $rules = ['store_id' => 'required|exists:stores,store_id'];
+        $rules = ['store_id' => 'required|exists:stores,id'];
         $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
         if($validateAttributes):
             return $validateAttributes;
