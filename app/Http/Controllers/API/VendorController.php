@@ -66,7 +66,7 @@ class VendorController extends ApiController
             
             $fullname = $input['fname'].' '.$input['lname'];
             $input['name'] = $fullname;
-            $input['status'] = '2';
+            $input['vendor_status'] = '2';
             // dd($input);
             $model = new User();
             $user = $model->FindOrfail(Auth::id());
@@ -163,7 +163,10 @@ class VendorController extends ApiController
             $input['user_id'] = Auth::id();
             $model = $model->fill($input);
             $store = $model->save();
-            User::FindOrfail(Auth::id())->update(['status' => '3']);
+            if(Auth::user()->type === '2'){
+                User::FindOrfail(Auth::id())->update(['vendor_status' => '3']);
+            }
+            
             return parent::success("Store added successfully!",['store' => $model]);
             // return parent::success('Store added successfully!',[]);
         }catch(\Exception $ex){
@@ -234,7 +237,10 @@ class VendorController extends ApiController
             $input['user_id']= Auth::id();
             $staff = Manager::create($input);
             if($request->type === '1'){
-                User::FindOrfail(Auth::id())->update(['status' => '4']);
+                if(Auth::user()->type === '2'):
+                    User::FindOrfail(Auth::id())->update(['vendor_status' => '4']);
+                endif;
+                
             }
             $user = User::select($this->LoginAttributes)->where('id', Auth::id())->first();
             
@@ -254,9 +260,12 @@ class VendorController extends ApiController
         endif;
         try{
             $user = User::find(Auth::id());
-            $status = ['status' => '5'];
-            $user->fill($status);
-            $user->save();
+            if(Auth::user()->type === '2'):
+                $status = ['vendor_status' => '5'];
+                $user->fill($status);
+                $user->save();
+            endif;
+            
             return parent::success("Add staff proceed successfully!",['user' => $user]);
         }catch(\Exception $ex){
                 return parent::error($ex->getMessage());
@@ -399,8 +408,10 @@ class VendorController extends ApiController
         //    }
         //   $product['product_variants'] =    array('variants'=> $vars,'options' => $push);
             endif;
-
-            $user = User::where('id',Auth::id())->update(['status' => '6']);
+            if(Auth::user()->type === '2'):
+                $user = User::where('id',Auth::id())->update(['vendor_status' => '6']);
+            endif;
+            
             return parent::success("Product created successfully!",['product' => $product]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
@@ -1288,7 +1299,7 @@ class VendorController extends ApiController
 
             $subscription  = Subscription::create($data);
             $user = User::FindOrfail(Auth::id());
-                    $user->fill(['status' => '6']);
+                    $user->fill(['vendor_status' => '6']);
                     $user->save();
 
         return parent::success("Subscription buy successfully",['subcription' => $subscription ]);
