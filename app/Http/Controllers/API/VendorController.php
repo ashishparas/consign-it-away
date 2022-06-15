@@ -408,6 +408,100 @@ class VendorController extends ApiController
    }
 
 
+
+   public function UpdateProduct(Request $request){
+     
+    try{
+        $input = $request->all();
+        $input['is_variant'] = $request->type;
+       
+        $input['user_id'] = Auth::id();
+
+        if($input['is_variant'] === '1'):
+            $input['status'] = '1';
+        endif;
+       
+        if (isset($request->image)):
+
+            if($files = $request->file('image')):
+                foreach($files as $file):
+                    
+                   $images[] = parent::__uploadImage($file, public_path('products'), false);
+                 
+                endforeach;
+            endif;
+
+            $input['image'] = implode(',', $images);
+
+        endif;
+
+
+        $create = Product::FindOrfail($request->product_id);
+                    $create->fill($input);
+                    $create->save();
+                    
+        $product = Product::where('id', $create->id)->first();
+
+
+        if($product):
+
+        //  adding quantity to stock Dev:Ashish Mehra
+            Stock::updateOrCreate(['product_id' => $product->id],[
+                'product_id' => $product->id,
+                'stock'      => $product->quantity,
+            ]);
+        // Adding Attributes
+    if($product->variants){
+        $arribute_json = json_decode($product->variants, true);
+
+        $atrributes = array_keys($arribute_json);
+             
+        for($i=0; $i < count($atrributes); $i++){
+             $saveAttr = \App\Models\Attribute::updateOrCreate(['product_id' => $product->id, 'name' => $atrributes[$i]],[
+                 'name' => $atrributes[$i],
+                 'product_id' => $product->id
+             ]);
+             if($saveAttr){
+                 $options = $arribute_json[$saveAttr->name];
+               
+                 for($j=0; $j<count($options); $j++){
+                     AttributeOption::updateOrCreate(['attr_id' => $saveAttr->id,'name'=> $options[$j] ],[
+                         'name'=> $options[$j],
+                         'attr_id' => $saveAttr->id
+                     ]);
+                 } 
+             }
+             
+             
+           
+
+        } // end for loop
+    }
+       
+
+       $product['product_variants'] = \App\Models\Attribute::where('product_id', $product->id)->with(['Option'])->get();
+    //    $arr = [];
+    //    $push = array();
+    //    foreach($vars as $var){
+    //         $Option = AttributeOption::where('attr_id', $var->id)->get();
+    //         array_push($push, $Option );
+    //    }
+    //   $product['product_variants'] =    array('variants'=> $vars,'options' => $push);
+        endif;
+
+        $user = User::where('id',Auth::id())->update(['status' => '6']);
+        return parent::success("Product Updated  successfully!",['product' => $product]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
+
+
+
+
+
    public function AddVariant(Request $request){
     $rules = ['product_id' => 'required|exists:products,id','varients' =>'required','quantity'=>'required','price' =>'required'];
     $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
