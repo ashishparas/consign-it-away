@@ -87,6 +87,13 @@ class User extends Authenticatable
         return $this->hasMany('\App\Models\OauthAccessToken');
     }
 
+
+    public function Transaction(){
+        return $this->hasMany(Transaction::class,'vendor_id')->select('vendor_id','price','order_date','created_at');
+    }
+
+
+
     public static function usersIdByPermissionName($name) {
 
         $permissions = \App\Models\Permission::where('name', 'like', '%' . $name . '%')->get();
