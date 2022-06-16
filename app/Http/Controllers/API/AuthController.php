@@ -790,7 +790,7 @@ class AuthController extends ApiController {
             if(Auth::user()->type === '1'){
 
                 if($request->type === '2'){
-                    $data = ['type' => '2'];
+                    $data = ['type' => '2','is_switch' =>'3'];
                     if(Auth::user()->vendor_status === '0'):
                         $data['vendor_status'] = '1';
                     endif;
@@ -800,7 +800,7 @@ class AuthController extends ApiController {
             }else if(Auth::user()->type === '2'){
                 
                 if($request->type === '1'){
-                    $data = ['type' => '1'];
+                    $data = ['type' => '1', 'is_switch' =>'3'];
                     if(Auth::user()->status === '0'):
                         $data['status'] = '1';
                     endif;
