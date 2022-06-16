@@ -106,4 +106,8 @@ class User extends Authenticatable
     }
 
 
+    public function getUserDeviceAttribute(){
+        return UserDevice::where('user_id', $this->id)->first();
+    }
+
 }
