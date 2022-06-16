@@ -842,8 +842,11 @@ class AuthController extends ApiController {
         return $validateAttributes;
     endif;
     try{
-
+       
                     $device_name  =UserDevice::select('type')->where('user_id', Auth::id())->first();
+
+
+                      
                     if ( strtolower ( $device_name ) == 'ios' ) {
                         $base_url = asset('');
                         $base_url = str_replace ( "https://", "", $base_url );
@@ -852,14 +855,14 @@ class AuthController extends ApiController {
                         ?><script>
                             window.location.href = "HBCUHUB://<?php echo $base_url;  ?>";
                             setInterval(function () {
-                                window.location.replace("https://apps.apple.com/us/app/HBCUHUB");
+                                window.location.replace("https://apps.apple.com/us/app/dutifypro/id1545296317");
                             }, 6000);
                         </script><?php
                     } else { 
                         ?><script>
                             window.location.href = "HBCUHUB://details";
                             setInterval(function () {
-                                window.location.replace("http://play.google.com/store/apps/details?id=com.HBCUHUB");
+                                window.location.replace("https://apps.apple.com/us/app/dutifypro/id1545296317");
                             }, 6000);
                         </script><?php
                     }

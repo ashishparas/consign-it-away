@@ -377,6 +377,9 @@ class ApiController extends \App\Http\Controllers\Controller {
         }
     }
 
+
+
+
     private static function pushNotifyiOS($data, $devicetoken, $customData = null) {
         //return true;
         $deviceToken = $devicetoken;
