@@ -31,6 +31,7 @@ use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
 use App\Models\Variant;
 use App\Models\VariantItems;
+use App\Models\Withdraw;
 use Attribute;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
@@ -1563,7 +1564,15 @@ public function Dashboard(Request $request)
         return $validateAttributes;
     endif;
     try{
-        $dashboard = User::select('id','name','fname','lname','email')->FindOrfail(Auth::id());
+        $dashboard = User::select('users.id','users.name','users.fname','users.lname','users.email','users.profile_picture',DB::raw('SUM(transactions.price) as TotalRevenue'))
+                    ->leftJoin('transactions','users.id','transactions.vendor_id')
+                    ->where('users.id', Auth::id())
+                    ->with(['Transaction'])
+                    ->first();
+                    $withdraw = Withdraw::where('user_id', Auth::id())->where('status','1')->sum('amount');
+                   
+                    $dashboard['income'] = $withdraw;
+                    $dashboard['balance'] = ($dashboard->TotalRevenue - $withdraw);
         return parent::success("View dashboard successfully!",$dashboard);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
