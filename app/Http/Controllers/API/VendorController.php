@@ -29,6 +29,7 @@ use App\Models\Stock;
 use App\Models\Subcategory;
 use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
+use App\Models\Transaction;
 use App\Models\Variant;
 use App\Models\VariantItems;
 use App\Models\Withdraw;
@@ -1579,6 +1580,23 @@ public function Dashboard(Request $request)
     }
 }
 
+
+public function ViewTransactions(Request $request)
+{
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $withdraw = Transaction::orderBy('id','DESC')->with(['OrderDetails'])->get();
+        $totalIncome = Transaction::where('vendor_id', Auth::id())->sum('price');
+       
+        return parent::success("View tansaction successfully!",['total_incomde' => number_format($totalIncome,2),'withdraw' => $withdraw]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 
