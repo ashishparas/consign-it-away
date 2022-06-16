@@ -18,6 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('transaction_id')->nullable();
+            $table->bigInteger('vendor_id')->nullable();
             $table->bigInteger('order_id')->nullable();
             $table->string('price')->nullable();
             $table->string('order_date')->nullable();

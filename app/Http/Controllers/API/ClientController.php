@@ -38,6 +38,7 @@ use App\Models\Product;
 use App\Models\Rating;
 use App\Models\RecentProducts;
 use App\Models\Store;
+use App\Models\Transaction;
 use App\Models\UserChat;
 use App\Models\Variant;
 use App\Models\VariantItems;
@@ -675,7 +676,7 @@ class ClientController extends ApiController
 
        try{
             $input = $request->all();
-           
+          
             // Charge for product
        
             $stripe =  \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET'));
@@ -693,8 +694,17 @@ class ClientController extends ApiController
         $input['charge_id'] = md5(rand(11111,99999)); //$charge['id'];
         $input['user_id'] = Auth::id();
         $order = Order::create($input);
-     
         if(!empty($order)):
+
+         
+            Transaction::create([
+                'user_id' => Auth::id(),
+                'order_id' =>  $order->id,
+                'transaction_id' => $order->charge_id,
+                'price' => $order->total_amount,
+                'order_date' => date('Y-m-d')
+            ]);
+
         
             $items = Cart::where('user_id', Auth::id())->get();
           
