@@ -1311,6 +1311,95 @@ class VendorController extends ApiController
        }
    }
 
+
+   public function ChangeSubscriptionPlan(request $request){
+    $rules = ['card_holder_name' => 'required','card_no' => 'required','expiry_date' =>'required','cvv' =>'required','subscription_price'=>'required','subscription_type'=>'required|in:month,year','PaymentToken'=>'required','save_card' =>'required|in:1,2'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+    try{
+        $input = $request->all();
+        $subscription = Subscription::where('user_id',Auth::id())->first();
+        
+        $body = json_decode($subscription->body,true);
+      
+        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        $sub = Stripe\Subscription::retrieve($subscription->subscription_id);
+        $sub->cancel();
+
+        // Mycode Dev:<Ashish Mehra/> (^-^)
+
+        $expiry_date = explode('/',$input['expiry_date']);
+        $input['expiry_month'] = $expiry_date[0];
+        $input['expiry_year'] = $expiry_date[1];
+        $input['user_id'] =  Auth::id();
+     
+        if($input['save_card'] === '1'){
+         $card = Card::create($input);
+        }
+
+    \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        $cardTokenArray=\Stripe\Token::create([
+            'card' => [
+            'number' => $card['card_no'],
+            'exp_month' => $input['expiry_month'],
+            'exp_year' => $input['expiry_year'],
+            'cvc' => '123',
+            ],
+        ]);
+      //$CardToken=$input['PaymentToken']; 
+        $CardToken=$cardTokenArray['id']; 
+        $customer = \Stripe\Customer::update ( $body['customer'],[
+       
+       'source'  => $CardToken          
+      ]);
+        $plan = \Stripe\Plan::create([
+            "product" => [ 
+                "name" => "Bronze Subscription" 
+            ], 
+            "amount" => ($input['subscription_price']*100),
+            "currency" => "USD",
+            "interval" => $input['subscription_type'], 
+            "interval_count" => 1 
+        ]); 
+
+        $subscription = \Stripe\Subscription::create([
+            "customer" => $customer['id'], 
+            "items" => array( 
+                array( 
+                    "plan" => $plan['id'], 
+                ), 
+            ),
+            // "trial_end"=> strtotime(date('Y-m-d')),
+            "metadata" => ["SellerID" => 'sel_'.md5(1111,9999)]
+        ]);
+     
+        $data = [
+            'user_id' => Auth::id(),
+            'name'    => $subscription['object'],
+            'stripe_status' => $subscription['status'],
+            'stripe_price' => $subscription['items']['data'][0]['plan']['amount'],
+            'subscription_id' => $subscription->id,
+            'subscription_item_id' => $subscription['items']['data'][0]['id'],
+            'quantity'     => '1',
+            'stripe_id'    =>  $subscription['customer'], //$subscription['items']['data'][0]['id'],
+            'trial_ends_at' => $subscription['current_period_end'],
+            'ends_at'   => $subscription['current_period_end'],
+            'body'  => json_encode($subscription),
+        ];
+
+        $subscription  = Subscription::FindOrfail(Auth::id());
+                        $subscription->fill($data);
+                        $subscription->save();
+        // End My code
+
+        return parent::success("Your subscription has been updated successfully!",$subscription);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
+
+
+
+
 public function OfferStatusById(Request $request)
 {
     $rules = ['offer_id'=>'required','offer_status'=>'required|in:1,2,3','offer_price'=>'','quantity'=>'','type'=>'required|in:vendor,client'];
@@ -1607,12 +1696,17 @@ public function Return(Request $request){
     endif;
     try{
 
-        $return = Item::where('status', '4')
+        $return = Item::whereIn('status', ['4','5'])
                 ->where('vendor_id', Auth::id())
                 ->with(['Product'])
                 ->orderBy('id','DESC')
                 ->get();
-        return parent::success("View returns successfully!",$return);
+        $request = Item::where('status','4')
+        ->where('vendor_id', Auth::id())
+        ->with(['Customer'])
+        ->orderBy('id','DESC')
+        ->get();
+        return parent::success("View returns successfully!",['returns' => $return,'request'=>$request]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
