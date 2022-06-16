@@ -1403,7 +1403,7 @@ class ClientController extends ApiController
             // DB::enableQuerylog();
 
             $RecentChat = UserChat::from( 'user_chat as msg' )
-            ->select(DB::raw('DISTINCT sender.fname as senderName, sender.id as sender_id, sender.profile_picture as sender_profile_picture,receiver.fname as receiverName,receiver.id as receiver_id,receiver.profile_picture as receiver_profile_picture,msg.message,msg.created_on,msg.status as readStatus,msg.MessageType',DB::raw('IF((select COUNT(*) from chat_deleteTB where deleteByuserID=2 AND ChatParticipantID=3>0),1,0) as chatDelRow')))
+            ->select(DB::raw('DISTINCT msg.id, sender.fname as senderName, sender.id as sender_id, sender.profile_picture as sender_profile_picture,receiver.fname as receiverName,receiver.id as receiver_id,receiver.profile_picture as receiver_profile_picture,msg.message,msg.created_on,msg.status as readStatus,msg.MessageType',DB::raw('IF((select COUNT(*) from chat_deleteTB where deleteByuserID=2 AND ChatParticipantID=3>0),1,0) as chatDelRow')))
             ->join('users as sender', 'msg.source_user_id' ,'=' ,'sender.id')
             ->join('users as receiver', 'msg.target_user_id', '=', 'receiver.id')
             ->where('msg.source_user_id',Auth::id())
