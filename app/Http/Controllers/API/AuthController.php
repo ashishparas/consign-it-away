@@ -842,28 +842,28 @@ class AuthController extends ApiController {
         return $validateAttributes;
     endif;
     try{
-       
-                    $device_name  =UserDevice::select('type')->where('user_id', Auth::id())->first();
+              
+                            $iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
+                            $iPad    = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
+                           
 
-
-                      
-                    if ( strtolower ( $device_name ) == 'ios' ) {
+                    if ( $iPhone || $iPad ) {
                         $base_url = asset('');
                         $base_url = str_replace ( "https://", "", $base_url );
                         $base_url = str_replace ( "http://", "", $base_url );
                         ob_start();
                         ?><script>
-                            window.location.href = "HBCUHUB://<?php echo $base_url;  ?>";
+                            window.location.href = "consignitaway://<?php echo $base_url;  ?>";
                             setInterval(function () {
                                 window.location.replace("https://apps.apple.com/us/app/dutifypro/id1545296317");
-                            }, 6000);
+                            }, 3000);
                         </script><?php
                     } else { 
                         ?><script>
-                            window.location.href = "HBCUHUB://details";
+                            window.location.href = "consignitaway://details";
                             setInterval(function () {
-                                window.location.replace("https://apps.apple.com/us/app/dutifypro/id1545296317");
-                            }, 6000);
+                                window.location.replace("http://play.google.com/store/apps/details?id=com.HBCUHUB");
+                            }, 3000);
                         </script><?php
                     }
                     
