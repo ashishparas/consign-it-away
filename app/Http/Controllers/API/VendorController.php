@@ -1715,6 +1715,31 @@ public function Return(Request $request){
 
 
 
+public function Withdraw(Request $request)
+{
+    $rules = ['amount' => 'required'];
+    $validateAttributes=parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $trans = Transaction::where('vendor_id', Auth::id())->sum('price');
+        $withdraw = Withdraw::where('user_id', Auth::id())->where('status','1')->sum('amount');
+        $withdrawalAmount =  ($trans - $withdraw);
+        if($request->amount > $withdrawalAmount):
+            return parent::error("Your amount unprocessable amount");
+        endif;
+        $input['user_id'] =  Auth::id();
+        $amt  = Withdraw::create($input);
+        return parent::success("Withdraw request successfully send to Admin",$amt);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
+
 
 
 
