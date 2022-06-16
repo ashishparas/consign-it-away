@@ -696,16 +696,6 @@ class ClientController extends ApiController
         $order = Order::create($input);
         if(!empty($order)):
 
-         
-            Transaction::create([
-                'user_id' => Auth::id(),
-                'order_id' =>  $order->id,
-                'transaction_id' => $order->charge_id,
-                'price' => $order->total_amount,
-                'order_date' => date('Y-m-d')
-            ]);
-
-        
             $items = Cart::where('user_id', Auth::id())->get();
           
             foreach($items as $item):
@@ -720,6 +710,17 @@ class ClientController extends ApiController
                     'price' => $product->amount,
                     'quantity' => $item->quantity
                 ]);
+
+                Transaction::create([
+                    'user_id' => Auth::id(),
+                    'order_id' =>  $order->id,
+                    'transaction_id' => $order->charge_id,
+                    'vendor_id'  => $item->vendor_id,
+                    'product_id'  => $product->id,
+                    'price' => $order->total_amount,
+                    'order_date' => date('Y-m-d')
+                ]);
+
                 if($item){
                   
                     $store = Store::where('id',$product->store_id)->first();
