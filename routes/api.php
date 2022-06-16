@@ -148,6 +148,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('change/store/status',[VendorController::class, "ChangeStoreStatus"]);
     Route::post('update/product',[VendorController::class, "UpdateProduct"])->middleware('UpdateProduct');
     Route::post('dashboard',[VendorController::class, "Dashboard"]);
+    Route::post('view/transactions',[VendorController::class,"ViewTransactions"]);
 });
 
 
