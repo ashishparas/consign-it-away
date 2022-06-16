@@ -149,6 +149,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('update/product',[VendorController::class, "UpdateProduct"])->middleware('UpdateProduct');
     Route::post('dashboard',[VendorController::class, "Dashboard"]);
     Route::post('view/transactions',[VendorController::class,"ViewTransactions"]);
+    Route::post('return',[VendorController::class, "Return"]);
     
 });
 
