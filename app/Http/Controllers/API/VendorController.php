@@ -1506,7 +1506,7 @@ public function ViewStaffDetailsById(Request $request){
     endif;
     try{
         $input = $request->all();
-        $staff = Manager::FindOrfail($request->staff_id);  
+        $staff = Manager::where('id',$request->staff_id)->with(['Store'])->first();  
         return parent::success("View staff detsils successfully!", $staff);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
