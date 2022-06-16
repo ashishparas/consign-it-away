@@ -22,6 +22,7 @@ use App\Models\Card;
 use App\Models\Category;
 use App\Models\Colour;
 use App\Models\Discount;
+use App\Models\Item;
 use App\Models\Manager;
 use App\Models\Offer;
 use App\Models\Product;
@@ -166,7 +167,7 @@ class VendorController extends ApiController
             $model = $model->fill($input);
             $store = $model->save();
             if(Auth::user()->type === '2'){
-                User::FindOrfail(Auth::id())->update(['vendor_status' => '3']);
+                User::where('id',Auth::id())->update(['vendor_status' => '3']);
             }
             
             return parent::success("Store added successfully!",['store' => $model]);
@@ -1597,6 +1598,28 @@ public function ViewTransactions(Request $request)
         return parent::error($ex->getMessage());
     }
 }
+
+public function Return(Request $request){
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+
+        $return = Item::where('status', '4')
+                ->where('vendor_id', Auth::id())
+                ->with(['Product'])
+                ->orderBy('id','DESC')
+                ->get();
+        return parent::success("View returns successfully!",$return);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+        
+}
+
+
 
 
 

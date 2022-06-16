@@ -26,7 +26,7 @@ class CreateItemsTable extends Migration
             $table->string('quantity')->nullable();
             $table->string('size')->nullable();
             $table->string('colour')->nullable();
-            $table->enum('status',[1,2,3,4])->default(1)->comment('1->placed,2->shipped,3->delivered,4->cancel_&_Refund');
+            $table->enum('status',[1,2,3,4,5])->default(1)->comment('1->placed,2->shipped,3->delivered,4->Return,5->cancel_&_Refund');
             $table->timestamps();
         });
     }
