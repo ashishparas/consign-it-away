@@ -15,5 +15,5 @@ class Transaction extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['transaction_id','user_id','order_id','price','order_date'];
+    protected $fillable = ['transaction_id','vendor_id','user_id','order_id','price','order_date'];
 }
