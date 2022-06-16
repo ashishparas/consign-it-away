@@ -1555,6 +1555,26 @@ public function ChangeStoreStatus(Request $request)
 }
 
 
+public function Dashboard(Request $request)
+{
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $dashboard = User::select('id','name','fname','lname','email')->FindOrfail(Auth::id());
+        return parent::success("View dashboard successfully!",$dashboard);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
+
+
+
+
 
 
 

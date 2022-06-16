@@ -788,6 +788,7 @@ class AuthController extends ApiController {
             $user = User::FindOrfail(Auth::id());
 
             if(Auth::user()->type === '1'){
+
                 if($request->type === '2'){
                     $data = ['type' => '2'];
                     if(Auth::user()->vendor_status === '0'):
@@ -797,6 +798,7 @@ class AuthController extends ApiController {
                     $user->save();
                 }
             }else if(Auth::user()->type === '2'){
+                
                 if($request->type === '1'){
                     $data = ['type' => '1'];
                     if(Auth::user()->status === '0'):
