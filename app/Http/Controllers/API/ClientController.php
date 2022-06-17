@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Helper\Helper;
 // use Auth;
 use App\Models\User;
 use \App\Models\Role;
@@ -676,80 +677,96 @@ class ClientController extends ApiController
 
        try{
             $input = $request->all();
+
+            
           
             // Charge for product
        
-            $stripe =  \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET'));
+            $Address = Helper::VerifyAddress($request->address_id);
+
+        if($Address):
+
+                $stripe =  \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET'));
             
-
-            // Token is created using Stripe Checkout or Elements!
-            // Get the payment token ID submitted by the form:
-           $token = $input['stripeToken'];
-        // $charge = \Stripe\Charge::create([
-        // 'amount' => ($input['total_amount'] * 100),
-        // 'currency' => 'usd',
-        // 'description' => 'Charge customer to place order',
-        // 'source' => $token,
-        // ]);
-        $input['charge_id'] = md5(rand(11111,99999)); //$charge['id'];
-        $input['user_id'] = Auth::id();
-        $order = Order::create($input);
-        if(!empty($order)):
-
-            $items = Cart::where('user_id', Auth::id())->get();
-          
-            foreach($items as $item):
-                $product = Product::where('id', $item->product_id)->first();
-            
-               $item =  Item::create([
-                    'user_id' => Auth::id(),
-                    'order_id' => $order->id,
-                    'product_id' => $product->id,
-                    'address_id' => $input['address_id'],
-                    'vendor_id' => $item->vendor_id,
-                    'price' => $product->amount,
-                    'quantity' => $item->quantity
-                ]);
-
-                Transaction::create([
-                    'user_id' => Auth::id(),
-                    'order_id' =>  $order->id,
-                    'transaction_id' => $order->charge_id,
-                    'vendor_id'  => $item->vendor_id,
-                    'product_id'  => $product->id,
-                    'price' => $order->total_amount,
-                    'order_date' => date('Y-m-d')
-                ]);
-
-                if($item){
-                  
-                    $store = Store::where('id',$product->store_id)->first();
-                   $StoreName = (!$store->name)?'No-name':$store->name;
-                    $body = '#00'.$item->id.' has been ordered from '.$StoreName;
+                // Token is created using Stripe Checkout or Elements!
+                // Get the payment token ID submitted by the form:
+               $token = $input['stripeToken'];
+            // $charge = \Stripe\Charge::create([
+            // 'amount' => ($input['total_amount'] * 100),
+            // 'currency' => 'usd',
+            // 'description' => 'Charge customer to place order',
+            // 'source' => $token,
+            // ]);
+            $input['charge_id'] = md5(rand(11111,99999)); //$charge['id'];
+            $input['user_id'] = Auth::id();
+            $order = Order::create($input);
+            if(!empty($order)):
+                
+                
+                $items = Cart::where('user_id', Auth::id())->get();
+              
+                foreach($items as $item):
+                    $product = Product::where('id', $item->product_id)->first();
+                
+                   $item =  Item::create([
+                        'user_id' => Auth::id(),
+                        'order_id' => $order->id,
+                        'product_id' => $product->id,
+                        'address_id' => $input['address_id'],
+                        'vendor_id' => $item->vendor_id,
+                        'price' => $product->amount,
+                        'quantity' => $item->quantity
+                    ]);
                    
-             $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');
-
-                   $arrayToSend = array(
-                       'to'=> $item->vendor_id,
-                       'title' =>'product Order',
-                       'body' => $body,
-                       'payload' => array('order_id'=>$item->id,'image'=>$product->image[0],'base_url'=> asset('/products'),'notification'=>$notification,'data'=>$notification),'priority'=>'high');
-                 
-                   parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
-                //    below client notification
-                   parent::pushNotifications($arrayToSend, $item->vendor_id ,Auth::id());
-                }
-        
-
-       
-            endforeach;
-
-           Cart::where('user_id', Auth::id())->delete();
-
+                    Transaction::create([
+                        'user_id' => Auth::id(),
+                        'order_id' =>  $order->id,
+                        'transaction_id' => $order->charge_id,
+                        'vendor_id'  => $item->vendor_id,
+                        'product_id'  => $product->id,
+                        'price' => $order->total_amount,
+                        'order_date' => date('Y-m-d')
+                    ]);
+    
+                    if($item){
+                      
+                        $store = Store::where('id',$product->store_id)->first();
+    $tracking_id = Helper::UPSP($item, $product->id ,$input['address_id'], $item->vendor_id,  $store->id);
+    if($tracking_id):
+                $updatetrackingId = Item::FindOrfail($item->id);
+                                    $updatetrackingId->fill(['tracking_id'=> $tracking_id]);
+                                    $updatetrackingId->save();
+    endif;
+                       $StoreName = (!$store->name)?'No-name':$store->name;
+                        $body = '#00'.$item->id.' has been ordered from '.$StoreName;
+                       
+                 $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+    
+                       $arrayToSend = array(
+                           'to'=> $item->vendor_id,
+                           'title' =>'product Order',
+                           'body' => $body,
+                           'payload' => array('order_id'=>$item->id,'image'=>$product->image[0],'base_url'=> asset('/products'),'notification'=>$notification,'data'=>$notification),'priority'=>'high');
+                     
+                       parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
+                    //    below client notification
+                       parent::pushNotifications($arrayToSend, $item->vendor_id ,Auth::id());
+                    }
+            
+    
            
+                endforeach;
+    
+               Cart::where('user_id', Auth::id())->delete();
+    
+               return parent::success("Your order Placed successfully!");
+            endif;
+    
+            
+        else:
+            return parent::error("Selected address is invalid");
         endif;
-
-        return parent::success("Your order Placed successfully!");
+           
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
        }
@@ -758,7 +775,7 @@ class ClientController extends ApiController
 
    public function ViewOrder(Request $request)
    {
-       $rules = ['type' => 'required|in:1,2,3'];
+       $rules = ['type' => 'required|in:1,2,3,4'];
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
        if($validateAttributes):
         return $validateAttributes;
@@ -767,11 +784,13 @@ class ClientController extends ApiController
        try{
             $input  = $request->all();
             if($request->type === '1'){
-                $items = Item::where('user_id',Auth::id())->where('status','1')->with(['Product'])->get();
+                $items = Item::where('user_id',Auth::id())->where('status','1')->with(['Product'])->orderBy('created_at','DESC')->get();
             }else if($request->type === '2'){
-                $items = Item::where('user_id',Auth::id())->where('status','2')->with(['Product'])->get();
+                $items = Item::where('user_id',Auth::id())->where('status','2')->with(['Product'])->orderBy('created_at','DESC')->get();
             }else if($request->type === '3'){
-                $items = Item::where('user_id',Auth::id())->where('status','3')->with(['Product'])->get();
+                $items = Item::where('user_id',Auth::id())->where('status','3')->with(['Product'])->orderBy('created_at','DESC')->get();
+            }else if($request->type === '4'){
+                $items = Item::where('user_id',Auth::id())->with(['Product'])->orderBy('created_at','DESC')->get();
             }
 
            
@@ -822,6 +841,12 @@ class ClientController extends ApiController
                 ->where('id', $input['order_id'])
                 ->with(['Product','MyRating'])
                 ->first();
+                $tracking_id = Helper::trackCourier($item->tracking_id);
+                if($tracking_id):
+                    $item['tracking_status'] =   $tracking_id;     
+                else:
+                    $item['tracking_status'] ="status not available yet";
+                endif;
         $address = Address::where('id', $item->address_id)
                 ->where('user_id', Auth::id())
                 ->first();
@@ -1019,34 +1044,9 @@ class ClientController extends ApiController
         endif;
         try{
             
-            $input_xml = <<<EOXML
-            <AddressValidateRequest USERID="778CONSI5321">
-                <Address ID="1">
-                    <Address1></Address1>
-                    <Address2>8 Wildwood Drive</Address2>
-                    <City>Old Lyme</City>
-                    <State>CT</State>
-                    <Zip5>06371</Zip5>
-                    <Zip4></Zip4>
-                </Address>
-            </AddressValidateRequest>
-            EOXML;
             
-            $fields = array('API' => 'Verify','XML' => $input_xml);
-            
-            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
-            
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
-            $data = curl_exec($ch);
-            curl_close($ch);
-            
-            // Convert the XML result into array
-            $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
 
-            return parent::success("view address successfully!", $array_data);
+            return parent::success("view address successfully!");
 
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
@@ -1131,6 +1131,9 @@ class ClientController extends ApiController
             return parent::error($ex->getMessage());
         }
    }
+
+
+
 
 
    public function UspsFindRate(Request $request)
