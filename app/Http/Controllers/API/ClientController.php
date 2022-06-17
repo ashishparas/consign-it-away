@@ -830,6 +830,7 @@ class ClientController extends ApiController
 
    public function ViewOrderById(Request $request)
    {
+      // dd(Auth::id());
        $rules = ['order_id' => 'required|exists:items,id','type'=>'','notification_id'=>''];
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
        if($validateAttributes):
