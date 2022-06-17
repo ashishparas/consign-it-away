@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client;
 use App\Models\UserDevice;
+use Illuminate\Support\Str;
 //fcm
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -244,7 +245,7 @@ class ApiController extends \App\Http\Controllers\Controller {
     
     
 
-    public static function pushNotofication($data = [], $deviceToken) {
+    public static function pushNotofication($data = [], string $deviceToken=null) {
      
      
         $DeviceType = UserDevice::where('user_id', $data['to'])->first();
@@ -308,14 +309,14 @@ class ApiController extends \App\Http\Controllers\Controller {
 //        return true;
 //    }
 
-    public static function pushNotificationiOSMultipleUsers($data = [], $userIds, $customData = null) {
+    public static function pushNotificationiOSMultipleUsers($data = [], $userIds=null, $customData = null) {
         foreach ($userIds as $userId):
             self::pushNotificationiOS($data, $userId, $customData);
         endforeach;
         return true;
     }
 
-    public static function pushNotificationiOS($data = [], $userId, $customData = null) {
+    public static function pushNotificationiOS($data = [], $userId=null, $customData = null) {
         foreach (\App\Models\UserDevice::whereUserId($userId)->get() as $userDevice):
             self::pushNotifyiOS($data, $userDevice->token);
         endforeach;
@@ -323,7 +324,7 @@ class ApiController extends \App\Http\Controllers\Controller {
     }
 
 
-    public static function pushNotifications($data = [], $userId, $receiver_id ,$saveNotification = true) 
+    public static function pushNotifications($data = [], $userId=null, $receiver_id=null ,$saveNotification = true) 
     {
       
              if ($saveNotification) {

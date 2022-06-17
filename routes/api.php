@@ -34,7 +34,8 @@ Route::post('forget/password',[AuthController::class, "ResetPassword"]);
 Route::post('csv',[VendorController::class, "CSV"]);
 Route::post('usps/address/verify',[ClientController::class, "UspsVerifyAddress"]);
 Route::post('find/address/by/zip',[ClientController::class, "UspsFindAddressByZip"]); 
-Route::post('track/courier',[ClientController::class, "UspsTrackCourier"]); 
+Route::post('track/courier',[ClientController::class, "UspsTrackCourier"]);  
+Route::get('shippment',[ClientController::class, "CreateShipment"]);
 Route::post('find/rate',[ClientController::class, "UspsFindRate"]); 
 // Route::group(['middleware' =>['auth:api']], function(){
     
