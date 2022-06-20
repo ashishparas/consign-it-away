@@ -25,7 +25,7 @@ class Helper extends ApiController
    
         if($address):
 
-            $input_xml = <<<EOXML
+    $input_xml = <<<EOXML
                         <AddressValidateRequest USERID="778CONSI5321">
                             <Address ID="$address->id">
                                 <Address1></Address1>
@@ -36,7 +36,7 @@ class Helper extends ApiController
                                 <Zip4></Zip4>
                             </Address>
                         </AddressValidateRequest>
-                        EOXML;
+                EOXML;
             
             $fields = array('API' => 'Verify','XML' => $input_xml);
             
@@ -77,7 +77,7 @@ class Helper extends ApiController
             $product = Product::FindOrfail($product_id);
             if($address_id != null && $vendor_id != null && $store_id !=null){
 
-                $input_xml = <<<EOXML
+$input_xml = <<<EOXML
 
                         <eVSRequest USERID= "778CONSI5321">
                         <Option/>
