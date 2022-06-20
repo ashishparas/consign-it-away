@@ -1676,6 +1676,7 @@ public function Dashboard(Request $request)
              
                     $dashboard['this_month_trans'] = number_format($this_mnth_tans,2);
                     $dashboard['current_month'] = date('F,Y');
+                    $dashboard['income_ratio'] = "0.0";
                     $dashboard['monthly_ratio'] = "0.0";
         return parent::success("View dashboard successfully!",$dashboard);
     }catch(\Exception $ex){
