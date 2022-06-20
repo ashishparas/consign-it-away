@@ -17,6 +17,7 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('tracking_id')->nullable();
             $table->bigInteger('vendor_id')->nullable();
             $table->bigInteger('order_id')->unsigned()->nullable();
             $table->bigInteger('address_id')->nullable();

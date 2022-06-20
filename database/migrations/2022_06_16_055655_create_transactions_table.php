@@ -22,6 +22,7 @@ class CreateTransactionsTable extends Migration
             $table->bigInteger('product_id')->nullable();
             $table->bigInteger('order_id')->nullable();
             $table->string('price')->nullable();
+            $table->enum('status',[1,2,3])->default(1)->comment('1-> credit,2->debit, 3->pending');
             $table->string('order_date')->nullable();
             
             $table->timestamps();

@@ -246,6 +246,7 @@ class VendorController extends ApiController
                 
             }
             $user = User::select($this->LoginAttributes)->where('id', Auth::id())->first();
+            $user['store'] = Store::select('id')->where('id', $request->store_id)->first();
             
             return parent::success("Staff added successfully!",['staff' => $staff,'user' =>$user]);
         }catch(\Exception $ex){
@@ -1663,10 +1664,17 @@ public function Dashboard(Request $request)
                     ->where('users.id', Auth::id())
                     ->with(['Transaction'])
                     ->first();
-                    $withdraw = Withdraw::where('user_id', Auth::id())->where('status','1')->sum('amount');
+                $withdraw = Withdraw::where('user_id', Auth::id())->where('status','1')->sum('amount');
                    
                     $dashboard['income'] = $withdraw;
                     $dashboard['balance'] = ($dashboard->TotalRevenue - $withdraw);
+                    $last_trans = Transaction::select('created_at')->where('vendor_id', Auth::id())->orderBy('created_at',"DESC")->first();
+                    $dashboard['last_transaction'] = date('Y-M-d h:i a', strtotime($last_trans->created_at));
+            
+                    $this_mnth_tans = Transaction::whereRaw('MONTH(order_date) = '.date('m'))->sum('price');
+             
+                    $dashboard['this_month_trans'] = number_format($this_mnth_tans,2);
+                    $dashboard['current_month'] = date('F,Y');
         return parent::success("View dashboard successfully!",$dashboard);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());

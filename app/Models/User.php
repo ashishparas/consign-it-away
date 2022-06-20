@@ -89,7 +89,7 @@ class User extends Authenticatable
 
 
     public function Transaction(){
-        return $this->hasMany(Transaction::class,'vendor_id')->select('vendor_id','price','order_date','created_at');
+        return $this->hasMany(Transaction::class,'vendor_id')->select('vendor_id','price','order_date','status','created_at');
     }
 
 
