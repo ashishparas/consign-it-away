@@ -717,8 +717,8 @@ class ClientController extends ApiController
                         'price' => $product->amount,
                         'quantity' => $item->quantity
                     ]);
-                   
-                    Transaction::create([
+               
+                    $trans = Transaction::create([
                         'user_id' => Auth::id(),
                         'order_id' =>  $item->id,
                         'transaction_id' => $order->charge_id,
@@ -727,11 +727,13 @@ class ClientController extends ApiController
                         'price' => $order->total_amount,
                         'order_date' => date('Y-m-d')
                     ]);
-    
+     
                     if($item){
                       
                         $store = Store::where('id',$product->store_id)->first();
+                       
     $tracking_id = Helper::UPSP($item, $product->id ,$input['address_id'], $item->vendor_id,  $store->id);
+     
     if($tracking_id):
                 $updatetrackingId = Item::FindOrfail($item->id);
                                     $updatetrackingId->fill(['tracking_id'=> $tracking_id]);
@@ -757,7 +759,7 @@ class ClientController extends ApiController
            
                 endforeach;
     
-               Cart::where('user_id', Auth::id())->delete();
+             //  Cart::where('user_id', Auth::id())->delete();
     
                return parent::success("Your order Placed successfully!");
             endif;

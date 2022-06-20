@@ -26,17 +26,17 @@ class Helper extends ApiController
         if($address):
 
             $input_xml = <<<EOXML
-            <AddressValidateRequest USERID="778CONSI5321">
-                <Address ID="$address->id">
-                    <Address1></Address1>
-                    <Address2>$address->address</Address2>
-                    <City>$address->city</City>
-                    <State>$address->state</State>
-                    <Zip5>$address->zipcode</Zip5>
-                    <Zip4></Zip4>
-                </Address>
-            </AddressValidateRequest>
-            EOXML;
+                        <AddressValidateRequest USERID="778CONSI5321">
+                            <Address ID="$address->id">
+                                <Address1></Address1>
+                                <Address2>$address->address</Address2>
+                                <City>$address->city</City>
+                                <State>$address->state</State>
+                                <Zip5>$address->zipcode</Zip5>
+                                <Zip4></Zip4>
+                            </Address>
+                        </AddressValidateRequest>
+                        EOXML;
             
             $fields = array('API' => 'Verify','XML' => $input_xml);
             
@@ -175,7 +175,7 @@ class Helper extends ApiController
             
             // Convert the XML result into array
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
-         
+            dd($array_data);
             return $array_data['BarcodeNumber'];
 
             }else{
