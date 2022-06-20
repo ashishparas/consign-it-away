@@ -154,6 +154,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('return',[VendorController::class, "Return"]);
     Route::post('change/subscription/plan',[VendorController::class, "ChangeSubscriptionPlan"]);
     Route::post('withdraw/request',[VendorController::class,"Withdraw"]);
+    Route::post('create/promocode',[VendorController::class, "CreatePromoCode"]);
+    Route::post('view/promocode', [VendorController::class, "ViewPromocode"]);
     
 });
 

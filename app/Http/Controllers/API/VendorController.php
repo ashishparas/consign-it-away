@@ -26,6 +26,7 @@ use App\Models\Item;
 use App\Models\Manager;
 use App\Models\Offer;
 use App\Models\Product;
+use App\Models\PromoCode;
 use App\Models\Stock;
 use App\Models\Subcategory;
 use App\Models\Subscription;
@@ -1752,10 +1753,38 @@ public function Withdraw(Request $request)
     }
 }
 
+public function CreatePromoCode(Request $request)
+{
+    $rules = ['name'=>'required','amount'=>'required','expiry' =>'required','product_id' =>'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $input['user_id'] = Auth::id();
+        $promocode = PromoCode::create($input);
+        return parent::success("Promocode created successfully!", $promocode);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
-
-
+public function ViewPromocode(Request $request)
+{
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $promocode = PromoCode::where('user_id', Auth::id())->get();
+        return parent::success("View products successfully!", $promocode);
+    }catch(\Exception $ex){
+        return parent::success($ex->getMessage());
+    }
+}
 
 
 
