@@ -720,7 +720,7 @@ class ClientController extends ApiController
                    
                     Transaction::create([
                         'user_id' => Auth::id(),
-                        'order_id' =>  $order->id,
+                        'order_id' =>  $item->id,
                         'transaction_id' => $order->charge_id,
                         'vendor_id'  => $item->vendor_id,
                         'product_id'  => $product->id,
