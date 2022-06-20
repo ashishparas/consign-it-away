@@ -1669,7 +1669,8 @@ public function Dashboard(Request $request)
                     $dashboard['income'] = $withdraw;
                     $dashboard['balance'] = ($dashboard->TotalRevenue - $withdraw);
                     $last_trans = Transaction::select('created_at')->where('vendor_id', Auth::id())->orderBy('created_at',"DESC")->first();
-                    $dashboard['last_transaction'] = date('Y-M-d h:i a', strtotime($last_trans->created_at));
+                    $Ldate =  ($last_trans)?  date('Y-M-d h:i a', strtotime($last_trans->created_at)): '';
+                    $dashboard['last_transaction'] = $Ldate;
             
                     $this_mnth_tans = Transaction::whereRaw('MONTH(order_date) = '.date('m'))->sum('price');
              
