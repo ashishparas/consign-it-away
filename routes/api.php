@@ -116,6 +116,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('edit/paypal/id',[VendorController::class, "EditPaypalId"]);
     Route::post('delete/discount',[VendorController::class, "DeleteDiscount"]);
     Route::post('view/orders', [ClientController::class, "ViewOrder"]);
+    Route::post('view/vendor/orders', [ClientController::class, "ViewVendorOrder"]);
     Route::post('set/default/address',[ClientController::class, "SetDefaultAddress"]);
     Route::post('view/order/by/id', [ClientController::class,"ViewOrderById"]);
     

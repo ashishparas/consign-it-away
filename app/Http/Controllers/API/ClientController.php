@@ -802,6 +802,37 @@ class ClientController extends ApiController
        }
    }
 
+
+   public function ViewVendorOrder(Request $request)
+   {
+       $rules = ['type' => 'required|in:1,2,3,4'];
+       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+
+       try{
+            $input  = $request->all();
+            if($request->type === '1'){
+                $items = Item::where('vendor_id',Auth::id())->where('status','1')->with(['Product'])->orderBy('created_at','DESC')->get();
+            }else if($request->type === '2'){
+                $items = Item::where('vendor_id',Auth::id())->where('status','2')->with(['Product'])->orderBy('created_at','DESC')->get();
+            }else if($request->type === '3'){
+                $items = Item::where('vendor_id',Auth::id())->where('status','3')->with(['Product'])->orderBy('created_at','DESC')->get();
+            }else if($request->type === '4'){
+                $items = Item::where('vendor_id',Auth::id())->with(['Product'])->orderBy('created_at','DESC')->get();
+            }
+
+           
+            return parent::success("View Orders successfully!",['orders' => $items]);
+       }catch(\Exception $ex){
+           return parent::error($ex->getMessage());
+       }
+   }
+
+
+
+
    public function SetDefaultAddress(Request $request){
      
     $rules = ['address_id' => 'required|exists:addresses,id','status' => 'required|in:1,2'];
