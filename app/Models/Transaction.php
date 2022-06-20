@@ -19,7 +19,7 @@ class Transaction extends Model
 
 
     public function OrderDetails(){
-        return $this->hasMany(Item::class,'id','order_id')->select('order_id','status');
+        return $this->hasMany(Item::class,'id','order_id')->select('id','status');
     }
 
 

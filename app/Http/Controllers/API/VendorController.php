@@ -292,7 +292,7 @@ class VendorController extends ApiController
           
             $manager = $manager->where('user_id', Auth::id())->with(['Store'])->get();
          
-            return parent::success("View staff successfully!",['manager' => $manager]);
+            return parent::success("View staff successfully!",['staff' => $manager]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
@@ -1694,7 +1694,7 @@ public function ViewTransactions(Request $request)
         return $validateAttributes;
     endif;
     try{
-        $withdraw = Transaction::orderBy('id','DESC')->with(['OrderDetails'])->get();
+        $withdraw = Transaction::orderBy('id','DESC')->get();
         $totalIncome = Transaction::where('vendor_id', Auth::id())->sum('price');
        
         return parent::success("View tansaction successfully!",['total_incomde' => number_format($totalIncome,2),'withdraw' => $withdraw]);
