@@ -595,13 +595,14 @@ class VendorController extends ApiController
             if(isset($request->search) || isset($request->category_id) || isset($request->stock_status)){
           
                 // DB::enableQueryLog();
-                $products = Product::select('products.id','products.name','products.description','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
+                $products = Product::select('products.id','products.name','products.description','products.image','products.amount','products.category_id','products.quantity',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
                 WHEN stocks.stock > 0 THEN "available"
                 WHEN stocks.stock = 0 THEN "not_available"
                 ELSE "not_available"
-               END ) as stock_status'))
+               END ) as stock_status, stocks.stock as manage_stock'))
                         ->leftJoin('ratings','ratings.product_id','products.id')
                         ->leftJoin('stocks','stocks.product_id','products.id')
+                       
                         ->where('products.user_id', Auth::id())
                         ->where('products.name','LIKE','%'.$request->search.'%')
                         ->Where('products.category_id','LIKE','%'.$category_id.'%')
@@ -609,7 +610,7 @@ class VendorController extends ApiController
                         ->with(['Category','Stock'])
                         ->groupBy('products.id')
                         ->orderBy('AverageRating','DESC')
-                        ->get();
+                        ->paginate($limit)->makeHidden(['CartStatus','soldBy']);
                         // dd(DB::getQueryLog($products));
 
             }else{
@@ -618,14 +619,14 @@ class VendorController extends ApiController
                 WHEN stocks.stock > 0 THEN "available"
                 WHEN stocks.stock = 0 THEN "not_available"
                 ELSE "not_available"
-               END ) as stock_status'))
+               END ) as stock_status,stocks.stock as manage_stock'))
                         ->leftJoin('ratings','ratings.product_id','products.id')
                         ->leftJoin('stocks','stocks.product_id','products.id')
                         ->where('products.user_id', Auth::id())
                         ->with(['Category'])
                         ->groupBy('products.id')
                         ->orderBy('AverageRating','DESC')
-                        ->get();
+                        ->paginate($limit)->makeHidden(['CartStatus','soldBy']);
 
             }
 
