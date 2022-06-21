@@ -1778,6 +1778,25 @@ public function CreatePromoCode(Request $request)
         return parent::error($ex->getMessage());
     }
 }
+public function UpdatePromoCode(Request $request)
+{
+    $rules = ['promocode_id'=>'required|exists:promo_codes,id','name'=>'required','amount'=>'required','expiry' =>'required','product_id' =>'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $promocode = new PromoCode();
+        $promocode = $promocode->FindOrfail($request->promocode_id);
+                        $promocode->fill($input);
+                        $promocode->save();
+        
+        return parent::success("Promocode created successfully!", $promocode);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 public function ViewPromocode(Request $request)
