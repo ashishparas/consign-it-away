@@ -778,6 +778,7 @@ class ClientController extends ApiController
    public function ViewOrder(Request $request)
    {
        $rules = ['type' => 'required|in:1,2,3,4'];
+      
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
        if($validateAttributes):
         return $validateAttributes;
