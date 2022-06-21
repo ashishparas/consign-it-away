@@ -1194,20 +1194,30 @@ class VendorController extends ApiController
 
    public function DeleteAttributes(Request $request)
    {
-       $rules = ['variant_id' => 'required|exists:variant_items,id','product_id' => 'required|exists:products,id'];
+       $rules = ['variant_id' => 'required|exists:variants,id','product_id' => 'required|exists:products,id'];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
        if($validateAttributes):
         return $validateAttributes;
        endif;
        try{
            $input = $request->all();
-           $variant = VariantItems::FindOrfail($input['variant_id']);
+           $variant = Variant::FindOrfail($input['variant_id']);
            $variant->delete();
 
-           $variants = VariantItems::select('id','product_id','quantity','price')
+           $variants = Variant::select('id','product_id','quantity','price')
                         ->where('variant_items.product_id', $input['product_id'])
-                        ->with(['variants'])
                         ->get();
+
+                        foreach($variants as $key => $variant){
+                            $option_id = explode(",",$variant['option_id']);
+                            // dd($attr_id);
+                            $variants[$key]['variants'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
+                            ->join("attribute_options","attributes.id","attribute_options.attr_id")
+                            ->whereIn('attribute_options.id', $option_id)
+                            ->with('Attributes')
+                            ->get();
+                        }
+
 
         return parent::success("Attribute deleted successfully!",['variants' => $variants]);
        }catch(\Exception $ex){
@@ -1840,7 +1850,50 @@ public function ViewOrderByVendor(Request $request)
    }
 
 
+   
+   function TransactionById(Request $request)
+   {
+        $rules = ['transaction_id' => 'required|exists:transactions,id'];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            
+            $transaction = Transaction::where('id',$request->transaction_id)
+            ->where('vendor_id', Auth::id())
+            ->with(['Customer','Vendor'])
+            ->first();
+            return parent::success("View transaction successfully!",$transaction);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
 
+   public function FilterTransaction(Request $request){
+    $rules = ['type'=>'required','date_from'=>'','date_to'=>'','processing_status'=>'required','payment_status'=>'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $model = new Transaction();
+        if($request->type === '1'):
+            if(isset($request->date_from) && isset($request->date_to)):
+                $model = $model->whereBetween('order_date', [$request->date_from, $request->date_to] );
+            endif;
+        endif;
+        
+        $model = $model->orderBy('created_at','DESC')
+                        ->where('status',$request->processing_status)
+                        ->where('payment_status', $request->payment_status)
+                        ->get();
+        return parent::success("Filter transaction successfully!",$model);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
 
 
 

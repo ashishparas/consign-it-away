@@ -21,6 +21,12 @@ class Transaction extends Model
     public function OrderDetails(){
         return $this->hasMany(Item::class,'id','order_id')->select('id','status');
     }
+    public function Customer(){
+        return $this->belongsTo(User::class,'user_id')->select('id','name','fname','lname','profile_picture');
+    }
+    public function Vendor(){
+        return $this->belongsTo(User::class,'vendor_id')->select('id','name','fname','lname','profile_picture');
+    }
 
 
 }
