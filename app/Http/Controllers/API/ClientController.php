@@ -660,7 +660,7 @@ class ClientController extends ApiController
                 ->with(['Product'])
                 ->get();
             }
-            
+          
             return parent::success("View Cart successfully!",['address' => $address,'cart' => $carts,'coupon_amount' => 0]);
         }catch(\Exception  $ex){
             return parent::error($ex->getMessage());
@@ -678,10 +678,7 @@ class ClientController extends ApiController
        try{
             $input = $request->all();
 
-            
-          
             // Charge for product
-       
             $Address = Helper::VerifyAddress($request->address_id);
 
         if($Address):
@@ -759,7 +756,7 @@ class ClientController extends ApiController
            
                 endforeach;
     
-             //  Cart::where('user_id', Auth::id())->delete();
+              Cart::where('user_id', Auth::id())->delete();
     
                return parent::success("Your order Placed successfully!");
             endif;

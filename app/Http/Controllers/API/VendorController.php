@@ -1895,7 +1895,7 @@ public function ViewOrderByVendor(Request $request)
    }
 
    public function FilterTransaction(Request $request){
-    $rules = ['type'=>'required','date_from'=>'','date_to'=>'','processing_status'=>'required','payment_status'=>'required'];
+    $rules = ['type'=>'required','month'=>'','date_from'=>'','date_to'=>'','processing_status'=>'required','payment_status'=>'required'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
     if($validateAttributes):
         return $validateAttributes;

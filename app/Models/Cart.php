@@ -27,10 +27,14 @@ class Cart extends Model
     
  
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','user_id','name','image','price');
+        return $this->belongsTo(Product::class)->select('id','user_id','name','image','price')->with(['Offer']);
     }
 
- 
+    public function Offer(){
+        return $this->hasOne(Offer::class,'user_id','user_id')
+                ->where('product_id',$this->product_id)
+                ->where('status','2');
+    }
 
    
   
