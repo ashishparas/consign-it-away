@@ -1153,7 +1153,7 @@ class VendorController extends ApiController
 
    public function StoreById(Request $request)
    {
-       $rules = ['store_id' => 'required|exists:stores,id','limit' =>''];
+       $rules = ['store_id' => 'required|exists:stores,id'];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),false);
        
        if($validateAttributes):
@@ -1162,6 +1162,7 @@ class VendorController extends ApiController
        try{
            $products = [];
             $input = $request->all();
+            $limit = 30;
             if(isset($request->limit)):
                 $limit = ($request->limit)? $request->limit:30;
             endif;
@@ -1176,11 +1177,15 @@ class VendorController extends ApiController
             ->where('store_id',$store->id)
             ->paginate($limit);
 
+            $countProductbyMonth = Product::where('user_id', Auth::id())->whereRaw("MONTH(created_at) = date('M')")->count();
+           
             foreach($products as $key => $product):
             $products[$key]['rating'] = number_format($product->Rating()->avg('rating'),1);
             $products[$key]['RatingCount'] = $product->Rating()->count('product_id');
+            
+
             endforeach;
-        return parent::success("View store details successfully!",['store' => $store,'product'=> $products,'about'=> $about]);
+        return parent::success("View store details successfully!",['product_added_this_month'=> $countProductbyMonth,'store' => $store,'product'=> $products,'about'=> $about]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
