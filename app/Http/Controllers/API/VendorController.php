@@ -1201,7 +1201,8 @@ class VendorController extends ApiController
        endif;
        try{
            $input = $request->all();
-           $variant = Variant::FindOrfail($input['variant_id'])->where('product_id', $request->product_id);
+           $variant = Variant::FindOrfail($input['variant_id']);
+           $variant = $variant->where('product_id', $request->product_id);
            $variant->delete();
 
         return parent::success("Attribute deleted successfully!");
