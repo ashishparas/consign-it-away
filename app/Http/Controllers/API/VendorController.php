@@ -1204,22 +1204,7 @@ class VendorController extends ApiController
            $variant = Variant::FindOrfail($input['variant_id']);
            $variant->delete();
 
-           $variants = Variant::select('id','product_id','quantity','price')
-                        ->where('variant_items.product_id', $input['product_id'])
-                        ->get();
-
-                        foreach($variants as $key => $variant){
-                            $option_id = explode(",",$variant['option_id']);
-                            // dd($attr_id);
-                            $variants[$key]['variants'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
-                            ->join("attribute_options","attributes.id","attribute_options.attr_id")
-                            ->whereIn('attribute_options.id', $option_id)
-                            ->with('Attributes')
-                            ->get();
-                        }
-
-
-        return parent::success("Attribute deleted successfully!",['variants' => $variants]);
+        return parent::success("Attribute deleted successfully!");
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
        }
