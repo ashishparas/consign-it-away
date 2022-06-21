@@ -14,6 +14,8 @@ use Stripe;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App;
+use App\Helper\Helper;
+use App\Models\Address;
 use App\Models\Attribute as ModelsAttribute;
 use App\Models\AttributeOption;
 use App\Models\Bank;
@@ -24,6 +26,7 @@ use App\Models\Colour;
 use App\Models\Discount;
 use App\Models\Item;
 use App\Models\Manager;
+use App\Models\Notification;
 use App\Models\Offer;
 use App\Models\Product;
 use App\Models\PromoCode;
@@ -1150,8 +1153,8 @@ class VendorController extends ApiController
 
    public function StoreById(Request $request)
    {
-       $rules = ['store_id' => 'required|exists:stores,id'];
-       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),true);
+       $rules = ['store_id' => 'required|exists:stores,id','limit' =>''];
+       $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),false);
        
        if($validateAttributes):
         return $validateAttributes;
@@ -1159,6 +1162,9 @@ class VendorController extends ApiController
        try{
            $products = [];
             $input = $request->all();
+            if(isset($request->limit)):
+                $limit = ($request->limit)? $request->limit:30;
+            endif;
             $store = Store::where('id', $input['store_id'])->with(['Manager'])->first();
 
             $about = User::select('id','name','fname','lname','profile_picture')
@@ -1168,7 +1174,7 @@ class VendorController extends ApiController
             $products = Product::select('id','image','name','amount')
             ->where('user_id',$store->user_id)
             ->where('store_id',$store->id)
-            ->get();
+            ->paginate($limit);
 
             foreach($products as $key => $product):
             $products[$key]['rating'] = number_format($product->Rating()->avg('rating'),1);
@@ -1786,6 +1792,48 @@ public function ViewPromocode(Request $request)
         return parent::success($ex->getMessage());
     }
 }
+
+
+public function ViewOrderByVendor(Request $request)
+   {
+      // dd(Auth::id());
+       $rules = ['order_id' => 'required|exists:items,id','type'=>'','notification_id'=>''];
+       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+       if($validateAttributes):
+        return $validateAttributes;
+       endif;
+       try{
+           $input = $request->all();
+        $item = Item::where('vendor_id',Auth::id())
+                ->where('id', $input['order_id'])
+                ->with(['Customer','Address','Product','MyRating'])
+                ->first();
+                $tracking_id = Helper::trackCourier($item->tracking_id);
+                if($tracking_id):
+                    $item['tracking_status'] =   $tracking_id;     
+                else:
+                    $item['tracking_status'] ="status not available yet";
+                endif;
+        $address = Address::where('id', $item->address_id)
+                ->where('user_id', Auth::id())
+                ->first();
+
+        $store = Store::select('id','store_image','name','description')
+        ->where('id', $item->product->store_id)
+        ->first();
+
+        if(isset($request->type) && isset($request->notification_id)){
+            if($request->type === '1'):
+                Notification::where('id', $request->notification_id)->update(['is_read' => '1']);
+            endif;
+        }
+
+        return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
+       }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+       }
+   }
+
 
 
 

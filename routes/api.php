@@ -119,6 +119,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('view/vendor/orders', [ClientController::class, "ViewVendorOrder"]);
     Route::post('set/default/address',[ClientController::class, "SetDefaultAddress"]);
     Route::post('view/order/by/id', [ClientController::class,"ViewOrderById"]);
+    Route::post('vendor/order/list/by/id',[VendorController::class,"ViewOrderByVendor"]);
     
     
     Route::post('add/variant',[VendorController::class, "AddVariant"]);
