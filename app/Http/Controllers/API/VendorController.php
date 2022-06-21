@@ -1201,11 +1201,11 @@ class VendorController extends ApiController
        endif;
        try{
            $input = $request->all();
-           DB::enableQueryLog();
+        
            $variant = Variant::FindOrfail($input['variant_id']);
            $variant = $variant->where('product_id', $request->product_id);
            $variant->delete();
-           dd(DB::getQueryLog($variant));
+           
 
         return parent::success("Attribute deleted successfully!");
        }catch(\Exception $ex){
