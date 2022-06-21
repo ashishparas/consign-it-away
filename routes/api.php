@@ -160,6 +160,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('view/promocode', [VendorController::class, "ViewPromocode"]);
     Route::post('view/transaction/by/id',[VendorController::class, "TransactionById"]);
     Route::post('filter/transactions',[VendorController::class, "FilterTransaction"]);
+    Route::post('delete/promocode',[VendorController::class, "DeletePromocode"]);
    
     
 });

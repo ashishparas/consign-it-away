@@ -1799,6 +1799,24 @@ public function UpdatePromoCode(Request $request)
 }
 
 
+public function DeletePromocode(Request $request)
+{
+    $rules = ['promocode_id'=>'required|exists:promo_codes,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $promocode = PromoCode::FindOrfail($request->promocode_id);
+                    $promocode->delete();
+        return parent::success("Delete promocode successfully!");
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
 public function ViewPromocode(Request $request)
 {
     $rules = [];
