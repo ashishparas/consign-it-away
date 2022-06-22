@@ -24,6 +24,11 @@ class PromoCode extends Model
 
     public function getProductAttribute(){
         $products = explode(',',$this->product_id);
-        return Product::select('id','name','image')->whereIn('id', $products)->get()->makeHidden(['soldBy','CartStatus','FavouriteId','favourite']);
+        return Product::
+        select('products.id','products.name','products.image','products.price','products.category_id','categories.title')
+        ->Join('categories','products.category_id','categories.id')
+        ->whereIn('products.id', $products)
+        ->get()
+        ->makeHidden(['soldBy','CartStatus','FavouriteId','favourite']);
     }
 }
