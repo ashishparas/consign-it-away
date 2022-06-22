@@ -80,6 +80,7 @@ class Helper extends ApiController
         try{
             $store = Store::FindOrfail($store_id);
             $user = User::FindOrfail($vendor_id);
+          
             $cusName = Auth::user()->name;
             $cusMobileNo = Auth::user()->mobile_no;
             $cusEmail = Auth::user()->email;
@@ -186,7 +187,7 @@ $input_xml = <<<EOXML
             
             // Convert the XML result into array
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
-          
+        
             return $array_data['BarcodeNumber'];
 
             }else{
