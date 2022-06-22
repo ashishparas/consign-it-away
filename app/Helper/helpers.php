@@ -20,7 +20,7 @@ class Helper extends ApiController
 
 
     public static function SavePaymentCard(){
-        
+
     }
 
 
@@ -186,7 +186,7 @@ $input_xml = <<<EOXML
             
             // Convert the XML result into array
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
-            dd($array_data);
+          
             return $array_data['BarcodeNumber'];
 
             }else{
