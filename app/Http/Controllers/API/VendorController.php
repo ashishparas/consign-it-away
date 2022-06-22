@@ -1773,7 +1773,9 @@ public function Withdraw(Request $request)
     try{
         $input = $request->all();
         $trans = Transaction::where('vendor_id', Auth::id())->sum('price');
+      
         $withdraw = Withdraw::where('user_id', Auth::id())->where('status','1')->sum('amount');
+        // dd($withdraw);
         $withdrawalAmount =  ($trans - $withdraw);
         if($request->amount > $withdrawalAmount):
             return parent::error("Your amount unprocessable amount");
