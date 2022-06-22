@@ -32,10 +32,14 @@ class Product extends Model
     ];
 
 
-    protected $appends = ['base_url','favourite','FavouriteId','CartStatus','soldBy'];
+    protected $appends = ['base_url','favourite','Dimensions','FavouriteId','CartStatus','soldBy'];
 
     
 
+
+    public function getDimensionsAttribute($value){
+        return json_decode($value, true);
+    }
 
 
     public function getCartStatusAttribute(){
