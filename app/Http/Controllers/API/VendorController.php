@@ -1871,7 +1871,7 @@ public function ViewOrderByVendor(Request $request)
                 ->where('id', $input['order_id'])
                 ->with(['Customer','Product','Transaction','MyRating'])
                 ->first();
-                if($item->tracking_id !== null):
+                if($item->tracking_id):
                     $tracking_id = Helper::trackCourier($item->tracking_id);
                     if($tracking_id):
                         $item['tracking_status'] =   $tracking_id;   
