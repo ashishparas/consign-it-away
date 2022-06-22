@@ -1868,7 +1868,7 @@ public function ViewOrderByVendor(Request $request)
            $input = $request->all();
         $item = Item::where('vendor_id',Auth::id())
                 ->where('id', $input['order_id'])
-                ->with(['Customer','Address','Product','MyRating'])
+                ->with(['Customer','Product','Transaction','MyRating'])
                 ->first();
                 $tracking_id = Helper::trackCourier($item->tracking_id);
                 if($tracking_id):
@@ -1876,9 +1876,7 @@ public function ViewOrderByVendor(Request $request)
                 else:
                     $item['tracking_status'] ="status not available yet";
                 endif;
-        $address = Address::where('id', $item->address_id)
-                ->where('user_id', Auth::id())
-                ->first();
+        $address = Address::where('id', $item->address_id)->first();
 
         $store = Store::select('id','store_image','name','description')
         ->where('id', $item->product->store_id)

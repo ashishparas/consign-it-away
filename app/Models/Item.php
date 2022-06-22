@@ -23,7 +23,7 @@ class Item extends Model
 
 
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','user_id','store_id','name','price','image','description','category_id','weight')->with(['User','Category']);
+        return $this->belongsTo(Product::class)->select('id','user_id','store_id','name','price','image','description','category_id','weight', 'variants','tags','meta_description')->with(['User','Category']);
     }
 
     public function SoldBy(){
@@ -47,6 +47,8 @@ class Item extends Model
         return $this->hasOne(Address::class,'id','address_id');
     }
 
-
+    public function Transaction(){
+        return $this->hasOne(Transaction::class,'order_id');
+    }
 
 }
