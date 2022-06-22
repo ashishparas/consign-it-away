@@ -1867,10 +1867,13 @@ public function ViewOrderByVendor(Request $request)
        endif;
        try{
            $input = $request->all();
+          
         $item = Item::where('vendor_id',Auth::id())
                 ->where('id', $input['order_id'])
                 ->with(['Customer','Product','Transaction','MyRating'])
                 ->first();
+            if($item){
+                
                 if($item->tracking_id):
                     $tracking_id = Helper::trackCourier($item->tracking_id);
                     if($tracking_id):
@@ -1892,6 +1895,12 @@ public function ViewOrderByVendor(Request $request)
                 Notification::where('id', $request->notification_id)->update(['is_read' => '1']);
             endif;
         }
+                
+                
+            }else{
+                return parent::error("Order not found related to this vendor");
+            }
+                
 
         return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
        }catch(\Exception $ex){
