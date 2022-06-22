@@ -30,6 +30,7 @@ use App\Models\Notification;
 use App\Models\Offer;
 use App\Models\Product;
 use App\Models\PromoCode;
+use App\Models\Refund;
 use App\Models\Stock;
 use App\Models\Subcategory;
 use App\Models\Subscription;
@@ -1870,12 +1871,16 @@ public function ViewOrderByVendor(Request $request)
                 ->where('id', $input['order_id'])
                 ->with(['Customer','Product','Transaction','MyRating'])
                 ->first();
-                $tracking_id = Helper::trackCourier($item->tracking_id);
-                if($tracking_id):
-                    $item['tracking_status'] =   $tracking_id;     
+                if($item->tracking_id !== null):
+                    $tracking_id = Helper::trackCourier($item->tracking_id);
+                    if($tracking_id):
+                        $item['tracking_status'] =   $tracking_id;   
+                    endif;
                 else:
                     $item['tracking_status'] ="status not available yet";
                 endif;
+              
+                 
         $address = Address::where('id', $item->address_id)->first();
 
         $store = Store::select('id','store_image','name','description')
@@ -1940,6 +1945,30 @@ public function ViewOrderByVendor(Request $request)
     }
    }
 
+
+
+   public function Refund(Request $request)
+   {
+        $rules = ['order_id' => 'required','cus_id' =>'required','refund_preference'=>'required','reason'=>'','amount'=>'required','ship_from'=>'required','','shipping_type'=>'required'];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            $input['vendor_id'] = Auth::id();
+            $refund = Refund::create($input);
+            if($refund):
+                // $item = Item::FindOrfail($refund->order_id);
+                //     $item->fill(['status' => '5']);
+                //     $item->save();
+
+            endif;
+          return  parent::success("Refund initiate successfully!",$refund);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
 
 
 
