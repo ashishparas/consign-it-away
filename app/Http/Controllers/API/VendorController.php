@@ -1233,7 +1233,7 @@ class VendorController extends ApiController
 
    public function VendorBuySubscription(Request $request)
    {
-       $rules = ['plan_id'=>'required','card_holder_name' => 'required','card_no' => 'required','expiry_date' =>'required','cvv' =>'required','subscription_price'=>'required','subscription_type'=>'required|in:month,year','PaymentToken'=>'required','save_card' =>'required|in:1,2'];
+       $rules = ['plan_id'=>'required','card_holder_name' => 'required','card_no' => '','expiry_date' =>'','cvv' =>'','subscription_price'=>'required','subscription_type'=>'required|in:month,year','PaymentToken'=>'','save_card' =>'required|in:1,2'];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
        if($validateAttributes):
         return $validateAttributes;
