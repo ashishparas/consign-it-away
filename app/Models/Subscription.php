@@ -13,7 +13,7 @@ class Subscription extends Model
     protected $table = "subscriptions";
 
 
-    protected $fillable = ['user_id','subscription_id','subscription_item_id','name','stripe_id','stripe_status','stripe_price','quantity','trial_ends_at','ends_at','body'];
+    protected $fillable = ['user_id','plan_id','subscription_id','subscription_item_id','name','stripe_id','stripe_status','stripe_price','quantity','trial_ends_at','ends_at','body'];
 
     protected $primaryKey = "id";
 

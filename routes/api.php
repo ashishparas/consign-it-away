@@ -44,6 +44,7 @@ Route::post('find/rate',[ClientController::class, "UspsFindRate"]);
 Route::post('get/categories',[VendorController::class, "getCategories"]);
 Route::post("brands",[VendorController::class,"Brands"]);
 Route::get('invite/friend',[AuthController::class,"InviteFriend"]);
+Route::get('share/product',[AuthController::class, "ShareProduct"]);
 Route::get('most/popular/products',[ClientController::class, "MostPopularsProducts"]);
 
 Route::post('search', [ClientController::class, "Search"]);
@@ -161,6 +162,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('view/transaction/by/id',[VendorController::class, "TransactionById"]);
     Route::post('filter/transactions',[VendorController::class, "FilterTransaction"]);
     Route::post('delete/promocode',[VendorController::class, "DeletePromocode"]);
+    
    
     
 });

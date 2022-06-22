@@ -18,6 +18,17 @@ class Helper extends ApiController
     }
 
 
+
+    public static function SavePaymentCard(){
+        
+    }
+
+
+
+
+
+
+
     public static function VerifyAddress(int $id=null){
         try{
 

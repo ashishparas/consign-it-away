@@ -919,14 +919,14 @@ class VendorController extends ApiController
 
    public function SubscriptionPlanById(Request $request)
    {
-        $rules = ['subscription_id' =>'required|exists:subscriptions,id'];
+        $rules = ['subscription_id' =>'required|exists:subscription_plans,id'];
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
         if($validateAttributes):
             return $validateAttributes;
         endif;
         try{
     
-            $subscription = Subscription::find($request->subscription_id);
+            $subscription = SubscriptionPlan::find($request->subscription_id);
             return parent::success("Subscription plan View successfully!",['subscription' => $subscription]);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
@@ -1233,15 +1233,16 @@ class VendorController extends ApiController
 
    public function VendorBuySubscription(Request $request)
    {
-       $rules = ['card_holder_name' => 'required','card_no' => 'required','expiry_date' =>'required','cvv' =>'required','subscription_price'=>'required','subscription_type'=>'required|in:month,year','PaymentToken'=>'required','save_card' =>'required|in:1,2'];
+       $rules = ['plan_id'=>'required','card_holder_name' => 'required','card_no' => 'required','expiry_date' =>'required','cvv' =>'required','subscription_price'=>'required','subscription_type'=>'required|in:month,year','PaymentToken'=>'required','save_card' =>'required|in:1,2'];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
        if($validateAttributes):
         return $validateAttributes;
        endif;
        try{
+        
             $input = $request->all();
             if($input['save_card'] === '1'){
-            
+          
                 $expiry_date = explode('/',$input['expiry_date']);
                 $input['expiry_month'] = $expiry_date[0];
                 $input['expiry_year'] = $expiry_date[1];
@@ -1250,9 +1251,9 @@ class VendorController extends ApiController
             $card = Card::create($input);
             }
         
-        // dd($cards['card_holder_name']);
-        // $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+            if($request->subscription_price > 0){
+                \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         // $cardTokenArray=\Stripe\Token::create([
         //     'card' => [
         //       'number' => $card['card_no'],
@@ -1301,6 +1302,7 @@ class VendorController extends ApiController
             ]);
          
             $data = [
+                'plan_id' => $input['plan_id'],
                 'user_id' => Auth::id(),
                 'name'    => $subscription['object'],
                 'stripe_status' => $subscription['status'],
@@ -1313,6 +1315,27 @@ class VendorController extends ApiController
                 'ends_at'   => $subscription['current_period_end'],
                 'body'  => json_encode($subscription),
             ];
+
+            
+
+            }else{
+
+                $data = [
+                    'plan_id' => $input['plan_id'],
+                    'user_id' => Auth::id(),
+                    'name'    => 'Bronze',
+                    'stripe_status' => 'success',
+                    'stripe_price' => 0,
+                    'subscription_id' => 'free'.md5(rand(1111, 9999)),
+                    'subscription_item_id' => 'free',
+                    'quantity'     => '1',
+                    'stripe_id'    =>  'free'.md5(rand(1111,999)), //$subscription['items']['data'][0]['id'],
+                    'trial_ends_at' => null,
+                    'ends_at'   => null,
+                    'body'  => null,
+                ];
+
+            }
 
             $subscription  = Subscription::create($data);
             $user = User::FindOrfail(Auth::id());
@@ -1918,6 +1941,10 @@ public function ViewOrderByVendor(Request $request)
         return parent::error($ex->getMessage());
     }
    }
+
+
+
+
 
 
 
