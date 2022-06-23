@@ -901,6 +901,7 @@ class VendorController extends ApiController
 
    public function SubscriptionsPlan(Request $request)
    {
+   
        $rules = [];
        $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
        if($validateAttributes):
@@ -911,7 +912,8 @@ class VendorController extends ApiController
            foreach($subscriptions as $key => $subscription):
             $subscriptions[$key]['features'] = json_decode($subscription->features);
            endforeach;
-            return parent::success("Subscription plans view successfully!",['subscription' => $subscriptions]);
+           $active = Subscription::select('plan_id')->where('user_id', Auth::id())->orderBy('created_at','DESC')->first();
+            return parent::success("Subscription plans view successfully!",['active_plan'=> $active,'subscription' => $subscriptions]);
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
        }
