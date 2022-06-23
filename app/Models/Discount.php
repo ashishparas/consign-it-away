@@ -33,6 +33,8 @@ class Discount extends Model
         return $this->hasMany(Product::class,"discount","id")->where('user_id', Auth::id())->select('id','name','image','discount');
     }
 
+  
+
 
 
 }
