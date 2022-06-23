@@ -852,7 +852,7 @@ class VendorController extends ApiController
 
    public function ViewDiscount(Request $request)
    {
-    
+  
     $rules = ['status' => 'required'];
     $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
     if($validateAttributes):
@@ -863,7 +863,7 @@ class VendorController extends ApiController
         $input = $request->all();
      
         $disc = [];
-        $discounts = Discount::where('user_id', Auth::id())->with('Category')->get();
+        $discounts = Discount::where('user_id', Auth::id())->with(['Category','Products'])->get();
         if($input['status'] == '1'){
          
         foreach($discounts as $discount):

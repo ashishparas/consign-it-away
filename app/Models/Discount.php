@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Discount extends Model
 {
@@ -26,5 +27,12 @@ class Discount extends Model
     public function Category(){
         return $this->belongsTo(Category::class)->select('id','title');   
     }
+
+
+    public function Products(){
+        return $this->hasMany(Product::class,"discount","id")->where('user_id', Auth::id())->select('id','name','image','discount');
+    }
+
+
 
 }

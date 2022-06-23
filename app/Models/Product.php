@@ -112,7 +112,9 @@ class Product extends Model
       return $this->belongsTo(Store::class)->select('id','name','banner')->with('Manager');
   }
 
-
+public function Discount(){
+    return $this->hasOne(Discount::class,'id','discount')->where('status','1')->select('id','percentage','description');
+}
   
     
 
