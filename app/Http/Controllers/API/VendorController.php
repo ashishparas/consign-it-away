@@ -1884,7 +1884,8 @@ public function ViewOrderByVendor(Request $request)
                 else:
                     $item['tracking_status'] ="status not available yet";
                 endif;
-              
+                  $specifications = Product::select('weight','brand','color','quantity')->where('id', $item->product_id)->first()->makeHidden('favourite','FavouriteId','CartStatus','soldBy');
+                $item['product']['product_specification'] = $specifications; 
                  
         $address = Address::where('id', $item->address_id)->first();
 
