@@ -599,7 +599,7 @@ class VendorController extends ApiController
             if(isset($request->search) || isset($request->category_id) || isset($request->stock_status)){
           
                 // DB::enableQueryLog();
-                $products = Product::select('products.id','products.name','products.description','products.image',DB::raw('products.price as amount'),'products.category_id','products.quantity',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
+                $products = Product::select('products.id','products.name','products.description','products.discount','products.image',DB::raw('products.price as amount'),'products.category_id','products.quantity',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
                 WHEN stocks.stock > 0 THEN "available"
                 WHEN stocks.stock = 0 THEN "not_available"
                 ELSE "not_available"
@@ -611,7 +611,7 @@ class VendorController extends ApiController
                         ->where('products.name','LIKE','%'.$request->search.'%')
                         ->Where('products.category_id','LIKE','%'.$category_id.'%')
                         ->having('stock_status','LIKE','%'.$stock_status.'%')
-                        ->with(['Category','Stock'])
+                        ->with(['Category','Stock','Discount'])
                         ->groupBy('products.id')
                         ->orderBy('AverageRating','DESC')
                         ->paginate($limit)->makeHidden(['CartStatus','soldBy']);
@@ -1886,6 +1886,10 @@ public function ViewOrderByVendor(Request $request)
                 endif;
                   $specifications = Product::select('weight','brand','color','quantity')->where('id', $item->product_id)->first()->makeHidden('favourite','FavouriteId','CartStatus','soldBy');
                 $item['product']['product_specification'] = $specifications; 
+
+               $attribite =  \App\Models\Attribute::where('product_id', $item->product_id)->get();
+
+                $item['product']['product_varients'] =  $attribite;
                  
         $address = Address::where('id', $item->address_id)->first();
 
