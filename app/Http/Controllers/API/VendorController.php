@@ -912,7 +912,12 @@ class VendorController extends ApiController
            foreach($subscriptions as $key => $subscription):
             $subscriptions[$key]['features'] = json_decode($subscription->features);
            endforeach;
-           $active = Subscription::select('plan_id')->where('user_id', Auth::id())->orderBy('created_at','DESC')->first();
+           $active = Subscription::select('plan_id','body')->where('user_id', Auth::id())->orderBy('created_at','DESC')->first();
+           if($active):
+            $subscription = json_decode($active->body, true);
+            $active['interval'] = $subscription['plan']['interval'];
+           endif;
+            
             return parent::success("Subscription plans view successfully!",['active_plan'=> $active,'subscription' => $subscriptions]);
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
