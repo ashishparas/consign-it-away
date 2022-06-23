@@ -30,6 +30,9 @@ class Attribute extends Model
         return $this->hasOne(\App\Models\AttributeOption::class,'attr_id');
     }
 
+public function AttributeOption(){
+        return $this->hasMany(\App\Models\AttributeOption::class,'attr_id');
+    }
    
 
 

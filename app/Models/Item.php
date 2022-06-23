@@ -50,6 +50,11 @@ class Item extends Model
     public function Transaction(){
         return $this->hasOne(Transaction::class,'order_id');
     }
+    
+    
+    public function ProductVariants(){
+        return \App\Models\Attribute::where('product_id',$this->product_id)->with(['AttributeOption'])->get();
+    }
 
 
 

@@ -1886,10 +1886,10 @@ public function ViewOrderByVendor(Request $request)
                 endif;
                   $specifications = Product::select('weight','brand','color','quantity')->where('id', $item->product_id)->first()->makeHidden('favourite','FavouriteId','CartStatus','soldBy');
                 $item['product']['product_specification'] = $specifications; 
-
+                $item['coupanAmt'] = '0';
                $attribite =  \App\Models\Attribute::where('product_id', $item->product_id)->get();
 
-                $item['product']['product_varients'] =  $attribite;
+                $item['product']['product_varients'] =  $item->ProductVariants();
                  
         $address = Address::where('id', $item->address_id)->first();
 
