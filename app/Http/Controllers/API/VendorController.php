@@ -599,7 +599,7 @@ class VendorController extends ApiController
             if(isset($request->search) || isset($request->category_id) || isset($request->stock_status)){
           
                 // DB::enableQueryLog();
-                $products = Product::select('products.id','products.name','products.description','products.image','products.amount','products.category_id','products.quantity',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
+                $products = Product::select('products.id','products.name','products.description','products.image',DB::raw('products.price as amount'),'products.category_id','products.quantity',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
                 WHEN stocks.stock > 0 THEN "available"
                 WHEN stocks.stock = 0 THEN "not_available"
                 ELSE "not_available"
