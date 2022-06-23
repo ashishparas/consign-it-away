@@ -1872,7 +1872,7 @@ public function ViewOrderByVendor(Request $request)
           
         $item = Item::where('vendor_id',Auth::id())
                 ->where('id', $input['order_id'])
-                ->with(['Customer','Product','Transaction','MyRating'])
+                ->with(['Customer','Product','Transaction','Rating'])
                 ->first();
             if($item){
                 
