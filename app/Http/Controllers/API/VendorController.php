@@ -1998,6 +1998,27 @@ public function ViewOrderByVendor(Request $request)
    }
 
 
+   public function DeleteProductImage(Request $request)
+   {
+        $rules = ['product_id'=> 'required|exists:products,id','image'=>'required'];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $input = $request->all();
+            $product = product::select('id','image','name')->where('id', $request->product_id)->first();
+            // dd($product->image);
+          
+            $arr = array_diff($product->image, array($request->image));
+          $image  = implode(',', $arr);
+          Product::where('id', $request->product_id)->update(['image' => $image]);
+            return parent::success("product image removed successfully!");
+
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
 
 
 

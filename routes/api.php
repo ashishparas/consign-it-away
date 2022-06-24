@@ -163,6 +163,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('filter/transactions',[VendorController::class, "FilterTransaction"]);
     Route::post('delete/promocode',[VendorController::class, "DeletePromocode"]);
     Route::post('initiate/refund',[VendorController::class, "Refund"]);
+    Route::post('delete/product/image',[VendorController::class, "DeleteProductImage"]);
     
    
     
