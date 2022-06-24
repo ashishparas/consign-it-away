@@ -1253,14 +1253,12 @@ class VendorController extends ApiController
        try{
         
             $input = $request->all();
+            $expiry_date = explode('/',$input['expiry_date']);
+            $input['expiry_month'] = $expiry_date[0];
+            $input['expiry_year'] = $expiry_date[1];
+            $input['user_id'] =  Auth::id();
             if($input['save_card'] === '1'){
-          
-                $expiry_date = explode('/',$input['expiry_date']);
-                $input['expiry_month'] = $expiry_date[0];
-                $input['expiry_year'] = $expiry_date[1];
-                $input['user_id'] =  Auth::id();
-            // dd($input);
-            $card = Card::create($input);
+                $card = Card::create($input);
             }
         
 
@@ -1268,9 +1266,9 @@ class VendorController extends ApiController
                 \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         // $cardTokenArray=\Stripe\Token::create([
         //     'card' => [
-        //       'number' => $card['card_no'],
-        //       'exp_month' => $card['expiry_month'],
-        //       'exp_year' => $card['expiry_year'],
+        //       'number' => $request['card_no'],
+        //       'exp_month' => $expiry_date[0],
+        //       'exp_year' => $expiry_date[1],
         //       'cvc' => '123',
         //     ],
         //   ]);
@@ -1322,7 +1320,7 @@ class VendorController extends ApiController
                 'subscription_id' => $subscription->id,
                 'subscription_item_id' => $subscription['items']['data'][0]['id'],
                 'quantity'     => '1',
-                'stripe_id'    =>  $subscription['customer'], //$subscription['items']['data'][0]['id'],
+                'stripe_id'    =>  $customer->id, //$subscription['items']['data'][0]['id'],
                 'trial_ends_at' => $subscription['current_period_end'],
                 'ends_at'   => $subscription['current_period_end'],
                 'body'  => json_encode($subscription),
@@ -1341,7 +1339,7 @@ class VendorController extends ApiController
                     'subscription_id' => 'free'.md5(rand(1111, 9999)),
                     'subscription_item_id' => 'free',
                     'quantity'     => '1',
-                    'stripe_id'    =>  'free'.md5(rand(1111,999)), //$subscription['items']['data'][0]['id'],
+                    'stripe_id'    =>  'free', //$subscription['items']['data'][0]['id'],
                     'trial_ends_at' => null,
                     'ends_at'   => null,
                     'body'  => null,
@@ -1368,13 +1366,16 @@ class VendorController extends ApiController
 
         $input = $request->all();
         $subscription = Subscription::where('user_id',Auth::id())->first();
-        
-        if($request->subscription_price > 0){
-            $body = json_decode($subscription->body,true);
       
-        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-        $sub = Stripe\Subscription::retrieve($subscription->subscription_id);
-        $sub->cancel();
+        if($request->subscription_price > 0){
+
+        $body = json_decode($subscription->body,true);
+            if($subscription->subscription_item_id !== "0"):
+                Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+                $sub = Stripe\Subscription::retrieve($subscription->subscription_id);
+                $sub->cancel();
+            endif;
+        
 
         // Mycode Dev:<Ashish Mehra/> (^-^)
 
@@ -1388,20 +1389,35 @@ class VendorController extends ApiController
         }
 
     \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-        $cardTokenArray=\Stripe\Token::create([
-            'card' => [
-            'number' => $card['card_no'],
-            'exp_month' => $input['expiry_month'],
-            'exp_year' => $input['expiry_year'],
-            'cvc' => '123',
-            ],
-        ]);
-      //$CardToken=$input['PaymentToken']; 
-        $CardToken=$cardTokenArray['id']; 
-        $customer = \Stripe\Customer::update ( $body['customer'],[
+        // $cardTokenArray=\Stripe\Token::create([
+        //     'card' => [
+        //     'number' => $request['card_no'],
+        //     'exp_month' => $input['expiry_month'],
+        //     'exp_year' => $input['expiry_year'],
+        //     'cvc' => '123',
+        //     ],
+        // ]);
+      $CardToken=$input['PaymentToken']; 
+        // $CardToken=$cardTokenArray['id']; 
        
-       'source'  => $CardToken          
-      ]);
+    
+            $customer = \Stripe\Customer::create ([
+                'email' => Auth::user()->email, 
+                'name' => Auth::user()->name,
+                'address' => [
+                    'line1' => '510 Townsend St',
+                    'postal_code' => '98140',
+                    'city' => 'San Francisco',
+                    'state' => 'CA',
+                    'country' => 'US',
+                  ],
+               'source'  => $CardToken          
+              ]);
+
+    
+
+        
+      
         $plan = \Stripe\Plan::create([
             "product" => [ 
                 "name" => "Bronze Subscription" 
@@ -1411,7 +1427,7 @@ class VendorController extends ApiController
             "interval" => $input['subscription_type'], 
             "interval_count" => 1 
         ]); 
-
+    
         $subscription = \Stripe\Subscription::create([
             "customer" => $customer['id'], 
             "items" => array( 
@@ -1432,11 +1448,12 @@ class VendorController extends ApiController
             'subscription_id' => $subscription->id,
             'subscription_item_id' => $subscription['items']['data'][0]['id'],
             'quantity'     => '1',
-            'stripe_id'    =>  $subscription['customer'], //$subscription['items']['data'][0]['id'],
+            'stripe_id'    =>  $customer->id, //$subscription['items']['data'][0]['id'],
             'trial_ends_at' => $subscription['current_period_end'],
             'ends_at'   => $subscription['current_period_end'],
             'body'  => json_encode($subscription),
         ];
+      
         }else{
             $data = [
                 'plan_id' => $request->plan_id,
@@ -1456,9 +1473,10 @@ class VendorController extends ApiController
 
         
 
-        $subscription  = Subscription::FindOrfail(Auth::id());
-                        $subscription->fill($data);
-                        $subscription->save();
+        $subscription  = new Subscription();
+        $subscription->where('user_id',Auth::id())->update($data);
+        $subscription = $subscription->where('user_id', Auth::id())->first();                  
+                        
         // End My code
 
         return parent::success("Your subscription has been updated successfully!",$subscription);

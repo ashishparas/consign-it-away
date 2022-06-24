@@ -130,6 +130,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('client/view/store/by/id',[ClientController::class, "ClientViewStore"]);
     Route::post('search/variant',[ClientController::class, "SearchVariants"]);
     Route::post('buy/subscription',[VendorController::class, "VendorBuySubscription"]);
+    Route::post('change/subscription/plan',[VendorController::class, "ChangeSubscriptionPlan"]);
     Route::post('create/offer',[ClientController::class, "CreateOffer"]);
     Route::get("product/filter",[ClientController::class,"ProductFilter"]);
     Route::post('offer/by/id',[ClientController::class, "getOfferDetailBy"]);
@@ -154,7 +155,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('dashboard',[VendorController::class, "Dashboard"]);
     Route::post('view/transactions',[VendorController::class,"ViewTransactions"]);
     Route::post('return',[VendorController::class, "Return"]);
-    Route::post('change/subscription/plan',[VendorController::class, "ChangeSubscriptionPlan"]);
+   
     Route::post('withdraw/request',[VendorController::class,"Withdraw"]);
     Route::post('create/promocode',[VendorController::class, "CreatePromoCode"]);
     Route::post('update/promocode',[VendorController::class, "UpdatePromoCode"]);
