@@ -1362,13 +1362,15 @@ class VendorController extends ApiController
 
 
    public function ChangeSubscriptionPlan(request $request){
-    $rules = ['card_holder_name' => 'required','card_no' => 'required','expiry_date' =>'required','cvv' =>'required','subscription_price'=>'required','subscription_type'=>'required|in:month,year','PaymentToken'=>'required','save_card' =>'required|in:1,2'];
+    $rules = ['card_holder_name' => 'required','card_no' => 'required','expiry_date' =>'required','cvv' =>'required','subscription_price'=>'required','subscription_type'=>'required|in:month,year','PaymentToken'=>'required','save_card' =>'required|in:1,2','plan_id' => 'required'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
     try{
+
         $input = $request->all();
         $subscription = Subscription::where('user_id',Auth::id())->first();
         
-        $body = json_decode($subscription->body,true);
+        if($request->subscription_price > 0){
+            $body = json_decode($subscription->body,true);
       
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         $sub = Stripe\Subscription::retrieve($subscription->subscription_id);
@@ -1422,6 +1424,7 @@ class VendorController extends ApiController
         ]);
      
         $data = [
+            'plan_id' => $request->plan_id,
             'user_id' => Auth::id(),
             'name'    => $subscription['object'],
             'stripe_status' => $subscription['status'],
@@ -1434,6 +1437,24 @@ class VendorController extends ApiController
             'ends_at'   => $subscription['current_period_end'],
             'body'  => json_encode($subscription),
         ];
+        }else{
+            $data = [
+                'plan_id' => $request->plan_id,
+                'user_id' => Auth::id(),
+                'name'    => "Bronze",
+                'stripe_status' => "success",
+                'stripe_price' => 0,
+                'subscription_id' => md5(rand(11111,99999)),
+                'subscription_item_id' => '0',
+                'quantity'     => '1',
+                'stripe_id'    =>  'free', //$subscription['items']['data'][0]['id'],
+                'trial_ends_at' => null,
+                'ends_at'   => null,
+                'body'  => null,
+            ];
+        }
+
+        
 
         $subscription  = Subscription::FindOrfail(Auth::id());
                         $subscription->fill($data);
