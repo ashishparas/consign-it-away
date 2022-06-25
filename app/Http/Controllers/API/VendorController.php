@@ -1986,7 +1986,7 @@ public function ViewOrderByVendor(Request $request)
             
             $transaction = Transaction::where('id',$request->transaction_id)
             ->where('vendor_id', Auth::id())
-            ->with(['Customer','Vendor'])
+            // ->with(['Customer','Vendor'])
             ->first();
             return parent::success("View transaction successfully!",$transaction);
         }catch(\Exception $ex){
