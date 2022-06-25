@@ -1941,8 +1941,8 @@ public function ViewOrderByVendor(Request $request)
 
                 $item['product']['product_varients'] =  $item->ProductVariants();
                  
-        $address = Address::where('id', $item->address_id)->first();
-
+                $address = Address::where('id', $item->address_id)->first();
+                
         $store = Store::select('id','store_image','name','description')
         ->where('id', $item->product->store_id)
         ->first();
@@ -1952,7 +1952,13 @@ public function ViewOrderByVendor(Request $request)
                 Notification::where('id', $request->notification_id)->update(['is_read' => '1']);
             endif;
         }
-                
+        $card = Card::where('id', $item->transaction->card_id)->select('id','card_holder_name','card_no','expiry_month','expiry_year')->first();
+        if($card){
+            $item['card_info'] = $card;
+        }else{
+            $item['card_info'] = null;
+        }
+       
                 
             }else{
                 return parent::error("Order not found related to this vendor");

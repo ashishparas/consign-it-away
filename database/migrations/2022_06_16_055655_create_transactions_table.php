@@ -17,6 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->bigInteger('card_id')->nullable();
             $table->string('transaction_id')->nullable();
             $table->bigInteger('vendor_id')->nullable();
             $table->bigInteger('product_id')->nullable();
