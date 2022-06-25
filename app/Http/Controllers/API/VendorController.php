@@ -915,7 +915,7 @@ class VendorController extends ApiController
            endforeach;
            $active = Subscription::select('plan_id','body')->where('user_id', Auth::id())->orderBy('created_at','DESC')->first();
           
-           if($active->body):
+           if(isset($active->body)):
             $subscription = json_decode($active->body, true);
             $active['interval'] = $subscription['plan']['interval'];
             else:
