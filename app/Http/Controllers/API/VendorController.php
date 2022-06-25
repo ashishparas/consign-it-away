@@ -1952,12 +1952,14 @@ public function ViewOrderByVendor(Request $request)
                 Notification::where('id', $request->notification_id)->update(['is_read' => '1']);
             endif;
         }
+        if(isset($item->transaction)):
         $card = Card::where('id', $item->transaction->card_id)->select('id','card_holder_name','card_no','expiry_month','expiry_year')->first();
         if($card){
             $item['card_info'] = $card;
         }else{
             $item['card_info'] = null;
         }
+        endif;
        
                 
             }else{

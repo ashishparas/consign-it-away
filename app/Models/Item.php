@@ -48,7 +48,7 @@ class Item extends Model
     }
 
     public function Transaction(){
-        return $this->hasOne(Transaction::class,'order_id');
+        return $this->hasOne(Transaction::class,'order_id','order_id');
     }
     
     
