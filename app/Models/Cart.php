@@ -16,7 +16,7 @@ class Cart extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['user_id','vendor_id','product_id','vendor_id','quantity'];
+    protected $fillable = ['user_id','vendor_id','product_id','vendor_id','variant_id','quantity'];
 
     
     public function VendorName(){
@@ -34,6 +34,11 @@ class Cart extends Model
         return $this->hasOne(Offer::class,'user_id','user_id')
                 ->where('product_id',$this->product_id)
                 ->where('status','2');
+    }
+
+
+    public function CustomerVariant(){
+        return $this->hasOne(Variant::class,'id','variant_id');
     }
 
    

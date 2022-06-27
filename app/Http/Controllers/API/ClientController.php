@@ -294,9 +294,10 @@ class ClientController extends ApiController
                
             $product['comment'][$key]['user'] = User::where('id', $commentUser->from)->select('id', 'fname','lname','profile_picture')->first();
             endforeach; 
-            $product['soldByOtherSellers'] = Product::select('id','user_id','image',DB::raw('price as amount'))
+            $product['soldByOtherSellers'] = Product::select('id','store_id','user_id','image',DB::raw('price as amount'))
                                             ->where('name','LIKE','%'.$product->name.'%')
                                             ->whereNotIn('id',[$product->id])
+                                            ->orderBy('created_at','DESC')
                                             ->with('User')
                                             ->get()->makeHidden(['soldBy','CartStatus']);
 
@@ -612,7 +613,7 @@ class ClientController extends ApiController
        endif;
        try{
            $cart = Cart::where('user_id' , Auth::id())
-           ->with('Product')
+           ->with('Product','CustomerVariant')
            ->orderBy('created_at','DESC')->get();
            return parent::success("View cart successfully!",['cart' => $cart]);
        }catch(\Exception $ex){
@@ -649,7 +650,7 @@ class ClientController extends ApiController
             ->where('status','1')
             ->first();
 
-            $carts = Cart::select('id','user_id','product_id','vendor_id')
+            $carts = Cart::select('id','user_id','product_id','vendor_id','variant_id')
             ->where('user_id', Auth::id())
             ->with(['VendorName'])
             ->groupBy('vendor_id')
@@ -877,12 +878,17 @@ class ClientController extends ApiController
                 ->where('id', $input['order_id'])
                 ->with(['Product','MyRating'])
                 ->first();
-                $tracking_id = Helper::trackCourier($item->tracking_id);
+                if($item){
+                    $tracking_id = Helper::trackCourier($item->tracking_id);
                 if($tracking_id):
                     $item['tracking_status'] =   $tracking_id;     
                 else:
                     $item['tracking_status'] ="status not available yet";
                 endif;
+                }else{
+                    $item['tracking_status'] ="status not available yet";
+                }
+                
         $address = Address::where('id', $item->address_id)
                 ->where('user_id', Auth::id())
                 ->first();
