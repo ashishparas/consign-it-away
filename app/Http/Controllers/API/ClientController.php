@@ -541,14 +541,14 @@ class ClientController extends ApiController
 
    public function AddToCart(Request $request)
    {
-    $rules=['product_id' => 'required|exists:products,id','quantity' =>'required','vendor_id' => 'required|exists:users,id'];
+    $rules=['product_id' => 'required|exists:products,id','quantity' =>'required','vendor_id' => 'required|exists:users,id','variant_id' =>'required|exists:variants,id'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
-        $input = $request->all();
 
+        $input = $request->all();
         $cart = Cart::where('product_id',$input['product_id'])->where('user_id', Auth::id());
         if($cart->count() > 0):
             return parent::error("The product already added in your cart");
@@ -885,25 +885,30 @@ class ClientController extends ApiController
                 else:
                     $item['tracking_status'] ="status not available yet";
                 endif;
-                }else{
-                    $item['tracking_status'] ="status not available yet";
-                }
-                
-        $address = Address::where('id', $item->address_id)
+
+                $address = Address::where('id', $item->address_id)
                 ->where('user_id', Auth::id())
                 ->first();
 
-        $store = Store::select('id','store_image','name','description')
-        ->where('id', $item->product->store_id)
-        ->first();
+                $store = Store::select('id','store_image','name','description')
+                ->where('id', $item->product->store_id)
+                ->first();
+        
+                if(isset($request->type) && isset($request->notification_id)){
+                    if($request->type === '1'):
+                        Notification::where('id', $request->notification_id)->update(['is_read' => '1']);
+                    endif;
+                }
+        
+                return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
 
-        if(isset($request->type) && isset($request->notification_id)){
-            if($request->type === '1'):
-                Notification::where('id', $request->notification_id)->update(['is_read' => '1']);
-            endif;
-        }
+                }else{
+                  return parent::error("Invalid product item id");
+                }
+                
+        
 
-        return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
+       
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
@@ -1055,8 +1060,7 @@ class ClientController extends ApiController
 
    public function CreateOffer(Request $request)
    {
-       $rules = ['product_id' => 'required|exists:products,id','vendor_id'=>'required|exists:users,id','name'=>'required','email'=>'required','phonecode' =>'required','mobile_no'=>'required','quantity'=>'required','offer_price'=>'required','comment' =>''];
-
+       $rules = ['product_id' => 'required|exists:products,id','vendor_id'=>'required|exists:users,id','name'=>'required','email'=>'required','phonecode' =>'required','mobile_no'=>'required','quantity'=>'required','offer_price'=>'required','comment' =>'', 'variant_id'=>'required|exists:variants,id'];
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
        if($validateAttributes):
         return $validateAttributes;

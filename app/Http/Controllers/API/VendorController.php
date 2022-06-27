@@ -1253,11 +1253,12 @@ class VendorController extends ApiController
        try{
         
             $input = $request->all();
-            $expiry_date = explode('/',$input['expiry_date']);
-            $input['expiry_month'] = $expiry_date[0];
-            $input['expiry_year'] = $expiry_date[1];
-            $input['user_id'] =  Auth::id();
+            
             if($input['save_card'] === '1'){
+                $expiry_date = explode('/',$input['expiry_date']);
+                $input['expiry_month'] = $expiry_date[0];
+                $input['expiry_year'] = $expiry_date[1];
+                $input['user_id'] =  Auth::id();
                 $card = Card::create($input);
             }
         

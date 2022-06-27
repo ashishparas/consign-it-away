@@ -21,6 +21,7 @@ class CreateOffersTable extends Migration
             $table->foreign('vendor_id')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('product_id')->unsigned()->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->bigInteger('variant_id')->nullable();
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('phonecode')->nullable();
