@@ -582,7 +582,7 @@ class VendorController extends ApiController
 
    public function ViewProduct(Request $request)
    {
-       $rules = ['limit' => '','search'=>'','category_id' =>'', 'stock_status' => ''];
+       $rules = ['limit' => ''];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
        if($validateAttributes):
         return $validateAttributes;
@@ -618,8 +618,9 @@ class VendorController extends ApiController
                         // dd(DB::getQueryLog($products));
 
             }else{
+            
                     // DB::enableQueryLog();
-                $products = Product::select('products.id','products.name','products.image','products.amount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
+                $products = Product::select('products.id','products.name','products.image','products.amount','products.discount','products.category_id','products.quantity', DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
                 WHEN stocks.stock > 0 THEN "available"
                 WHEN stocks.stock = 0 THEN "not_available"
                 ELSE "not_available"
@@ -627,7 +628,7 @@ class VendorController extends ApiController
                         ->leftJoin('ratings','ratings.product_id','products.id')
                         ->leftJoin('stocks','stocks.product_id','products.id')
                         ->where('products.user_id', Auth::id())
-                        ->with(['Category'])
+                        ->with(['Category','Stock','Discount'])
                         ->groupBy('products.id')
                         ->orderBy('AverageRating','DESC')
                         ->paginate($limit)->makeHidden(['CartStatus','soldBy']);
