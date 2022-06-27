@@ -1556,6 +1556,7 @@ public function ChangeStaffStatus(Request $request){
 }
 
 public function EditStoreManagerDetails(Request $request){
+
     $rules = ['store_id'=> 'required|exists:stores,id','banner'=>'','image' => '','name'=>'required','location'=>'required','description'=>'required','manager_id' =>'Required|exists:managers,id',
 'manager_name'=>'required','manager_email'=>'required','manager_mobile_no' =>'required','manager_status'=>'required|in:1,2','manager_image' =>''];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
@@ -1596,11 +1597,11 @@ public function EditStoreManagerDetails(Request $request){
        
        
 
-        $manager = new Manager();
-        $manager = $manager->FindOrfail($request->manager_id);
+        
         
             Manager::where('store_id', $request->store_id)->update(['status' =>'1']);
-
+            $manager = new Manager();
+            $manager = $manager->FindOrfail($request->manager_id);
         $data = [
             'name' => $request->manager_name,
             'email' => $request->manager_email,
@@ -1615,9 +1616,11 @@ public function EditStoreManagerDetails(Request $request){
 
         $manager->fill($data);
         $manager->save();
+
         $mng = Manager::where('id',$input['manager_id'])->where('status','2')->first();
+
         return parent::success("Store edited successfully!",['store' => $model,'manager'=> $mng]);
-        // return parent::success('Store added successfully!',[]);
+       
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
