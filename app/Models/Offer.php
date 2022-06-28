@@ -20,6 +20,6 @@ class Offer extends Model
 
 
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','name','image','amount');
+        return $this->belongsTo(Product::class)->select('id','name','image','amount','discount')->with(['Discount']);
     }
 }
