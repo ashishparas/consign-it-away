@@ -553,15 +553,14 @@ class VendorController extends ApiController
         // if($variant):
 
             $varient_items = json_decode($input['varients'],true);
-         //  dd($varient_items);
+       
            $attr_id = [];
            $option_id = [];
            for($i=0; $i<count($varient_items); $i++){
                     array_push($attr_id,$varient_items[$i]['attr_id']);
                     array_push($option_id,$varient_items[$i]['option_id']);
            }
-         //  dd($attr_id);
-            // foreach($varient_items as $varient_item):
+         
                 $varient_item['variant_item_id'] = '1';//$variant->id;
                   Variant::create([
                     'attr_id' => implode(",", $attr_id),
@@ -570,19 +569,18 @@ class VendorController extends ApiController
                     'quantity' => $input['quantity'],
                     'price' => $input['price']
                 ]);
-            // endforeach;
-            
-        // endif;
+          
             $variants = Variant:: where('product_id', $input['product_id'])->get();
-
+            
             foreach($variants as $key => $variant){
                 $option_id = explode(",",$variant['option_id']);
-                // dd($attr_id);
+              // DB::enableQueryLog();
                 $variants[$key]['variants'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
                 ->join("attribute_options","attributes.id","attribute_options.attr_id")
                 ->whereIn('attribute_options.id', $option_id)
                 ->with('Attributes')
                 ->get();
+              //  dd(DB::getQueryLog($variants[$key]['variants']));
             }
         return parent::success("Variants added successfully!",['varients' => $variants]);
     }catch(\Exception $ex){
