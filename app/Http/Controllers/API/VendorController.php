@@ -645,7 +645,8 @@ class VendorController extends ApiController
                         ->paginate($limit)->makeHidden(['CartStatus','soldBy']);
 
             }
-
+            $count =     Product::where('user_id', Auth::id())->whereMonth('created_at', date('m'))->count('id');
+           
             //  dd(DB::getQueryLog($products));
 
             // foreach($products as $key => $product):
@@ -653,7 +654,7 @@ class VendorController extends ApiController
             //     $products[$key]['comment'] = $product->Rating()->count('comment');
             // endforeach;
          
-        return parent::success("View all products successfully!", ['products' => $products]);
+        return parent::success("View all products successfully!", ['this_month_added' => $count,'products' => $products]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
