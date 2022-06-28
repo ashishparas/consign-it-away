@@ -2085,6 +2085,30 @@ public function ViewOrderByVendor(Request $request)
    }
 
 
+   public function Revenue(Request $request){
+    $rules = ['month'=>'', 'year'=>''];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $transaction = Transaction::select('price','order_date','created_at');
+        if(isset($request->month)){
+            $transaction = $transaction->whereMonth('created_at', $request->month);
+        }
+        if(isset($request->year)){
+            $transaction = $transaction->whereYear('created_at', $request->year);
+        }
+        $transaction = $transaction->where('vendor_id', Auth::id())->get();
+        return parent::success("Filtered transactions successfully!",$transaction);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+
+   }
+
+
 
 
 
