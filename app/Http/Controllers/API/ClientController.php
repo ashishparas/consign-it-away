@@ -1060,7 +1060,7 @@ class ClientController extends ApiController
 
    public function CreateOffer(Request $request)
    {
-       $rules = ['product_id' => 'required|exists:products,id','vendor_id'=>'required|exists:users,id','name'=>'required','email'=>'required','phonecode' =>'required','mobile_no'=>'required','quantity'=>'required','offer_price'=>'required','comment' =>'', 'variant_id'=>'required|exists:variants,id'];
+       $rules = ['product_id' => 'required|exists:products,id','vendor_id'=>'required|exists:users,id','name'=>'required','email'=>'required','phonecode' =>'required','mobile_no'=>'required','quantity'=>'required','offer_price'=>'required','comment' =>'', 'variant_id'=>''];
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
        if($validateAttributes):
         return $validateAttributes;
