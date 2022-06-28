@@ -27,7 +27,7 @@ class Attribute extends Model
    
 
     public function Attributes(){
-        return $this->hasOne(\App\Models\AttributeOption::class,'attr_id');
+        return $this->hasOne(\App\Models\AttributeOption::class,'id','option_id');
     }
 
 public function AttributeOption(){
