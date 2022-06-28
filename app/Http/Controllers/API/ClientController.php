@@ -541,7 +541,7 @@ class ClientController extends ApiController
 
    public function AddToCart(Request $request)
    {
-    $rules=['product_id' => 'required|exists:products,id','quantity' =>'required','vendor_id' => 'required|exists:users,id','variant_id' =>'required|exists:variants,id'];
+    $rules=['product_id' => 'required|exists:products,id','quantity' =>'required','vendor_id' => 'required|exists:users,id','variant_id' =>''];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
     if($validateAttributes):
         return $validateAttributes;
@@ -1250,7 +1250,7 @@ class ClientController extends ApiController
         if($request->type === '2'){
             $product = new Product();
          
-        $RecentlyViewProduct = RecentProducts::select('products.id','recent_products.product_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as FavouriteId'))
+        $RecentlyViewProduct = RecentProducts::select('products.id','products.subcategory_id','recent_products.product_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as FavouriteId'))
             ->Join('products', 'recent_products.product_id', 'products.id')
             ->leftJoin('ratings', 'ratings.product_id', 'products.id')
             ->leftJoin('favourites', 'favourites.product_id', 'products.id');
@@ -1288,7 +1288,7 @@ class ClientController extends ApiController
             $mostPopular = new Product();
        
             $mostPopular = $mostPopular
-            ->select('products.id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite'))
+            ->select('products.id','products.subcategory_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id');
          
@@ -1318,7 +1318,7 @@ class ClientController extends ApiController
 
         }else if($request->type === '3'){
             $newProducts = new Product();
-            $newProducts = $newProducts->select('id','user_id','store_id','name','image','price','brand');
+            $newProducts = $newProducts->select('id','subcategory_id','user_id','store_id','name','image','price','brand');
             
             if(isset($request->search)){
                 $newProducts = $newProducts->where('name', 'LIKE', '%'.$request->search.'%');
@@ -1342,7 +1342,7 @@ class ClientController extends ApiController
          
             $brand = new Product();
                 DB::enableQueryLog();
-            $brand = $brand->select('products.id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+            $brand = $brand->select('products.id','products.subcategory_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id');
 
@@ -1372,7 +1372,7 @@ class ClientController extends ApiController
          
             $sub_category = new Product();
              
-                $sub_category = $sub_category->select('products.id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                $sub_category = $sub_category->select('products.id','products.subcategory_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id');
 
