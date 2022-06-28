@@ -443,7 +443,7 @@ class VendorController extends ApiController
         if($input['is_variant'] === '1'):
             $input['status'] = '1';
         endif;
-       
+        $images= [];
         if (isset($request->image)):
 
             if($files = $request->file('image')):
@@ -453,13 +453,24 @@ class VendorController extends ApiController
                  
                 endforeach;
             endif;
-
+             
             $input['image'] = implode(',', $images);
 
         endif;
 
 
         $create = Product::FindOrfail($request->product_id);
+       
+        $old_images = $create->image;
+       
+        if(!empty($images)){
+           
+            foreach($images as $image):
+                array_push( $old_images, $image);
+            endforeach;
+        }
+        
+        $input['image'] = implode(",", $old_images);
                     $create->fill($input);
                     $create->save();
                     
