@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Offer extends Model
 {
@@ -20,6 +21,6 @@ class Offer extends Model
 
 
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','name','image','amount','discount')->with(['Discount']);
+        return $this->belongsTo(Product::class)->select('id','name','image',DB::raw('price as amount'),'discount')->with(['Discount']);
     }
 }
