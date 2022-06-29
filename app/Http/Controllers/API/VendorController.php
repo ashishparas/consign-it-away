@@ -544,16 +544,7 @@ class VendorController extends ApiController
     endif;
     try{
         $input = $request->all();
-        // dd($input);
-        // $variant = VariantItems::create([
-        //     'product_id' => $input['product_id'],
-        //     'quantity' => $input['quantity'],
-        //     'price' => $input['price']
-        // ]);
-        // if($variant):
-
             $varient_items = json_decode($input['varients'],true);
-       
            $attr_id = [];
            $option_id = [];
            for($i=0; $i<count($varient_items); $i++){
@@ -571,17 +562,7 @@ class VendorController extends ApiController
                 ]);
           
             $variants = Variant:: where('product_id', $input['product_id'])->get();
-            
-            foreach($variants as $key => $variant){
-                $option_id = explode(",",$variant['option_id']);
-              // DB::enableQueryLog();
-                $variants[$key]['variants'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
-                ->join("attribute_options","attributes.id","attribute_options.attr_id")
-                ->whereIn('attribute_options.id', $option_id)
-                ->with('Attributes')
-                ->get();
-              //  dd(DB::getQueryLog($variants[$key]['variants']));
-            }
+            $variants =  Helper::ProductVariants($variants);
         return parent::success("Variants added successfully!",['varients' => $variants]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -1226,14 +1207,32 @@ class VendorController extends ApiController
            $input = $request->all();
            $variant = Variant::FindOrfail($input['variant_id']);
            $variant->delete();
-           
 
-        return parent::success("Attribute deleted successfully!");
+           $variants = Variant:: where('product_id', $input['product_id'])->get();
+           $variants =  Helper::ProductVariants($variants);
+        return parent::success("Attribute deleted successfully!",$variants);
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
        }
    }
 
+
+   public function ViewProductvariants(Request $request){
+    $rules = ['product_id' => 'required|exists:products,id'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        
+        $variants = Variant:: where('product_id', $input['product_id'])->get();
+        $variants =  Helper::ProductVariants($variants);
+        return parent::success("View all variants successfully!",$variants);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+   }
 
 
    public function SubmitProduct(Request $request)
