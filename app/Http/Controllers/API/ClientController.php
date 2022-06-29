@@ -684,7 +684,7 @@ class ClientController extends ApiController
 
             // Charge for product
             $Address = Helper::VerifyAddress($request->address_id);
-
+           
         if($Address):
 
                 $stripe =  \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET'));
@@ -701,6 +701,7 @@ class ClientController extends ApiController
             $input['charge_id'] = md5(rand(11111,99999)); //$charge['id'];
             $input['user_id'] = Auth::id();
             $order = Order::create($input);
+           
             if(!empty($order)):
                 
                 
@@ -745,13 +746,13 @@ class ClientController extends ApiController
                         $body = '#00'.$item->id.' has been ordered from '.$StoreName;
                        
                  $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');
-    
+                       
                        $arrayToSend = array(
                            'to'=> $item->vendor_id,
                            'title' =>'product Order',
                            'body' => $body,
                            'payload' => array('order_id'=>$item->id,'image'=>$product->image[0],'base_url'=> asset('/products'),'notification'=>$notification,'data'=>$notification),'priority'=>'high');
-                     
+                    
                        parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
                     //    below client notification
                        parent::pushNotifications($arrayToSend, $item->vendor_id ,Auth::id());
@@ -761,7 +762,7 @@ class ClientController extends ApiController
            
                 endforeach;
     
-              Cart::where('user_id', Auth::id())->delete();
+                 Cart::where('user_id', Auth::id())->delete();
     
                return parent::success("Your order Placed successfully!");
             endif;

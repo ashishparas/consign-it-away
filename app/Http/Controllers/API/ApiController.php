@@ -247,7 +247,7 @@ class ApiController extends \App\Http\Controllers\Controller {
 
     public static function pushNotofication($data = [], string $deviceToken=null) {
      
-     
+    
         $DeviceType = UserDevice::where('user_id', $data['to'])->first();
        
              if( $DeviceType){
@@ -353,7 +353,7 @@ class ApiController extends \App\Http\Controllers\Controller {
         try {
               
             if (isset($data['payload']))
-            
+         
                 $DeviceType = UserDevice::where('user_id', $data['to'])->first();
              if($DeviceType){
                 
