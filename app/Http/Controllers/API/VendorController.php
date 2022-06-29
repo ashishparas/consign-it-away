@@ -855,7 +855,10 @@ class VendorController extends ApiController
         $input = $request->all();
      
         $disc = [];
-        $discounts = Discount::where('user_id', Auth::id())->with(['Category','Products'])->get();
+        $discounts = Discount::where('user_id', Auth::id())
+        ->with(['Category'])
+        ->orderBy('discounts.id','DESC')
+        ->get();
         if($input['status'] == '1'){
          
         foreach($discounts as $discount):
@@ -1210,7 +1213,7 @@ class VendorController extends ApiController
 
            $variants = Variant:: where('product_id', $input['product_id'])->get();
            $variants =  Helper::ProductVariants($variants);
-        return parent::success("Attribute deleted successfully!",$variants);
+        return parent::success("Attribute deleted successfully!",['varients' => $variants]);
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
        }
@@ -1228,7 +1231,7 @@ class VendorController extends ApiController
         
         $variants = Variant:: where('product_id', $input['product_id'])->get();
         $variants =  Helper::ProductVariants($variants);
-        return parent::success("View all variants successfully!",$variants);
+        return parent::success("View all variants successfully!",['varients' => $variants]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }

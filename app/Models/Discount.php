@@ -25,13 +25,16 @@ class Discount extends Model
      }
 
     public function Category(){
-        return $this->belongsTo(Category::class)->select('id','title');   
+        return $this->belongsTo(Category::class)->select('id','title')->with(['Products']);   
     }
 
 
-    public function Products(){
-        return $this->hasMany(Product::class,"discount","id")->where('user_id', Auth::id())->select('id','name','image','discount');
-    }
+    // public function Products(){
+    //     return $this->hasMany(Product::class,"discount","id")
+    //     ->where('caregory_id', $this->category_id)
+    //     ->where('user_id', Auth::id())
+    //     ->select('id','name','image','discount');
+    // }
 
   
 

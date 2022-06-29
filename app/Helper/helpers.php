@@ -37,10 +37,6 @@ class Helper extends ApiController
 
 
 
-
-
-
-
     public static function VerifyAddress(int $id=null){
         try{
 

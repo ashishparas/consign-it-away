@@ -28,6 +28,9 @@ class Category extends Model
         return $this->hasMany(Subcategory::class);
     }
 
+    public function Products(){
+        return $this->hasMany(Product::class,"category_id")->select('id','category_id','name','image')->where('user_id',Auth::id());
+    }
 
    
 
