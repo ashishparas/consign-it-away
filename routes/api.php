@@ -37,6 +37,8 @@ Route::post('find/address/by/zip',[ClientController::class, "UspsFindAddressByZi
 Route::post('track/courier',[ClientController::class, "UspsTrackCourier"]);  
 Route::get('shippment',[ClientController::class, "CreateShipment"]);
 Route::post('find/rate',[ClientController::class, "UspsFindRate"]); 
+Route::post('subcategories',[VendorController::class, "SubCategories"]);
+Route::post('colours',[VendorController::class, "Colours"]);
 // Route::group(['middleware' =>['auth:api']], function(){
     
 // });
@@ -96,10 +98,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('subscription/plan',[VendorController::class, "SubscriptionsPlan"]);
     Route::post('subscription/by/id',[VendorController::class, "SubscriptionPlanById"]);
     Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
-    Route::post('subcategories',[VendorController::class, "SubCategories"]);
+    
     Route::post('personal',[ClientController::class, "Personal"]);
     Route::post('edit/personal',[ClientController::class, "EditPersonal"]);
-    Route::post('colours',[VendorController::class, "Colours"]);
+    
     Route::post('change/profile/picture',[AuthController::class, "ChangeProfilePicture"]);
     
     Route::post('open/cart',[ClientController::class, "OpenCart"]);
