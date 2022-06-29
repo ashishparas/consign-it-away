@@ -1224,7 +1224,6 @@ class VendorController extends ApiController
        endif;
        try{
            $input = $request->all();
-        
            $variant = Variant::FindOrfail($input['variant_id']);
            $variant->delete();
            
