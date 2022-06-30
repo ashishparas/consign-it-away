@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
+use App\Models\Brand;
 class AdminController extends Controller
 {
     /**
@@ -39,4 +40,57 @@ class AdminController extends Controller
     //   dd($items->toArray());
         return view('order-management.shipping-orders-details', compact('items'));
     }
+    
+    public function Brand(){
+        $brands = Brand::take(2000)->get();
+        return view('admin/brand/brand-list', compact('brands'));
+    }
+    
+    
+    public function EditBrand($id){
+        $brand = Brand::FindOrfail($id);
+        return view('admin/brand/edit-brand',compact('brand'));
+    }
+    
+    public function UpdateBrand(Request $request){
+        $input = $request->all();
+      
+// dd(public_path('/public/brand'));
+            
+            $brand = Brand::FindOrfail($request->id);
+             if (isset($request->image)):
+                $input['image'] = parent::__uploadImage($request->file('image'), public_path('/brand'), false);
+            endif;
+                    $brand->fill($input);
+                    $brand->save();
+            return redirect()->route('brand-list');
+            
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

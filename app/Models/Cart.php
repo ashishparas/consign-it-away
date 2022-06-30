@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 class Cart extends Model
 {
@@ -18,6 +19,22 @@ class Cart extends Model
 
     protected $fillable = ['user_id','vendor_id','product_id','vendor_id','variant_id','quantity'];
 
+    protected $appends = ['Attributes'];
+    
+    
+    public function getAttributesAttribute(){
+        $variant = Variant::where('id',$this->variant_id)->first();
+        if($variant):
+            $option_id = explode(",",$variant['option_id']);
+          // DB::enableQueryLog();
+            return  Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
+            ->join("attribute_options","attributes.id","attribute_options.attr_id")
+            ->whereIn('attribute_options.id', $option_id)
+            ->with('Attributes')
+            ->get();
+            endif;
+       
+    }
     
     public function VendorName(){
         // return $this->hasOne(User::class, 'id', 'vendor_id')->select('id','name','fname','lname');

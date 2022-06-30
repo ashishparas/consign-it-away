@@ -49,5 +49,11 @@
         <a href="{{url('/admin/report-management')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/warning.svg')}}" alt="img">Report Management</span>
         </a>
       </li>
+      
+      <li class="menu-item">
+        <a href="{{url('/admin/brand-list')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/star.svg')}}" alt="img">Brand</span>
+        </a>
+      </li>
+      
     </ul>
   </aside>

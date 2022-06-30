@@ -20,7 +20,7 @@ class Attribute extends Model
 
 
     public function Option(){
-        return $this->hasMany(\App\Models\AttributeOption::class,'id')->with(['VariantItem']);
+        return $this->hasMany(\App\Models\AttributeOption::class,'attr_id')->with(['VariantItem']);
     }
 
 

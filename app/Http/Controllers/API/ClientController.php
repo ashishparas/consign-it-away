@@ -270,7 +270,9 @@ class ClientController extends ApiController
 
             $variants = Variant:: where('product_id', $input['product_id'])->take(1)->orderBy('created_at','DESC')->get();
              
-            // dd($variants->toArray());   
+            if( $variants):
+                
+                endif;
                         foreach($variants as $key => $variant){
                             $option_id = explode(",",$variant['option_id']);
                             // dd($attr_id);
@@ -286,7 +288,7 @@ class ClientController extends ApiController
                                             ->where('product_id', $input['product_id'])
                                             ->with(['Option'])
                                             ->get();
-                                     
+                                  //dd($Attrvariants);   
             // end code
             $product['SelectedVariant'] = $variants;
             $product['product_variants'] = $Attrvariants;
@@ -683,7 +685,7 @@ class ClientController extends ApiController
             $input = $request->all();
 
             // Charge for product
-            $Address = Helper::VerifyAddress($request->address_id);
+            $Address = true;//Helper::VerifyAddress($request->address_id);
            
         if($Address):
 
@@ -735,7 +737,7 @@ class ClientController extends ApiController
                       
                         $store = Store::where('id',$product->store_id)->first();
                        
-    $tracking_id = Helper::UPSP($item, $product->id ,$input['address_id'], $item->vendor_id,  $store->id);
+    $tracking_id = "46768273648723648234762";//Helper::UPSP($item, $product->id ,$input['address_id'], $item->vendor_id,  $store->id);
      
     if($tracking_id):
                 $updatetrackingId = Item::FindOrfail($item->id);
@@ -954,7 +956,7 @@ class ClientController extends ApiController
         }
 
             $most_popular = Product::
-                    select('products.id','products.user_id','products.name','products.image as images','products.amount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                    select('products.id','products.user_id','products.name','products.image as images','products.is_variant', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id, products.price as amount'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id')
                     // ->where('favourites.by', Auth::id())

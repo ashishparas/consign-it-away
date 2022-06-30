@@ -22,6 +22,10 @@ class AttributeOption extends Model
     }
 
 
+    public function Attributes(){
+        return $this->hasMany(App\Models\Attribute::class,'id','attr_id');
+    }
+
 
 
 }

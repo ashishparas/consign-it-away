@@ -60,6 +60,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('add-staff',[VendorController::class, "AddStaff"]);
             Route::post('create-staff', [VendorController::class, "CreateStaff"]);
             Route::get('delete/staff/{id}',[VendorController::class, "DeleteAdminStaff"]);
+            Route::get('brand-list',[AdminController::class,"Brand"])->name('brand-list');
+            Route::get('edit-brand/{id}',[AdminController::class,"EditBrand"]);
+            Route::post('update-brand',[AdminController::class,"UpdateBrand"]);
  });
  
  

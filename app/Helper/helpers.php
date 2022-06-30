@@ -34,6 +34,21 @@ class Helper extends ApiController
         return $variants;
 
     }
+    
+    public static function ProductSingleVariants($variant=null){
+
+        // foreach($variants as $key => $variant){
+            $option_id = explode(",",$variant['option_id']);
+          // DB::enableQueryLog();
+            $variants[$key]['variants'] = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
+            ->join("attribute_options","attributes.id","attribute_options.attr_id")
+            ->whereIn('attribute_options.id', $option_id)
+            ->with('Attributes')
+            ->first();
+        // }
+        return $variant;
+
+    }
 
 
 
