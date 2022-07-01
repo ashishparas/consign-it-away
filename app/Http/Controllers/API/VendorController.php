@@ -912,9 +912,9 @@ class VendorController extends ApiController
           
            if(isset($active->body)):
             $subscription = json_decode($active->body, true);
-            $active['interval'] = $subscription['plan']['interval'];
+            $active['interval'] = $active->type;
             else:
-                $active['interval']= $active->type;
+                $active['interval']= '';
            endif;
          
             return parent::success("Subscription plans view successfully!",['active_plan'=> $active,'subscription' => $subscriptions]);
