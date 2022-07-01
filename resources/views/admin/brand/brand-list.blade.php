@@ -78,7 +78,7 @@
                 return '<img src="'+baseUrl+'/'+data+'" width="50" height="50">';
             }
           },
-              {data: 'action', name: 'action',orderable: false,searchable: false },
+              {data: 'action', name: 'action',orderable: false,searchable: false }, 
           ]
       });
       
