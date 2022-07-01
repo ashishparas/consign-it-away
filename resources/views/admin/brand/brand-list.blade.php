@@ -35,12 +35,13 @@
                 </div>
                 <div class="ms-panel-body table-responsive">
                     <!----table---->
-                  <table id="example" class="running_order data-table table table-striped dataTable_custom" style="width:100%">
+                  <table id="example" class="running_order yajra-datatable table table-striped dataTable_custom" style="width:100%">
                    
                     <thead>
                       <tr>
+                          <th>id</th>
                           <th>Brand Name</th>
-                          <th>Brand Img</th>
+                          <th>image</th>
                           <!--<th>Brand Logo</th>-->
                           <th>Action</th>
                       </tr>
@@ -58,27 +59,31 @@
     </div>
 	</div>
 
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
   <script type="text/javascript">
     $(function () {
-      
-      var table = $('.data-table').DataTable({
+     var baseUrl = "{{asset('public/brand')}}";
+   
+      var table = $('.yajra-datatable').DataTable({
           processing: true,
           serverSide: true,
           ajax: "{{ route('brand-list-data') }}",
           columns: [
               {data: 'id', name: 'id'},
               {data: 'name', name: 'name'},
-              {data: 'image', name: 'image'},
-              {data: 'action', name: 'action', orderable: false, searchable: false},
+              {data: 'image', name: 'image',
+              render: function( data, type, full, meta ) {
+              
+                return '<img src="'+baseUrl+'/'+data+'" width="50" height="50">';
+            }
+          },
+              {data: 'action', name: 'action',orderable: false,searchable: false },
           ]
       });
       
     });
   </script>
-
-
-
 
 
 @endsection

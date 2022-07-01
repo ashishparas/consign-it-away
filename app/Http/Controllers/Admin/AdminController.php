@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Brand;
+use DataTables;
 class AdminController extends Controller
 {
     /**
@@ -42,20 +43,21 @@ class AdminController extends Controller
     }
     
     public function Brand(){
-        $brands = Brand::take(2000)->get();
+      
         return view('admin/brand/brand-list');
     }
     
 
     public function BrandList(Request $request ){
-
         if ($request->ajax()) {
-            $data = Brand::select('*');
+           
+            $data = Brand::select('*')->get();
+         
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
      
-                           $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+                $btn = '<a href="'.url('admin/edit-brand/'.$row->id).'" class="edit btn btn-primary btn-sm">Edit</a>';
     
                             return $btn;
                     })
@@ -63,7 +65,7 @@ class AdminController extends Controller
                     ->make(true);
         }
 
-        return view('admin/brand/brand-list');
+       
     }
 
     

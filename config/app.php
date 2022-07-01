@@ -234,6 +234,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Helper' => App\Helper\Helper::class,
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         // 'FCM'      => LaravelFCM\Facades\FCM::class,
 	    // 'FCMGroup' => LaravelFCM\Facades\FCMGroup::class, // Optional
         // 'Usps' => Johnpaulmedina\Usps\Facades\Usps::class,
