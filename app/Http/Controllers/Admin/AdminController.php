@@ -43,9 +43,29 @@ class AdminController extends Controller
     
     public function Brand(){
         $brands = Brand::take(2000)->get();
-        return view('admin/brand/brand-list', compact('brands'));
+        return view('admin/brand/brand-list');
     }
     
+
+    public function BrandList(Request $request ){
+
+        if ($request->ajax()) {
+            $data = Brand::select('*');
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+     
+                           $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+    
+                            return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+
+        return view('admin/brand/brand-list');
+    }
+
     
     public function EditBrand($id){
         $brand = Brand::FindOrfail($id);

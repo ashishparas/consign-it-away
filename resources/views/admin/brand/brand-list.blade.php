@@ -35,36 +35,19 @@
                 </div>
                 <div class="ms-panel-body table-responsive">
                     <!----table---->
-                  <table id="example" class="running_order table table-striped dataTable_custom" style="width:100%">
+                  <table id="example" class="running_order data-table table table-striped dataTable_custom" style="width:100%">
+                   
                     <thead>
-                        <tr>
-                            <th>Brand Name</th>
-                            <th>Brand Img</th>
-                            <!--<th>Brand Logo</th>-->
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($brands as $brand)
-                        <tr>
-                            <td>{{ $brand->name }}</td>
-                            <td class="product_tuc">
-                              <div class="d-block d-lg-flex align-items-center product-img">
-                                <img class="mr-3" src="{{asset('public/brand/'.$brand->image)}}" alt="image"/>
-                              </div>
-                            </td>
-                            <!--<td>-->
-                            <!--    <img src="assets/img/fedex.png" alt="" width="120px">-->
-                            <!--</td>-->
-                            <td>
-                              <div class="ml-auto pr-2">
-                                <a href="{{url('/admin/edit-brand/'. $brand->id)}}"><img src="{{asset('public/assets/img/pen.svg')}}"  alt="">Edit</a>
-                                <!--<a href="javascript:;" class="ml-3"><img src="{{asset('public/assets/img/delete.svg')}}" alt="">Delete</a>-->
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
+                      <tr>
+                          <th>Brand Name</th>
+                          <th>Brand Img</th>
+                          <!--<th>Brand Logo</th>-->
+                          <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                </tbody>
+
                 </table>
                   <!----table---->
                 </div>
@@ -76,6 +59,23 @@
 	</div>
 
 
+  <script type="text/javascript">
+    $(function () {
+      
+      var table = $('.data-table').DataTable({
+          processing: true,
+          serverSide: true,
+          ajax: "{{ route('brand-list-data') }}",
+          columns: [
+              {data: 'id', name: 'id'},
+              {data: 'name', name: 'name'},
+              {data: 'image', name: 'image'},
+              {data: 'action', name: 'action', orderable: false, searchable: false},
+          ]
+      });
+      
+    });
+  </script>
 
 
 

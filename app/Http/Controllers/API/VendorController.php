@@ -1952,7 +1952,7 @@ public function ViewOrderByVendor(Request $request)
                         $item['tracking_status'] =   $tracking_id;   
                     endif;
                 else:
-                    $item['tracking_status'] ="status not available yet";
+                    $item['tracking_status'] = json_encode(['error' => "tracking status of tracking id not available yet"]);
                 endif;
                   $specifications = Product::select('weight','brand','color','quantity')->where('id', $item->product_id)->first()->makeHidden('favourite','FavouriteId','CartStatus','soldBy');
                 $item['product']['product_specification'] = $specifications; 
