@@ -908,13 +908,13 @@ class VendorController extends ApiController
            foreach($subscriptions as $key => $subscription):
             $subscriptions[$key]['features'] = json_decode($subscription->features);
            endforeach;
-           $active = Subscription::select('plan_id','body')->where('user_id', Auth::id())->orderBy('created_at','DESC')->first();
+           $active = Subscription::select('plan_id','type','body')->where('user_id', Auth::id())->orderBy('created_at','DESC')->first();
           
            if(isset($active->body)):
             $subscription = json_decode($active->body, true);
             $active['interval'] = $subscription['plan']['interval'];
             else:
-                $active['interval']= '';
+                $active['interval']= $active->type;
            endif;
          
             return parent::success("Subscription plans view successfully!",['active_plan'=> $active,'subscription' => $subscriptions]);
@@ -1328,6 +1328,7 @@ class VendorController extends ApiController
                 'plan_id' => $input['plan_id'],
                 'user_id' => Auth::id(),
                 'name'    => $subscription['object'],
+                'type'    => $request->subscription_type,
                 'stripe_status' => $subscription['status'],
                 'stripe_price' => $subscription['items']['data'][0]['plan']['amount'],
                 'subscription_id' => $subscription->id,
@@ -1347,6 +1348,7 @@ class VendorController extends ApiController
                     'plan_id' => $input['plan_id'],
                     'user_id' => Auth::id(),
                     'name'    => 'Bronze',
+                    'type'    => $request->subscription_type,
                     'stripe_status' => 'success',
                     'stripe_price' => 0,
                     'subscription_id' => 'free'.md5(rand(1111, 9999)),
@@ -1456,6 +1458,7 @@ class VendorController extends ApiController
             'plan_id' => $request->plan_id,
             'user_id' => Auth::id(),
             'name'    => $subscription['object'],
+            'type'    => $request->subscription_type,
             'stripe_status' => $subscription['status'],
             'stripe_price' => $subscription['items']['data'][0]['plan']['amount'],
             'subscription_id' => $subscription->id,
@@ -1472,6 +1475,7 @@ class VendorController extends ApiController
                 'plan_id' => $request->plan_id,
                 'user_id' => Auth::id(),
                 'name'    => "Bronze",
+                'type'    => $request->subscription_type,
                 'stripe_status' => "success",
                 'stripe_price' => 0,
                 'subscription_id' => md5(rand(11111,99999)),

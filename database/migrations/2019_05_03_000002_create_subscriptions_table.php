@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('plan_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
+            $table->string('type')->nullable();
             $table->string('stripe_id')->unique();
             $table->string('subscription_id')->nullable();
             $table->string('subscription_item_id')->nullable();
