@@ -189,7 +189,7 @@
           <div class="ms-panel">
             <div class="ms-panel-header d-flex justify-content-between">
                 <h4 class="mb-0">Tranactions</h4>
-                <a class="btn green_btn" href="transactions-mgt.html">View All</a>
+                <a class="btn green_btn" href="#">View All</a>
             </div>
             <div class="ms-panel-body">
               <div class="running_orders_summary table-responsive">
@@ -211,7 +211,7 @@
                             <td>#D8799</td>
                             <td class="product_tuc">
                               <div class="d-flex align-items-center">
-                                <img class="mr-3" src="assets/img/46-46.png" alt="image">
+                                <img class="mr-3" src="{{asset('public/assets/img/46-46.png')}}" alt="image">
                                 <h6 class="mb-0">Robbies Pvt Ltd.</h6>
                               </div>
                             </td>
@@ -224,7 +224,7 @@
                             <td>#D8799</td>
                             <td class="product_tuc">
                               <div class="d-flex align-items-center">
-                                <img class="mr-3" src="assets/img/46-46.png" alt="image">
+                                <img class="mr-3" src="{{asset('public/assets/img/46-46.png')}}" alt="image">
                                 <h6 class="mb-0">Jack's Store</h6>
                               </div>
                             </td>
@@ -237,7 +237,7 @@
                             <td>#D8799</td>
                             <td class="product_tuc">
                               <div class="d-flex align-items-center">
-                                <img class="mr-3" src="assets/img/46-46.png" alt="image">
+                                <img class="mr-3" src="{{asset('public/assets/img/46-46.png')}}" alt="image">
                                 <h6 class="mb-0">DollarSmart.</h6>
                               </div>
                             </td>
@@ -250,7 +250,7 @@
                           <td>#D8799</td>
                           <td class="product_tuc">
                             <div class="d-flex align-items-center">
-                              <img class="mr-3" src="assets/img/46-46.png" alt="image">
+                              <img class="mr-3" src="{{asset('public/assets/img/46-46.png')}}" alt="image">
                               <h6 class="mb-0">Robbies Pvt Ltd.</h6>
                             </div>
                           </td>
