@@ -718,7 +718,7 @@ class ClientController extends ApiController
                         'product_id' => $product->id,
                         'address_id' => $input['address_id'],
                         'vendor_id' => $item->vendor_id,
-                        'price' => $product->amount,
+                        'price' => $product->price,
                         'quantity' => $item->quantity
                     ]);
                
