@@ -7,7 +7,7 @@
       <div class="col-md-12">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb pl-0">
-            <li class="breadcrumb-item"><img src="{{asset('public/assets/img/home.svg')}}" alt="img">Dashboard</li>
+            <li class="breadcrumb-item"><img src="{{asset('public/assets/img/home.svg')}}" alt="img">Dashboard-1234</li>
           </ol>
         </nav>
       </div>
