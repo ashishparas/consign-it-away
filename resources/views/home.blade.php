@@ -15,7 +15,7 @@
         <h3>Welcome Back, <strong>{{Auth::user()->name}}!</strong></h3>
         <p class="grey_cl fs-16 pb-3">Last Update: 24 April, 2022 | 09:02 AM</p>
       </div>
-    </div>
+    </div> 
     <!--breadcrumbs-->
     <div class="row">
             <div class="col-md-4">
