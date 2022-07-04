@@ -73,7 +73,7 @@
                   <a href="" class="pb-3 mb-3 border-bottom d-block">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex mb-3 align-items-center">
-                            <div class="mr-3"><img src="assets/img/78-78.png" alt="alt"></div>
+                            <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
                             <div class="chat_thread_data mt-3 flex_1">
                                 <h5 class="mb-0 mr-2 pr-lg-5 pr-0">Men Blue Slim Fit Faded Opaque Faded Casual Denim...</h5>
                                 <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">Roshan Brothers Ent.</span></p>
@@ -86,7 +86,7 @@
                   <a href="" class="pb-3 mb-3 border-bottom d-block">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex mb-3 align-items-center">
-                          <div class="mr-3"><img src="assets/img/78-78.png" alt="alt"></div>
+                          <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
                             <div class="chat_thread_data mt-3 flex_1">
                                 <h5 class="mb-0 mr-2 pr-lg-5 pr-0">Men Blue Slim Fit Faded Opaque Faded Casual Denim...</h5>
                                 <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">Roshan Brothers Ent.</span></p>
@@ -99,7 +99,7 @@
                   <a href="" class="pb-3 mb-3 border-bottom d-block">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex mb-3 align-items-center">
-                          <div class="mr-3"><img src="assets/img/78-78.png" alt="alt"></div>
+                          <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
                             <div class="chat_thread_data mt-3 flex_1">
                                 <h5 class="mb-0 mr-2 pr-lg-5 pr-0">Men Blue Slim Fit Faded Opaque Faded Casual Denim...</h5>
                                 <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">Roshan Brothers Ent.</span></p>
@@ -112,7 +112,7 @@
                   <a href="" class="pb-3 mb-3 border-bottom d-block">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex mb-3 align-items-center">
-                          <div class="mr-3"><img src="assets/img/78-78.png" alt="alt"></div>
+                          <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
                             <div class="chat_thread_data mt-3 flex_1">
                                 <h5 class="mb-0 mr-2 pr-lg-5 pr-0">Men Blue Slim Fit Faded Opaque Faded Casual Denim...</h5>
                                 <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">Roshan Brothers Ent.</span></p>
@@ -125,7 +125,7 @@
                   <a href="" class="pb-3 mb-3 border-bottom d-block">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex mb-3 align-items-center">
-                          <div class="mr-3"><img src="assets/img/78-78.png" alt="alt"></div>
+                          <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
                             <div class="chat_thread_data mt-3 flex_1">
                                 <h5 class="mb-0 mr-2 pr-lg-5 pr-0">Men Blue Slim Fit Faded Opaque Faded Casual Denim...</h5>
                                 <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">Roshan Brothers Ent.</span></p>
