@@ -49,7 +49,7 @@ class AdminController extends Controller
     
 
     public function BrandList(Request $request ){
-        dd('hello');
+     
         if ($request->ajax()) {
            
             $data = Brand::select('*')->get();
