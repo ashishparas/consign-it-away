@@ -59,7 +59,7 @@
     </div>
 	</div>
 
-  
+  <script src="https://php.parastechnologies.in/consign-it-away/public/assets/js/jquery-3.3.1.min.js"></script>
   <script type="text/javascript">
     $(function () {
     
