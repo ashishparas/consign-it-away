@@ -70,7 +70,7 @@
                     <img class="mr-3" src="{{asset('public/asset/img/46-46.png')}}" alt="img"/>
                     @endif
                     <div class="shipping_info pt-0">
-                        <h5 class="mb-2">{{$PastOrder->product->name}}</h5>
+                        <h5 class="mb-2">{{($PastOrder->product)?$PastOrder->product->name:'No-Name'}}</h5>
                         <div class="d-flex justify-content-between align-items-end">
                           <ul class="list-inline mb-0 black_cl">
                             <li class="list-inline-item mr-3">Quantity: <span class="black_cl">{{$PastOrder->quantity}}</span></li>
