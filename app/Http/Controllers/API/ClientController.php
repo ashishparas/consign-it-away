@@ -217,7 +217,7 @@ class ClientController extends ApiController
             $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,162])->get();
          
             
-            $recentView = RecentProducts::select(DB::raw('products.id as id'),'products.name','products.image','recent_products.user_id','recent_products.product_id','products.discount',DB::raw("CONVERT(favourites.id, CHAR) as FavouriteId, products.price as amount"),DB::raw('(favourites.status) as favourite'))
+            $recentView = RecentProducts::select(DB::raw('products.id as id, recent_products.id as recent_id '),'products.name','products.image','recent_products.user_id','recent_products.product_id','products.discount',DB::raw("CONVERT(favourites.id, CHAR) as FavouriteId, products.price as amount"),DB::raw('(favourites.status) as favourite'))
             ->where('recent_products.user_id', Auth::id())
             ->leftJoin('favourites', 'favourites.product_id', 'recent_products.product_id')
             ->join('products', 'products.id', '=', 'recent_products.product_id')
