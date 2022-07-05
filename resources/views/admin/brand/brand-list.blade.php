@@ -81,6 +81,7 @@
               {data: 'action', name: 'action',orderable: false,searchable: false }, 
           ]
       });
+      console.log(table);
       
     });
   </script>

@@ -48,12 +48,13 @@ class AdminController extends Controller
     }
     
 
-    public function BrandList(Request $request ){
-    
+
+    public function BrandList(Request $request){
+ 
         if ($request->ajax()) {
            
-            $data = Brand::select('*');
-         
+            $data = Brand::select("*");
+     
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -65,8 +66,7 @@ class AdminController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         }
-            
-       
+
     }
 
     
