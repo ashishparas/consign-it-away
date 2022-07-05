@@ -2106,6 +2106,7 @@ public function ViewOrderByVendor(Request $request)
             $transaction = $transaction->whereYear('created_at', $request->year);
         }
         $transaction = $transaction->where('vendor_id', Auth::id())->get();
+        
         return parent::success("Filtered transactions successfully!",$transaction);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());

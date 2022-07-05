@@ -63,13 +63,13 @@
 
   <script type="text/javascript">
     $(function () {
-     $.noConflict();
+    
      var baseUrl = "{{asset('public/brand')}}";
   
       var table = $('.yajra-datatable').DataTable({
           processing: true,
           serverSide: true,
-          ajax: "{{ url('/admin/brand/list/data') }}",
+          ajax: "{{ route('brand-list-data') }}",
           columns: [
               {data: 'id', name: 'id'},
               {data: 'name', name: 'name'},
