@@ -889,7 +889,7 @@ class ClientController extends ApiController
                 if($tracking_id):
                     $item['tracking_status'] =   $tracking_id;     
                 else:
-                    $item['tracking_status'] ="status not available yet";
+                    $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
                 endif;
 
                 $address = Address::where('id', $item->address_id)
