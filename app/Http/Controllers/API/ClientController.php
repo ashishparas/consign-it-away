@@ -994,6 +994,9 @@ class ClientController extends ApiController
             foreach($products as $key => $product):
                 $products[$key]['rating'] = number_format($product->Rating()->avg('rating'),1);
                 $products[$key]['RatingCount'] = $product->Rating()->count('product_id');
+
+                $products[$key]['AverageRating'] = number_format($product->Rating()->avg('rating'),1);
+                $products[$key]['TotalComments'] = $product->Rating()->count('product_id');
             endforeach;
            
             $Product_ratings = Rating::where('product_id', $input['product_id'])->with(['User'])->get();
