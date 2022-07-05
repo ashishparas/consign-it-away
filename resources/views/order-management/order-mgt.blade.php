@@ -96,12 +96,12 @@
         <div class="ms-panel">
           <div class="ms-panel-header d-flex justify-content-between align-items-baseline">
               <h4 class="mb-0">Chat On Order</h4>
-              <a href="messages.html" class="btn green_btn">View All</a>
+              <a href="javascript:void(0)" class="btn green_btn">View All</a>
           </div>
           <div class="ms-panel-body">
               <div class="chat_scroll shipping_scroll">
                 <div class="chat_thread d-flex">
-                  <img class="mr-3" src="assets/img/51-51.png" alt="alt"/>
+                  <img class="mr-3" src="{{asset('public/assets/img/51-51.png')}}" alt="alt"/>
                   <div class="chat_thread_data">
                       <h5>John Rimishe</h5>
                       <p class="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit egestas augue vitae sagittis. In maximus ornare sem...</p>
@@ -109,7 +109,7 @@
                   </div>
                 </div>
                 <div class="chat_thread d-flex">
-                  <img class="mr-3" src="assets/img/51-51.png" alt="alt"/>
+                  <img class="mr-3" src="{{asset('public/assets/img/51-51.png')}}" alt="alt"/>
                   <div class="chat_thread_data">
                       <h5>John Rimishe</h5>
                       <p class="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit egestas augue vitae sagittis. In maximus ornare sem lacinia congue. </p>
@@ -117,7 +117,7 @@
                   </div>
                 </div>
                 <div class="chat_thread d-flex">
-                  <img class="mr-3" src="assets/img/51-51.png" alt="alt"/>
+                  <img class="mr-3" src="{{asset('public/assets/img/51-51.png')}}" alt="alt"/>
                   <div class="chat_thread_data">
                       <h5>John Rimishe</h5>
                       <p class="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit egestas... </p>
@@ -125,7 +125,7 @@
                   </div>
                 </div>
                 <div class="chat_thread d-flex">
-                  <img class="mr-3" src="assets/img/51-51.png" alt="alt"/>
+                  <img class="mr-3" src="{{asset('public/assets/img/51-51.png')}}" alt="alt"/>
                   <div class="chat_thread_data">
                       <h5>John Rimishe</h5>
                       <p class="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit egestas augue vitae sagittis. In maximus ornare sem lacinia congue. </p>
