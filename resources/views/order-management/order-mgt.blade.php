@@ -64,7 +64,7 @@
                 @foreach($PastOrders as $PastOrder)
                   <div class="shipping_wrap">
                     <a href="complete-orders-details.html" class="d-flex">
-                      @if($PastOrder->product !== '')
+                      @if(!empty($PastOrder->product))
                     <img class="mr-3" src="{{asset('public/products/'.$PastOrder->product->image[0])}}" alt="img"/>
                     @else
                     <img class="mr-3" src="{{asset('public/asset/img/46-46.png')}}" alt="img"/>
