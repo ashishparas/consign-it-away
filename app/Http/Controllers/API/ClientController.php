@@ -218,10 +218,10 @@ class ClientController extends ApiController
          
             
             $recentView = RecentProducts::select(DB::raw('products.id as id, recent_products.id as recent_id '),'products.name','products.image','recent_products.user_id','recent_products.product_id','products.discount',DB::raw("CONVERT(favourites.id, CHAR) as FavouriteId, products.price as amount"),DB::raw('(favourites.status) as favourite'))
-            ->where('recent_products.user_id', Auth::id())
+            
             ->leftJoin('favourites', 'favourites.product_id', 'recent_products.product_id')
             ->join('products', 'products.id', '=', 'recent_products.product_id')
-            
+            ->where('recent_products.user_id', Auth::id())
             // ->take(5)
             ->get();
             //dd($recentView->toArray());
