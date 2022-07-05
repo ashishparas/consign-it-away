@@ -625,6 +625,7 @@ class VendorController extends ApiController
 
             }
             $count =     Product::where('user_id', Auth::id())->whereMonth('created_at', date('m'))->count('id');
+            $Productcount =     Product::where('user_id', Auth::id())->count('id');
            
             //  dd(DB::getQueryLog($products));
 
@@ -633,7 +634,7 @@ class VendorController extends ApiController
             //     $products[$key]['comment'] = $product->Rating()->count('comment');
             // endforeach;
          
-        return parent::success("View all products successfully!", ['this_month_added' => $count,'products' => $products]);
+        return parent::success("View all products successfully!", ['product_count'=>$Productcount,'this_month_added' => $count,'products' => $products]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
