@@ -86,7 +86,7 @@ class AdminController extends Controller
             endif;
                     $brand->fill($input);
                     $brand->save();
-            return redirect()->route('brand-list');
+            return redirect()->route('brand.list');
             
     }
     
