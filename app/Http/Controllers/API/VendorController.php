@@ -2099,16 +2099,47 @@ public function ViewOrderByVendor(Request $request)
     endif;
     try{
         $input = $request->all();
-        $transaction = Transaction::select('price','order_date','created_at');
-        if(isset($request->month)){
-            $transaction = $transaction->whereMonth('created_at', $request->month);
-        }
-        if(isset($request->year)){
-            $transaction = $transaction->whereYear('created_at', $request->year);
-        }
-        $transaction = $transaction->where('vendor_id', Auth::id())->get();
         
-        return parent::success("Filtered transactions successfully!",$transaction);
+       
+        $users = Transaction::select('id', 'order_date','price');
+        if(isset($request->year)):
+            $users = $users->whereYear('order_date', $request->year);
+    endif;
+        $users = $users->get()->groupBy(function ($date) {
+            return Carbon::parse($date->order_date)->format('m');
+        });
+
+        $usermcount = [];
+        $userArr = [];
+        $usermprice = [];
+        $price = 0;
+    foreach ($users as $key => $value) {
+    //   dd($key);
+        $usermcount[(int)$key] = count($value);
+        foreach($value as $val){
+            $price += $val->price;
+        }
+        $usermprice[(int)$key] = $price;
+        $price= 0;
+    }
+
+    $month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    for ($i = 1; $i <= 12; $i++) {
+        if (!empty($usermcount[$i])) {
+            $userArr[$i]['count'] = $usermcount[$i];
+            $userArr[$i]['sum'] = $usermprice[$i];
+        } else {
+            $userArr[$i]['count'] = 0;
+            $userArr[$i]['sum'] = 0;
+        }
+        $userArr[$i]['month'] = $month[$i - 1];
+    }
+        // dd($userArr);
+    // return response()->json(array_values($userArr));
+
+        
+        return parent::success("Filtered transactions successfully!",$userArr);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
