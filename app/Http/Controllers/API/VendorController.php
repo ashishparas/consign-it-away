@@ -2138,8 +2138,8 @@ public function ViewOrderByVendor(Request $request)
         // dd($userArr);
     // return response()->json(array_values($userArr));
 
-        
-        return parent::success("Filtered transactions successfully!",$userArr);
+       
+        return parent::success("Filtered transactions successfully!", array_values($userArr));
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
