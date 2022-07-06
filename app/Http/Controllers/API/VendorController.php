@@ -1943,7 +1943,7 @@ public function ViewOrderByVendor(Request $request)
           
         $item = Item::where('vendor_id',Auth::id())
                 ->where('id', $input['order_id'])
-                ->with(['Customer','Product','Transaction','Rating'])
+                ->with(['Customer','cancelRequest','Product','Transaction','Rating'])
                 ->first();
                // dd($item->toArray());
             if($item){
@@ -1956,8 +1956,8 @@ public function ViewOrderByVendor(Request $request)
                 else:
                     $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
                 endif;
-                  $specifications = Product::select('weight','brand','color','quantity')->where('id', $item->product_id)->first();
-                //   ->makeHidden('favourite','FavouriteId','CartStatus','soldBy');
+                  $specifications = Product::select('weight','brand','color','quantity')->where('id', $item->product_id)->first()
+                  ->makeHidden('favourite','FavouriteId','CartStatus','soldBy');
                 $item['product']['product_specification'] = $specifications; 
                 $item['coupanAmt'] = '0';
                $attribite =  \App\Models\Attribute::where('product_id', $item->product_id)->get();

@@ -56,6 +56,10 @@ class Item extends Model
         return \App\Models\Attribute::where('product_id',$this->product_id)->with(['AttributeOption'])->get();
     }
 
+    public function cancelRequest(){
+        return $this->hasOne(cancellation::class);
+    }
+
 
 
 }
