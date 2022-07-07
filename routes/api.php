@@ -125,7 +125,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('vendor/order/list/by/id',[VendorController::class,"ViewOrderByVendor"]); 
     
     
-    Route::post('add/variant',[VendorController::class, "AddVariant"]);
+    Route::post('add/variant',[VendorController::class, "AddVariant"]); 
     Route::post('delete/variants',[VendorController::class, "DeleteAttributes"]);
     Route::post('view/product/variants',[VendorController::class, "ViewProductvariants"]); 
     Route::post('view/staff/by/id',[VendorController::class, "ViewStaffById"]);
