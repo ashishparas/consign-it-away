@@ -814,7 +814,7 @@ class ClientController extends ApiController
 
    public function ViewVendorOrder(Request $request)
    {
-       $rules = ['type' => 'required|in:1,2,3,4'];
+       $rules = ['type' => 'required|in:1,2,3,4','search' => ''];
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
        if($validateAttributes):
         return $validateAttributes;
@@ -829,7 +829,12 @@ class ClientController extends ApiController
             }else if($request->type === '3'){
                 $items = Item::where('vendor_id',Auth::id())->where('status','3')->with(['Product'])->orderBy('created_at','DESC')->get();
             }else if($request->type === '4'){
-                $items = Item::where('vendor_id',Auth::id())->with(['Product'])->orderBy('created_at','DESC')->get();
+                $items = Item::select('items.*','products.name')->where('vendor_id',Auth::id())
+                            ->Join('products','products.id','items.product_id');
+                if(isset($request->search)){
+                    $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
+                }
+                $items = $items->with(['Product'])->orderBy('items.created_at','DESC')->get();
             }
 
            
