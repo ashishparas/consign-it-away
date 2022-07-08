@@ -1803,7 +1803,7 @@ public function ViewTransactions(Request $request)
         $totalIncome = Transaction::where('vendor_id', Auth::id())->sum('price');
         $withdrawEarning = Withdraw::where('user_id', Auth::id())->sum('amount');
         $balance = $totalIncome - $withdrawEarning;
-        return parent::success("View tansaction successfully!",['total_incomde' => number_format($balance,2),'withdraw'=> $withdraw, 'withdraw_earning' => number_format($withdraw,2)  ]);
+        return parent::success("View tansaction successfully!",['total_incomde' => number_format($balance,2),'withdraw'=> $withdraw, 'withdraw_earning' => number_format($balance,2)  ]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
