@@ -1801,9 +1801,9 @@ public function ViewTransactions(Request $request)
     try{
         $withdraw = Transaction::orderBy('id','DESC')->get();
         $totalIncome = Transaction::where('vendor_id', Auth::id())->sum('price');
-        $withdraw = Withdraw::where('user_id', Auth::id())->sum('amount');
-        $balance = $totalIncome - $withdraw;
-        return parent::success("View tansaction successfully!",['total_incomde' => number_format($balance,2),'withdraw' => number_format($withdraw,2)  ]);
+        $withdrawEarning = Withdraw::where('user_id', Auth::id())->sum('amount');
+        $balance = $totalIncome - $withdrawEarning;
+        return parent::success("View tansaction successfully!",['total_incomde' => number_format($balance,2),'withdraw'=> $withdraw, 'withdraw_earning' => number_format($withdraw,2)  ]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
