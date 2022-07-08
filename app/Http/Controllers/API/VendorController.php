@@ -1769,7 +1769,7 @@ public function Dashboard(Request $request)
                     ->where('users.id', Auth::id())
                     ->with(['Transaction'])
                     ->first();
-                $withdraw = Withdraw::where('user_id', Auth::id())->where('status','1')->sum('amount');
+                $withdraw = Withdraw::where('user_id', Auth::id())->sum('amount');
                    
                     $dashboard['income'] = $withdraw;
                     $dashboard['balance'] = ($dashboard->TotalRevenue - $withdraw);
@@ -1844,15 +1844,18 @@ public function Withdraw(Request $request)
     try{
         $input = $request->all();
         $trans = Transaction::where('vendor_id', Auth::id())->sum('price');
-      
+    
         $withdraw = Withdraw::where('user_id', Auth::id())->where('status','1')->sum('amount');
-        // dd($withdraw);
+      
         $withdrawalAmount =  ($trans - $withdraw);
+     
         if($request->amount > $withdrawalAmount):
             return parent::error("Your amount unprocessable amount");
         endif;
+
         $input['user_id'] =  Auth::id();
         $amt  = Withdraw::create($input);
+
         return parent::success("Withdraw request successfully send to Admin",$amt);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
