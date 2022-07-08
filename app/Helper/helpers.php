@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+    // userId: 778CONSI5321
 class Helper extends ApiController
 {
     public static function shout(string $string)
@@ -265,6 +265,52 @@ $input_xml = <<<EOXML
             return false;
         }
     }
+
+
+    public static function getShippingPrice(){
+        try{
+
+    $input_xml = <<<EOXML
+                    <RateV4Request USERID="778CONSI5321">
+                    <Revision>2</Revision>
+                    <Package ID="0">
+                    <Service>PRIORITY</Service>
+                    <ZipOrigination>22201</ZipOrigination>
+                    <ZipDestination>26301</ZipDestination>
+                    <Pounds>8</Pounds>
+                    <Ounces>2</Ounces>
+                    <Container></Container>
+                    <Width></Width>
+                    <Length></Length>
+                    <Height></Height>
+                    <Girth></Girth>
+                    <Machinable>TRUE</Machinable>
+                    </Package>
+                    </RateV4Request>
+                EOXML;
+            
+            $fields = array('API' => 'RateV4','XML' => $input_xml);
+            
+            $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+            $data = curl_exec($ch);
+            curl_close($ch);
+        
+            return json_decode(json_encode(simplexml_load_string($data)), true);
+         
+                    
+        }catch(\Exception $ex){
+            return false;
+        }
+    }
+
+
+
+
 
 
 

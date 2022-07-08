@@ -60,7 +60,7 @@ if (\Request::header('Authorization'))
 Route::group(['middleware' => $middleware], function () {
 
     Route::post('home', [ClientController::class, "Home"]);
-    
+
 });
 
 
@@ -185,6 +185,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('initiate/refund',[VendorController::class, "Refund"]);
     Route::post('delete/product/image',[VendorController::class, "DeleteProductImage"]);
     Route::post('revenue',[VendorController::class, "Revenue"]);
+    
     
    
     

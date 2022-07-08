@@ -1769,10 +1769,11 @@ public function Dashboard(Request $request)
                     ->where('users.id', Auth::id())
                     ->with(['Transaction'])
                     ->first();
-                $withdraw = Withdraw::where('user_id', Auth::id())->sum('amount');
-                   
-                    $dashboard['income'] = $withdraw;
-                    $dashboard['balance'] = ($dashboard->TotalRevenue - $withdraw);
+        $withdraw = Withdraw::where('user_id', Auth::id())->sum('amount');
+       
+                    $dashboard['TotalRevenue'] = (string)$dashboard['TotalRevenue'];
+                    $dashboard['income'] = number_format($withdraw,1);
+                    $dashboard['balance'] = number_format(($dashboard->TotalRevenue - $withdraw),1);
                     $last_trans = Transaction::select('created_at')->where('vendor_id', Auth::id())->orderBy('created_at',"DESC")->first();
                     $Ldate =  ($last_trans)?  date('Y-M-d h:i a', strtotime($last_trans->created_at)): '';
                     $dashboard['last_transaction'] = $Ldate;
@@ -1800,8 +1801,9 @@ public function ViewTransactions(Request $request)
     try{
         $withdraw = Transaction::orderBy('id','DESC')->get();
         $totalIncome = Transaction::where('vendor_id', Auth::id())->sum('price');
-       
-        return parent::success("View tansaction successfully!",['total_incomde' => number_format($totalIncome,2),'withdraw' => $withdraw]);
+        $withdraw = Withdraw::where('user_id', Auth::id())->sum('amount');
+        $balance = $totalIncome - $withdraw;
+        return parent::success("View tansaction successfully!",['total_incomde' => number_format($balance,2),'withdraw' => number_format($withdraw,2)  ]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
@@ -2149,6 +2151,24 @@ public function ViewOrderByVendor(Request $request)
     }
 
    }
+
+   public function getShippingPrice(Request $request){
+        $rules = [];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+        if($validateAttributes):
+            return $validateAttributes;
+        endif;
+        try{
+            $ShippingRate = helper::getShippingPrice();
+            
+            return parent::success("view shipping rate sucessfully!",$ShippingRate);
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+   }
+
+
+
 
 
 
