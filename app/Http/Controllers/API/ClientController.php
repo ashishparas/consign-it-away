@@ -190,7 +190,7 @@ class ClientController extends ApiController
     }
 
     public function Home(Request $request){
-        // dd(Auth::id());
+    //    dd(Auth::id());
         $rules = [];
         $validateAttributes=parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
         if($validateAttributes):

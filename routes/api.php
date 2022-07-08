@@ -6,6 +6,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\API\VendorController;
 use Facade\FlareClient\Http\Client;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,21 @@ Route::get('most/popular/products',[ClientController::class, "MostPopularsProduc
 
 Route::post('search', [ClientController::class, "Search"]);
 
+
+$middleware = ['api'];
+if (\Request::header('Authorization'))
+
+    $middleware = array_merge(['auth:sanctum']);
+Route::group(['middleware' => $middleware], function () {
+
+    Route::post('home', [ClientController::class, "Home"]);
+    
+});
+
+
+
+
+
 Route::middleware(['auth:sanctum'])->group(function(){
     
     Route::post('logout',[AuthController::class, "Logout"]);
@@ -74,7 +90,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('edit/address',[ClientController::class, "EditAddress"]);
     Route::post('view/addresses',[ClientController::class, "ViewAddress"]);
     Route::post('contact',[ClientController::class,'Contact']);
-    Route::post('home',[ClientController::class,"Home"]);
+    
     Route::post('rating',[ClientController::class, "Rating"]);
     Route::post('favourite',[ClientController::class,"Favourite"]);
     Route::get('favourite/list',[ClientController::class,"FavouriteList"]);
