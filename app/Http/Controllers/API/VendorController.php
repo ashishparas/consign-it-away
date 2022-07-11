@@ -2111,7 +2111,7 @@ public function ViewOrderByVendor(Request $request)
         if(isset($request->year)):
             $users = $users->whereYear('order_date', $request->year);
     endif;
-        $users = $users->get()->groupBy(function ($date) {
+        $users = $users->where('vendor_id',Auth::id())->get()->groupBy(function ($date) {
             return Carbon::parse($date->order_date)->format('m');
         });
 
@@ -2134,7 +2134,7 @@ public function ViewOrderByVendor(Request $request)
     for ($i = 1; $i <= 12; $i++) {
         if (!empty($usermcount[$i])) {
             $userArr[$i]['count'] = $usermcount[$i];
-            $userArr[$i]['sum'] = $usermprice[$i];
+            $userArr[$i]['sum'] = number_format($usermprice[$i],2);
         } else {
             $userArr[$i]['count'] = 0;
             $userArr[$i]['sum'] = 0;
