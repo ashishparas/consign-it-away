@@ -1185,12 +1185,15 @@ class ClientController extends ApiController
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
             $data = curl_exec($ch);
             curl_close($ch);
-            
+            $arr = [];
             // Convert the XML result into array
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
-            if($array_data['TrackDetail']):
-
-            endif;
+            foreach($array_data['TrackInfo']['TrackDetail'] as $key => $track):
+              $arr[] =  explode(",", $track);
+              dd($arr);
+            endforeach;
+            // dd($arr);
+          
             return parent::success("view address successfully!", $array_data);
 
         }catch(\Exception $ex){

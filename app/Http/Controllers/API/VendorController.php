@@ -1010,18 +1010,21 @@ class VendorController extends ApiController
 
    public function Brands(Request $request){
       
-       $rules = ['search' =>''];
-       $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
+       $rules = ['search' =>'','limit'=>'','page' =>''];
+       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
        if($validateAttributes):
         return $validateAttributes;
        endif;
        try{
+
         $brands = [];
+        $limit = (isset($request->limit))? $request->limit:15;
+        
         $input = $request->all();
         if(isset($request->search)):
-        $brands = Brand::where('name','LIKE', "%".$input['search']."%")->take(2000)->get();
+        $brands = Brand::where('name','LIKE', "%".$input['search']."%")->take(2000)->paginate($limit);
         else:
-            $brands = Brand::inRandomOrder()->take(2000)->get();
+            $brands = Brand::inRandomOrder()->take(2000)->paginate($limit);
         
         endif;
         
