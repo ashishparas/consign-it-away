@@ -2118,7 +2118,7 @@ public function ViewOrderByVendor(Request $request)
         $usermcount = [];
         $userArr = [];
         $usermprice = [];
-        $price = 0;
+        $price = "0";
     foreach ($users as $key => $value) {
     //   dd($key);
         $usermcount[(int)$key] = count($value);
@@ -2126,7 +2126,7 @@ public function ViewOrderByVendor(Request $request)
             $price += $val->price;
         }
         $usermprice[(int)$key] = $price;
-        $price= 0;
+        $price= "0";
     }
 
     $month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -2137,7 +2137,7 @@ public function ViewOrderByVendor(Request $request)
             $userArr[$i]['sum'] = number_format($usermprice[$i],2);
         } else {
             $userArr[$i]['count'] = 0;
-            $userArr[$i]['sum'] = 0;
+            $userArr[$i]['sum'] = "0";
         }
         $userArr[$i]['month'] = $month[$i - 1];
     }
