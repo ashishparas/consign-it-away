@@ -236,6 +236,8 @@ class AuthController extends ApiController {
         if($check_user):
             $token = $check_user->createToken('Consign-it-away')->plainTextToken;
             parent::addUserDeviceData($check_user, $request);
+            $check_user['store'] = Store::select('id')->where('user_id', $check_user->id)->orderBy('created_at','DESC')->first();
+         
             return parent::success("User already exists.",['token' =>  $token,'user'=> $check_user],200);
         else:
             return parent::success('This user not exists.',['status' =>'not_exist'],201);
