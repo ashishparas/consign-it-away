@@ -63,6 +63,7 @@ Route::group(['middleware' => $middleware], function () {
     Route::post('product/by/id',[ClientController::class,"ProductById"]);
     Route::get("product/filter",[ClientController::class,"ProductFilter"]);
     Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
+    Route::post('client/view/store/by/id',[ClientController::class, "ClientViewStore"]);
 });
 
 
@@ -148,7 +149,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('view/product/variants',[VendorController::class, "ViewProductvariants"]); 
     Route::post('view/staff/by/id',[VendorController::class, "ViewStaffById"]);
     Route::post('view/store/by/id',[VendorController::class, "StoreById"]);
-    Route::post('client/view/store/by/id',[ClientController::class, "ClientViewStore"]);
+    
     Route::post('search/variant',[ClientController::class, "SearchVariants"]);
     Route::post('buy/subscription',[VendorController::class, "VendorBuySubscription"]);
     Route::post('change/subscription/plan',[VendorController::class, "ChangeSubscriptionPlan"]);

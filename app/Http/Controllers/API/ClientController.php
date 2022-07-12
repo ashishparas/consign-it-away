@@ -1197,7 +1197,7 @@ class ClientController extends ApiController
             $string_to_match = $track;
                 if ( preg_match_all($extract_date_pattern, $string_to_match, $matches) ) {
                     
-                $newdate =  date('d/m/Y',strtotime($matches[0][0]));
+                $newdate =  date('m/d/Y',strtotime($matches[0][0]));
                 $newString = str_replace($matches[0][0],  $newdate,  $string_to_match);
                 //   echo $newString."<br>"; 
                 $string_to_match = $newString;
