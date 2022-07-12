@@ -309,6 +309,73 @@ $input_xml = <<<EOXML
     }
 
 
+    public static function ReturnRequest(){
+        try{
+
+            $input_xml = <<<EOXML
+                            <USPSReturnsLabelRequest USERID="778CONSI5321">
+                            <Option/>
+                            <Revision></Revision>
+                            <ImageParameters>
+                            <ImageType>PDF</ImageType>
+                            <SeparateReceiptPage>false</SeparateReceiptPage>
+                            </ImageParameters>
+                            <CustomerFirstName>Ashish</CustomerFirstName>
+                            <CustomerLastName>Mehra</CustomerLastName>
+                            <CustomerFirm>Abc </CustomerFirm>
+                            <CustomerAddress1/>
+                            <CustomerAddress2>PO Box 100</CustomerAddress2>
+                            <CustomerUrbanization/>
+                            <CustomerCity>Washington</CustomerCity>
+                            <CustomerState>DC</CustomerState>
+                            <CustomerZip5>20260</CustomerZip5>
+                            <CustomerZip4>1122</CustomerZip4>
+                            <POZipCode>20260</POZipCode>
+                            <AllowNonCleansedOriginAddr>false</AllowNonCleansedOriginAddr>
+                            <RetailerATTN>ATTN: Retailer Returns Department</RetailerATTN>
+                            <RetailerFirm>Retailer Firm</RetailerFirm>
+                            USPS Web Tools User Guide
+                            15
+                            <WeightInOunces>80</WeightInOunces>
+                            <ServiceType>PRIORITY</ServiceType>
+                            <Width>4</Width>
+                            <Length>10</Length>
+                            <Height>7</Height>
+                            <Girth>2</Girth>
+                            <Machinable>true</Machinable>
+                            <CustomerRefNo>RMA%23: EE66GG87</CustomerRefNo>
+                            <PrintCustomerRefNo>true</PrintCustomerRefNo>
+                            <CustomerRefNo2> EF789UJK </CustomerRefNo2>
+                            <PrintCustomerRefNo2>true</PrintCustomerRefNo2>
+                            <SenderName>Sender Name for Email</SenderName>
+                            <SenderEmail>senderemail@email.com</SenderEmail>
+                            <RecipientName>Recipient of Email</RecipientName>
+                            <RecipientEmail>recipientemail@email.com</RecipientEmail>
+                            <TrackingEmailPDF>true</TrackingEmailPDF>
+                            <ExtraServices>
+                            <ExtraService>156</ExtraService>
+                            </ExtraServices>
+                            </USPSReturnsLabelRequest>
+                EOXML;
+            
+            $fields = array('API' => 'USPSReturnsLabel','XML' => $input_xml);
+            
+            $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            $data = json_decode(json_encode(simplexml_load_string($data)), true);
+            dd($data);
+
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
+
 
 
 

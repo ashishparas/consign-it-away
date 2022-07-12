@@ -524,18 +524,19 @@ class ClientController extends ApiController
 
 
    public function Search(Request $request){
-    $rules = ['search' => ''];
-    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+    $rules = ['search' => '','limit'=>'','page'=>''];
+    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
         $input = $request->all();
         $seacrh = $input['search'];
+        $limit = (isset($request->limit))?$request->limit:15;
         if(isset($seacrh)):
-            $product = Product::where('name','LIKE', '%'.$seacrh.'%')->with(['Discount'])->get();
+            $product = Product::where('name','LIKE', '%'.$seacrh.'%')->with(['Discount'])->paginate($limit);
         else:
-            $product = Product::with(['Discount'])->get();
+            $product = Product::with(['Discount'])->paginate($limit);
         endif;
         
         return parent::success("View search result successfully!",['result' => $product]);
@@ -1608,6 +1609,28 @@ public function DeleteAddress(Request $request)
         return parent::error($ex->getMessage());
     }
 }
+
+
+public function ReturnLabel(Request $request)
+{
+    $rules = [];
+    $validateAttributes=parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $returnCourier = Helper::ReturnRequest();
+        return parent::success("Return request in proccess successfully!");
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
+
+
+
+
 
 
 
