@@ -1185,16 +1185,32 @@ class ClientController extends ApiController
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
             $data = curl_exec($ch);
             curl_close($ch);
-            $arr = [];
+           
             // Convert the XML result into array
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
+            $arr = [];
+            $newString="";
+            // dd($array_data);
             foreach($array_data['TrackInfo']['TrackDetail'] as $key => $track):
-              $arr[] =  explode(",", $track);
-              dd($arr);
+        
+        $extract_date_pattern = "/(January|February|March|April|May|June|July|Augest|September|October|November|December)\s\d{2},\s{1}\d{4}/";
+            $string_to_match = $track;
+                if ( preg_match_all($extract_date_pattern, $string_to_match, $matches) ) {
+                    
+                $newdate =  date('d/m/Y',strtotime($matches[0][0]));
+                $newString = str_replace($matches[0][0],  $newdate,  $string_to_match);
+                //   echo $newString."<br>"; 
+                $string_to_match = $newString;
+                }
+                $arr[] = explode(",", $string_to_match);
+
+              
+           
             endforeach;
+           
             // dd($arr);
           
-            return parent::success("view address successfully!", $array_data);
+            return parent::success("view address successfully!", $arr);
 
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());

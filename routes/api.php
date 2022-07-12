@@ -61,6 +61,8 @@ Route::group(['middleware' => $middleware], function () {
 
     Route::post('home', [ClientController::class, "Home"]);
     Route::post('product/by/id',[ClientController::class,"ProductById"]);
+    Route::get("product/filter",[ClientController::class,"ProductFilter"]);
+    Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
 });
 
 
@@ -113,7 +115,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('vendor/view/profile',[VendorController::class, "ViewProfile"]);
     Route::post('subscription/plan',[VendorController::class, "SubscriptionsPlan"]);
     Route::post('subscription/by/id',[VendorController::class, "SubscriptionPlanById"]);
-    Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
+    
     
     Route::post('personal',[ClientController::class, "Personal"]);
     Route::post('edit/personal',[ClientController::class, "EditPersonal"]);
@@ -151,7 +153,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('buy/subscription',[VendorController::class, "VendorBuySubscription"]);
     Route::post('change/subscription/plan',[VendorController::class, "ChangeSubscriptionPlan"]);
     Route::post('create/offer',[ClientController::class, "CreateOffer"]);
-    Route::get("product/filter",[ClientController::class,"ProductFilter"]);
+    
     Route::post('offer/by/id',[ClientController::class, "getOfferDetailBy"]);
     Route::post('user/chat',[ClientController::class, "UserChat"]);
     Route::post('chat/image/url',[AuthController::class, "ChatImageUrl"]);
