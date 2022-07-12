@@ -1164,7 +1164,8 @@ class VendorController extends ApiController
 
    public function StoreById(Request $request)
    {
-       $rules = ['store_id' => 'required|exists:stores,id'];
+  
+       $rules = ['store_id' => 'required|exists:stores,id','search'=>''];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),false);
        
        if($validateAttributes):
@@ -1183,8 +1184,11 @@ class VendorController extends ApiController
                             ->where('id',$store->user_id)
                             
                             ->first();
-            $products = Product::select('id','image','name','amount')
-            ->where('user_id',$store->user_id)
+            $products = Product::select('id','image','name','amount');
+            if(isset($request->search)){
+                $products = $products->where("name","LIKE","%".$request->search."%");
+            }
+            $products = $products->where('user_id',$store->user_id)
             ->where('store_id',$store->id)
             ->paginate($limit);
 

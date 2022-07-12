@@ -1109,7 +1109,6 @@ class ClientController extends ApiController
         endif;
         try{
             
-            
 
             return parent::success("view address successfully!");
 
