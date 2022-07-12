@@ -1773,10 +1773,13 @@ public function Dashboard(Request $request)
                     ->with(['Transaction'])
                     ->first();
         $withdraw = Withdraw::where('user_id', Auth::id())->sum('amount');
-       
-                    $dashboard['TotalRevenue'] = (string)$dashboard['TotalRevenue'];
+     
+                    $dashboard['TotalRevenue'] = $dashboard['TotalRevenue']?(string)$dashboard['TotalRevenue']:"0";
+                  
                     $dashboard['income'] = number_format($withdraw,1);
-                    $dashboard['balance'] = number_format(($dashboard->TotalRevenue - $withdraw),1);
+                      
+                    $dashboard['balance'] = number_format(( (int)$dashboard->TotalRevenue - $withdraw ),1);
+                   
                     $last_trans = Transaction::select('created_at')->where('vendor_id', Auth::id())->orderBy('created_at',"DESC")->first();
                     $Ldate =  ($last_trans)?  date('Y-M-d h:i a', strtotime($last_trans->created_at)): '';
                     $dashboard['last_transaction'] = $Ldate;
