@@ -1966,7 +1966,7 @@ public function ViewOrderByVendor(Request $request)
             if($item->tracking_id):
 
                     $tracking_id = Helper::trackCourier($item->tracking_id);
-                  
+                    $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
                 if($tracking_id):
                    
                     if(isset($tracking_id['TrackDetail'])){
