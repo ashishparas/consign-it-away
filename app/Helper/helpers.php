@@ -1,7 +1,7 @@
 <?php // Code within app\Helpers\Helper.php
 
 namespace App\Helper;
-
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\API\ApiController;
 use App\Models\Address;
 use App\Models\Product;
@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
     // userId: 778CONSI5321
 class Helper extends ApiController
 {
@@ -377,6 +378,24 @@ $input_xml = <<<EOXML
     }
 
 
+
+    public static function SendVarificationEmail($email, $name, $message){
+
+        $sendGridMail = new \SendGrid\Mail\Mail();
+        $sendGridMail->setFrom(getenv('MAIL_ADDRESS'), "ConsignItAway");
+        $sendGridMail->setSubject("OTP Verification Mail");
+        $sendGridMail->addTo($email, $name);
+        $sendGridMail->addContent("text/plain", "OTP Verification Mail");
+        $sendGridMail->addContent("text/html",$message);
+        
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+        $response = $sendgrid->send($sendGridMail);
+        return true;
+        // print $response->statusCode() . "\n";
+        // print_r($response->headers());
+        // print $response->body() . "\n";
+        // exit;
+    }
 
 
 

@@ -193,12 +193,12 @@ class ApiController extends \App\Http\Controllers\Controller {
     protected static function sendOTPUser(User $user) {
     // dd($user);
         $otp = mt_rand(1000, 9999);
-        $user->mobile_otp = 1111;
+        $user->mobile_otp = $otp;
         
         $user->save();
-    $phonecode =     str_replace('+','', trim($user->phonecode));
-    $phonecode = '+'.$phonecode;
-        // return self::sendTextMessage('<#> Your ' . config('app.name') . ' OTP is ' . $otp.' Use this to verify your mobile '. config('app.name') ,$phonecode,$user->mobile_no);
+        $phonecode =     str_replace('+','', trim($user->phonecode));
+        $phonecode = '+'.$phonecode;
+        return self::sendTextMessage('<#> Your ' . config('app.name') . ' OTP is ' . $otp.' Use this to verify your mobile '. config('app.name') ,$phonecode,$user->mobile_no);
     }
 
     protected static function sendOTP($number) {
