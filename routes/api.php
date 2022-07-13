@@ -47,7 +47,7 @@ Route::post('colours',[VendorController::class, "Colours"]);
 Route::post('get/categories',[VendorController::class, "getCategories"]);
 Route::post("brands",[VendorController::class,"Brands"]);
 Route::get('invite/friend',[AuthController::class,"InviteFriend"]);
-Route::get('share/product',[AuthController::class, "ShareProduct"]);
+Route::get('share/product/{id}',[AuthController::class, "ShareProduct"]);
 Route::get('most/popular/products',[ClientController::class, "MostPopularsProducts"]);
 
 Route::post('search', [ClientController::class, "Search"]);

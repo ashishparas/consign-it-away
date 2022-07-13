@@ -685,103 +685,96 @@ class ClientController extends ApiController
         return $validateAttributes;
        endif;
 
-       try{
+        try{
             $input = $request->all();
 
             // Charge for product
             $Address = true;//Helper::VerifyAddress($request->address_id);
            
-        if($Address):
+            if($Address):
 
                 $stripe =  \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET'));
             
-                // Token is created using Stripe Checkout or Elements!
-                // Get the payment token ID submitted by the form:
-               $token = $input['stripeToken'];
-            // $charge = \Stripe\Charge::create([
-            // 'amount' => ($input['total_amount'] * 100),
-            // 'currency' => 'usd',
-            // 'description' => 'Charge customer to place order',
-            // 'source' => $token,
-            // ]);
-            $input['charge_id'] = md5(rand(11111,99999)); //$charge['id'];
-            $input['user_id'] = Auth::id();
-            $order = Order::create($input);
+                    // Token is created using Stripe Checkout or Elements!
+                    // Get the payment token ID submitted by the form:
+                $token = $input['stripeToken'];
+                // $charge = \Stripe\Charge::create([
+                // 'amount' => ($input['total_amount'] * 100),
+                // 'currency' => 'usd',
+                // 'description' => 'Charge customer to place order',
+                // 'source' => $token,
+                // ]);
+                $input['charge_id'] = md5(rand(11111,99999)); //$charge['id'];
+                $input['user_id'] = Auth::id();
+                $order = Order::create($input);
            
-            if(!empty($order)):
+                if(!empty($order)):
                 
                 
-                $items = Cart::where('user_id', Auth::id())->get();
+                    $items = Cart::where('user_id', Auth::id())->get();
               
-                foreach($items as $item):
-                    $product = Product::where('id', $item->product_id)->first();
+                    foreach($items as $item):
+                        $product = Product::where('id', $item->product_id)->first();
                 
-                   $item =  Item::create([
-                        'user_id' => Auth::id(),
-                        'order_id' => $order->id,
-                        'product_id' => $product->id,
-                        'address_id' => $input['address_id'],
-                        'vendor_id' => $item->vendor_id,
-                        'price' => $product->price,
-                        'quantity' => $item->quantity
-                    ]);
+                        $item =  Item::create([
+                                'user_id' => Auth::id(),
+                                'order_id' => $order->id,
+                                'product_id' => $product->id,
+                                'address_id' => $input['address_id'],
+                                'vendor_id' => $item->vendor_id,
+                                'price' => $product->price,
+                                'quantity' => $item->quantity
+                        ]);
                
-                    $trans = Transaction::create([
-                        'user_id' => Auth::id(),
-                        'card_id' => $request->card_id,
-                        'order_id' =>  $item->id,
-                        'transaction_id' => $order->charge_id,
-                        'vendor_id'  => $item->vendor_id,
-                        'product_id'  => $product->id,
-                        'price' => $order->total_amount,
-                        'order_date' => date('Y-m-d')
-                    ]);
+                        $trans = Transaction::create([
+                            'user_id' => Auth::id(),
+                            'card_id' => $request->card_id,
+                            'order_id' =>  $item->id,
+                            'transaction_id' => $order->charge_id,
+                            'vendor_id'  => $item->vendor_id,
+                            'product_id'  => $product->id,
+                            'price' => $order->total_amount,
+                            'order_date' => date('Y-m-d')
+                        ]);
      
-                    if($item){
-                      
-                        $store = Store::where('id',$product->store_id)->first();
+                        if($item){
+                            $store = Store::where('id',$product->store_id)->first();
                        
-    $tracking_id = "46768273648723648234762";//Helper::UPSP($item, $product->id ,$input['address_id'], $item->vendor_id,  $store->id);
+                            $tracking_id = "46768273648723648234762";//Helper::UPSP($item, $product->id ,$input['address_id'], $item->vendor_id,  $store->id);
      
-    if($tracking_id):
-                $updatetrackingId = Item::FindOrfail($item->id);
-                                    $updatetrackingId->fill(['tracking_id'=> $tracking_id]);
-                                    $updatetrackingId->save();
-    endif;
-                       $StoreName = (!$store->name)?'No-name':$store->name;
-                        $body = '#00'.$item->id.' has been ordered from '.$StoreName;
+                            if($tracking_id):
+                                $updatetrackingId = Item::FindOrfail($item->id);
+                                                    $updatetrackingId->fill(['tracking_id'=> $tracking_id]);
+                                                    $updatetrackingId->save();
+                            endif;
+                            $StoreName = (!$store->name)?'No-name':$store->name;
+                            $body = '#00'.$item->id.' has been ordered from '.$StoreName;
                        
-                 $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+                            $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');
                        
-                       $arrayToSend = array(
-                           'to'=> $item->vendor_id,
-                           'title' =>'product Order',
-                           'body' => $body,
-                           'payload' => array('order_id'=>$item->id,'image'=>$product->image[0],'base_url'=> asset('/products'),'notification'=>$notification,'data'=>$notification),'priority'=>'high');
+                            $arrayToSend = array(
+                                'to'=> $item->vendor_id,
+                                'title' =>'product Order',
+                                'body' => $body,
+                                'payload' => array('order_id'=>$item->id,'image'=>$product->image[0],'base_url'=> asset('/products'),'notification'=>$notification,'data'=>$notification),'priority'=>'high');
                     
-                       parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
-                    //    below client notification
-                       parent::pushNotifications($arrayToSend, $item->vendor_id ,Auth::id());
-                    }
+                            parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
+                             //    below client notification
+                         parent::pushNotifications($arrayToSend, $item->vendor_id ,Auth::id());
+                        }
             
-    
-           
-                endforeach;
-    
-                 Cart::where('user_id', Auth::id())->delete();
-    
-               return parent::success("Your order Placed successfully!");
+                    endforeach;
+                    Cart::where('user_id', Auth::id())->delete();
+                    return parent::success("Your order Placed successfully!");
+                endif;   
+            else:
+                return parent::error("Selected address is invalid");
             endif;
-    
-            
-        else:
-            return parent::error("Selected address is invalid");
-        endif;
            
-       }catch(\Exception $ex){
+        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
-       }
-   }
+        }
+    }
 
 
    public function ViewOrder(Request $request)

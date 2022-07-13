@@ -75,7 +75,7 @@ class Helper extends ApiController
             
             $fields = array('API' => 'Verify','XML' => $input_xml);
             
-            $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -200,7 +200,7 @@ $input_xml = <<<EOXML
             
             $fields = array('API' => 'eVS','XML' => $input_xml);
             
-            $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -292,7 +292,7 @@ $input_xml = <<<EOXML
             
             $fields = array('API' => 'RateV4','XML' => $input_xml);
             
-            $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -361,7 +361,7 @@ $input_xml = <<<EOXML
             
             $fields = array('API' => 'USPSReturnsLabel','XML' => $input_xml);
             
-            $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
