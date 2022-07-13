@@ -1965,11 +1965,6 @@ public function ViewOrderByVendor(Request $request)
                 
                 if($item->tracking_id):
                     $tracking_id = Helper::trackCourier($item->tracking_id);
-<<<<<<< HEAD
-                
-=======
-                   
->>>>>>> dee0c403cb356ca04f23c32b20e44f61d443f5f2
                     if($tracking_id):
                    
                         $item['tracking_status'] = (isset($tracking_id['TrackDetail']))?$tracking_id['TrackDetail']: $tracking_id['TrackSummary'];
