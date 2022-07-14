@@ -720,6 +720,7 @@ class ClientController extends ApiController
                                 'user_id' => Auth::id(),
                                 'order_id' => $order->id,
                                 'product_id' => $product->id,
+                                'variant_id' => ($item->variant_id)?$item->variant_id:null, 
                                 'address_id' => $input['address_id'],
                                 'vendor_id' => $item->vendor_id,
                                 'price' => $product->price,

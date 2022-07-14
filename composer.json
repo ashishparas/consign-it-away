@@ -8,6 +8,7 @@
         "php": "^7.3|^8.0",
         "apility/laravel-fcm": "^1.4",
         "appzcoder/laravel-admin": "^3.3",
+        "braintree/braintree_php": "^6.8",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "johnpaulmedina/laravel-usps": "^8.0",
@@ -17,9 +18,9 @@
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
+        "sendgrid/sendgrid": "~7",
         "stripe/stripe-php": "^7.116",
         "twilio/sdk": "^6.35",
-        "sendgrid/sendgrid": "~7",
         "yajra/laravel-datatables-oracle": "*"
     },
     "require-dev": {
