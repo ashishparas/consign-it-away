@@ -779,9 +779,9 @@ class ClientController extends ApiController
 
    public function ViewOrder(Request $request)
    {
-       $rules = ['type' => 'required|in:1,2,3,4'];
+       $rules = ['type' => 'required|in:1,2,3,4','search'=>'', 'sort'=>''];
       
-       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+       $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
        if($validateAttributes):
         return $validateAttributes;
        endif;
@@ -794,11 +794,31 @@ class ClientController extends ApiController
                 $items = Item::where('user_id',Auth::id())->where('status','2')->with(['Product'])->orderBy('created_at','DESC')->get();
             }else if($request->type === '3'){
                 $items = Item::where('user_id',Auth::id())->where('status','3')->with(['Product'])->orderBy('created_at','DESC')->get();
-            }else if($request->type === '4'){
-                $items = Item::where('user_id',Auth::id())->with(['Product'])->orderBy('created_at','DESC')->get();
+            }elseif($request->type === '4'){
+                
+            
+                $items = Item::select('items.*','products.name')->where('items.user_id',Auth::id())
+                            ->Join('products','products.id','items.product_id');
+                if(isset($request->search)){
+                    $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
+                }
+                $items = $items->with(['Product'])->orderBy('items.created_at','DESC');
+            if(isset($request->sort)){
+                    
+                    
+                if($request->sort == 1){
+                    $items = $items->whereDate('items.created_at','>=', Carbon::today()->subDays(7) );            
+                }elseif($request->sort == 2){
+                    $items = $items->whereDate('items.created_at','>=', Carbon::today()->subDays(30) );  
+                }elseif($request->sort == 3){
+                    $items = $items->whereDate('items.created_at','>=', Carbon::today()->subDays(182) );
+                }elseif($request->sort == 4){
+                    $items = $items->whereYear('items.created_at', Carbon::today()->subDays(365) );  
+                }
+                    
             }
-
-           
+                    $items = $items->get();
+        }
             return parent::success("View Orders successfully!",['orders' => $items]);
        }catch(\Exception $ex){
            return parent::error($ex->getMessage());
@@ -904,7 +924,9 @@ class ClientController extends ApiController
                         Notification::where('id', $request->notification_id)->update(['is_read' => '1']);
                     endif;
                 }
-        
+                 $item['CardDetails'] = Order::select('id','card_id')
+                 ->where('id',$item->order_id)->with(['Card'])->first();
+                 $item['coupon'] = '0';
                 return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
 
                 }else{

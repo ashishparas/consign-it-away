@@ -16,4 +16,8 @@ class Order extends Model
     protected $primaryKey = "id";
 
     protected $fillable = ['address_id','card_id','charge_id','order_id','items','sub_total','coupon','shipping_cost','total_amount'];
+
+    public function Card(){
+        return $this->belongsTo(Card::class);
+    }
 }
