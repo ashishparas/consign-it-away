@@ -36,14 +36,19 @@
                             <label for="exampleFormControlInput1">Brand Name</label>
                             <input type="type" class="form-control" placeholder="" name="name" value="{{$brand? $brand->name:''}}">
                           </div>
-                          <div class="form-group">
-                            
+                        <div class="form-group">
                             <img src="{{asset('public/brand/'.$brand->image)}}" width="50" height="50">
                         </div>
                           <div class="form-group">
                             <label for="exampleFormControlInput1">Upload Img</label>
                             <input type="file" name="image" class="form-control-file border p-1" id="exampleFormControlFile1">
                         </div>
+
+                        <div class="form-group">
+                          <?php $photo = ($brand->photo)? $brand->photo:"No_image.png"; ?>
+                          <img src="{{asset('public/brand/'.$photo)}}" width="50" height="50">
+                      </div>
+
                         <div class="form-group">
                           <label for="exampleFormControlInput1">Upload Cover Photo</label>
                           <input type="file" name="photo" class="form-control-file border p-1" id="exampleFormControlFile1">
