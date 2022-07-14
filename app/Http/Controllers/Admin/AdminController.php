@@ -81,9 +81,14 @@ class AdminController extends Controller
 // dd(public_path('/public/brand'));
             
             $brand = Brand::FindOrfail($request->id);
-             if (isset($request->image)):
+            if (isset($request->image)):
                 $input['image'] = parent::__uploadImage($request->file('image'), public_path('/brand'), false);
             endif;
+
+            if (isset($request->photo)):
+                $input['photo'] = parent::__uploadImage($request->file('photo'), public_path('/brand'), false);
+            endif;
+
                     $brand->fill($input);
                     $brand->save();
             return redirect()->route('brand.list');

@@ -42,6 +42,7 @@
                           <th>id</th>
                           <th>Brand Name</th>
                           <th>image</th>
+                          <th>Cover Photos</th>
                           <!--<th>Brand Logo</th>-->
                           <th>Action</th>
                       </tr>
@@ -76,6 +77,12 @@
               render: function( data, type, full, meta ) {
               
                 return '<img src="'+baseUrl+'/'+data+'" width="50" height="50">';
+            }
+          },
+          {data: 'photo', name: 'photo',
+              render: function( data, type, full, meta ) {
+                let photo = (data)?data:'No_image.png';
+                return '<img src="'+baseUrl+'/'+photo+'" width="50" height="50">';
             }
           },
               {data: 'action', name: 'action',orderable: false,searchable: false }, 

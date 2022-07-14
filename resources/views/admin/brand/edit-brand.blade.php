@@ -44,6 +44,10 @@
                             <label for="exampleFormControlInput1">Upload Img</label>
                             <input type="file" name="image" class="form-control-file border p-1" id="exampleFormControlFile1">
                         </div>
+                        <div class="form-group">
+                          <label for="exampleFormControlInput1">Upload Cover Photo</label>
+                          <input type="file" name="photo" class="form-control-file border p-1" id="exampleFormControlFile1">
+                      </div>
                         <!--<div class="form-group">-->
                         <!--    <label for="exampleFormControlInput1">Upload Logo</label>-->
                         <!--    <input type="file" class="form-control-file border p-1" id="exampleFormControlFile1">-->
