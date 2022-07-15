@@ -24,6 +24,7 @@ class CreateItemsTable extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->bigInteger('product_id')->nullable();
             $table->bigInteger('variant_id')->nullable();
+            $table->bigInteger('offer_id')->nullable();
             $table->string('price')->nullable();
             $table->string('quantity')->nullable();
             $table->string('size')->nullable();

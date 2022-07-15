@@ -88,9 +88,7 @@ class Product extends Model
 
 
     public function Rating(){   
-        
       return $this->hasOne(Rating::class);
-      
     }
 
 
@@ -101,7 +99,7 @@ class Product extends Model
 
   
   public function Offer(){
-      return $this->hasOne(Offer::class)->where('user_id', Auth::id());
+      return $this->hasOne(Offer::class)->where('user_id', Auth::id())->orderBy('created_at','DESC');
   }
    
   public function PorductRating(){

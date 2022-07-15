@@ -705,13 +705,13 @@ class ClientController extends ApiController
                 // ]);
                 $input['charge_id'] = md5(rand(11111,99999)); //$charge['id'];
                 $input['user_id'] = Auth::id();
+
                 $order = Order::create($input);
-           
                 if(!empty($order)):
                 
                 
-                    $items = Cart::where('user_id', Auth::id())->get();
-              
+                    $items = Cart::where('user_id', Auth::id())->with(['Product'])->get();
+                   
                     foreach($items as $item):
                         $product = Product::where('id', $item->product_id)->first();
                 
@@ -719,7 +719,8 @@ class ClientController extends ApiController
                                 'user_id' => Auth::id(),
                                 'order_id' => $order->id,
                                 'product_id' => $product->id,
-                                'variant_id' => ($item->variant_id)?$item->variant_id:null, 
+                                'variant_id' => ($item->variant_id)?$item->variant_id:null,
+                                'offer_id'   => ($item->product->offer)?$item->product->offer->id:null,
                                 'address_id' => $input['address_id'],
                                 'vendor_id' => $item->vendor_id,
                                 'price' => $product->price,
@@ -901,7 +902,7 @@ class ClientController extends ApiController
            $input = $request->all();
         $item = Item::where('user_id',Auth::id())
                 ->where('id', $input['order_id'])
-                ->with(['Product','MyRating'])
+                ->with(['Product','MyRating','Offer'])
                 ->first();
                 if($item){
                     $tracking_id = Helper::trackCourier($item->tracking_id);

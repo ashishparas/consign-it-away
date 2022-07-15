@@ -19,7 +19,7 @@ class Item extends Model
 
     protected $primarykey="id";
 
-    protected  $fillable = ['user_id','tracking_id','vendor_id','product_id','variant_id','address_id','order_id','price','quantity','color','size','status'];
+    protected  $fillable = ['user_id','tracking_id','vendor_id','product_id','variant_id','offer_id','address_id','order_id','price','quantity','color','size','status'];
 
 
     public function Product(){
@@ -58,6 +58,10 @@ class Item extends Model
 
     public function cancelRequest(){
         return $this->hasOne(cancellation::class);
+    }
+
+    public function Offer(){
+        return $this->hasOne(Offer::class,'id','offer_id');
     }
 
 
