@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
     // userId: 778CONSI5321
 class Helper extends ApiController
 {
+    
     public static function shout(string $string)
     {
         return  $string;

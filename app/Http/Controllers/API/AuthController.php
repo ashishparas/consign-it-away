@@ -878,7 +878,7 @@ class AuthController extends ApiController {
   }
 
   public function ShareProduct(Request $request, $id){
-   
+  
     $rules = [];
    
     $validateAttributes = parent::validateAttributes($request,'GET',$rules,array_keys($rules), false);
@@ -886,28 +886,30 @@ class AuthController extends ApiController {
         return $validateAttributes;
     endif;
     try{
-                            $iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
-                            $iPad    = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
+            $iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
+            $iPad    = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
                          
-                    if ( $iPhone || $iPad ) {
-                        $base_url = asset('');
-                        $base_url = str_replace ( "https://", "", $base_url );
-                        $base_url = str_replace ( "http://", "", $base_url );
-                        ob_start();
-                        ?><script>
-                            window.location.href = "consignitaway://<?php echo $base_url;  ?>?product_id=<?php echo $id; ?>";
-                            setInterval(function () {
-                                window.location.replace("https://apps.apple.com/us/app/dutifypro/id1545296317");
-                            }, 3000);
-                        </script><?php
-                    } else { 
-                        ?><script>
-                            window.location.href = "consignitaway://details??product_id=<?php echo $id; ?>";
-                            setInterval(function () {
-                                window.location.replace("http://play.google.com/store/apps/details?id=com.HBCUHUB");
-                            }, 3000);
-                        </script><?php
-                    }
+if ( $iPhone || $iPad ) {
+    $base_url = asset('');
+    $base_url = str_replace ( "https://", "", $base_url );
+    $base_url = str_replace ( "http://", "", $base_url );
+    ob_start();
+    ?><script>
+        window.location.href = "consignitaway://<?php echo $base_url;  ?>?product_id=<?php echo $id; ?>";
+        setInterval(function () {
+            window.location.replace("https://php.parastechnologies.in/consign/#/details?id=<?php echo $id; ?>");
+        }, 3000);
+    </script>
+    <?php } else {    ?>
+            <script>
+                window.location.href = "consignitaway://details??product_id=<?php echo $id; ?>";
+                setInterval(function () {
+                    
+                    window.location.replace("https://php.parastechnologies.in/consign/#/details?id=<?php echo $id; ?>");
+                }, 3000);
+            </script>
+        <?php
+        }
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        } 
