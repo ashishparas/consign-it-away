@@ -25,6 +25,6 @@ class Offer extends Model
     }
 
     public function Variants(){
-        return $this->hasOne(Variant::class)->select('id','price');
+        return $this->belongsTo(Variant::class)->select('id','price');
     }
 }
