@@ -1550,7 +1550,7 @@ class ClientController extends ApiController
                     ->where('user_id',Auth::id())
                     ->orWhere('vendor_id', Auth::id())
                     ->where('user_id',$request->reciever_id)
-                    ->with('Product','Variants')
+                    ->with(['Variants','Product'])
                     ->OrderBy('created_at','DESC')
                     ->first();
 
