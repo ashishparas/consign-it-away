@@ -687,7 +687,6 @@ class ClientController extends ApiController
 
         try{
             $input = $request->all();
-
             // Charge for product
             $Address = true;//Helper::VerifyAddress($request->address_id);
            
@@ -933,10 +932,7 @@ class ClientController extends ApiController
                 }else{
                   return parent::error("Invalid product item id");
                 }
-                
-        
-
-       
+ 
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
@@ -1549,7 +1545,15 @@ class ClientController extends ApiController
             if(!empty($RecentChat)) {
              
 
-            $offer = Offer::where('isCheckout','0')->where('vendor_id',$request->reciever_id)->where('user_id',Auth::id())->orWhere('vendor_id', Auth::id())->where('user_id',$request->reciever_id)->with('Product')->OrderBy('created_at','DESC')->first();
+            $offer = Offer::where('isCheckout','0')
+                    ->where('vendor_id',$request->reciever_id)
+                    ->where('user_id',Auth::id())
+                    ->orWhere('vendor_id', Auth::id())
+                    ->where('user_id',$request->reciever_id)
+                    ->with('Product','Variants')
+                    ->OrderBy('created_at','DESC')
+                    ->first();
+
             // dd(DB::getQueryLog($offer));
      return $response=array("status"=>true,"code"=>200,"message"=>"View Messages successfully!","offer" => $offer,"data" =>$RecentChat,"blockStatus" => 0,"BlockByID" =>0);  
 

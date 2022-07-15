@@ -23,4 +23,8 @@ class Offer extends Model
     public function Product(){
         return $this->belongsTo(Product::class)->select('id','name','image',DB::raw('price as amount'),'discount')->with(['Discount']);
     }
+
+    public function Variants(){
+        return $this->hasOne(Variant::class)->select('id','price');
+    }
 }
