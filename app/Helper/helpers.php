@@ -12,11 +12,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
     // userId: 778CONSI5321
+    // URL: https://stg-secure.shippingapis.com/ShippingAPI.dll?
 class Helper extends ApiController
 {
+    // public $AccountId = "778CONSI5321";
     
     public static function shout(string $string)
     {
+       
         return  $string;
     }
 
@@ -62,7 +65,7 @@ class Helper extends ApiController
         if($address):
 
     $input_xml = <<<EOXML
-                        <AddressValidateRequest USERID="778CONSI5321">
+                        <AddressValidateRequest USERID="641IHERB6005">
                             <Address ID="$address->id">
                                 <Address1></Address1>
                                 <Address2>$address->address</Address2>
@@ -76,7 +79,7 @@ class Helper extends ApiController
             
             $fields = array('API' => 'Verify','XML' => $input_xml);
             
-            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -116,7 +119,7 @@ class Helper extends ApiController
 
 $input_xml = <<<EOXML
 
-                        <eVSRequest USERID= "778CONSI5321">
+                        <eVSRequest USERID= "641IHERB6005">
                         <Option/>
                         <Revision/>
                         <ImageParameters>
@@ -201,7 +204,7 @@ $input_xml = <<<EOXML
             
             $fields = array('API' => 'eVS','XML' => $input_xml);
             
-            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -235,14 +238,14 @@ $input_xml = <<<EOXML
 
             if($tracking_id !== null){
                 $input_xml = <<<EOXML
-                    <TrackRequest USERID="778CONSI5321">
+                    <TrackRequest USERID="641IHERB6005">
                         <TrackID ID="$tracking_id"></TrackID>
                     </TrackRequest>
             EOXML;
             
             $fields = array('API' => 'TrackV2','XML' => $input_xml);
             
-            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -273,7 +276,7 @@ $input_xml = <<<EOXML
         try{
 
     $input_xml = <<<EOXML
-                    <RateV4Request USERID="778CONSI5321">
+                    <RateV4Request USERID="641IHERB6005">
                     <Revision>2</Revision>
                     <Package ID="0">
                     <Service>PRIORITY</Service>
@@ -293,7 +296,7 @@ $input_xml = <<<EOXML
             
             $fields = array('API' => 'RateV4','XML' => $input_xml);
             
-            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -315,7 +318,7 @@ $input_xml = <<<EOXML
         try{
 
             $input_xml = <<<EOXML
-                            <USPSReturnsLabelRequest USERID="778CONSI5321">
+                            <USPSReturnsLabelRequest USERID="641IHERB6005">
                             <Option/>
                             <Revision></Revision>
                             <ImageParameters>
@@ -362,7 +365,7 @@ $input_xml = <<<EOXML
             
             $fields = array('API' => 'USPSReturnsLabel','XML' => $input_xml);
             
-            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -403,5 +406,15 @@ $input_xml = <<<EOXML
 
 
 
+
+
+
+
+
+
+
+
+
+    
 }
 

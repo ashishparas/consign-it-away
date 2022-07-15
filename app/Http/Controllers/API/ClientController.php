@@ -1082,10 +1082,10 @@ class ClientController extends ApiController
             else:
                 $message="Variant not found!";
             endif;
-                
+        $product = Product::select('id','name',DB::raw('price as amount'))->where('id', $request->product_id)->first()->makeHidden(['base_url','favourite','FavouriteId','CartStatus','soldBy']);
             
 
-            return parent::success($message,['variants' =>  $variants]);
+            return parent::success($message,['product' =>$product,'variants' =>  $variants]);
         
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -1186,14 +1186,14 @@ class ClientController extends ApiController
         try{
             
             $input_xml = <<<EOXML
-                    <TrackRequest USERID="778CONSI5321">
+                    <TrackRequest USERID="641IHERB6005">
                         <TrackID ID="$request->track_id"></TrackID>
                     </TrackRequest>
             EOXML;
             
             $fields = array('API' => 'TrackV2','XML' => $input_xml);
             
-            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -1206,7 +1206,7 @@ class ClientController extends ApiController
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
             $arr = [];
             $newString="";
-            // dd($array_data);
+            dd($array_data);
             foreach($array_data['TrackInfo']['TrackDetail'] as $key => $track):
         
         $extract_date_pattern = "/(January|February|March|April|May|June|July|Augest|September|October|November|December)\s\d{2},\s{1}\d{4}/";
