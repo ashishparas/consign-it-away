@@ -23,7 +23,7 @@ class Item extends Model
 
 
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','user_id','store_id','name','price','image','description','category_id','weight', 'variants','tags','meta_description','selling_fee','shipping_type')->with(['User','Category']);
+        return $this->belongsTo(Product::class)->select('id','user_id','store_id','name','price','discount','image','description','category_id','weight', 'variants','tags','meta_description','selling_fee','shipping_type')->with(['User','Category','Discount']);
     }
 
     public function SoldBy(){
