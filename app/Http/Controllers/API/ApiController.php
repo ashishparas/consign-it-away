@@ -245,11 +245,11 @@ class ApiController extends \App\Http\Controllers\Controller {
     
     
 
-    public static function pushNotofication($data = [], string $deviceToken=null) {
+    public static function pushNotofication($data = [], string $deviceToken=null, $to=null) {
      
+
+        $DeviceType = UserDevice::where('user_id', $to)->first();
     
-        $DeviceType = UserDevice::where('user_id', $data['to'])->first();
-       
              if( $DeviceType){
                 
                 if(strtolower($DeviceType['type']) == 'android'):
@@ -291,7 +291,7 @@ class ApiController extends \App\Http\Controllers\Controller {
                 // $deviceToken = "doRF6VhJTr-2NFzxlfI39T:APA91bG_9rxoV8Yf7nUN7NBVG1QuPN-y6pJU57houmef1Jkx5RNrST_c6xjMwBnoCElgD7UrYbB4HWLvDr0vD3jmjmXexvpdr7QpRXt6e0vyqfTfSvGoMnnMlK0tqKmh2FstyofV0dX9";
         
                 $downstreamResponse = FCM::sendTo($deviceToken, $option, $notification, $data);
-        //        $downstreamResponse->numberFailure();
+                // $downstreamResponse->numberFailure();
                 
                  return $downstreamResponse->numberSuccess() == '1' ? true : false;
                 
@@ -326,7 +326,7 @@ class ApiController extends \App\Http\Controllers\Controller {
 
     public static function pushNotifications($data = [], $userId=null, $receiver_id=null ,$saveNotification = true) 
     {
-      
+            
              if ($saveNotification) {
                
                  self::savePushNotification($data, $userId, $receiver_id);
@@ -339,12 +339,14 @@ class ApiController extends \App\Http\Controllers\Controller {
              //   return true;
              // if (User::whereId($userId)->where('is_notify', '1')->get()->isEmpty() === true)
              //   return true;
-            
+      
              foreach (UserDevice::whereUserId($receiver_id)->get() as $userDevice):
                    if(!empty($userDevice)):
-                         self::pushNotofication($data, $userDevice->token);      
+                        self::pushNotofication($data, $userDevice->token, $data['to']=null);      
                        endif;
+                    
              endforeach;
+      
              return true;
          }
 
@@ -353,8 +355,9 @@ class ApiController extends \App\Http\Controllers\Controller {
         try {
               
             if (isset($data['payload']))
-         
+              
                 $DeviceType = UserDevice::where('user_id', $data['to'])->first();
+           
              if($DeviceType){
                 
                 if(strtolower($DeviceType['type']) == 'android'):
@@ -374,7 +377,7 @@ class ApiController extends \App\Http\Controllers\Controller {
             \App\Models\Notification::create($data);
             return true;
         } catch (\Exception $ex) {
-           // dd($ex->getMessage());
+            dd($ex->getMessage());
         }
     }
 

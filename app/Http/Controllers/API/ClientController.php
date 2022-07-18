@@ -711,8 +711,9 @@ class ClientController extends ApiController
                 
                 
                     $items = Cart::where('user_id', Auth::id())->with(['Product'])->get();
-                   
-                    foreach($items as $item):
+                   $test = [];
+                
+                    foreach($items as $item){
                         $product = Product::where('id', $item->product_id)->first();
                 
                         $item =  Item::create([
@@ -752,20 +753,26 @@ class ClientController extends ApiController
                             $body = '#00'.$item->id.' has been ordered from '.$StoreName;
                        
                             $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');
-                       
+                        
                             $arrayToSend = array(
-                                'to'=> $item->vendor_id,
+                                'to' => $item['vendor_id'],
                                 'title' =>'product Order',
                                 'body' => $body,
-                                'payload' => array('order_id'=>$item->id,'image'=>$product->image[0],'base_url'=> asset('/products'),'notification'=>$notification,'data'=>$notification),'priority'=>'high');
-                    
-                            parent::pushNotifications($arrayToSend, Auth::id(), $item->vendor_id);
+                                'payload' => array('order_id'=>$item->id,'image'=>$product->image[0],'base_url'=> asset('/products'),'notification'=>$notification,'data'=>$notification),'priority'=>'high'
+                                );
+                              
+                          
+                            parent::pushNotifications($arrayToSend, Auth::id(), $item['vendor_id']);
+                      
                              //    below client notification
-                         parent::pushNotifications($arrayToSend, $item->vendor_id ,Auth::id());
+                            parent::pushNotifications($arrayToSend, $item->vendor_id, Auth::id());
+                        
                         }
+                        
             
-                    endforeach;
-                    Cart::where('user_id', Auth::id())->delete();
+                    }
+         
+                    // Cart::where('user_id', Auth::id())->delete();
                     return parent::success("Your order Placed successfully!");
                 endif;   
             else:
