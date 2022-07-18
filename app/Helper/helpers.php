@@ -383,6 +383,62 @@ $input_xml = <<<EOXML
 
 
 
+
+    public static function SchedulePickup(){
+        try{
+
+            $input_xml = <<<EOXML
+                            <CarrierPickupScheduleRequest USERID="641IHERB6005">
+                            <FirstName>John</FirstName>
+                            <LastName>Doe</LastName>
+                            <FirmName>ABC Corp.</FirmName>
+                            <SuiteOrApt>Suite 777</SuiteOrApt>
+                            <Address2>8 Wildwood Drive</Address2>
+                            <Urbanization></Urbanization>
+                            <City>Old Lyme</City>
+                            <State>CT</State>
+                            <ZIP5>06371</ZIP5>
+                            <ZIP4>1234</ZIP4>
+                            <Phone>9068768054</Phone>
+                            <Extension>201</Extension>
+                            <Package>
+                            <ServiceType>PriorityMailExpress</ServiceType>
+                            <Count>2</Count>
+                            </Package>
+                            <Package>
+                            <ServiceType>PriorityMail</ServiceType>
+                            <Count>1</Count>
+                            </Package>
+                            <EstimatedWeight>14</EstimatedWeight>
+                            <PackageLocation>Front Door</PackageLocation>
+                            <SpecialInstructions>Packages are behind the screen door.</SpecialInstructions>
+                            </CarrierPickupScheduleRequest>
+                        EOXML;
+                    
+                    $fields = array('API' => 'CarrierPickupSchedule','XML' => $input_xml);
+                    
+                    $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+                    
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+                    $data = curl_exec($ch);
+                    curl_close($ch);
+                
+                    return json_decode(json_encode(simplexml_load_string($data)), true);
+                 
+                            
+                }catch(\Exception $ex){
+                    return false;
+                }
+    }
+
+
+
+
+
+
     public static function SendVarificationEmail($email, $name, $message){
 
         $sendGridMail = new \SendGrid\Mail\Mail();

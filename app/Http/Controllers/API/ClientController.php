@@ -1294,7 +1294,7 @@ class ClientController extends ApiController
    public function ProductFilter(Request $request)
    {
    
-     $rules = ['limit' =>'','page'=>'','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>'','search'=>'','type'=>'required|in:1,2,3,4,5','subcategory_id'=>''];
+     $rules = ['limit' =>'','page'=>'','price' =>'','brand'=>'', 'color'=>'','mile_radius' =>'','material_type'=>'','search'=>'','type'=>'required|in:1,2,3,4,5','subcategory_id'=>'','price_filter' =>''];
      $validateAttributes = parent::validateAttributes($request,'GET',$rules, array_keys($rules),false);
      if($validateAttributes):
         return $validateAttributes;
@@ -1328,6 +1328,20 @@ class ClientController extends ApiController
                 // dd($request->search);
                 $RecentlyViewProduct = $RecentlyViewProduct->where('name','LIKE', '%'.$request->search.'%');
             }
+            if(isset($request->price_filter) && $request->price_filter == '1'){
+                // dd($request->search);
+                $RecentlyViewProduct = $RecentlyViewProduct->orderBy('ratings.rating', 'DESC');
+            }
+            if(isset($request->price_filter) && $request->price_filter == '2'){
+                // dd($request->search);
+                $RecentlyViewProduct = $RecentlyViewProduct->orderBy('products.price', 'ASC');
+            }
+            if(isset($request->price_filter) && $request->price_filter == '3'){
+                // dd($request->search);
+                $RecentlyViewProduct = $RecentlyViewProduct->orderBy('products.price', 'DESC');
+            }
+            
+            
 
             $RecentlyViewProduct = $RecentlyViewProduct->groupBy('products.id')->paginate($limit);
 
@@ -1366,6 +1380,19 @@ class ClientController extends ApiController
                         $mostPopular = $mostPopular->where('brand', $request->brand);
                     }
                     
+                    if(isset($request->price_filter) && $request->price_filter == '1'){
+                        // dd($request->search);
+                        $mostPopular = $mostPopular->orderBy('ratings.rating', 'DESC');
+                    }
+                    if(isset($request->price_filter) && $request->price_filter == '2'){
+                        // dd($request->search);
+                        $mostPopular = $mostPopular->orderBy('products.price', 'ASC');
+                    }
+                    if(isset($request->price_filter) && $request->price_filter == '3'){
+                        // dd($request->search);
+                        $mostPopular = $mostPopular->orderBy('products.price', 'DESC');
+                    }
+
                     // ->where('favourites.by', Auth::id())
                     $mostPopular = $mostPopular->groupBy('products.id')
                                             ->orderBy('AverageRating', 'desc')
@@ -1395,6 +1422,20 @@ class ClientController extends ApiController
                 $newProducts = $newProducts->where('brand', $request->brand);
             }
 
+            if(isset($request->price_filter) && $request->price_filter == '1'){
+                // dd($request->search);
+                $newProducts = $newProducts->orderBy('ratings.rating', 'DESC');
+            }
+            if(isset($request->price_filter) && $request->price_filter == '2'){
+                // dd($request->search);
+                $newProducts = $newProducts->orderBy('products.price', 'ASC');
+            }
+            if(isset($request->price_filter) && $request->price_filter == '3'){
+                // dd($request->search);
+                $newProducts = $newProducts->orderBy('products.price', 'DESC');
+            }
+
+
             $newProducts = $newProducts->orderBy('created_at','DESC')->paginate($limit);
             $products = $newProducts;
         }else if($request->type === '4'){
@@ -1420,6 +1461,19 @@ class ClientController extends ApiController
                         $brand = $brand->where('brand', $request->brand);
                     }
                     
+                    if(isset($request->price_filter) && $request->price_filter == '1'){
+                        // dd($request->search);
+                        $brand = $brand->orderBy('ratings.rating', 'DESC');
+                    }
+                    if(isset($request->price_filter) && $request->price_filter == '2'){
+                        // dd($request->search);
+                        $brand = $brand->orderBy('products.price', 'ASC');
+                    }
+                    if(isset($request->price_filter) && $request->price_filter == '3'){
+                        // dd($request->search);
+                        $brand = $brand->orderBy('products.price', 'DESC');
+                    }
+
                     // ->where('favourites.by', Auth::id())
                     $brand= $brand->groupBy('products.id')
                                             ->orderBy('AverageRating', 'desc')
@@ -1449,6 +1503,21 @@ class ClientController extends ApiController
                     if(isset($request->brand)){
                         $sub_category = $sub_category->where('brand', $request->brand);
                     }
+
+
+                    if(isset($request->price_filter) && $request->price_filter == '1'){
+                        // dd($request->search);
+                        $sub_category = $sub_category->orderBy('ratings.rating', 'DESC');
+                    }
+                    if(isset($request->price_filter) && $request->price_filter == '2'){
+                        // dd($request->search);
+                        $sub_category = $sub_category->orderBy('products.price', 'ASC');
+                    }
+                    if(isset($request->price_filter) && $request->price_filter == '3'){
+                        // dd($request->search);
+                        $sub_category = $sub_category->orderBy('products.price', 'DESC');
+                    }
+
                     
                     // ->where('favourites.by', Auth::id())
                     $sub_category= $sub_category->groupBy('products.id')

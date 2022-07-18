@@ -189,6 +189,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('delete/product/image',[VendorController::class, "DeleteProductImage"]);
     Route::post('revenue',[VendorController::class, "Revenue"]);
     route::post('courier/return',[ClientController::class,"ReturnLabel"]);
+    route::post('schedule/pickup',[VendorController::class, "SchedulePickup"]);
     
     
    
