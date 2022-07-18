@@ -304,7 +304,7 @@ class ClientController extends ApiController
                                             ->whereNotIn('id',[$product->id])
                                             ->orderBy('created_at','DESC')
                                             ->with('User')
-                                            ->get()->makeHidden(['soldBy','CartStatus']);
+                                            ->get()->makeHidden(['soldBy']);
 
             $OtherProducts = Product::select('products.id','products.user_id','products.name','products.image',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(product_id) as TotalRating, products.price as amount'))
                     ->leftJoin('ratings','ratings.product_id','products.id')
