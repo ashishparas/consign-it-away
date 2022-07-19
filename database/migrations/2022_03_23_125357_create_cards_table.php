@@ -22,6 +22,7 @@ class CreateCardsTable extends Migration
             $table->string('expiry_month')->nullable();
             $table->string('expiry_Year')->nullable();
             $table->enum('status',[1,2])->default(1)->comment('1->Active, 2->Inactive');
+            $table->string('token')->nullable();
             $table->timestamps();
         });
     }
