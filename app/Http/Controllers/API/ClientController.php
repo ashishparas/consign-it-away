@@ -772,7 +772,7 @@ class ClientController extends ApiController
             
                     }
          
-                    // Cart::where('user_id', Auth::id())->delete();
+                    Cart::where('user_id', Auth::id())->delete();
                     return parent::success("Your order Placed successfully!");
                 endif;   
             else:
