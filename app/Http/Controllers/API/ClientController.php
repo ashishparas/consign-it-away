@@ -741,7 +741,7 @@ class ClientController extends ApiController
      
                         if($item){
                             $store = Store::where('id',$product->store_id)->first();
-                       
+                        
                             $tracking_id = "46768273648723648234762";//Helper::UPSP($item, $product->id ,$input['address_id'], $item->vendor_id,  $store->id);
      
                             if($tracking_id):
@@ -749,7 +749,7 @@ class ClientController extends ApiController
                                                     $updatetrackingId->fill(['tracking_id'=> $tracking_id]);
                                                     $updatetrackingId->save();
                             endif;
-                            $StoreName = (!$store->name)?'No-name':$store->name;
+                            $StoreName = (!$store)?'No-name':$store->name;
                             $body = '#00'.$item->id.' has been ordered from '.$StoreName;
                        
                             $notification = array('title' =>'product Order' , 'body' => $body, 'sound' => 'default', 'badge' => '1');
@@ -772,7 +772,7 @@ class ClientController extends ApiController
             
                     }
          
-                    Cart::where('user_id', Auth::id())->delete();
+                   // Cart::where('user_id', Auth::id())->delete();
                     return parent::success("Your order Placed successfully!");
                 endif;   
             else:
