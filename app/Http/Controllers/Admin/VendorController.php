@@ -141,6 +141,10 @@ class VendorController extends Controller
     }
 
 
+    public function CreateProduct(){
+        return view('admin.product.product-create');
+    }
+
 
 
 

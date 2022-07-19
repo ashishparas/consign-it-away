@@ -64,6 +64,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('brand/list/data',[AdminController::class,"BrandList"])->name('brand-list-data');
             Route::get('edit-brand/{id}',[AdminController::class,"EditBrand"]);
             Route::post('update-brand',[AdminController::class,"UpdateBrand"]);
+            Route::get('create/product',[VendorController::class, "CreateProduct"]);
  });
  
  

@@ -263,7 +263,7 @@ class ClientController extends ApiController
         try{
 
             $input = $request->all();
-            $product = Product::where('id',$input['product_id'])->with(['Offer','Discount'])->first();
+            $product = Product::where('id',$input['product_id'])->with(['Offer','Discount','Stock'])->first();
           
             $product['rating'] = number_format($product->Rating()->avg('rating'),1);
             $product['RatingCount'] = $product->Rating()->count('product_id');

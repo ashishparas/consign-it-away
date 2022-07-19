@@ -155,4 +155,17 @@ class UsersController extends Controller
 
         return redirect('admin/users')->with('flash_message', 'User deleted!');
     }
+
+
+    
+
+
+
+
+
+
+
+
+
+
 }
