@@ -7,6 +7,7 @@ use App\Models\AdminStaff;
 use App\Models\Contact;
 use App\Models\Item;
 use App\Models\Product;
+use App\Models\Store;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -141,8 +142,10 @@ class VendorController extends Controller
     }
 
 
-    public function CreateProduct(){
-        return view('admin.product.product-create');
+    public function CreateProduct(Store $store){
+        $stores = $store->select('id','name')->orderBy('created_at','DESC')->get();
+        // dd($stores->toArray());
+        return view('admin.product.product-create',compact('stores'));
     }
 
 

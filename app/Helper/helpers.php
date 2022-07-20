@@ -7,6 +7,7 @@ use App\Models\Address;
 use App\Models\Product;
 use App\Models\Store;
 use App\Models\User;
+use App\Models\Variant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -53,6 +54,30 @@ class Helper extends ApiController
         // }
         return $variant;
 
+    }
+
+    public static function ProductvariantById($variant_id=null){
+        try{
+            // Dev: Ashish Mehra
+            if($variant_id !==null){
+
+                $variants = Variant::where('id', $variant_id)->first();
+                $option_id = explode(",",$variants['option_id']);
+              
+                $selectedVariants = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))
+                ->join("attribute_options","attributes.id","attribute_options.attr_id")
+                ->whereIn('attribute_options.id', $option_id)
+                ->with('Attributes')
+                ->get();
+                // dd($selectedVariants->toArray());
+                return $selectedVariants;
+            }else{
+                return null;
+            }
+            
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
     }
 
 

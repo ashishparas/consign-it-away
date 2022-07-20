@@ -315,7 +315,7 @@
     </div>
   </div>
 
-
+  
 
 
   <!-- Global Required Scripts Start -->
@@ -347,6 +347,16 @@
            });
       
   </script>
+
+<script>
+  $(document).ready(function(){
+    $("#advance-block").click(function(){
+      $("#add_advance").toggle();
+    });
+
+  });
+  </script>
+
 
 </body>
 

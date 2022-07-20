@@ -583,11 +583,11 @@ class VendorController extends ApiController
            $search = $input['search'];
            $category_id = (int)$input['category_id'];
            $stock_status = $input['stock_status'];
-           if(isset($input['limit'])):
-            $limit = $input['limit'];
-        endif;
+        
+            $limit = isset($input['limit'])? $input['limit']: 15;
+      
             if(isset($request->search) || isset($request->category_id) || isset($request->stock_status)){
-          
+            
                 // DB::enableQueryLog();
                 $products = Product::select('products.id','products.name','products.description','products.discount','products.image',DB::raw('products.price as amount'),'products.category_id','products.quantity',DB::raw('FORMAT(AVG(ratings.rating),1) as AverageRating, COUNT(ratings.id) as TotalComments'),'stocks.stock',DB::raw('(CASE
                 WHEN stocks.stock > 0 THEN "available"
@@ -599,13 +599,13 @@ class VendorController extends ApiController
                        
                         ->where('products.user_id', Auth::id())
                         ->where('products.name','LIKE','%'.$request->search.'%')
-                        ->Where('products.category_id','LIKE','%'.$category_id.'%')
+                        ->orWhere('products.category_id','LIKE','%'.$category_id.'%')
                         ->having('stock_status','LIKE','%'.$stock_status.'%')
                         ->with(['Category','Stock','Discount'])
                         ->groupBy('products.id')
                         ->orderBy('AverageRating','DESC')
                         ->paginate($limit)->makeHidden(['CartStatus','soldBy']);
-                        // dd(DB::getQueryLog($products));
+                        dd(DB::getQueryLog($products));
 
             }else{
             
@@ -1958,7 +1958,7 @@ public function ViewOrderByVendor(Request $request)
           
         $item = Item::where('vendor_id',Auth::id())
                 ->where('id', $input['order_id'])
-                ->with(['Customer','cancelRequest','Product','Transaction','Rating'])
+                ->with(['Customer','cancelRequest','Product','Transaction','Rating','Offer'])
                 ->first();
                // dd($item->toArray());
     if($item){
@@ -2009,31 +2009,35 @@ public function ViewOrderByVendor(Request $request)
                  
                 $address = Address::where('id', $item->address_id)->first();
                 
-        $store = Store::select('id','store_image','name','description')
-        ->where('id', $item->product->store_id)
-        ->first();
+                $store = Store::select('id','store_image','name','description')
+                                ->where('id', $item->product->store_id)
+                                ->first();
 
-        if(isset($request->type) && isset($request->notification_id)){
-            if($request->type === '1'):
-                Notification::where('id', $request->notification_id)->update(['is_read' => '1']);
-            endif;
-        }
-        if(isset($item->transaction)):
-        $card = Card::where('id', $item->transaction->card_id)->select('id','card_holder_name','card_no','expiry_month','expiry_year')->first();
-        if($card){
-            $item['card_info'] = $card;
-        }else{
-            $item['card_info'] = null;
-        }
-        endif;
-       
-                
-            }else{
-                return parent::error("Order not found related to this vendor");
+            if(isset($request->type) && isset($request->notification_id)){
+                if($request->type === '1'):
+                    Notification::where('id', $request->notification_id)->update(['is_read' => '1']);
+                endif;
             }
+            if(isset($item->transaction)):
+                $card = Card::where('id', $item->transaction->card_id)->select('id','card_holder_name','card_no','expiry_month','expiry_year')->first();
+            if($card){
+                $item['card_info'] = $card;
+            }else{
+                $item['card_info'] = null;
+            }
+            endif;
+
+           $selectedvariants =  Helper::ProductvariantById($item->variant_id);
+           $item['selected_variants'] = $selectedvariants;
+
+            return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
+                
+        }else{
+            return parent::error("Order not found related to this vendor");
+        }
                 
 
-        return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
+        
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }
