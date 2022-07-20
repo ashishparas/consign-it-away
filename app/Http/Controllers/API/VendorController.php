@@ -605,7 +605,7 @@ class VendorController extends ApiController
                         ->groupBy('products.id')
                         ->orderBy('AverageRating','DESC')
                         ->paginate($limit)->makeHidden(['CartStatus','soldBy']);
-                        dd(DB::getQueryLog($products));
+                       
 
             }else{
             

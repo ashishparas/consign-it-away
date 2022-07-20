@@ -142,10 +142,10 @@ class VendorController extends Controller
     }
 
 
-    public function CreateProduct(Store $store){
-        $stores = $store->select('id','name')->orderBy('created_at','DESC')->get();
-        // dd($stores->toArray());
-        return view('admin.product.product-create',compact('stores'));
+    public function CreateProduct(User $User){
+        $users = $User->select('id','name','fname','lname')->whereNotIn('id', [1])->orderBy('created_at','DESC')->with(['Store'])->get();
+     
+        return view('admin.product.product-create',compact('users'));
     }
 
 

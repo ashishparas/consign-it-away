@@ -110,4 +110,8 @@ class User extends Authenticatable
         return UserDevice::where('user_id', $this->id)->first();
     }
 
+    public function Store(){
+        return $this->hasMany(Store::class)->select('id','user_id','name');
+    }
+
 }
