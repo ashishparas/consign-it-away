@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminStaff;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Colour;
 use App\Models\Contact;
 use App\Models\Item;
 use App\Models\Product;
 use App\Models\Store;
+use App\Models\Subcategory;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -144,11 +148,27 @@ class VendorController extends Controller
 
     public function CreateProduct(User $User){
         $users = $User->select('id','name','fname','lname')->whereNotIn('id', [1])->orderBy('created_at','DESC')->with(['Store'])->get();
-     
-        return view('admin.product.product-create',compact('users'));
+        $categories = Category::get();
+        $brands = Brand::get();
+        $colors = Colour::get();
+        // dd($categories->toArray());
+        return view('admin.product.product-create',compact('users','categories','brands','colors'));
     }
 
 
+    public function ViewStoreById(Request $request){
+        if($request->ajax()){
+            $store = Store::where('user_id', $request->id)->get();
+            return response()->json($store);
+        }
+    }
+
+    public function ViewSubCategory(Request $request){
+        if($request->ajax()){
+            $subCategories= Subcategory::where('category_id', $request->id)->get();
+            return response()->json($subCategories);
+        }
+    }
 
 
 

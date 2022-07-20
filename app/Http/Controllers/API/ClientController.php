@@ -914,7 +914,7 @@ class ClientController extends ApiController
                 if($item){
                     $tracking_id = Helper::trackCourier($item->tracking_id);
                 if($tracking_id):
-                    $item['tracking_status'] =   $tracking_id;     
+                    $item['tracking_status'] =   $tracking_id;  
                 else:
                     $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
                 endif;

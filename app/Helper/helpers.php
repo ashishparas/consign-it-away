@@ -284,6 +284,7 @@ $input_xml = <<<EOXML
             if(array_key_exists('Error', $array_data['TrackInfo'])):
                 return false;
             else:
+                // dd($array_data);
                 return $array_data['TrackInfo'];
             endif;
             

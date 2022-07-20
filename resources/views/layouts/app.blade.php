@@ -16,6 +16,7 @@
   <link href="{{asset('public/assets/css/custom.css')}}" rel="stylesheet">
   <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+ 
 </head>
 <body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar">
   <!-- Preloader -->
@@ -333,6 +334,7 @@
 </script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"> </script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"> </script>
+<script src="{{asset('public/js/custom.js')}}"></script>
 <script>
   $(document).ready(function() {
       $('#example').DataTable();
@@ -356,6 +358,8 @@
 
   });
   </script>
+
+
 
 
 </body>

@@ -1991,7 +1991,7 @@ public function ViewOrderByVendor(Request $request)
                          // Endcode
                              $item['tracking_status'] = $arr;
                     }else{
-                        $item['tracking_status'] = $tracking_id['TrackSummary'];
+                        $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
                     }
                 else:
                     $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
