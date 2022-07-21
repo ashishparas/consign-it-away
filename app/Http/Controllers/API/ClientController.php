@@ -735,7 +735,7 @@ class ClientController extends ApiController
                             'transaction_id' => $order->charge_id,
                             'vendor_id'  => $item->vendor_id,
                             'product_id'  => $product->id,
-                            'price' => $order->total_amount,
+                            'price' => $product->price,
                             'order_date' => date('Y-m-d')
                         ]);
      
