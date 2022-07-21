@@ -1809,7 +1809,7 @@ public function ViewTransactions(Request $request)
         return $validateAttributes;
     endif;
     try{
-        $withdraw = Transaction::orderBy('id','DESC')->get();
+        $withdraw = Transaction::where('vendor_id', Auth::id())->orderBy('id','DESC')->get();
         $totalIncome = Transaction::where('vendor_id', Auth::id())->sum('price');
         $withdrawEarning = Withdraw::where('user_id', Auth::id())->sum('amount');
         $balance = $totalIncome - $withdrawEarning;
