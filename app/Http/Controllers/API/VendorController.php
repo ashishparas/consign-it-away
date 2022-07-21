@@ -1788,7 +1788,7 @@ public function Dashboard(Request $request)
                     $Ldate =  ($last_trans)?  date('Y-M-d h:i a', strtotime($last_trans->created_at)): '';
                     $dashboard['last_transaction'] = $Ldate;
             
-                    $this_mnth_tans = Transaction::whereRaw('MONTH(order_date) = '.date('m'))->sum('price');
+                    $this_mnth_tans = Transaction::where('vendor_id', Auth::id())->whereRaw('MONTH(order_date) = '.date('m'))->sum('price');
              
                     $dashboard['this_month_trans'] = number_format($this_mnth_tans,2);
                     $dashboard['current_month'] = date('F,Y');
