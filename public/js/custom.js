@@ -62,4 +62,55 @@ $(document).ready(function(){
     });
 
 
+    // Dev: Ashish Mehra
+    let attrName, optName;
+    let allOption = [];
+    let attributeCombination=[];
+    let variants = [];
+
+    $("#addOption").click(function(){
+
+        optName = $("#optionName").val();
+        allOption.push(optName);
+        console.log(allOption);
+    });
+   
+
+    $("#createVariant").click( function(){
+        
+        attrName = $("#attributeName").val();
+        if(attrName !== ''){
+            variants.push({
+                attr_name: attrName,
+                attr_option:allOption
+            });
+            console.log(variants);
+            allOption=[];
+          console.log(variants);
+            $.each(variants , function(index, value){
+                let html = "<tr> <td><label class='ms-checkbox-wrap'><input type='checkbox' value=''><i class='ms-checkbox-check'></i></label></td><td>"+value.attr_name+"</td></tr>";
+                $("#combination").append(html);
+                  
+                $.each(value.attr_option, function(key, val){
+                   
+                   const abc=`<tr><div class='size_small position-relative'>${val}<span class='close_white'><a href=''><img src='' alt=''></a></span></div></tr>`;
+                   console.log(abc);
+                    $("#combination").append(abc);
+                });
+
+            });
+            variants=[];
+        }else{
+            $("#attrError").text("Please select Attribute first");
+        }
+        
+    
+    
+    });
+    
+
+
+
+
+
 });

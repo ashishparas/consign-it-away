@@ -492,39 +492,37 @@
       <div class="ms-panel-body">
           <div class="form-group">
               <label for="exampleEmail">Attribute</label>
-              <input type="email" class="form-control" placeholder="Enter attribute">
+              <input type="email" class="form-control"  id="attributeName" value="" placeholder="Enter attribute">
+              <span id="attrError"></span>
             </div>
             <div class="form-group">
               <label for="exampleEmail">No. of Option</label>
-                  <select class="form-control" id="validationCustom15" required="">
-                    <option value="">Select Category</option>
-                    <option value="">Select Category1</option>
-                    <option value="">Select Category2</option>
-                  </select>
+                 <input type="text" id="optionName" value="" class="form-control"/>
+                 <button type="button" id="addOption" class="btn btn-success py-2 px-2 mt-0 fs-16">Add Option </button>
             </div>
-            <button type="button" class="btn btn-success py-2 px-2 mt-0 fs-16">Create </button>
-            <div class="d-flex justify-content-between align-items-center pt-3">
+            <button type="button" id="createVariant" class="btn btn-success py-2 px-2 mt-0 fs-16">Create </button>
+            {{-- <div class="d-flex justify-content-between align-items-center pt-3">
                 <h5>Color</h5>
                 <span><img src="{{asset('public/assets/img/delete_icon.svg')}}" alt=""></span>
-            </div>
-            <h6>Attribute Option</h6>
-            <div class="green_input">
+            </div> --}}
+            {{-- <h6>Attribute Option</h6> --}}
+            {{-- <div class="green_input">
               <div class="img_box">
                 <img src="{{asset('public/assets/img/upload_banner.svg')}}" alt="">
-                <div class="upload_input"><input type="file" class="custom-file-input" id="validatedCustomFile"></div>
+                <div class="upload_input"></div>
               </div>
               <input type="text" class="form-control" placeholder="Green">
               <span><img src="{{asset('public/assets/img/delete_icon.svg')}}"></span>
-            </div>
-            <div class="green_input mt-3">
+            </div> --}}
+            {{-- <div class="green_input mt-3">
               <div class="img_box">
                 <img src="{{asset('public/assets/img/upload_banner.svg')}}" alt="">
-                <div class="upload_input"><input type="file" class="custom-file-input" id="validatedCustomFile"></div>
+                <div class="upload_input"></div>
               </div>
               <input type="text" class="form-control" placeholder="Enter Color">
               <span><img src="{{asset('public/assets/img/delete_icon.svg')}}"></span>
             </div>
-            <button type="button" class="btn btn-success py-2 px-2 mt-0 fs-16 mt-3">Add </button>
+            <button type="button" class="btn btn-success py-2 px-2 mt-0 fs-16 mt-3">Add </button> --}}
           </div>
   </div>
 </div>
@@ -549,30 +547,8 @@
                   <th scope="col">Options</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><label class="ms-checkbox-wrap">
-                    <input type="checkbox" value=""> <i class="ms-checkbox-check"></i>
-                  </label></td>
-                  <td>Sizes</td>
-                  <td>
-                    <div class="size_small position-relative">s<span class="close_white"><a href="javascript:;"><img src="{{asset('public/assets/img/close_white_cross.svg')}}" alt="img"/></a></span></div>
-                    <div class="size_small position-relative">M<span class="close_white"><a href="javascript:;"><img src="{{asset('public/assets/img/close_white_cross.svg')}}" alt="img"/></a></span></div>
-                    <div class="size_small position-relative">L<span class="close_white"><a href="javascript:;"><img src="{{asset('public/assets/img/close_white_cross.svg')}}" alt="img"/></a></span></div>
-                    <div class="size_small position-relative">XL<span class="close_white"><a href="javascript:;"><img src="{{asset('public/assets/img/close_white_cross.svg')}}" alt="img"/></a></span></div>
-                  </td>    
-                </tr> 
-                <tr>
-                  <td><label class="ms-checkbox-wrap">
-                    <input type="checkbox" value=""> <i class="ms-checkbox-check"></i>
-                  </label></td>
-                  <td>Colors</td>
-                  <td>
-                    <div class="size_small position-relative w-25">Green<span class="close_white"><a href="javascript:;"><img src="{{asset('public/assets/img/close_white_cross.svg')}}" alt="img"/></a></span></div>
-                    <div class="size_small position-relative w-25">Orange<span class="close_white"><a href="javascript:;"><img src="{{asset('public/assets/img/close_white_cross.svg')}}" alt="img"/></a></span></div>
-                    <div class="size_small position-relative w-25">Black<span class="close_white"><a href="javascript:;"><img src="{{asset('public/assets/img/close_white_cross.svg')}}" alt="img"/></a></span></div>
-                  </td>    
-                </tr> 
+              <tbody  id="combination">
+               
               </tbody>
             </table>
           </div>
