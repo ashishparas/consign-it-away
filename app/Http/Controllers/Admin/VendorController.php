@@ -147,12 +147,13 @@ class VendorController extends Controller
 
 
     public function CreateProduct(User $User){
+       
         $users = $User->select('id','name','fname','lname')->whereNotIn('id', [1])->orderBy('created_at','DESC')->with(['Store'])->get();
         $categories = Category::get();
-        $brands = Brand::get();
+        $brands = Brand::take(1000)->get();
         $colors = Colour::get();
-        // dd($categories->toArray());
-        return view('admin.product.product-create',compact('users','categories','brands','colors'));
+       
+        return view('admin.products.product-create',compact('users','categories','brands','colors'));
     }
 
 
