@@ -23,7 +23,7 @@
                 <div class="ms-panel-header border-0 d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">Vendor Products</h3>
                     <span>
-                        <a href="javascript:;" class="btn green_btn" data-toggle="modal" data-target="#addproductby_modal">+ Add Product</a>
+                        <a href="{{url('admin/create/product')}}" class="btn green_btn" >+ Add Product</a>
                     </span>
                 </div>
             </div>
