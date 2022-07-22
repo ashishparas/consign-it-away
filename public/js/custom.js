@@ -71,7 +71,14 @@ $(document).ready(function(){
     $("#addOption").click(function(){
 
         optName = $("#optionName").val();
+       
         allOption.push(optName);
+        
+        $.each(allOption , function(index, value){
+            
+            
+            $('.optionSpan').append(value);
+        });
         console.log(allOption);
     });
    
@@ -79,7 +86,8 @@ $(document).ready(function(){
     $("#createVariant").click( function(){
         
         attrName = $("#attributeName").val();
-        if(attrName !== ''){
+        optionName = $("#optionName").val();
+        if(attrName !== '' && optionName !== ''){
             variants.push({
                 attr_name: attrName,
                 attr_option:allOption
@@ -87,21 +95,33 @@ $(document).ready(function(){
             console.log(variants);
             allOption=[];
           console.log(variants);
+       
             $.each(variants , function(index, value){
-                let html = "<tr> <td><label class='ms-checkbox-wrap'><input type='checkbox' value=''><i class='ms-checkbox-check'></i></label></td><td>"+value.attr_name+"</td></tr>";
+            
+               
+                 let html = "<tr> <td><label class='ms-checkbox-wrap'><input type='checkbox' value=''><i class='ms-checkbox-check'></i></label></td><td>"+value.attr_name+"</td><td>"+value.attr_option+"</td></tr>";
                 $("#combination").append(html);
-                  
-                // $.each(value.attr_option, function(key, val){
-                   
-                //    const abc=`<tr><div class='size_small position-relative'>${val}<span class='close_white'><a href=''><img src='' alt=''></a></span></div></tr>`;
-                //    console.log(abc);
-                //     $("#combination").append(abc);
-                // });
+                
+              
+                $.each(value.attr_option, function(key, val){
+          
+                   const abc="<tr><div class='size_small position-relative'>"+val+"<span class='close_white'><a href=''><img src='' alt=''></a></span></div></tr>";
+                   console.log(abc);
+                    $("#combination").append(abc);
+                });
 
             });
             variants=[];
         }else{
-            $("#attrError").text("Please select Attribute first");
+            if(attrName === "")
+            {
+                $("#attrError").text("Please select Attribute first");
+            }
+            if(optionName === "")
+            {
+                $("#optionError").text("Please select Option first");
+            }
+            
         }
         
     
