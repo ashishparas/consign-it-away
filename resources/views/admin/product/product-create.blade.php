@@ -500,29 +500,8 @@
                  <input type="text" id="optionName" value="" class="form-control"/>
                  <button type="button" id="addOption" class="btn btn-success py-2 px-2 mt-0 fs-16">Add Option </button>
             </div>
-            <button type="button" id="createVariant" class="btn btn-success py-2 px-2 mt-0 fs-16">Create </button>
-            {{-- <div class="d-flex justify-content-between align-items-center pt-3">
-                <h5>Color</h5>
-                <span><img src="{{asset('public/assets/img/delete_icon.svg')}}" alt=""></span>
-            </div> --}}
-            {{-- <h6>Attribute Option</h6> --}}
-            {{-- <div class="green_input">
-              <div class="img_box">
-                <img src="{{asset('public/assets/img/upload_banner.svg')}}" alt="">
-                <div class="upload_input"></div>
-              </div>
-              <input type="text" class="form-control" placeholder="Green">
-              <span><img src="{{asset('public/assets/img/delete_icon.svg')}}"></span>
-            </div> --}}
-            {{-- <div class="green_input mt-3">
-              <div class="img_box">
-                <img src="{{asset('public/assets/img/upload_banner.svg')}}" alt="">
-                <div class="upload_input"></div>
-              </div>
-              <input type="text" class="form-control" placeholder="Enter Color">
-              <span><img src="{{asset('public/assets/img/delete_icon.svg')}}"></span>
-            </div>
-            <button type="button" class="btn btn-success py-2 px-2 mt-0 fs-16 mt-3">Add </button> --}}
+    <button type="button" id="createVariant" class="btn btn-success py-2 px-2 mt-0 fs-16">Create </button>
+           
           </div>
   </div>
 </div>
