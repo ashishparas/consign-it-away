@@ -151,7 +151,7 @@ class VendorController extends Controller
         $categories = Category::get();
         $brands = Brand::get();
         $colors = Colour::get();
-        dd($categories->toArray());
+        // dd($categories->toArray());
         return view('admin.product.product-create',compact('users','categories','brands','colors'));
     }
 
