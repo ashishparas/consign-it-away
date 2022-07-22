@@ -13,7 +13,7 @@
   <link href="{{asset('public/assets/css/bootstrap.min.css')}}" rel="stylesheet">
   <!-- Costic styles -->
   <link href="{{asset('public/assets/css/style.css')}}" rel="stylesheet">
-  <link href="{{asset('public/assets/css/custom.css')}}" rel="stylesheet">
+  {{-- <link href="{{asset('public/assets/css/custom.css')}}" rel="stylesheet"> --}}
   <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
  
