@@ -19,6 +19,17 @@
   </div>
   <!--breadcrumbs-->
   <!--shipping-orders-->
+
+  @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
   <div class="row align-items-start">
     <div class="col-xl-12 col-md-12">
       <div class="ms-panel">
@@ -39,7 +50,7 @@
                 <div class="col-md-4 mb-2">
                   <label>Vendor Name</label>
                   <div class="input-group">
-                    <select class="form-control" id="vendorName" name="vendor_name" required>
+                    <select class="form-control" id="vendorName" name="vendor_name">
                         <option value="">---Select vendor--</option>
                         @foreach ($users as $user)
                           <option value="{{$user->id}}">{{ $user->name }}</option>    
@@ -78,13 +89,12 @@
                   <input type="file" class="custom-file-input" id="image-input" name="image[]" multiple required>
                  
                 </div>
+                @error('image')
+                <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
                </div>
                <div>
-                <ul class="d-block d-lg-flex col-gap align-items-center preview-area">
-                 
-                 
-                  
-                </ul>
+                <ul class="d-block d-lg-flex col-gap align-items-center preview-area"> </ul>
                </div>
              </div>
            </div>
@@ -97,7 +107,7 @@
                   </span>
                 </label>
                 <div class="input-group">
-                  <input type="text" class="form-control" value="{{ old('') }}" placeholder="Enter Product Name" name="name"> 
+                  <input type="text" class="form-control" value="{{ old('name') }}" placeholder="Enter Product Name" name="name"> 
               
                 </div>
                 @error('name')
@@ -155,7 +165,7 @@
                 <label for="validationCustom02" class="d-flex">Description<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
                   <img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" value="" placeholder="Type Here..." name="description">
+                  <input type="text" class="form-control" name="description" value="{{ old('description') }}" placeholder="Type Here..." name="description">
                 </div>
               </div>
                 @error('description')
@@ -226,16 +236,14 @@
                   <h6 class="d-flex align-items-center justify-content-between">Custom Condition
                     <div class="ml-auto">
                       <label class="ms-switch">
-                        <input type="checkbox" name="custom_condition" value=""> <span class="ms-switch-slider round"></span>
+                        <input type="checkbox" name="condition" value=""> <span class="ms-switch-slider round"></span>
                       </label>
                     </div>
                   </h6>
                   <p>
-                    <textarea class="form-control" value="{{ old('condition') }}" name="condition" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <textarea class="form-control" value="" name="" id="exampleFormControlTextarea1" rows="3"></textarea>
                   </p>
-                  @error('condition')
-                    <div  class="alert alert-danger">{{ $message }}</div>
-                  @enderror
+               
                 </div>
               
               </div>
@@ -255,31 +263,28 @@
               <div class="col-md-4 mb-2">
                 <label>Length</label>
                 <div class="input-group">
-                  <input type="text" name="length" value="{{old('length')}}" required class="form-control" placeholder="Enter Length">
+                  <input type="text" name="Length" value="" required class="form-control" placeholder="Enter Length">
                 </div>
-                @error('length')
-                  <div class="alert alert->danger">{{old('length')}}</div>
-                @enderror
+              
               </div>
               <div class="col-md-4 mb-2">
                 <label>Width</label>
                 <div class="input-group">
-                  <input type="text" name="width" value="{{ old('width') }}" required class="form-control" placeholder="Enter Width">
+                  <input type="text" name="Breadth" value="" required class="form-control" placeholder="Enter Width">
                 </div>
-                @error('width')
-                  <div class="alert alert->danger">{{old('width')}}</div>
-                @enderror
+               
               </div>
               <div class="col-md-4 mb-2">
                 <label>Height</label>
                 <div class="input-group">
-                  <input type="text" name="height" value="{{old('height')}}" required class="form-control" placeholder="Enter Height">
+                  <input type="text" name="Height" value="" required class="form-control" placeholder="Enter Height">
                 </div>
-                @error('height')
-                  <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+              
               </div>
             </div>   
+            @error('dimensions')
+            <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
       </div>
   </div>
     
@@ -296,7 +301,7 @@
         </div>
         <div>
           <label class="ms-switch">
-            <input type="checkbox" name="for_sale" value="1"> <span class="ms-switch-slider round"></span>
+            <input type="checkbox" name="available_for_sale" value="1"> <span class="ms-switch-slider round"></span>
           </label>
         </div>
       </div>
@@ -307,7 +312,7 @@
         </div>
         <div>
             <label class="ms-switch">
-              <input type="checkbox" checked="" name="customer_contact" value="1"> <span class="ms-switch-slider ms-switch-warning round"></span>
+              <input type="checkbox" checked="" name="constomer_contact" value="1"> <span class="ms-switch-slider ms-switch-warning round"></span>
             </label>
         </div>
       </div>
@@ -343,7 +348,7 @@
       </h5>
       <div class="form-check pl-0">
         <label class="ms-checkbox-wrap mb-1">
-          <input class="form-check-input" type="checkbox" value="" name=" " id="invalidCheck">
+          <input class="form-check-input" type="checkbox" value="1" name="free_shipping" id="invalidCheck">
           <i class="ms-checkbox-check"></i>
         </label>
         <span class="green_cl"> Free Shipping </span>

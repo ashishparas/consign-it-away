@@ -18,6 +18,7 @@ use App\Models\Subcategory;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -173,8 +174,10 @@ class VendorController extends Controller
 
     public function StoreProduct(Request $request)
     {
+        $input = $request->all();
+       
         $rules =[];
-        // dd($request->all())
+        
         if ($request->is_variant === '1') {
             //dd("is not variant product");
             $rules = [
@@ -186,8 +189,8 @@ class VendorController extends Controller
                 'available_for_sale' => 'required|in:1,2', 'constomer_contact' => 'required|in:1,2',
                 'inventory_track' => 'required|in:1,2', 'product_offer' => '', 'ships_from' => 'required', 'shipping_type' => 'required', 'free_shipping' => 'required|in:1,2', 'meta_description' => '',
                 'meta_tags' => '', 'meta_keywords' => '', 'title' => '', 'variants' => '',
-                'state' => '', 'tags' => '', 'advertisement' => '', 'selling_fee' => 'required',
-                'amount' => 'required', 'type' => 'required|in:1,2', 'store_id' => 'required|exists:stores,id'
+                'state' => '', 'tags' => '', 'advertisement' => '', 'selling_fee' => '',
+                'amount' => '', 'is_variant' => 'required|in:1,2', 'store_id' => 'required|exists:stores,id'
             ];
         }elseif($request->is_variant === '2'){
             dd("is  variant product");
@@ -221,10 +224,11 @@ class VendorController extends Controller
                 'advertisement' =>'', 
                 'selling_fee' =>'required', 
                 'amount' => 'required',
-                'type'=>'required|in:1,2',
+                'is_variant'=>'required|in:1,2',
                 'store_id' =>'required|exists:stores,id'];
         }
         $validate = $request->validate($rules);
+       
 
         
 
@@ -241,10 +245,20 @@ class VendorController extends Controller
             $input['image'] = implode(',', $images);
 
         endif;
+        dd($request->dimensions);
+        if(isset($request->Height) && isset($request->Breadth) && isset($request->Height)){
+            $dimension =     array('Height'=> $request->Height,'Breadth'=>$request->Breadth,'Height'=>$request->Height);
+           
+        }  
+        $input['user_id'] = $request->vendor_name;
+        $input['dimensions'] = $dimension? json_encode($dimension):null;
+        $input['product_offer'] = $request->product_offer?$request->product_offer:2;
+    //   dd($input);
         $create = Product::create($input);
+       
         $product = Product::where('id', $create->id)->first();
         if ($product) {
-
+            
             Stock::create([
                 'product_id' => $product->id,
                 'stock'      => $product->quantity,
