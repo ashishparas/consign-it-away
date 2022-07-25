@@ -412,13 +412,6 @@ class VendorController extends ApiController
            
 
            $product['product_variants'] = \App\Models\Attribute::where('product_id', $product->id)->with(['Option'])->get();
-        //    $arr = [];
-        //    $push = array();
-        //    foreach($vars as $var){
-        //         $Option = AttributeOption::where('attr_id', $var->id)->get();
-        //         array_push($push, $Option );
-        //    }
-        //   $product['product_variants'] =    array('variants'=> $vars,'options' => $push);
             endif;
             if(Auth::user()->type === '2'):
                 $user = User::where('id',Auth::id())->update(['vendor_status' => '6']);

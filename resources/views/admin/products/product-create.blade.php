@@ -29,8 +29,8 @@
       </div>
   </div>
       <div class="col-xl-12 col-md-12">
-        <form action="{{url('admin/create/product')}}" method="post" enctype="multipart/form-data">
-
+        <form action="{{url('admin/store/product')}}" method="post" enctype="multipart/form-data">
+          @csrf
           <div class="ms-panel">
             <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
                <h5 class="mb-0 pb-0">Vendor Information</h5>
@@ -39,7 +39,7 @@
                 <div class="col-md-4 mb-2">
                   <label>Vendor Name</label>
                   <div class="input-group">
-                    <select class="form-control" id="vendorName" name="vendor_name">
+                    <select class="form-control" id="vendorName" name="vendor_name" required>
                         <option value="">---Select vendor--</option>
                         @foreach ($users as $user)
                           <option value="{{$user->id}}">{{ $user->name }}</option>    
@@ -51,7 +51,7 @@
                 <div class="col-md-4 mb-2">
                   <label>Role</label>
                   <div class="input-group">
-                    <select class="form-control" id="storeName" name="vendor_store" required>
+                    <select class="form-control" id="storeName" name="store_id" required>
                       <option value="">Select Store</option>
                     </select>
                   </div>
@@ -75,28 +75,15 @@
                    <img src="{{asset('public/assets/img/upload_banner.svg')}}"/>
                 </div>
                 <div class="input_upload">
-                  <input type="file" class="custom-file-input" id="validatedCustomFile" name="product_image"></div>
+                  <input type="file" class="custom-file-input" id="image-input" name="image[]" multiple required>
+                 
+                </div>
                </div>
                <div>
-                <ul class="d-block d-lg-flex col-gap align-items-center">
-                  <li>
-                    <div class="more_infromation position-relative">
-                      <img src="{{asset('public/assets/img/head_phone.png')}}" alt="" />
-                      <span><a href="javascript:;"><img src="assets/img/close_icon.svg"/></a></span>
-                     </div>
-                  </li>
-                  <li>
-                    <div class="more_infromation position-relative">
-                      <img src="{{asset('public/assets/img/head_phonethree.png')}}" alt="" />
-                      <span><a href="javascript:;"><img src="assets/img/close_icon.svg"/></a></span>
-                     </div>
-                  </li>
-                  <li>
-                  <div class="more_infromation position-relative">
-                    <img src="{{asset('public/assets/img/head_phonetwo.png')}}" alt="" />
-                    <span><a href="javascript:;"><img src="assets/img/close_icon.svg"/></a></span>
-                  </div>
-                  </li>
+                <ul class="d-block d-lg-flex col-gap align-items-center preview-area">
+                 
+                 
+                  
                 </ul>
                </div>
              </div>
@@ -110,8 +97,12 @@
                   </span>
                 </label>
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Enter Product Name" name="product_name"> 
+                  <input type="text" class="form-control" value="{{ old('') }}" placeholder="Enter Product Name" name="name"> 
+              
                 </div>
+                @error('name')
+                <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
               </div>
               <div class="col-md-4 mb-3">
                 <label for="validationCustom02" class="d-flex">Brand<span class="ml-auto"  data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
@@ -129,7 +120,7 @@
                 <label for="validationCustom01" class="d-flex">Product Category *<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
                   <img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
-                  <select class="form-control" id="categories" name="category" required="">
+                  <select class="form-control" id="categories" name="category_id" required="">
                     <option value="">Select Category</option>
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}">{{ $category->title }}</option> 
@@ -143,11 +134,9 @@
                 <label for="validationCustom01" class="d-flex">Product Sub-Category<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
                   <img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
-                  <select class="form-control" id="subCategory" name="sub_category" required="">
-                    
-                   
+                <select class="form-control" id="subCategory" name="subcategory_id" value="" required="">
                 
-                  </select>
+                </select>
                 </div>
               </div>
               <div class="col-md-4 mb-3">
@@ -157,7 +146,7 @@
                  <select class="form-control" name="color" required>
                     <option value="">--Select Color--</option>
                     @foreach ($colors as $color)
-                        <option value="{{ $color->id }}">{{ $color->name }}</option>
+                        <option value="{{ $color->name }}">{{ $color->name }}</option>
                     @endforeach
                  </select>
                 </div>
@@ -166,22 +155,31 @@
                 <label for="validationCustom02" class="d-flex">Description<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
                   <img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Type Here..." name="description">
+                  <input type="text" class="form-control" value="" placeholder="Type Here..." name="description">
                 </div>
               </div>
+                @error('description')
+                  <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
                <div class="col-md-4 mb-3">
                 <label for="validationCustom02" class="d-flex">Quantity<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
                   <img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" name="quantity" placeholder="Enter quantity">
+                  <input type="text" autocomplete="off" id="txtIdNum" onkeypress="return AllowOnlyNumbers(event);" class="form-control" value="{{ old('quantity') }}" name="quantity" placeholder="Enter quantity">
                 </div>
+                @error('quantity')
+                  <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
               </div>
               <div class="col-md-4 mb-3">
                 <label for="validationCustom02" class="d-flex">Weight(In Pound)<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
                   <img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" name="weight" placeholder="Enter weight">
+                  <input type="text" autocomplete="off" value="{{ old('weight') }}" id="txtIdNum" onkeypress="return AllowOnlyNumbers(event);" class="form-control" name="weight" required placeholder="Enter weight">
                 </div>
+                @error('weight')
+                  <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
            </div>
@@ -198,7 +196,7 @@
           <div class="form-row px-4 pt-3 pb-3">
               <div class="col-md-4 mb-2">
                 <div class="green_pargh">
-                  <input class="form-check-input" value="new" name="condition" type="radio" name="exampleRadios">
+                  <input class="form-check-input"  value="new" name="condition" type="radio" name="exampleRadios">
                   <div class="add-category-btn">
                   <h6>New</h6>
                   <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -207,7 +205,7 @@
               </div>
               <div class="col-md-4 mb-2">
                 <div class="green_pargh">
-                  <input class="form-check-input" name="condition" value="like_new" type="radio" name="exampleRadios">
+                  <input class="form-check-input"  name="condition" value="like_new" type="radio" name="exampleRadios">
                   <div class="add-category-btn">
                   <h6>Like New</h6>
                   <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -216,7 +214,7 @@
               </div>
               <div class="col-md-4 mb-2">
                 <div class="green_pargh">
-                  <input class="form-check-input" name="condition" value="old" type="radio" name="exampleRadios">
+                  <input class="form-check-input"  name="condition" value="old" type="radio" name="exampleRadios">
                   <div class="add-category-btn">
                   <h6>Old</h6>
                   <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -228,13 +226,16 @@
                   <h6 class="d-flex align-items-center justify-content-between">Custom Condition
                     <div class="ml-auto">
                       <label class="ms-switch">
-                        <input type="checkbox" name="custom_condition"> <span class="ms-switch-slider round"></span>
+                        <input type="checkbox" name="custom_condition" value=""> <span class="ms-switch-slider round"></span>
                       </label>
                     </div>
                   </h6>
                   <p>
-                    <textarea class="form-control" name="condtion_sepc" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <textarea class="form-control" value="{{ old('condition') }}" name="condition" id="exampleFormControlTextarea1" rows="3"></textarea>
                   </p>
+                  @error('condition')
+                    <div  class="alert alert-danger">{{ $message }}</div>
+                  @enderror
                 </div>
               
               </div>
@@ -254,20 +255,29 @@
               <div class="col-md-4 mb-2">
                 <label>Length</label>
                 <div class="input-group">
-                  <input type="text" name="length" class="form-control" placeholder="Enter Length">
+                  <input type="text" name="length" value="{{old('length')}}" required class="form-control" placeholder="Enter Length">
                 </div>
+                @error('length')
+                  <div class="alert alert->danger">{{old('length')}}</div>
+                @enderror
               </div>
               <div class="col-md-4 mb-2">
                 <label>Width</label>
                 <div class="input-group">
-                  <input type="text" name="width" class="form-control" placeholder="Enter Width">
+                  <input type="text" name="width" value="{{ old('width') }}" required class="form-control" placeholder="Enter Width">
                 </div>
+                @error('width')
+                  <div class="alert alert->danger">{{old('width')}}</div>
+                @enderror
               </div>
               <div class="col-md-4 mb-2">
                 <label>Height</label>
                 <div class="input-group">
-                  <input type="text" name="height" class="form-control" placeholder="Enter Height">
+                  <input type="text" name="height" value="{{old('height')}}" required class="form-control" placeholder="Enter Height">
                 </div>
+                @error('height')
+                  <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>   
       </div>
@@ -308,7 +318,7 @@
         </div>
         <div>
           <label class="ms-switch">
-            <input type="checkbox" name="inventory_check" value="1"> <span class="ms-switch-slider round"></span>
+            <input type="checkbox" name="inventory_track" value="1"> <span class="ms-switch-slider round"></span>
           </label>
         </div>
       </div>
@@ -319,7 +329,7 @@
         </div>
         <div>
           <label class="ms-switch">
-            <input type="checkbox" name="product_offer" value="1"> <span class="ms-switch-slider round"></span>
+            <input type="checkbox" name="product_offer" value=""> <span class="ms-switch-slider round"></span>
           </label>
         </div>
       </div>
@@ -333,7 +343,7 @@
       </h5>
       <div class="form-check pl-0">
         <label class="ms-checkbox-wrap mb-1">
-          <input class="form-check-input" type="checkbox" value="1" name="shipping" id="invalidCheck">
+          <input class="form-check-input" type="checkbox" value="" name=" " id="invalidCheck">
           <i class="ms-checkbox-check"></i>
         </label>
         <span class="green_cl"> Free Shipping </span>
@@ -344,13 +354,16 @@
             <label>Ships from (zip code) <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
               <img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
             <div class="input-group">
-              <input type="text" class="form-control" name="ship_from" placeholder="Enter Length">
+              <input type="text" class="form-control" value="{{ old('ships_from') }}" name="ships_from" placeholder="Enter zipcode">
             </div>
+            @error('ships_from')
+              <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
           </div>
           <div class="col-md-6 mb-2">
             <label>Shipping Type <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
             <div class="input-group">
-              <input type="text" class="form-control" name="shipping_type" placeholder="Enter Width">
+              <input type="text" class="form-control" value="{{old('shipping_type')}}" name="shipping_type" placeholder="Enter shipping type">
             </div>
           </div>
        
@@ -367,8 +380,11 @@
         <div class="col-md-6 mb-2">
           <label>Set Price <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
           <div class="input-group">
-            <input type="text" class="form-control" name="price" placeholder="Enter Length">
+            <input type="text" class="form-control" value="{{old('price')}}" name="price" placeholder="Enter Length">
           </div>
+          @error('price')
+            <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
         </div>
         <div class="col-md-6 mb-2">
           <label>Apply Discount (Optional) <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
@@ -388,7 +404,7 @@
 </div>
 
 
-<div class="col-xl-12 col-md-12">
+{{-- <div class="col-xl-12 col-md-12">
 <div class="ms-panel">
   <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
      <h5 class="mb-0 pb-0">Return & Refund</h5>
@@ -413,7 +429,7 @@
     </div>
     </div>   
 </div>
-</div>
+</div> --}}
 
 
 <div class="col-xl-12 col-md-12">
@@ -433,8 +449,10 @@
   </div>
   </div>
   <div class="col-md-6 text-right">
-    <a role="button" href="javascript:;" class="btn advance_btn mt-0 px-5" id="advance-block">Advance</a>
-    <a role="button" href="vender-products.html" class="btn track_order_but mt-0 px-4">Add Product</a>
+    <input type="text" value="1" name="is_variant"  id="variant_product"/>
+    <a role="button" class="btn advance_btn mt-0 px-5" id="advance-block">Advance</a>
+    {{-- <a role="button" href="vender-products.html" class="btn track_order_but mt-0 px-4">Add Product</a> --}}
+    <input type="submit" name="CreateProduct" class="btn track_order_but mt-0 px-4" value="Add Product" />
   </div>
 </div>
 </div>
@@ -459,26 +477,35 @@
                   </span>
                 </label>
               <div class="input-group">
-                <input type="text" class="form-control" name="meta_tag" placeholder="Add meta tags here...">
+                <input type="text" class="form-control" value="{{old('meta_tags')}}" name="meta_tags" placeholder="Add meta tags here...">
               </div>
+              @error('meta_tags')
+                <div class="alert alert-danger">{{ $message }}</div>
+              @enderror
             </div>
             <div class="col-md-4 mb-2">
                 <label class="d-flex font-weight-bold">Meta Keywords <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" name="meta_keywords" placeholder="Add meta keywords here...">
+                  <input type="text" class="form-control" value="{{old('meta_keywords')}}" name="meta_keywords" placeholder="Add meta keywords here...">
                 </div>
+                @error('meta_keywords')
+                  <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
               </div>
               <div class="col-md-4 mb-2">
                 <label class="d-flex font-weight-bold">Product Title <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" name="product_title" placeholder="Enter Title for marketing">
+                  <input type="text" class="form-control" name="title" placeholder="Enter Title for marketing">
                 </div>
               </div>
               <div class="col-md-12 mb-2">
                 <label class="d-flex font-weight-bold">Meta Description <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></label>
                 <div class="input-group">
-                    <textarea rows="5" class="form-control" name="description" placeholder="Type Here..."></textarea>
+                    <textarea rows="5" class="form-control" name="meta_description" placeholder="Type Here...">{{old('meta_description')}}</textarea>
                   </div>
+                  @error('meta_description')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                  @enderror
               </div>
           </div>   
     </div>
@@ -492,7 +519,7 @@
       <div class="ms-panel-body">
           <div class="form-group">
               <label for="exampleEmail">Attribute</label>
-              <input type="email" class="form-control"  id="attributeName" value="" placeholder="Enter attribute">
+              <input type="email" class="form-control"   id="attributeName" value="" placeholder="Enter attribute">
               <span id="attrError"></span>
             </div>
             <div class="form-group">
@@ -503,9 +530,12 @@
                  <button type="button" id="addOption" class="btn btn-success py-2 px-2 mt-0 fs-16">Add Option </button>
             </div>
             <button type="button" id="createVariant" class="btn btn-success py-2 px-2 mt-0 fs-16">Create </button>
-            
-            <input type="hidden" class="variantsValue" name="variants" >
+               
+            <input type="text" id="variantsValue" name="variants" value="" />
           </div>
+          @error('variants')
+            <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
   </div>
 </div>
 
@@ -538,7 +568,7 @@
 </div>
 </div>
 
-<div class="col-md-4">
+<div class="col-md-12">
 <div class="ms-panel">
   <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
       <h5 class="mb-0 pb-0">Product Specifications <span data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></h5>
@@ -547,19 +577,19 @@
     <h6>State</h6>
       <div class="enter_spec">
         <div class="form-group">
-          <input type="email" class="form-control" placeholder="Enter Specification">
+          <input type="text" name="state" class="form-control" placeholder="Enter Specification">
         </div>
-        <div class="form-group">
+        {{-- <div class="form-group">
           <textarea class="form-control" rows="3">Type...</textarea>
-        </div>
-      </div>
+        </div> --}}
+      {{-- </div>
         <button type="button" class="btn btn-success py-2 px-2 mt-0 fs-16 mt-0">Add </button>
-      </div>
+      </div> --}}
 </div>
 </div>
 
 
-<div class="col-md-8">
+{{-- <div class="col-md-8">
 <div class="ms-panel">
 <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
     <h5 class="mb-0 pb-0">Specification List </h5>
@@ -612,9 +642,9 @@
   </ul>
 </div>
 </div>
-</div>
+</div> --}}
 
-<div class="col-xl-12 col-md-12">
+{{-- <div class="col-xl-12 col-md-12">
 <div class="ms-panel">
 <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
  <h5 class="mb-0 pb-0">Tags On Product <span data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span>
@@ -634,63 +664,63 @@
   </div>
 </div>   
 </div>
-</div>
+</div> --}}
 
 
-<div class="col-xl-12 col-md-12">
-<div class="ms-panel">
-<div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
- <h5 class="mb-0 pb-0">More Details <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></h5>
-</div>
-<div class="form-row px-4 pt-3">
-  <div class="col-md-4 mb-2">
-    <label class="d-flex">UPC <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
-      <img src="{{asset('public/assets/img/question_mark.svg')}}">
-     </span></label>
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Enter UPC">
-    </div>
+  {{-- <div class="col-xl-12 col-md-12">
+  <div class="ms-panel">
+  <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
+  <h5 class="mb-0 pb-0">More Details <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></h5>
   </div>
-  <div class="col-md-4 mb-2">
-    <label class="d-flex">SKU <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
-      <img src="{{asset('public/assets/img/question_mark.svg')}}">
-     </span></label>
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Enter SKU">
+  <div class="form-row px-4 pt-3">
+    <div class="col-md-4 mb-2">
+      <label class="d-flex">UPC <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
+        <img src="{{asset('public/assets/img/question_mark.svg')}}">
+      </span></label>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Enter UPC">
+      </div>
     </div>
-  </div>
-  <div class="col-md-4 mb-2">
-    <label class="d-flex">EAN<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
-      <img src="{{asset('public/assets/img/question_mark.svg')}}">
-     </span></label>
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Enter EAN">
+    <div class="col-md-4 mb-2">
+      <label class="d-flex">SKU <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
+        <img src="{{asset('public/assets/img/question_mark.svg')}}">
+      </span></label>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Enter SKU">
+      </div>
     </div>
-  </div>
-  <div class="col-md-4 mb-2">
-    <label class="d-flex">GTIN<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
-      <img src="{{asset('public/assets/img/question_mark.svg')}}">
-     </span></label>
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Enter GTIN">
+    <div class="col-md-4 mb-2">
+      <label class="d-flex">EAN<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
+        <img src="{{asset('public/assets/img/question_mark.svg')}}">
+      </span></label>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Enter EAN">
+      </div>
     </div>
-  </div>
-  <div class="col-md-4 mb-2">
-    <label class="d-flex">Ext.<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
-      <img src="{{asset('public/assets/img/question_mark.svg')}}">
-     </span></label>
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Enter Ext">
+    <div class="col-md-4 mb-2">
+      <label class="d-flex">GTIN<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
+        <img src="{{asset('public/assets/img/question_mark.svg')}}">
+      </span></label>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Enter GTIN">
+      </div>
     </div>
+    <div class="col-md-4 mb-2">
+      <label class="d-flex">Ext.<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
+        <img src="{{asset('public/assets/img/question_mark.svg')}}">
+      </span></label>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Enter Ext">
+      </div>
+    </div>
+  </div>   
   </div>
-</div>   
-</div>
-</div>
+  </div> --}}
 
 <div class="col-xl-12 col-md-12">
 <div class="ms-panel">
 <div class="ms-panel-body">
-<div class="ms-panel-body mt-0 d-flex pl-0 align-items-center justify-content-between pb-3 pt-0">
+{{-- <div class="ms-panel-body mt-0 d-flex pl-0 align-items-center justify-content-between pb-3 pt-0">
 <div>
 <h6>Advertise Product on Various platform</h6>
 <p>This will make you to advertise your product on various social media platform.</p>
@@ -702,9 +732,9 @@
 <input type="checkbox"> <span class="ms-switch-slider round"></span>
 </label>
 </div>
-</div>
+</div> --}}
 
-<div class="ms-panel-body mt-0 d-flex pl-0 align-items-center justify-content-between pb-3 pt-0">
+{{-- <div class="ms-panel-body mt-0 d-flex pl-0 align-items-center justify-content-between pb-3 pt-0">
 <div>
 <h6>Add Same Price for all Varients</h6>
 <p>This will list the same price for each and every variants of product.</p>
@@ -718,7 +748,8 @@
 <input type="checkbox"> <span class="ms-switch-slider round"></span>
 </label>
 </div>
-</div>
+</div> --}}
+
 <div class="row">
 <div class="col-md-6">
 <div class="d-flex">
@@ -733,71 +764,19 @@
 </div>
 </div>
 <div class="col-md-6 text-right">
-<a role="button" href="vender-products.html" class="btn track_order_but mt-0 px-4">Add Product</a>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+  <input type="submit" class="btn track_order_but mt-0 px-4" name="normal_product" value="Add Product"/>
 
-</main>
-<!-- MODALS -->
-<div class="modal fade" id="reject_modal" tabindex="-1" role="dialog" aria-labelledby="reject_modal">
-<div class="modal-dialog" role="document">
-<div class="modal-content">
-
-<div class="modal-header">
-  <h3 class="modal-title has-icon ms-icon-round">Reasons </h3>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-</div>
-
-<div class="modal-body">
-  <ul class="ms-list ms-list-display lisitng-block">
-    <li>
-      <label class="ms-checkbox-wrap ms-checkbox-primary">
-        <input type="radio" value="" name="radioExample2" checked=""> <i class="ms-checkbox-check"></i>
-      </label> <span class="pl-2"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in euismod mauris. </span>
-    </li>
-    <li>
-      <label class="ms-checkbox-wrap ms-checkbox-secondary">
-        <input type="radio" value="" name="radioExample2"> <i class="ms-checkbox-check"></i>
-      </label> <span class="pl-2"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in euismod mauris. </span>
-    </li>
-    <li>
-      <label class="ms-checkbox-wrap ms-checkbox-success">
-        <input type="radio" value="" name="radioExample2"> <i class="ms-checkbox-check"></i>
-      </label> <span class="pl-2"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in euismod mauris. </span>
-    </li>
-    <li>
-      <label class="ms-checkbox-wrap ms-checkbox-danger">
-        <input type="radio" value="" name="radioExample2"> <i class="ms-checkbox-check"></i>
-      </label> <span class="pl-2"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in euismod mauris. </span>
-    </li>
-    <li>
-      <label class="ms-checkbox-wrap ms-checkbox-danger">
-        <input type="radio" value="" name="radioExample2"> <i class="ms-checkbox-check"></i>
-      </label> <span class="pl-2"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in euismod mauris. </span>
-    </li>
-    <li>
-      <label class="ms-checkbox-wrap ms-checkbox-danger">
-        <input type="radio" value="" name="radioExample2"> <i class="ms-checkbox-check"></i>
-      </label> <span class="pl-2"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in euismod mauris. </span>
-    </li>
-  </ul>
-  <p class="text-center"><button role="button" class="btn green_btn">Submit</button></p>
 </div>
 </div>
 </div>
 </div>
-
-          
-        </form>
-          
-
-
-
+</div>
+</div>
+</div>
+</form>
+</main>   
+     
+        
 
 
 

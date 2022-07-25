@@ -59,9 +59,11 @@ class Helper extends ApiController
     public static function ProductvariantById($variant_id=null){
         try{
             // Dev: Ashish Mehra
-            if($variant_id !==null){
+            $variants = Variant::where('id', $variant_id)->first();
+            if($variants !==null){
 
-                $variants = Variant::where('id', $variant_id)->first();
+               
+                // dd($variants);
                 $option_id = explode(",",$variants['option_id']);
               
                 $selectedVariants = \App\Models\Attribute::select('attributes.id','attributes.name', DB::raw('attribute_options.id AS option_id, attribute_options.name AS option_name'))

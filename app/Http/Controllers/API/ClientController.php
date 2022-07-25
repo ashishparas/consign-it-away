@@ -658,7 +658,7 @@ class ClientController extends ApiController
 
             $carts = Cart::select('id','user_id','product_id','vendor_id','variant_id')
             ->where('user_id', Auth::id())
-            ->with(['VendorName'])
+            ->with(['VendorName','CustomerVariant'])
             ->groupBy('vendor_id')
             ->get();
            
@@ -935,6 +935,9 @@ class ClientController extends ApiController
                  $item['CardDetails'] = Order::select('id','card_id')
                  ->where('id',$item->order_id)->with(['Card'])->first();
                  $item['coupon'] = '0';
+               
+                 $item['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
+
                 return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
 
                 }else{
