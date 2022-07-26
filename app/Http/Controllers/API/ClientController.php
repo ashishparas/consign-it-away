@@ -658,7 +658,7 @@ class ClientController extends ApiController
 
             $carts = Cart::select('id','user_id','product_id','vendor_id','variant_id')
             ->where('user_id', Auth::id())
-            ->with(['VendorName','CustomerVariant'])
+            ->with(['VendorName'])
             ->groupBy('vendor_id')
             ->get();
            

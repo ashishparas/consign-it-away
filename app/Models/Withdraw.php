@@ -20,4 +20,10 @@ class Withdraw extends Model
 
     protected $fillable = ['user_id','amount','status','date'];
 
+
+
+    public function User(){
+        
+    }
+
 }
