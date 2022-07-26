@@ -582,7 +582,7 @@ class ClientController extends ApiController
         $cart = Cart::FindOrfail($input['cart_id']);
         $cart->quantity = $input['quantity'];
         $cart->save();
-        $cart = Cart::where('user_id', Auth::id())->with('product')->orderBy('created_at','DESC')->get();
+        $cart = Cart::where('user_id', Auth::id())->with('product','CustomerVariant')->orderBy('created_at','DESC')->get();
         return parent::success("Quantity added to cart successfully!",['cart' => $cart]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
@@ -603,7 +603,7 @@ class ClientController extends ApiController
         $cart = Cart::FindOrfail($input['cart_id']);
         $cart->delete();
        
-        $cart = Cart::where('user_id', Auth::id())->with('Product')->get();
+        $cart = Cart::where('user_id', Auth::id())->with('Product')->orderBy('created_at','DESC')->get();
         return parent::success("Delete cart item successfully!",['cart' => $cart]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());

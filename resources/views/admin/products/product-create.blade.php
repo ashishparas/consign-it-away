@@ -205,8 +205,8 @@
           </div>
           <div class="form-row px-4 pt-3 pb-3">
               <div class="col-md-4 mb-2">
-                <div class="green_pargh">
-                  <input class="form-check-input"  value="new" name="condition" type="radio" name="exampleRadios">
+                <div class="green_pargh" for="r1">
+                  <input class="form-check-input" id="r1" value="new" name="condition" type="radio" name="exampleRadios">
                   <div class="add-category-btn">
                   <h6>New</h6>
                   <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -214,17 +214,17 @@
                 </div>
               </div>
               <div class="col-md-4 mb-2">
-                <div class="green_pargh">
-                  <input class="form-check-input"  name="condition" value="like_new" type="radio" name="exampleRadios">
+                <div class="green_pargh" for="r2">
+                  <input class="form-check-input" id="r2"  name="condition" value="like_new" type="radio" name="exampleRadios">
                   <div class="add-category-btn">
                   <h6>Like New</h6>
                   <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
-                </div>
+                </div> 
                 </div>
               </div>
               <div class="col-md-4 mb-2">
-                <div class="green_pargh">
-                  <input class="form-check-input"  name="condition" value="old" type="radio" name="exampleRadios">
+                <div class="green_pargh" for="r3">
+                  <input class="form-check-input" id="r3"  name="condition" value="old" type="radio" name="exampleRadios">
                   <div class="add-category-btn">
                   <h6>Old</h6>
                   <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -236,7 +236,7 @@
                   <h6 class="d-flex align-items-center justify-content-between">Custom Condition
                     <div class="ml-auto">
                       <label class="ms-switch">
-                        <input type="checkbox" name="condition" value=""> <span class="ms-switch-slider round"></span>
+                        <input type="checkbox" name="" value=""> <span class="ms-switch-slider round"></span>
                       </label>
                     </div>
                   </h6>
@@ -524,7 +524,7 @@
       <div class="ms-panel-body">
           <div class="form-group">
               <label for="exampleEmail">Attribute</label>
-              <input type="email" class="form-control"   id="attributeName" value="" placeholder="Enter attribute">
+              <input type="text" class="form-control"   id="attributeName" value="" placeholder="Enter attribute">
               <span id="attrError"></span>
             </div>
             <div class="form-group">

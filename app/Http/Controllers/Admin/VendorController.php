@@ -175,7 +175,7 @@ class VendorController extends Controller
     public function StoreProduct(Request $request)
     {
         $input = $request->all();
-       
+  
         $rules =[];
         
         if ($request->is_variant === '1') {
@@ -193,7 +193,7 @@ class VendorController extends Controller
                 'amount' => '', 'is_variant' => 'required|in:1,2', 'store_id' => 'required|exists:stores,id'
             ];
         }elseif($request->is_variant === '2'){
-            dd("is  variant product");
+           // dd("is  variant product");
             $rules = [
                 'name'=> 'required',
                 'image'=>'required',
@@ -222,8 +222,8 @@ class VendorController extends Controller
                 'state'=> '',
                 'tags' =>'',
                 'advertisement' =>'', 
-                'selling_fee' =>'required', 
-                'amount' => 'required',
+                'selling_fee' =>'', 
+                'amount' => '',
                 'is_variant'=>'required|in:1,2',
                 'store_id' =>'required|exists:stores,id'];
         }
@@ -245,15 +245,15 @@ class VendorController extends Controller
             $input['image'] = implode(',', $images);
 
         endif;
-        dd($request->dimensions);
-        if(isset($request->Height) && isset($request->Breadth) && isset($request->Height)){
-            $dimension =     array('Height'=> $request->Height,'Breadth'=>$request->Breadth,'Height'=>$request->Height);
+       
+        if(isset($request->Length) && isset($request->Breadth) && isset($request->Height)){
+            $dimension =     array('Length'=> $request->Length,'Breadth'=>$request->Breadth,'Height'=>$request->Height);
            
         }  
         $input['user_id'] = $request->vendor_name;
         $input['dimensions'] = $dimension? json_encode($dimension):null;
         $input['product_offer'] = $request->product_offer?$request->product_offer:2;
-    //   dd($input);
+    
         $create = Product::create($input);
        
         $product = Product::where('id', $create->id)->first();
