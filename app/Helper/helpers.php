@@ -11,18 +11,61 @@ use App\Models\Variant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Shippo;
     // userId: 778CONSI5321
     // URL: https://stg-secure.shippingapis.com/ShippingAPI.dll?
 class Helper extends ApiController
 {
     // public $AccountId = "778CONSI5321";
+
     
     public static function shout(string $string)
     {
        
         return  $string;
     }
+
+
+    public static function validateAddress($address_id=null){
+
+        try{
+            if($address_id !== null){
+                $address = Address::where('id' , $address_id)->first();
+                $fullName = $address->fname.' '.$address->lname;
+
+                \Shippo::setApiKey(env('SHIPPO_PRIVATE'));   
+                $toAddress = [
+                    "name" => ucfirst($fullName), // required
+                    "company" => "Consignitaway",
+                    "street1"=> $address->address,  // required
+                    "street2"=> "",
+                    "city"=> $address->city,  //required
+                    "state"=>$address->state, // required
+                    "zip"=>$address->zipcode,  // required
+                    "country"=> $address->country, // required
+                    "phone"=> $address->mobile_no, // required
+                    "email"=> $address->email, // required
+                    "is_residential"=>True,
+                    "metadata"=>"Customer ID". $address->user_id,
+        
+                ];
+                
+             $address =  \Shippo_Address::create($toAddress);
+            // dd($address);
+                if($address['object_id']):
+                    return true;
+                endif;
+            }else{
+                return false;
+            }
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+
+        
+}
+
+
 
 
 

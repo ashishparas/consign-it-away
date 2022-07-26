@@ -688,7 +688,9 @@ class ClientController extends ApiController
         try{
             $input = $request->all();
             // Charge for product
-            $Address = true;//Helper::VerifyAddress($request->address_id);
+            // $Address = Helper::validateAddress($request->address_id);
+            $Address = true;
+            
            
             if($Address):
 
