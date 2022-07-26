@@ -318,8 +318,8 @@ class VendorController extends Controller
 
     public function ViewTransaction()
     {
-        $withdraws = Withdraw::get();
-        dd($withdraws->toArray());
+        $withdraws = Withdraw::with(['User'])->get();
+    //    dd($withdraws->toArray());
         return view('admin.transaction.view-transaction', compact('withdraws'));
     }
 

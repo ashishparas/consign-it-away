@@ -31,17 +31,21 @@
           </div>
           <div class="ms-panel-body pt-2 platform_scroll">
               <ul class="ms-followers ms-list platform_scroll ps">
-
-               <li class="ms-list-item media list-block mb-2 px-0">
-                <img src="{{ asset('public/assets/img/trans_mgt_img.png') }}" class="ms-img-small ms-img-round" alt="people">
+                @foreach ($withdraws as $withdraw)
+            
+                    <li class="ms-list-item media list-block mb-2 px-0">
+                <img src="{{ asset('public/vendor/'.$withdraw->user->profile_picture) }}" class="ms-img-small ms-img-round" alt="people">
                 <div class="media-body">
-                  <h6 class="pb-0">Roshan Enterprise</h6>
-                  <h5 class="fs-16 mb-0"><span class="grey_cl font-weight-normal">Amount: </span><span class="green_cl">$78.09</span></h5>
+                
+                  <h6 class="pb-0">{!! $withdraw->user->name !!}</h6>
+                  <h5 class="fs-16 mb-0"><span class="grey_cl font-weight-normal">Amount: </span><span class="green_cl">${{ $withdraw->amount }}</span></h5>
                   <p class="orange_cl fs-16">3 days to relies payment</p>
                 </div>
                 <button type="button" class="btn green_btn_light_new mr-2" name="button">Accept</button>
                 <button type="button" class="btn reject_btn" name="button">Reject</button>
-              </li>
+              </li>     
+                @endforeach
+               
 
             </ul>
           </div>

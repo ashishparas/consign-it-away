@@ -909,7 +909,7 @@ class ClientController extends ApiController
            $input = $request->all();
         $item = Item::where('user_id',Auth::id())
                 ->where('id', $input['order_id'])
-                ->with(['Product','MyRating','Offer'])
+                ->with(['Product','MyRating','Offer','CustomerVariant'])
                 ->first();
                 if($item){
                     $tracking_id = Helper::trackCourier($item->tracking_id);

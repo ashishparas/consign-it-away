@@ -114,4 +114,8 @@ class User extends Authenticatable
         return $this->hasMany(Store::class)->select('id','user_id','name');
     }
 
+    public function StoreName(){
+        return $this->hasOne(Store::class)->select('id','user_id','name');
+    }
+
 }

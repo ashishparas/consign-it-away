@@ -64,6 +64,9 @@ class Item extends Model
         return $this->hasOne(Offer::class,'id','offer_id');
     }
 
+    public function CustomerVariant(){
+        return $this->hasOne(Variant::class,'id','variant_id');
+    }
 
 
 }

@@ -23,7 +23,7 @@ class Withdraw extends Model
 
 
     public function User(){
-        
+        return $this->hasOne(User::class,'id','user_id')->select('id','name','fname','lname','profile_picture')->with(['StoreName']);
     }
 
 }
