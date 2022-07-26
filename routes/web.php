@@ -51,7 +51,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('shipping-order-details/{id}',[AdminController::class, "ShippingOrderDetails"]);
             Route::get('vendor-management',[VendorController::class,"index"]);
             Route::get('subscription-plan',[VendorController::class,"SubscriptionPlan"]);
-            Route::get('vendor-products',[VendorController::class, "VendorProducts"]);
+            Route::get('vendor-products',[VendorController::class, "VendorProducts"])->name('vendor.product.list');
             Route::get('product/detail/vendor/{id}',[VendorController::class,"ViewProductDetailsById"]);
             Route::get('report-management',[VendorController::class, "ViewReports"]);
             Route::get('running-orders',[VendorController::class, "RunningOrders"]);
@@ -68,6 +68,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::post("store/product",[VendorController::class, "StoreProduct"]);
             Route::post('view/store/by/id',[VendorController::class, "ViewStoreById"]);
             Route::post('view/subcategories/by/id',[VendorController::class,"ViewSubCategory"]);
+            Route::get('view/transactions', [VendorController::class, "ViewTransaction"]);
  });
  
  

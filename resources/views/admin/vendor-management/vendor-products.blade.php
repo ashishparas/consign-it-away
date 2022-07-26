@@ -16,6 +16,9 @@
       </div>
     </div>
     <!--breadcrumbs-->
+    @if(session()->has('success'))
+      <div class="alert alert-success">{{ session()->get('success') }}</div>
+    @endif
     <!--shipping-orders-->
     <div class="row align-items-start">
         <div class="col-xl-12 col-md-12">
@@ -50,9 +53,8 @@
                 <tbody>
                     @foreach ($products as $product)
                         
-                   
                     <tr>
-                        <td>#{{$product->id}}</td>
+                        <td>{{$product->id}}</td>
                         <td class="product_tuc">
                           
                           <div class="d-block d-lg-flex align-items-center product-img">

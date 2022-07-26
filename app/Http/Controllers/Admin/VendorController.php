@@ -17,6 +17,7 @@ use App\Models\Store;
 use App\Models\Subcategory;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
+use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +66,9 @@ class VendorController extends Controller
 
     public function VendorProducts()
     {
-        $products = Product::select('id', 'name', 'image', 'quantity', 'status', 'price')->get();
+        $products = Product::select('id', 'name', 'image', 'quantity', 'status', 'price')
+                                ->orderBy('created_at','DESC')
+                                ->get();
         // dd($products->toArray());
         return view('admin.vendor-management.vendor-products', compact('products'));
     }
@@ -287,7 +290,7 @@ class VendorController extends Controller
                     }
                 } // end for loop
             }
-            dd("product inserted successfully!");
+            return redirect()->route('vendor.product.list')->with('success','Product listed successfully!');
         }
     }
 
@@ -312,4 +315,48 @@ class VendorController extends Controller
             return response()->json($subCategories);
         }
     }
+
+    public function ViewTransaction()
+    {
+        $withdraws = Withdraw::get();
+        dd($withdraws->toArray());
+        return view('admin.transaction.view-transaction', compact('withdraws'));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

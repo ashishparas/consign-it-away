@@ -152,7 +152,7 @@
                       </div>
                       <div class="text-center w-50">
                         <p><img src="{{asset('public/assets/img/dollar-img.png')}}" alt=""/></p>
-                        <h2>£234</h2>
+                        <h2>${{ $transaction }}</h2>
                         <p class="p">Total Revenue Generated</p>
                         <p class="grey_cl">August 2020</p>
                       </div>
@@ -178,7 +178,7 @@
                       </div>
                       </div>
                       <div class="text-center green_light d-flex align-items-center justify-content-center ml-auto w-50 rounded w-m-100 p-4 p-lg-3">
-                        <h3 class="mb-0">£239.09</h3>
+                        <h3 class="mb-0">${{ $transaction }}</h3>
                       </div>
                     </div>
                   </div>

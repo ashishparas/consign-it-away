@@ -34,7 +34,7 @@
         </ul>
       </li>
       <li class="menu-item">
-        <a href="javascript:void(0)"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/transaction.svg')}}" alt="img">Transactions Management</span>
+        <a href="{{url('admin/view/transactions')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/transaction.svg')}}" alt="img">Transactions Management</span>
         </a>
       </li>
       <li class="menu-item">

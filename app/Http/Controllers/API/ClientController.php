@@ -664,10 +664,10 @@ class ClientController extends ApiController
            
             foreach($carts as $key =>  $cart){
 
-                $carts[$key]['soldBy'] = Cart::select('id','vendor_id','product_id','quantity')
+                $carts[$key]['soldBy'] = Cart::select('id','vendor_id','product_id','quantity','variant_id')
                 ->where('vendor_id', $cart->vendor_id)
                 ->where('user_id', Auth::id())
-                ->with(['Product'])
+                ->with(['Product','CustomerVariant'])
                 ->get();
             }
           
