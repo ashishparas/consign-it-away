@@ -76,7 +76,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('add-subcategory/{id}',[VendorController::class, "AddSubCategory"]);
             Route::post('create-subcategory', [VendorController::class, "CreateSubCategory"]);
             Route::get('subcategory-management',[VendorController::class,"SubCategoryManagement"])->name('subcategory-management');
-            Route::get('delete/subcategory/{id}',[VendorController::class, "DeleteSubCategory"]);
+            Route::get('delete/subcategory/{id}',[VendorController::class, "DeleteSubCategory"]); 
  });
  
  
