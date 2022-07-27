@@ -139,7 +139,7 @@ class VendorController extends ApiController
 
 
     public function AddStore(Request $request){
-        $rules = ['banner'=>'required','image' => 'required','name'=>'required','location'=>'required','description'=>'required','store_images'=> 'required'];
+        $rules = ['banner'=>'required','image' => 'required','name'=>'required','location'=>'required','description'=>'required','store_images'=> 'required','address'=>'','city'=>'','state'=>'','country'=>'','zipcode'=>''];
         $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
         
         if($validateAttributes):
@@ -185,7 +185,7 @@ class VendorController extends ApiController
 
 
     public function EditStore(Request $request){
-        $rules = ['store_id'=> 'required|exists:stores,id','banner'=>'','image' => '','name'=>'required','location'=>'required','description'=>'required'];
+        $rules = ['store_id'=> 'required|exists:stores,id','banner'=>'','image' => '','name'=>'required','location'=>'required','description'=>'required','address'=>'','city'=>'','state'=>'','country'=>'','zipcode'=>''];
         $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
         
         if($validateAttributes):

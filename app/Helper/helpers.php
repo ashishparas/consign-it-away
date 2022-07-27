@@ -40,20 +40,36 @@ class Helper extends ApiController
                     "street1"=> $address->address,  // required
                     "street2"=> "",
                     "city"=> $address->city,  //required
-                    "state"=>$address->state, // required
-                    "zip"=>$address->zipcode,  // required
+                    "state"=> $address->state, // required
+                    "zip"=> $address->zipcode,  // required
                     "country"=> $address->country, // required
                     "phone"=> $address->mobile_no, // required
                     "email"=> $address->email, // required
-                    "is_residential"=>True,
+                    "is_residential"=> true,
                     "metadata"=>"Customer ID". $address->user_id,
+                   "validate" => true
         
                 ];
                 
-             $address =  \Shippo_Address::create($toAddress);
-            // dd($address);
-                if($address['object_id']):
-                    return true;
+             $address =  \Shippo_Address::create([
+                    'name' => 'Shawn Ippotle',
+                    "company" => "Consignitaway",
+                    'street1' => '215 Clayton St.',
+                    'city' => 'San Francisco',
+                    'state' => 'CA',
+                    'zip' => '94117',
+                    'country' => 'US',
+                    "phone"=> "+9190678054", // required
+                    "email"=> $address->email, // required
+                    "validate" => true
+             ]);
+                // dd($address);
+                if(!empty($address['validation_results'])):
+                    $validate =   \Shippo_Address::validate($address['object_id']);
+                   
+                    return $address['validation_results']['is_valid'];    
+                else:
+                 return false;
                 endif;
             }else{
                 return false;
@@ -66,7 +82,89 @@ class Helper extends ApiController
 }
 
 
+    // public static function CarierAccounts(){
+        
+    //     \Shippo::setApiKey(env('SHIPPO_PRIVATE'));
+    //     $fedex_account = \Shippo_CarrierAccount::create(array(
+    //         'carrier' => 'fedex',
+    //         'account_id' => '510087780',
+    //         'parameters' => array('first_name' => 'James', 'last_name' => 'Oddo', 'phone_number' => '+ 4177201199', 'from_address_st' => '1526 South Glenstone Ave', 'from_address_city' => 'Springfield', 'from_address_state' => 'MO', 'from_address_zip' => '65804', 'from_address_country_iso2' => 'United States'),
+    //         'test' => true,
+    //         'active' => true
+    //     ));
+    //     // $cr = \Shippo_CarrierAccount::all(array('carrier'=> ''));
+    //     dd($fedex_account );
+    // }
 
+
+public static function shippingLabel($customerId, $vendorId){
+        $customer = User::where('id', $customerId)->first();
+        dd($customer->toArray());
+        \Shippo::setApiKey(env('SHIPPO_PRIVATE'));
+        $fromAddress = array(
+            'name' => 'Shawn Ippotle',
+            'street1' => '215 Clayton St.',
+            'city' => 'San Francisco',
+            'state' => 'CA',
+            'zip' => '94117',
+            'country' => 'US'
+        );
+        
+        $toAddress = array(
+            'name' => 'Mr Hippo"',
+            'street1' => '215 clayton st.',
+            'city' => 'San Francisco',
+            'state' => 'CA',
+            'zip' => '94117',
+            'country' => 'US',
+            'phone' => '+1 555 341 9393'
+        );
+        
+        $parcel = array(
+            'length'=> '5',
+            'width'=> '5',
+            'height'=> '5',
+            'distance_unit'=> 'in',
+            'weight'=> '2',
+            'mass_unit'=> 'lb',
+        );
+        
+        $shipment = \Shippo_Shipment::create( array(
+            'address_from'=> $fromAddress,
+            'address_to'=> $toAddress,
+            'parcels'=> array($parcel),
+            'async'=> false
+            )
+        );
+
+        $rate = $shipment['rates'][7];
+
+        $transaction = \Shippo_Transaction::create(array(
+            'rate'=> $rate['object_id'],
+            'async'=> false,
+        ));
+    
+    // Print the shipping label from label_url
+    // Get the tracking number from tracking_number
+    if ($transaction['status'] == 'SUCCESS'){
+        $result = [
+            'tracking_no' => $transaction['tracking_number'],
+            'shiping_label' => $transaction['label_url']
+        ];
+        return $result;
+       
+    } else {
+        return parent::error($transaction['messages']);
+        // echo "Transaction failed with messages:" . "\n";
+        // foreach ($transaction['messages'] as $message) {
+        //     echo "--> " . $message . "\n";
+        // }
+    }
+           
+
+            
+
+}
 
 
     public static function ProductVariants($variants=[]){

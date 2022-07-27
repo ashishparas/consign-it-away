@@ -21,6 +21,11 @@ class CreateStoresTable extends Migration
             $table->string('store_image')->nullable();
             $table->string('name')->nullable();
             $table->text('location')->nullable();
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('country')->nullable();
+            $table->string('zipcode')->nullable();
             $table->text('description')->nullable();
             $table->string('photos')->nullable();
             $table->enum('status',[1,2])->default(1)->comment('1->Active, 2->Inactive');

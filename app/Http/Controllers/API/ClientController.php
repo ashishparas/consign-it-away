@@ -688,8 +688,11 @@ class ClientController extends ApiController
         try{
             $input = $request->all();
             // Charge for product
-            // $Address = Helper::validateAddress($request->address_id);
-            $Address = true;
+            $Address = Helper::validateAddress($request->address_id);
+           $carierAccounts = helper::shippingLabel('2', '3');
+                            dd($carierAccounts);
+            // $Address = true;
+
             
            
             if($Address):
@@ -743,7 +746,9 @@ class ClientController extends ApiController
      
                         if($item){
                             $store = Store::where('id',$product->store_id)->first();
-                        
+                            
+                            // $carierAccounts = helper::shippingLabel(Auth::id(), $item->vendor_id);
+                            dd($carierAccounts);
                             $tracking_id = "46768273648723648234762";//Helper::UPSP($item, $product->id ,$input['address_id'], $item->vendor_id,  $store->id);
      
                             if($tracking_id):
@@ -850,7 +855,7 @@ class ClientController extends ApiController
                 $items = Item::where('vendor_id',Auth::id())->where('status','1')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
             }else if($request->type === '2'){
                 $items = Item::where('vendor_id',Auth::id())->where('status','2')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
-            }else if($request->type === '3'){
+            }else if($request->type === '3'){   
                 $items = Item::where('vendor_id',Auth::id())->where('status','3')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
             }else if($request->type === '4'){
                 $items = Item::select('items.*','products.name')->where('vendor_id',Auth::id())
