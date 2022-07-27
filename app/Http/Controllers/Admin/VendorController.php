@@ -322,6 +322,106 @@ class VendorController extends Controller
     //    dd($withdraws->toArray());
         return view('admin.transaction.view-transaction', compact('withdraws'));
     }
+    
+    public function CategoryManagement()
+    {
+        $Categories = Category::orderBy('created_at', 'DESC')->get();
+        return view('admin.category.category_mgt', compact('Categories'));
+    }
+    
+    public function AddCategory()
+    {
+        return view('admin.category.category-create');
+    }
+    
+    public function CreateCategory(Request $request)
+    {
+        $input = $request->all();
+        
+        $request->validate([
+            'title' => 'required',
+            'image' => ''
+        ]);
+
+        try {
+
+            $input = $request->all();
+            
+            $type = str_replace(' ', '_', $request->title);
+            $input['type'] = $type;
+            // dd($input);
+            if (isset($request->image)) :
+
+                $imageName = time() . '.' . $request->image->extension();
+                $request->image->move(public_path('/category'), $imageName);
+                $input['image'] = $imageName;
+            endif;
+
+
+            $Category = Category::create($input);
+            if ($Category) :
+                return redirect()->route('category-management');
+            endif;
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
+    }
+    
+    public function DeleteCategory($id)
+    {
+        $staff = Category::FindOrfail($id);
+        $staff->delete();
+        return redirect()->route('category-management')->with('message', 'Category Deleted Successfully!');
+    }
+    
+    public function AddSubCategory($id)
+    {
+        return view('admin.category.subcategory-create', compact('id'));
+    }
+    
+    public function CreateSubCategory(Request $request)
+    {
+        $input = $request->all();
+        
+        $request->validate([
+            'title' => 'required',
+            'image' => ''
+        ]);
+
+        try {
+
+            $input = $request->all();
+            // dd($input);
+            if (isset($request->image)) :
+
+                $imageName = time() . '.' . $request->image->extension();
+                $request->image->move(public_path('/category'), $imageName);
+                $input['image'] = $imageName;
+            endif;
+
+
+            $subCategory = Subcategory::create($input);
+            if ($subCategory) :
+                return redirect()->route('category-management');
+            endif;
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
+    }
+    
+    public function SubCategoryManagement()
+    {
+        $subcategories = Subcategory::with('Category')->get();
+       // echo "<pre>"; print_r($subcategories); die;
+        return view('admin.subcategory.subcategory_mgt', compact('subcategories'));
+    }
+    
+    public function DeleteSubCategory($id)
+    {
+        $staff = Subcategory::FindOrfail($id);
+        $staff->delete();
+        return redirect()->route('subcategory-management')->with('message', 'Sub Category Deleted Successfully!');
+    }
 
 
 

@@ -12,6 +12,18 @@
         </a>
       </li>
       <li class="menu-item">
+        <a href="{{url('/admin/brand-list')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/star.svg')}}" alt="img">Brand</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="{{url('/admin/category-management')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/vendor.svg')}}" alt="img">Category Management</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="{{url('/admin/subcategory-management')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/vendor.svg')}}" alt="img">Sub Category Management</span>
+        </a>
+      </li>
+      <li class="menu-item">
         <a href="{{url('admin/order-management')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/shopping-bag.svg')}}" alt="img">Order Management </span>
         </a>
       </li>
@@ -50,10 +62,7 @@
         </a>
       </li>
       
-      <li class="menu-item">
-        <a href="{{url('/admin/brand-list')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/star.svg')}}" alt="img">Brand</span>
-        </a>
-      </li>
+      
       
     </ul>
   </aside>

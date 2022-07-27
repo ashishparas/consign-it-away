@@ -231,7 +231,7 @@
                 </div>
                 </div>
               </div>
-              <div class="ms-panel-body mt-2 d-flex align-items-center justify-content-between pb-3 col-md-12">
+              {{-- <div class="ms-panel-body mt-2 d-flex align-items-center justify-content-between pb-3 col-md-12">
                 <div class="w-100">
                   <h6 class="d-flex align-items-center justify-content-between">Custom Condition
                     <div class="ml-auto">
@@ -246,7 +246,7 @@
                
                 </div>
               
-              </div>
+              </div> --}}
             </div>   
       </div>
   </div>
