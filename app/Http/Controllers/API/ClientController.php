@@ -688,10 +688,11 @@ class ClientController extends ApiController
         try{
             $input = $request->all();
             // Charge for product
-            $Address = Helper::validateAddress($request->address_id);
-           $carierAccounts = helper::shippingLabel('2', '3');
-                            dd($carierAccounts);
-            // $Address = true;
+        //     $Address = Helper::validateAddress($request->address_id);
+        //    $carierAccounts = helper::shippingLabel('2', '3');
+        //    $trackingId =  Helper::trackingStatus('92055901755477000000000015');
+                            // dd($trackingId);
+            $Address = true;
 
             
            
@@ -746,9 +747,9 @@ class ClientController extends ApiController
      
                         if($item){
                             $store = Store::where('id',$product->store_id)->first();
-                            
+
                             // $carierAccounts = helper::shippingLabel(Auth::id(), $item->vendor_id);
-                            dd($carierAccounts);
+                            // dd($carierAccounts);
                             $tracking_id = "46768273648723648234762";//Helper::UPSP($item, $product->id ,$input['address_id'], $item->vendor_id,  $store->id);
      
                             if($tracking_id):

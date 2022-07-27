@@ -97,38 +97,48 @@ class Helper extends ApiController
     // }
 
 
-public static function shippingLabel($customerId, $vendorId){
-        $customer = User::where('id', $customerId)->first();
-        dd($customer->toArray());
+public static function shippingLabel($addressId, $productId){
+        $customerAddress = Address::where('id', $addressId)->first();
+        $storeAddress = Product::select('id','name','store_id','weight','dimensions')
+        ->where('id', $productId)
+        ->with('Store')
+        ->first();
+        // dd( $storeAddress->store->country);
         \Shippo::setApiKey(env('SHIPPO_PRIVATE'));
         $fromAddress = array(
-            'name' => 'Shawn Ippotle',
-            'street1' => '215 Clayton St.',
-            'city' => 'San Francisco',
-            'state' => 'CA',
-            'zip' => '94117',
-            'country' => 'US'
+            'name' => $storeAddress->store->name,
+            'street1' => $storeAddress->store->address,
+            'city' => $storeAddress->store->city,
+            'state' => $storeAddress->store->state,
+            'zip' => $storeAddress->store->zipcode,
+            'country' => $storeAddress->store->country,
+            'phone'   => $storeAddress->store->manager->mobile_no,
+            'email'   => $storeAddress->store->manager->email
+
         );
+      
         
         $toAddress = array(
-            'name' => 'Mr Hippo"',
-            'street1' => '215 clayton st.',
-            'city' => 'San Francisco',
-            'state' => 'CA',
-            'zip' => '94117',
-            'country' => 'US',
-            'phone' => '+1 555 341 9393'
+            'name' =>  $customerAddress->fname.' '.$customerAddress->lname ,
+            'street1' => $customerAddress->address,
+            'city' => $customerAddress->city,
+            'state' => $customerAddress->state,
+            'zip' => $customerAddress->zipcode,
+            'country' => $customerAddress->country,
+            'phone' => $customerAddress->mobile_no
         );
-        
+       
+        $dimensions = json_decode($storeAddress->dimensions, true);
+    
         $parcel = array(
-            'length'=> '5',
-            'width'=> '5',
-            'height'=> '5',
+            'length'=> $dimensions? $dimensions['Length']:20,
+            'width'=> $dimensions? $dimensions['Breadth']:20,
+            'height'=> $dimensions? $dimensions['Height']:20,
             'distance_unit'=> 'in',
-            'weight'=> '2',
+            'weight'=> $storeAddress->weight,
             'mass_unit'=> 'lb',
         );
-        
+      
         $shipment = \Shippo_Shipment::create( array(
             'address_from'=> $fromAddress,
             'address_to'=> $toAddress,
@@ -136,7 +146,7 @@ public static function shippingLabel($customerId, $vendorId){
             'async'=> false
             )
         );
-
+        // dd($shipment);
         $rate = $shipment['rates'][7];
 
         $transaction = \Shippo_Transaction::create(array(
@@ -163,6 +173,37 @@ public static function shippingLabel($customerId, $vendorId){
            
 
             
+
+}
+
+
+
+
+public static function trackingStatus($trackingId){
+    \Shippo::setApiKey(env('SHIPPO_PRIVATE'));
+    $status_params = array(
+        'id' => 'SHIPPO_TRANSIT',
+        'carrier' => 'shippo'
+    );
+    
+ 
+    $status = \Shippo_Track::get_status($status_params);
+
+    $create_params = array(
+        "carrier" => "shippo",
+        "tracking_number"=> "SHIPPO_TRANSIT"
+    );
+    
+    //The response is stored in $webhook response and is identical to the response of Track::get_status 
+    $webhook_response = \Shippo_Track::create($create_params);
+    
+    
+    echo "--> " . "Carrier: " . $webhook_response['carrier'] . "\n";
+    echo "--> " . "Shipping tracking number: " . $webhook_response['tracking_number'] . "\n";
+    echo "--> " . "Address from: " . $webhook_response['address_from'] . "\n";
+    echo "--> " . "Address to: " . $webhook_response['address_to'] . "\n";
+    echo "--> " . "Tracking Status: " . $webhook_response['tracking_status'] . "\n";
+    exit;
 
 }
 

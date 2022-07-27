@@ -107,7 +107,9 @@ class Product extends Model
   }
 
   public function Store(){
-      return $this->belongsTo(Store::class)->select('id','name','banner')->with('Manager');
+      return $this->belongsTo(Store::class)
+      ->select('id','name','banner','address','city','state','country','zipcode')
+      ->with('Manager');
   }
 
 public function Discount(){
