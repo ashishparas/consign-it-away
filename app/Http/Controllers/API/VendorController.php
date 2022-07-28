@@ -1951,7 +1951,7 @@ public function ViewOrderByVendor(Request $request)
           
         $item = Item::where('vendor_id',Auth::id())
                 ->where('id', $input['order_id'])
-                ->with(['Customer','cancelRequest','Product','Transaction','Rating','Offer'])
+                ->with(['Customer','cancelRequest','Product','Transaction','Rating','CustomerVariant','Offer'])
                 ->first();
                // dd($item->toArray());
     if($item){
