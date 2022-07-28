@@ -45,6 +45,7 @@ use App\Models\Variant;
 use App\Models\VariantItems;
 use Attribute;
 use GrahamCampbell\ResultType\Success;
+use Illuminate\Auth\Events\Failed;
 use Illuminate\Cache\RateLimiting\Limit;
 use phpDocumentor\Reflection\DocBlock\Tags\InvalidTag;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -915,17 +916,17 @@ class ClientController extends ApiController
        endif;
        try{
            $input = $request->all();
-        $item = Item::where('user_id',Auth::id())
+         $item = Item::where('user_id',Auth::id())
                 ->where('id', $input['order_id'])
                 ->with(['Product','MyRating','Offer','CustomerVariant'])
                 ->first();
                 if($item){
                     $tracking_id = Helper::trackCourier($item->tracking_id);
-                if($tracking_id):
-                    $item['tracking_status'] =   $tracking_id;  
-                else:
-                    $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
-                endif;
+                        if($tracking_id['status'] === true):
+                            $item['tracking_status'] =   $tracking_id['data'];  
+                        else:
+                            $item['tracking_status'] = ['error' => $tracking_id['data']];
+                        endif;
 
                 $address = Address::where('id', $item->address_id)
                 ->where('user_id', Auth::id())
@@ -1201,14 +1202,14 @@ class ClientController extends ApiController
         try{
             
             $input_xml = <<<EOXML
-                    <TrackRequest USERID="641IHERB6005">
+                    <TrackRequest USERID="778CONSI5321">
                         <TrackID ID="$request->track_id"></TrackID>
                     </TrackRequest>
             EOXML;
             
             $fields = array('API' => 'TrackV2','XML' => $input_xml);
             
-            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+            $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -1221,27 +1222,44 @@ class ClientController extends ApiController
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
             $arr = [];
             $newString="";
-            dd($array_data);
-            foreach($array_data['TrackInfo']['TrackDetail'] as $key => $track):
+            // dd($array_data);
+            if(isset($array_data['TrackInfo']['TrackDetail'])){
+                foreach($array_data['TrackInfo']['TrackDetail'] as $key => $track):
         
-        $extract_date_pattern = "/(January|February|March|April|May|June|July|Augest|September|October|November|December)\s\d{2},\s{1}\d{4}/";
-            $string_to_match = $track;
-                if ( preg_match_all($extract_date_pattern, $string_to_match, $matches) ) {
-                    
-                $newdate =  date('m/d/Y',strtotime($matches[0][0]));
-                $newString = str_replace($matches[0][0],  $newdate,  $string_to_match);
-                //   echo $newString."<br>"; 
-                $string_to_match = $newString;
-                }
-                $arr[] = explode(",", $string_to_match);
-
-              
+                    $extract_date_pattern = "/(January|February|March|April|May|June|July|Augest|September|October|November|December)\s\d{2},\s{1}\d{4}/";
+                        $string_to_match = $track;
+                            if ( preg_match_all($extract_date_pattern, $string_to_match, $matches) ) {
+                                
+                            $newdate =  date('m/d/Y',strtotime($matches[0][0]));
+                            $newString = str_replace($matches[0][0],  $newdate,  $string_to_match);
+                            //   echo $newString."<br>"; 
+                            $string_to_match = $newString;
+                            }
+                            $arr[] = explode(",", $string_to_match);
+                            
+                            //$keys  = array('status','date','time','address','zip');
+                            $av = [];
+                            foreach( $arr as $key => $value){
+                                //for($i=0; $i<count($value); $i++ ){
+                                  $av[$key]['status'] = $value[0];
+                                  $av[$key]['date'] = $value[1];
+                                  $av[$key]['time'] = (isset($value[2]))? $value[2]:"";
+                                  $av[$key]['address'] = (isset($value[3]))? $value[3]:"";
+                                  $av[$key]['zip'] = (isset($value[4]))? $value[4]:""; 
+                            }
+                           
+                            // }
+                            
+                        endforeach;
+                        // dd($arr);
+                        return parent::success("view tracking successfully!", $av);
+            }else{
+                $uspsErrorData = isset($array_data['TrackInfo']['Error']) ? 
+                                    $array_data['TrackInfo']['Error']['Description']:
+                                    $array_data['TrackInfo']['TrackSummary'];
+               return parent::error($uspsErrorData);
+            }
            
-            endforeach;
-           
-            // dd($arr);
-          
-            return parent::success("view address successfully!", $arr);
 
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
@@ -1262,7 +1280,7 @@ class ClientController extends ApiController
         try{
             
             $input_xml = <<<EOXML
-                <RateV4Request USERID="778CONSI5321">
+                <RateV4Request USERID="641IHERB6005">
                 <Revision>2</Revision>
                 <Package ID="1">
                 <Service>PRIORITY</Service>
@@ -1282,7 +1300,7 @@ class ClientController extends ApiController
             
             $fields = array('API' => 'RateV4','XML' => $input_xml);
             
-            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);

@@ -1956,42 +1956,14 @@ public function ViewOrderByVendor(Request $request)
                // dd($item->toArray());
     if($item){
                 
-            if($item->tracking_id):
-
                     $tracking_id = Helper::trackCourier($item->tracking_id);
-                    $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
-                if($tracking_id):
-                   
-                    if(isset($tracking_id['TrackDetail'])){
-                            // Dev:Ashish
-                        $arr = [];
-                        $newString="";
-        
-                        foreach($tracking_id['TrackDetail'] as $key => $track):
-            
-                            $extract_date_pattern = "/(January|February|March|April|May|June|July|Augest|September|October|November|December)\s\d{2},\s{1}\d{4}/";
-                            $string_to_match = $track;
-                            if ( preg_match_all($extract_date_pattern, $string_to_match, $matches) ) {
-                        
-                                $newdate =  date('m/d/Y',strtotime($matches[0][0]));
-                                $newString = str_replace($matches[0][0],  $newdate,  $string_to_match);
-                
-                                $string_to_match = $newString;
-                            }
-                                $arr[] = explode(",", $string_to_match);
-                        endforeach;
+                    if($tracking_id['status'] === true):
+                        $item['tracking_status'] =   $tracking_id['data'];  
+                    else:
+                        $item['tracking_status'] = ['error' => $tracking_id['data']];
+                    endif;
 
-                         // Endcode
-                             $item['tracking_status'] = $arr;
-                    }else{
-                        $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
-                    }
-                else:
-                    $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
-                endif;
-            else:
-                    $item['tracking_status'] = ['error' => "tracking status of tracking id not available yet"];
-            endif;
+                 
                   $specifications = Product::select('weight','brand','color','quantity')->where('id', $item->product_id)->first()
                     ->makeHidden('favourite','FavouriteId','CartStatus','soldBy');
                     $item['product']['product_specification'] = $specifications; 

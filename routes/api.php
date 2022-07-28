@@ -6,8 +6,6 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\API\VendorController;
 use Facade\FlareClient\Http\Client;
-use Illuminate\Support\Facades\Request as FacadesRequest;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes

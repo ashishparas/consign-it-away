@@ -445,36 +445,67 @@ $input_xml = <<<EOXML
     public static function trackCourier($tracking_id){
         try{
 
-            if($tracking_id !== null){
-                $input_xml = <<<EOXML
-                    <TrackRequest USERID="641IHERB6005">
-                        <TrackID ID="$tracking_id"></TrackID>
-                    </TrackRequest>
-            EOXML;
+        if($tracking_id !== null){
+
+                    $input_xml = <<<EOXML
+                                    <TrackRequest USERID="778CONSI5321">
+                                        <TrackID ID="$tracking_id"></TrackID>
+                                    </TrackRequest>
+                                EOXML;
             
-            $fields = array('API' => 'TrackV2','XML' => $input_xml);
+                $fields = array('API' => 'TrackV2','XML' => $input_xml);
             
-            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+                $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
-            $data = curl_exec($ch);
-            curl_close($ch);
-            
+                        $ch = curl_init();
+                        curl_setopt($ch, CURLOPT_URL, $url);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+                        $data = curl_exec($ch);
+                        curl_close($ch);
             // Convert the XML result into array
-            $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
-            if(array_key_exists('Error', $array_data['TrackInfo'])):
-                return false;
-            else:
-                // dd($array_data);
-                return $array_data['TrackInfo'];
-            endif;
-            
+                        $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
+                        $arr = [];
+                        $newString="";
+            // dd($array_data);
+            if(isset($array_data['TrackInfo']['TrackDetail'])){
+                foreach($array_data['TrackInfo']['TrackDetail'] as $key => $track):
+        
+                    $extract_date_pattern = "/(January|February|March|April|May|June|July|Augest|September|October|November|December)\s\d{2},\s{1}\d{4}/";
+                        $string_to_match = $track;
+                            if ( preg_match_all($extract_date_pattern, $string_to_match, $matches) ) {
+                                
+                                $newdate =  date('m/d/Y',strtotime($matches[0][0]));
+                                $newString = str_replace($matches[0][0],  $newdate,  $string_to_match);
+                                //   echo $newString."<br>"; 
+                                $string_to_match = $newString;
+                            }
+                            $arr[] = explode(",", $string_to_match);
+                            //$keys  = array('status','date','time','address','zip');
+                            $av = [];
+                            foreach( $arr as $key => $value){
+                                //for($i=0; $i<count($value); $i++ ){
+                                  $av[$key]['status'] = $value[0];
+                                  $av[$key]['date'] = $value[1];
+                                  $av[$key]['time'] = (isset($value[2]))? $value[2]:"";
+                                  $av[$key]['address'] = (isset($value[3]))? $value[3]:"";
+                                  $av[$key]['zip'] = (isset($value[4]))? $value[4]:""; 
+                            }
+                           
+                            // }
+                endforeach;
+                        // dd($arr);
+                    return array('status'=>true,'data'=> $av);
             }else{
-                return false;
+                $uspsErrorData = isset($array_data['TrackInfo']['Error']) ? 
+                                    $array_data['TrackInfo']['Error']['Description']:
+                                    $array_data['TrackInfo']['TrackSummary'];
+               return array('status'=>false,'data'=> $uspsErrorData);
             }
+
+
+
+        }
 
         }catch(\Exception $ex){
             return false;
