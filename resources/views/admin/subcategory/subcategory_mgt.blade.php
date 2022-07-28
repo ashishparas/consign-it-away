@@ -59,6 +59,7 @@
                                             </div>
                                         </td>
                                         <td>
+                                            <a href="{{url('/admin/edit-subcategory/'.$item->id)}}" class="edit btn btn-primary">Edit</a>
                                             <a href="{{url('/admin/delete/subcategory/'.$item->id)}}" class="ml-3"><img src="{{asset('public/assets/img/delete.svg')}}" alt=""></a>
                                         </td>
                                     </tr>

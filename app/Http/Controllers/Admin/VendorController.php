@@ -423,7 +423,45 @@ class VendorController extends Controller
         return redirect()->route('subcategory-management')->with('message', 'Sub Category Deleted Successfully!');
     }
 
+    public function EditCategory($id){
+        $category = Category::FindOrfail($id);
+        return view('admin/category/edit-category',compact('category'));
+    }
+    
+    public function UpdateCategory(Request $request){
+        $input = $request->all();
+ 
+            
+        $category = Category::FindOrfail($request->id);
+        if (isset($request->image)):
+            $input['image'] = parent::__uploadImage($request->file('image'), public_path('/category'), false);
+        endif;
 
+                $category->fill($input);
+                $category->save();
+        return redirect()->route('category-management');
+            
+    }
+    
+    public function EditSubCategory($id){
+        $subcategory = Subcategory::FindOrfail($id);
+        return view('admin/subcategory/edit-subcategory',compact('subcategory'));
+    }
+    
+    public function UpdateSubCategory(Request $request){
+        $input = $request->all();
+ 
+            
+        $category = Subcategory::FindOrfail($request->id);
+        if (isset($request->image)):
+            $input['image'] = parent::__uploadImage($request->file('image'), public_path('/category'), false);
+        endif;
+
+                $category->fill($input);
+                $category->save();
+        return redirect()->route('subcategory-management');
+            
+    }
 
 
 

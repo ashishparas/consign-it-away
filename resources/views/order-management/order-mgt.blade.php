@@ -40,9 +40,13 @@
                     @foreach ($items as $item)
                     <div class="shipping_wrap">
                         <a href="{{url('/admin/shipping-order-details/'.$item->id)}}" class="d-flex">
-                          <img class="mr-3" src="{{asset('public/products/'.$item->product->image[0])}}" alt="img"/>
+                            @if(!empty($item->product))
+                            <img class="mr-3" src="{{asset('public/products/'.$item->product->image[0])}}" alt="img"/>
+                          @else
+                            <img class="mr-3" src="{{asset('public/asset/img/46-46.png')}}" alt="img"/>
+                          @endif
                           <div class="shipping_info pt-0">
-                              <h5 class="mb-2">{{ $item->product->name }}</h5>
+                              <h5 class="mb-2">{{($item->product)?$item->product->name:'No-Name'}}</h5>
                               <div class="d-flex justify-content-between align-items-end">
                                 <ul class="list-inline mb-0 black_cl">
                                   <li class="list-inline-item mr-3">Quantity: <span class="black_cl">{{$item->quantity }}</span></li>
@@ -163,7 +167,11 @@
                           <td>#000000{{$item->order_id}}</td>
                           <td class="product_tuc">
                             <div class="d-flex align-items-center">
+                            @if(!empty($item->product))
                               <img class="mr-3" src="{{asset('public/products/'.$item->product->image[0])}}" alt="image"/>
+                           @else
+                                <img class="mr-3" src="{{asset('public/asset/img/46-46.png')}}" alt="img"/>
+                           @endif
                               <h6 class="mb-0">{{($item->product == null)?'No-name':$item->product->name}}</h6>
                             </div>
                           </td>
