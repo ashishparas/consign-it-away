@@ -860,7 +860,7 @@ class ClientController extends ApiController
                 if(isset($request->search)){
                     $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
                 }
-                $items = $items->where('status','1')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->get();
+                $items = $items->where('items.status','1')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->get();
             }else if($request->type === '2'){
                 $items = Item::where('vendor_id',Auth::id())->where('status','2')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->get();
             }else if($request->type === '3'){   
