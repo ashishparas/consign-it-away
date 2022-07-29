@@ -862,9 +862,31 @@ class ClientController extends ApiController
                 }
                 $items = $items->where('items.status','1')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->get();
             }else if($request->type === '2'){
-                $items = Item::where('vendor_id',Auth::id())->where('status','2')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->get();
+
+                $items = Item::select('items.*','products.name')
+                ->Join('products','products.id','items.product_id');
+                if(isset($request->search)){
+                    $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
+                }
+                $items = $items->where('items.vendor_id',Auth::id())
+                                ->where('items.status','2')
+                                ->with(['Product','Offer','CustomerVariant'])
+                                ->orderBy('items.created_at','DESC')
+                                ->get();
+
             }else if($request->type === '3'){   
-                $items = Item::where('vendor_id',Auth::id())->where('status','3')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->get();
+
+                $items = Item::select('items.*','products.name')
+                ->Join('products','products.id','items.product_id');
+                if(isset($request->search)){
+                    $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
+                }
+                $items = $items->where('items.vendor_id',Auth::id())
+                ->where('items.status','3')
+                ->with(['Product','Offer','CustomerVariant'])
+                ->orderBy('items.created_at','DESC')
+                ->get();
+
             }else if($request->type === '4'){
                 $items = Item::select('items.*','products.name')
                             ->Join('products','products.id','items.product_id')
