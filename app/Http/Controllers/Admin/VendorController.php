@@ -18,6 +18,7 @@ use App\Models\Subcategory;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
 use App\Models\Withdraw;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -319,8 +320,9 @@ class VendorController extends Controller
     public function ViewTransaction()
     {
         $withdraws = Withdraw::with(['User'])->get();
-    //    dd($withdraws->toArray());
-        return view('admin.transaction.view-transaction', compact('withdraws'));
+        $transactions = Transaction::with(['Vendor'])->with(['OrderDetails'])->get();
+        //dd($transactions->toArray());
+        return view('admin.transaction.view-transaction', compact('withdraws', 'transactions'));
     }
     
     public function CategoryManagement()
@@ -461,6 +463,14 @@ class VendorController extends Controller
                 $category->save();
         return redirect()->route('subcategory-management');
             
+    }
+    
+    public function ViewTransactionDetailsById($id)
+    {
+
+        $transaction = Transaction::where('id', $id)->with(['Vendor'])->first();
+           // dd($transaction->toArray());
+        return view('admin/transaction/transaction-detail', compact('transaction'));
     }
 
 

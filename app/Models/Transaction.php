@@ -25,7 +25,7 @@ class Transaction extends Model
         return $this->belongsTo(User::class,'user_id')->select('id','name','fname','lname','profile_picture');
     }
     public function Vendor(){
-        return $this->belongsTo(User::class,'vendor_id')->select('id','name','fname','lname','profile_picture');
+        return $this->belongsTo(User::class,'vendor_id')->select('id','name','fname','lname','profile_picture','mobile_no','phonecode');
     }
 
 
