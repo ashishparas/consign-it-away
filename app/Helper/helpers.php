@@ -270,8 +270,8 @@ public static function trackingStatus($trackingId){
         }
     }
 
-    public static function chargeCustomer($nonce_id){
-       
+    public static function chargeCustomer($nonce_id=null){
+       if($nonce_id !== null){
         $transaction = \Square::charge([
             'amount' => 500,
             'source_id' => $nonce_id,
@@ -283,6 +283,10 @@ public static function trackingStatus($trackingId){
         }else{
             echo false;
         }
+       }else{
+        return false;
+       }
+        
         // dd();
 
     }

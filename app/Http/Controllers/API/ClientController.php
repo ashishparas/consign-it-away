@@ -697,7 +697,7 @@ class ClientController extends ApiController
             $Address = true;
             if($Address):
 
-                $payment  = Helper::chargeCustomer($input['paymentToken']="cnon:CBASEFltG2a_p2Q1nNrmFXUbNos");
+                $payment  = Helper::chargeCustomer($input['paymentToken']);
                 if($payment === false){
                         parent::error("payment failed please check your card details");
                 }
