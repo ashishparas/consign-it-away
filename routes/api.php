@@ -114,8 +114,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('vendor/view/profile',[VendorController::class, "ViewProfile"]);
     Route::post('subscription/plan',[VendorController::class, "SubscriptionsPlan"]);
     Route::post('subscription/by/id',[VendorController::class, "SubscriptionPlanById"]);
-    
-    
     Route::post('personal',[ClientController::class, "Personal"]);
     Route::post('edit/personal',[ClientController::class, "EditPersonal"]);
     
@@ -140,7 +138,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('set/default/address',[ClientController::class, "SetDefaultAddress"]);
     Route::post('view/order/by/id', [ClientController::class,"ViewOrderById"]);
     Route::post('vendor/order/list/by/id',[VendorController::class,"ViewOrderByVendor"]); 
-        
     Route::post('add/variant',[VendorController::class, "AddVariant"]); 
     Route::post('delete/variants',[VendorController::class, "DeleteAttributes"]);
     Route::post('view/product/variants',[VendorController::class, "ViewProductvariants"]); 
