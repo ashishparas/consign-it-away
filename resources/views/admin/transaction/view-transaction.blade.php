@@ -82,7 +82,7 @@
                 <h5 class="mb-0 pb-0 d-flex">Generated Invoices <span class="ml-auto input-date-right"><input type="date" id="birthday" name="birthday"></span></h5>
             </div>
             <div class="ms-panel-body platform_scroll">
-                <a href="transactions-mgt-invoice.html" class="d-flex align-items-center justify-content-between mb-4">
+                {{-- <a href="transactions-mgt-invoice.html" class="d-flex align-items-center justify-content-between mb-4">
                     <div>
                         <h6 class="grey_cl mb-0 font-weight-normal fs-14">23 April 2022</h6>
                         <h6 class="mb-0 py-1">Primis Vendor's</h6>
@@ -92,51 +92,10 @@
                         <p class="mb-2"><span class="grey_cl">Transaction ID: </span><strong><u>#83002GDE92E</u></strong></p>
                         <h5 class="green_cl">$ 56.70</h5>
                     </div>
-                  </a>
-                <a href="transactions-mgt-invoice.html" class="d-flex align-items-center justify-content-between mb-4">
-                    <div>
-                        <h6 class="grey_cl mb-0 font-weight-normal fs-14">23 April 2022</h6>
-                        <h6 class="mb-0 py-1">Elder Rose Enterprises</h6>
-                        <p class="blue_cl mb-0">Early Pay Out</p>
-                    </div>
-                    <div>
-                        <p class="mb-2"><span class="grey_cl">Transaction ID: </span><strong><u>#83002GDE92E</u></strong></p>
-                        <h5 class="green_cl">$ 56.70</h5>
-                    </div>
-                  </a>
-                <a href="transactions-mgt-invoice.html" class="d-flex align-items-center justify-content-between mb-4">
-                    <div>
-                        <h6 class="grey_cl mb-0 font-weight-normal fs-14">23 April 2022</h6>
-                        <h6 class="mb-0 py-1">Zumin Store</h6>
-                        <p class="blue_cl mb-0">Early Pay Out</p>
-                    </div>
-                    <div>
-                        <p class="mb-2"><span class="grey_cl">Transaction ID: </span><strong><u>#83002GDE92E</u></strong></p>
-                        <h5 class="green_cl">$ 56.70</h5>
-                    </div>
-                  </a>
-                <a href="transactions-mgt-invoice.html" class="d-flex align-items-center justify-content-between mb-4">
-                    <div>
-                        <h6 class="grey_cl mb-0 font-weight-normal fs-14">23 April 2022</h6>
-                        <h6 class="mb-0 py-1">Brother's Enterprises</h6>
-                        <p class="blue_cl mb-0">Early Pay Out</p>
-                    </div>
-                    <div>
-                        <p class="mb-2"><span class="grey_cl">Transaction ID: </span><strong><u>#83002GDE92E</u></strong></p>
-                        <h5 class="green_cl">$ 56.70</h5>
-                    </div>
-                  </a>
-                <a href="transactions-mgt-invoice.html" class="d-flex align-items-center justify-content-between mb-4">
-                    <div>
-                        <h6 class="grey_cl mb-0 font-weight-normal fs-14">23 April 2022</h6>
-                        <h6 class="mb-0 py-1">Brother's Enterprises</h6>
-                        <p class="blue_cl mb-0">Early Pay Out</p>
-                    </div>
-                    <div>
-                        <p class="mb-2"><span class="grey_cl">Transaction ID: </span><strong><u>#83002GDE92E</u></strong></p>
-                        <h5 class="green_cl">$ 56.70</h5>
-                    </div>
-                  </a>
+                  </a> --}}
+                  <a href="#" class="d-flex align-items-center justify-content-between mb-4">No Data Found </a>
+                
+              
                 </div>
             </div>
       </div>

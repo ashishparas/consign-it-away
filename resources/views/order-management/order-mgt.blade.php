@@ -104,36 +104,21 @@
           </div>
           <div class="ms-panel-body">
               <div class="chat_scroll shipping_scroll">
-                <div class="chat_thread d-flex">
+               {{-- <div class="chat_thread d-flex">
                   <img class="mr-3" src="{{asset('public/assets/img/51-51.png')}}" alt="alt"/>
                   <div class="chat_thread_data">
                       <h5>John Rimishe</h5>
                       <p class="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit egestas augue vitae sagittis. In maximus ornare sem...</p>
                       <small class="grey_cl">2 mins ago</small>
                   </div>
-                </div>
+                </div> --}}
+                
                 <div class="chat_thread d-flex">
-                  <img class="mr-3" src="{{asset('public/assets/img/51-51.png')}}" alt="alt"/>
+                  <!--<img class="mr-3" src="{{asset('public/assets/img/51-51.png')}}" alt="alt"/>-->
                   <div class="chat_thread_data">
-                      <h5>John Rimishe</h5>
-                      <p class="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit egestas augue vitae sagittis. In maximus ornare sem lacinia congue. </p>
-                      <small class="grey_cl">2 mins ago</small>
-                  </div>
-                </div>
-                <div class="chat_thread d-flex">
-                  <img class="mr-3" src="{{asset('public/assets/img/51-51.png')}}" alt="alt"/>
-                  <div class="chat_thread_data">
-                      <h5>John Rimishe</h5>
-                      <p class="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit egestas... </p>
-                      <small class="grey_cl">2 mins ago</small>
-                  </div>
-                </div>
-                <div class="chat_thread d-flex">
-                  <img class="mr-3" src="{{asset('public/assets/img/51-51.png')}}" alt="alt"/>
-                  <div class="chat_thread_data">
-                      <h5>John Rimishe</h5>
-                      <p class="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit egestas augue vitae sagittis. In maximus ornare sem lacinia congue. </p>
-                      <small class="grey_cl">2 mins ago</small>
+                      <!--<h5>John Rimishe</h5>-->
+                      <p class="mb-2">No Chat Found </p>
+                      <!--<small class="grey_cl">2 mins ago</small>-->
                   </div>
                 </div>
               </div>

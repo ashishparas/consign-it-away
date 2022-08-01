@@ -50,16 +50,22 @@
                       <td>#00 {{$item->id}}</td>
                       <td class="product_tuc">
                         <div class="product_full_img">
-                          <img class="mr-3" src="{{asset('public/products/'.$item->product->image[0])}}" alt="image"/>
-                          <h6 class="mb-0">{{$item->product->name}}</h6>
+                            @if(!empty($item->product))
+                                <img class="mr-3" src="{{asset('public/products/'.$item->product->image[0])}}" alt="image"/>
+                            @else
+                                <img class="mr-3" src="{{asset('public/asset/img/46-46.png')}}" alt="img"/>
+                           @endif
+                          <h6 class="mb-0">{{($item->product == null)?'No-name':$item->product->name}}</h6>
                         </div>
                       </td>
                       <td><a href="javascript:;" class="orange_cl">@php
+                      if(!empty($item->product)) {
                           if($item->product->soldBy == null){
                               echo 'No Store Added';
                           }else{
                            echo $item->product->soldBy->name;
                           }
+                      }
                           @endphp</td>
                       <td>2</td>
                       <td><span class="green_cl">Paid</span></td>
@@ -75,7 +81,8 @@
                     @endphp      
                     </span></td>
                       <td>$ {{$item->price}}</td>
-                      <td><a class="btn orange_btn" href="{{url('/admin/vendor-edit-profile/'.$item->id)}}">View</a></td>
+                      <td> <a class="btn orange_btn" <?php  if(!empty($item->product)) { ?> href="{{url('/admin/vendor-edit-profile/'.$item->product->store_id )}}" <?php } 
+                          ?>>View</a> </td>
                   </tr>
 @endforeach
                                

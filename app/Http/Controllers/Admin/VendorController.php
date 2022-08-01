@@ -95,7 +95,7 @@ class VendorController extends Controller
     {
         $items = Item::with('Product')
             ->whereIn('status', ['1', '2', '3'])
-            ->take(10)
+            // ->take(10)
             ->orderBy('created_at', 'DESC')
             ->get();
         // dd($items->toArray());
@@ -104,7 +104,10 @@ class VendorController extends Controller
 
     public function VendorEditProfile($id)
     {
-        // dd($id);
+        
+        $vendors = User::select('id', 'name', 'fname', 'lname', 'email', 'profile_picture')->where('id', $id)->get();
+         dd($vendors);
+        
         return view('admin/vendor-management.vendor-profile-edit');
     }
 
