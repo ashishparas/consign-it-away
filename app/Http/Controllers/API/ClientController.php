@@ -693,6 +693,9 @@ class ClientController extends ApiController
         //    $carierAccounts = helper::shippingLabel('2', '3');
         //    $trackingId =  Helper::trackingStatus('92055901755477000000000015');
                             // dd($trackingId);
+            Helper::chargeCustomer("cnon:CBASEFltG2a_p2Q1nNrmFXUbNos");
+
+
             $Address = true;
 
             
@@ -861,6 +864,9 @@ class ClientController extends ApiController
                     $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
                 }
                 $items = $items->where('items.status','1')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->get();
+                foreach($items as $key => $item){
+                        $items[$key]['tracking_status'] = Helper::trackCourier($item['tracking_id']);
+                }
             }else if($request->type === '2'){
 
                 $items = Item::select('items.*','products.name')
@@ -873,6 +879,9 @@ class ClientController extends ApiController
                                 ->with(['Product','Offer','CustomerVariant'])
                                 ->orderBy('items.created_at','DESC')
                                 ->get();
+                foreach($items as $key => $item){
+                    $items[$key]['tracking_status'] = Helper::trackCourier($item['tracking_id']);
+                }
 
             }else if($request->type === '3'){   
 
@@ -886,6 +895,9 @@ class ClientController extends ApiController
                 ->with(['Product','Offer','CustomerVariant'])
                 ->orderBy('items.created_at','DESC')
                 ->get();
+                foreach($items as $key => $item){
+                    $items[$key]['tracking_status'] = Helper::trackCourier($item['tracking_id']);
+                }
 
             }else if($request->type === '4'){
                 $items = Item::select('items.*','products.name')

@@ -7,6 +7,8 @@ use App\Models\Address;
 use App\Models\Product;
 use App\Models\Store;
 use App\Models\User;
+use Nikolag\Square\Facades\Square;
+use Nikolag\Square\Models\customer;
 use App\Models\Variant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -179,6 +181,10 @@ public static function shippingLabel($addressId, $productId){
 
 
 
+
+
+
+
 public static function trackingStatus($trackingId){
     \Shippo::setApiKey(env('SHIPPO_PRIVATE'));
     $status_params = array(
@@ -264,6 +270,22 @@ public static function trackingStatus($trackingId){
         }
     }
 
+    public static function chargeCustomer($nonce_id){
+       
+        $transaction = \Square::charge([
+            'amount' => 500,
+            'source_id' => $nonce_id,
+            'location_id' => getenv('SQUARE_LOCATION'),
+            'currency' => 'USD'
+        ]);
+        if($transaction['status'] === 'PAID'){
+            echo 'success';
+        }else{
+            echo 'failed';
+        }
+        // dd();
+
+    }
 
 
     public static function VerifyAddress(int $id=null){
