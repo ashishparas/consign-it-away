@@ -67,10 +67,11 @@
             <div class="ms-panel common_card_h">
                 <div class="ms-panel-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">Most Top Selling Product</h4>
-                    <span class="requests_counts_two">43</span>
+                    <span class="requests_counts_two">00</span>
                 </div>
-                <div class="ms-panel-body border-bottom-0 auto_scroll">
-                  <a href="" class="pb-3 mb-3 border-bottom d-block">
+               <div>No data</div>
+               <div class="ms-panel-body border-bottom-0 auto_scroll">
+                   {{-- <a href="" class="pb-3 mb-3 border-bottom d-block">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex mb-3 align-items-center">
                             <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
@@ -133,7 +134,7 @@
                         </div>
                     </div>
                     <p class="mb-1 fs-2 p">No. of Product sell: <span class="black_cl mb-2">234</span></p>                          
-                  </a>
+                  </a> --}}
 
                 </div>
                </div>
