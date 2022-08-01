@@ -138,90 +138,30 @@
                       </tr>
                   </thead>
                   <tbody>
+                      @foreach ($transactions as $transaction)
                       <tr>
-                          <td>#B2343</td>
+                          <td>#{{ $transaction->transaction_id }}</td>
                           <td>
                             <div class="d-flex align-items-center product_tuc">
-                              <div class="img-left mr-2"><img class="mr-3" src="{{asset('public/assets/img/46-46.png')}}" alt="image"/></div>
-                              <div class="pargh-block"><h6 class="mb-0">Robbies Pvt Ltd.</h6></div>
+                              <div class="img-left mr-2">
+                                  @if(!empty($transaction->vendor->profile_picture))
+                                  <img class="mr-3" src="{{asset('public/vendor/'.$transaction->vendor->profile_picture)}}" alt="image"/>
+                                  @else
+                                  <img class="mr-3" src="{{asset('public/asset/img/46-46.png')}}" alt="img"/>
+                                  @endif
+                                  
+                                  </div>
+                              <div class="pargh-block"><h6 class="mb-0">{{ $transaction->vendor->name }}</h6></div>
                             </div>
                           </td>
-                          <td>23-09-2022</td>
-                          <td>+91-9878767656</td>
-                          <td>$ 76.98</td>
-                          <td>Early Pay Out</td>
-                          <td><a class="btn orange_btn" href="transaction-details.html">View</a></td>
+                          <td>{{ date('d-m-Y',strtotime($transaction->order_date)) }}</td>
+                          <td>{{ $transaction->vendor->phonecode }}-{{ $transaction->vendor->mobile_no }}</td>
+                          <td>$ {{ $transaction->price }}</td>
+                          <td>{{ ($transaction->payment_status == '1')? 'Success':'Pending Or Failed' }}</td>
+                          <td><a class="btn orange_btn" href="{{url('/admin/transaction-detail/'. $transaction->id)}}">View</a></td>
                       </tr>
-                      <tr>
-                        <td>#B2343</td>
-                        <td>
-                          <div class="d-flex align-items-center product_tuc">
-                            <div class="img-left mr-2"><img class="mr-3" src="{{ asset('public/assets/img/46-46.png') }}" alt="image"/></div>
-                            <div class="pargh-block"><h6 class="mb-0">Robbies Pvt Ltd.</h6></div>
-                          </div>
-                        </td>
-                        <td>23-09-2022</td>
-                        <td>+91-9878767656</td>
-                        <td>$ 76.98</td>
-                        <td>Early Pay Out</td>
-                        <td><a class="btn orange_btn" href="transaction-details.html">View</a></td>
-                    </tr>
-                    <tr>
-                        <td>#B2343</td>
-                        <td>
-                          <div class="d-flex align-items-center product_tuc">
-                            <div class="img-left mr-2"><img class="mr-3" src="{{ asset('public/assets/img/46-46.png') }}" alt="image"/></div>
-                            <div class="pargh-block"><h6 class="mb-0">Robbies Pvt Ltd.</h6></div>
-                          </div>
-                        </td>
-                        <td>23-09-2022</td>
-                        <td>+91-9878767656</td>
-                        <td>$ 76.98</td>
-                        <td>Early Pay Out</td>
-                        <td><a class="btn orange_btn" href="transaction-details.html">View</a></td>
-                    </tr>
-                    <tr>
-                      <td>#B2343</td>
-                      <td>
-                        <div class="d-flex align-items-center product_tuc">
-                          <div class="img-left mr-2"><img class="mr-3" src="{{ asset('public/assets/img/46-46.png') }}" alt="image"/></div>
-                          <div class="pargh-block"><h6 class="mb-0">Robbies Pvt Ltd.</h6></div>
-                        </div>
-                      </td>
-                      <td>23-09-2022</td>
-                      <td>+91-9878767656</td>
-                      <td>$ 76.98</td>
-                      <td>Early Pay Out</td>
-                      <td><a class="btn orange_btn" href="transaction-details.html">View</a></td>
-                  </tr>
-                  <tr>
-                    <td>#B2343</td>
-                    <td>
-                      <div class="d-flex align-items-center product_tuc">
-                        <div class="img-left mr-2"><img class="mr-3" src="{{ asset('public/assets/img/46-46.png') }}" alt="image"/></div>
-                        <div class="pargh-block"><h6 class="mb-0">Robbies Pvt Ltd.</h6></div>
-                      </div>
-                    </td>
-                    <td>23-09-2022</td>
-                    <td>+91-9878767656</td>
-                    <td>$ 76.98</td>
-                    <td>Early Pay Out</td>
-                    <td><a class="btn orange_btn" href="transaction-details.html">View</a></td>
-                </tr>
-                <tr>
-                  <td>#B2343</td>
-                  <td>
-                    <div class="d-flex align-items-center product_tuc">
-                      <div class="img-left mr-2"><img class="mr-3" src="{{ asset('public/assets/img/46-46.png') }}" alt="image"/></div>
-                      <div class="pargh-block"><h6 class="mb-0">Robbies Pvt Ltd.</h6></div>
-                    </div>
-                  </td>
-                  <td>23-09-2022</td>
-                  <td>+91-9878767656</td>
-                  <td>$ 76.98</td>
-                  <td>Early Pay Out</td>
-                  <td><a class="btn orange_btn" href="transaction-details.html">View</a></td>
-              </tr>
+                      @endforeach
+                      
                   </tbody>
                 </table>
                 <!----table---->
