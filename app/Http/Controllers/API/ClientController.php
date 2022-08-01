@@ -865,7 +865,8 @@ class ClientController extends ApiController
                 }
                 $items = $items->where('items.status','1')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->get();
                 foreach($items as $key => $item){
-                        $items[$key]['tracking_status'] = Helper::trackCourier($item['tracking_id']);
+                    $tracking = Helper::trackCourier($item['tracking_id']);
+                        $items[$key]['tracking_status'] = $tracking['data'];
                 }
             }else if($request->type === '2'){
 
@@ -880,7 +881,8 @@ class ClientController extends ApiController
                                 ->orderBy('items.created_at','DESC')
                                 ->get();
                 foreach($items as $key => $item){
-                    $items[$key]['tracking_status'] = Helper::trackCourier($item['tracking_id']);
+                    $tracking = Helper::trackCourier($item['tracking_id']);
+                        $items[$key]['tracking_status'] = $tracking['data'];
                 }
 
             }else if($request->type === '3'){   
@@ -896,7 +898,8 @@ class ClientController extends ApiController
                 ->orderBy('items.created_at','DESC')
                 ->get();
                 foreach($items as $key => $item){
-                    $items[$key]['tracking_status'] = Helper::trackCourier($item['tracking_id']);
+                        $tracking = Helper::trackCourier($item['tracking_id']);
+                        $items[$key]['tracking_status'] = $tracking['data'];
                 }
 
             }else if($request->type === '4'){
