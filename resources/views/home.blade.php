@@ -13,7 +13,7 @@
       </div>
       <div class="col-md-12">
         <h3>Welcome Back, <strong>{{Auth::user()->name}}!</strong></h3>
-        <p class="grey_cl fs-16 pb-3">Last Update: 24 April, 2022 | 09:02 AM</p>
+        <p class="grey_cl fs-16 pb-3">Last Update: 01 Aug, 2022 | 09:02 AM</p>
       </div>
     </div> 
     <!--breadcrumbs-->
@@ -36,7 +36,7 @@
                 <div class="ms-panel">
                     <div class="ms-panel-header d-flex align-items-center justify-content-between">
                         <div>
-                            <h3 class="mb-0 pb-0 fs-20">1234</h3>
+                            <h3 class="mb-0 pb-0 fs-20">00</h3>
                             <p class="mb-0 pb-0 pt-0">Total No. of
                                 Visitors</p>
                         </div>
