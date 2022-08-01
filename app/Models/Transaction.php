@@ -15,11 +15,11 @@ class Transaction extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['transaction_id','card_id','vendor_id','product_id','user_id','order_id','price','status','order_date'];
+    protected $fillable = ['transaction_id','card_id','vendor_id','product_id','user_id','order_id','price','status','payment_source','order_date'];
 
 
     public function OrderDetails(){
-        return $this->belongsTo(Order::class,'id')->select('id','status','items');
+        return $this->belongsTo(Order::class,'id')->select('id','items');
     }
     public function Customer(){
         return $this->belongsTo(User::class,'user_id')->select('id','name','fname','lname','profile_picture');

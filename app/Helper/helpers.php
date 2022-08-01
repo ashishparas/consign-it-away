@@ -279,9 +279,9 @@ public static function trackingStatus($trackingId){
             'currency' => 'USD'
         ]);
         if($transaction['status'] === 'PAID'){
-            echo 'success';
+            echo true;
         }else{
-            echo 'failed';
+            echo false;
         }
         // dd();
 

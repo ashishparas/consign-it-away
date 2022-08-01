@@ -680,7 +680,7 @@ class ClientController extends ApiController
 
    public function Order(Request $request)
    {
-       $rules = ['address_id' => 'required|exists:addresses,id', 'card_id' =>'required|exists:cards,id','items' =>'required','sub_total' => 'required','coupon_id' =>'','shipping_cost' => 'required','total_amount' => 'required','stripeToken' => 'required'];
+       $rules = ['address_id' => 'required|exists:addresses,id', 'card_id' =>'required|exists:cards,id','items' =>'required','sub_total' => 'required','coupon_id' =>'','shipping_cost' => 'required','total_amount' => 'required','paymentToken' => 'required','paymentSource'=>'required'];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
        if($validateAttributes):
         return $validateAttributes;
@@ -693,20 +693,20 @@ class ClientController extends ApiController
         //    $carierAccounts = helper::shippingLabel('2', '3');
         //    $trackingId =  Helper::trackingStatus('92055901755477000000000015');
                             // dd($trackingId);
-            Helper::chargeCustomer("cnon:CBASEFltG2a_p2Q1nNrmFXUbNos");
-
 
             $Address = true;
-
-            
-           
             if($Address):
+
+                $payment  = Helper::chargeCustomer($input['paymentToken']="cnon:CBASEFltG2a_p2Q1nNrmFXUbNos");
+                if($payment === false){
+                        parent::error("payment failed please check your card details");
+                }
 
                 $stripe =  \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET'));
             
                     // Token is created using Stripe Checkout or Elements!
                     // Get the payment token ID submitted by the form:
-                $token = $input['stripeToken'];
+                $token = $input['paymentToken'];
                 // $charge = \Stripe\Charge::create([
                 // 'amount' => ($input['total_amount'] * 100),
                 // 'currency' => 'usd',
@@ -746,6 +746,7 @@ class ClientController extends ApiController
                             'vendor_id'  => $item->vendor_id,
                             'product_id'  => $product->id,
                             'price' => $product->price,
+                            'payment_source' => $request->paymentSource,
                             'order_date' => date('Y-m-d')
                         ]);
      
