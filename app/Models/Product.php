@@ -108,7 +108,7 @@ class Product extends Model
 
   public function Store(){
       return $this->belongsTo(Store::class)
-      ->select('id','name','banner','address','city','state','country','zipcode')
+      ->select('id','name','banner','address','location','city','state','country','zipcode')
       ->with('Manager');
   }
 

@@ -19,17 +19,23 @@ class Transaction extends Model
 
 
     public function OrderDetails(){
-        return $this->hasMany(Item::class,'id','order_id')->select('id','status');
+        return $this->belongsTo(Order::class,'id')->select('id','status','items');
     }
     public function Customer(){
         return $this->belongsTo(User::class,'user_id')->select('id','name','fname','lname','profile_picture');
     }
-    public function Vendor(){
-        return $this->belongsTo(User::class,'vendor_id')->select('id','name','fname','lname','profile_picture','mobile_no','phonecode');
-    }
-
-
     
+    public function Vendor(){
+        return $this->belongsTo(User::class,'vendor_id')->select('id','name','fname','lname','profile_picture','mobile_no','phonecode','fax');
+    }
+    
+    public function Product(){
+        return $this->belongsTo(Product::class,'product_id')->select('id','user_id','store_id','name','price')->with(['Store']);
+    }
+    
+    public function Item(){
+        return $this->belongsTo(Item::class,'order_id')->select('id','address_id')->with(['Address']);
+    }
 
 
 }

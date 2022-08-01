@@ -467,10 +467,40 @@ class VendorController extends Controller
     
     public function ViewTransactionDetailsById($id)
     {
-
-        $transaction = Transaction::where('id', $id)->with(['Vendor'])->first();
-           // dd($transaction->toArray());
+        $transaction = Transaction::where('id', $id)->with(['Vendor','Product','OrderDetails'])->first();
+          // dd($transaction->toArray());
         return view('admin/transaction/transaction-detail', compact('transaction'));
+    }
+    
+    public function ViewTransactionInvoice($id)
+    {
+        $transaction = Transaction::where('id', $id)->with(['Vendor','Product','Item'])->first();
+           //dd($transaction->toArray());
+        return view('admin/transaction/transaction-invoice', compact('transaction'));
+    }
+    
+    public function withdrawAccept(Request $request){
+        $input = $request->all();
+   
+        $Withdraw = Withdraw::FindOrfail($request->id);
+        $input['status'] = '1';
+       
+        $Withdraw->fill($input);
+        $Withdraw->save();
+        return redirect()->back()->with(['success' => 'Withdraw Accepted']);
+            
+    }
+    
+    public function withdrawReject(Request $request){
+        $input = $request->all();
+   
+        $Withdraw = Withdraw::FindOrfail($request->id);
+        $input['status'] = '2';
+       
+        $Withdraw->fill($input);
+        $Withdraw->save();
+        return redirect()->back()->with(['error' => 'Withdraw Rejected']);
+            
     }
 
 

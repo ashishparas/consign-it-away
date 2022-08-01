@@ -28,8 +28,9 @@ class HomeController extends Controller
         $UserCount  = User::where('id','!=',1)->count();
         $OrderCount = Order::count();
         $transaction = Transaction::sum('price');
+        $transactions = Transaction::with(['Vendor'])->with(['OrderDetails'])->orderBy('id','DESC')->limit(5)->get();
         
-        return view('home',compact('UserCount','OrderCount','transaction'));
+        return view('home',compact('UserCount','OrderCount','transaction','transactions'));
     
     }
 

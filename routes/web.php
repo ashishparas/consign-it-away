@@ -82,6 +82,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('edit-subcategory/{id}',[VendorController::class,"EditSubCategory"]);
             Route::post('update-subcategory',[VendorController::class,"UpdateSubCategory"]);
             Route::get('transaction-detail/{id}',[VendorController::class,"ViewTransactionDetailsById"]);
+            Route::get('transaction-invoice/{id}',[VendorController::class,"ViewTransactionInvoice"]);
+            Route::post('withdraw-accept', [VendorController::class, "withdrawAccept"]);
+            Route::post('withdraw-reject', [VendorController::class, "withdrawReject"]);
  });
  
  

@@ -120,3 +120,4 @@
 [22-Jul-2022 09:04:52 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/phpparastechnolo/public_html/consign-it-away/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php on line 496
 [22-Jul-2022 09:04:52 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 32768 bytes) in /home/phpparastechnolo/public_html/consign-it-away/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php on line 1
 [27-Jul-2022 05:48:16 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\Admin\VendorController::CreateProduct() in /home/phpparastechnolo/public_html/consign-it-away/app/Http/Controllers/Admin/VendorController.php on line 326
+[01-Aug-2022 07:55:22 UTC] PHP Fatal error:  Trait "Nikolag\Square\Traits\HasCustomers" not found in /home/phpparastechnolo/public_html/consign-it-away/app/Models/User.php on line 13

@@ -23,7 +23,7 @@
                 <div class="ms-panel-header border-0 d-flex justify-content-between">
                     <h3>Transaction Details</h3>
                     <span class="ml-auto">
-                        <a href="transactions-mgt-invoice.html" class="btn green_btn">Generate Invoice</a>
+                        <a href="{{url('/admin/transaction-invoice/'. $transaction->id)}}" class="btn green_btn">Generate Invoice</a>
                     </span>
                 </div>
                 <div class="d-flex align-items-center w-100 py-2 px-4 border-bottom pb-3 mb-3">
@@ -36,58 +36,58 @@
                       <h5 class="green_cl">{{ $transaction->vendor->name }}</h5>
                       <p class="border-bottom pb-3">
                         <span class="float-left"><img src="{{ asset('public/assets/img/address_black.svg') }}" alt="img" class="mr-2"></span>
-                        Second Floor, Plot No. 82, Okhla Industrial Estate, Phase - III.</p>
+                        {{ ($transaction->product)?$transaction->product->store->location:'-'}}</p>
                         <div class="d-flex align-items-center justify-content-between">
                           <span class="grey_cl">Fax No:</span>
-                          <p>8578490303</p>
+                          <p>{{ $transaction->vendor->fax }}</p>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <span class="grey_cl">Manager:</span>
-                          <p>Rogger Smith</p>
+                          <p>{{ ($transaction->product)?$transaction->product->store->manager->name :'-' }}</p>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <span class="grey_cl">Manager Contact:</span>
-                          <p>+91-89876658678</p>
+                          <p>{{ ($transaction->product)?$transaction->product->store->manager->phonecode :'' }} - {{ ($transaction->product)?$transaction->product->store->manager->mobile_no:'' }}</p>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <span class="grey_cl">Vender Contact:</span>
                           <p>{{ $transaction->vendor->phonecode }}-{{ $transaction->vendor->mobile_no }}</p>
                         </div>
                         <span class="badge green_badge p-2 round mt-2">{{ ($transaction->payment_status == '1')? 'Success':'Pending Or Failed' }}</span>
-                        <div class="d-flex justify-content-between border-top mt-3 pt-2">
+                        <!--- <div class="d-flex justify-content-between border-top mt-3 pt-2">
                           <span class="grey_cl">Payment Mode:</span>
                           <p>987-098393<br/><span class="green_cl">PayPal ID</span></p>
-                        </div>
+                        </div> --->
                     </div>
                     <div class="col-md-5">
                         <div class="receipt_bg pb-1 mb-3 px-3 py-2">
                             Receipt
                           </div>
-                          <div class="d-flex w-100 py-0 px-2 justify-content-between pb-2">
+                          <!--- <div class="d-flex w-100 py-0 px-2 justify-content-between pb-2">
                             <span class="grey_cl">Total Items</span>
-                                  <p class="mb-0 pb-0">322</p>
-                          </div>
+                                  <p class="mb-0 pb-0">11</p>
+                          </div> --->
                           <div class="d-flex w-100 py-0 px-2 justify-content-between pb-2">
                             <span class="grey_cl">Total Amount</span>
                                   <p class="green_cl mb-0 pb-0 green_cl">$ {{ $transaction->price }}</p>
                           </div>
                           <div class="d-flex w-100 py-0 px-2 justify-content-between border-top py-2 mt-2">
                             <span class="grey_cl">Consignment(%)- 3%</span>
-                                  <p class="mb-0 pb-0 green_cl">- $ 43.98</p>
+                                  <p class="mb-0 pb-0 green_cl"> $ 0.00</p>
                           </div>
                           <div class="d-flex w-100 py-0 px-2 justify-content-between border-top py-2 mt-2">
                             <span class="grey_cl">Payable Amount</span>
-                                  <p class="mb-0 pb-0 green_cl">$ 523.00</p>
+                                  <p class="mb-0 pb-0 green_cl">$ {{ $transaction->price }}</p>
                           </div>
                     </div>
                   </div>
-                  <div class="receipt_bg mx-4 pb-1 mb-3 px-3 py-2 mt-2">
+                  <!--- <div class="receipt_bg mx-4 pb-1 mb-3 px-3 py-2 mt-2">
                     Any Note
                   </div>
                   <div class="d-flex w-100 py-0 px-4 justify-content-between pb-5">
                         <p class="mb-0 pb-0 pl-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus et metus eget leo semper
                         tincidunt in vitae erat. Ut vitae tortor quis quam vehicula laoreet eu sit amet odio.</p>
-                  </div>
+                  </div> --->
             </div>
         </div>
         </div>

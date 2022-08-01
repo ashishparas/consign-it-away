@@ -28,6 +28,14 @@
         <div class="ms-panel">
           <div class="ms-panel-header border-bottom">
               <h5 class="mb-0">Withdraw Requests</h5>
+          
+                @if(session()->has('success'))
+                    <h6 class="alert alert-success">{{ session()->get('success') }}</h6>
+                @endif
+                
+                @if(session()->has('error'))
+                    <h6 class="alert alert-danger">{{ session()->get('error') }}</h6>
+                @endif
           </div>
           <div class="ms-panel-body pt-2 platform_scroll">
               <ul class="ms-followers ms-list platform_scroll ps">
@@ -41,8 +49,24 @@
                   <h5 class="fs-16 mb-0"><span class="grey_cl font-weight-normal">Amount: </span><span class="green_cl">${{ $withdraw->amount }}</span></h5>
                   <p class="orange_cl fs-16">3 days to relies payment</p>
                 </div>
-                <button type="button" class="btn green_btn_light_new mr-2" name="button">Accept</button>
-                <button type="button" class="btn reject_btn" name="button">Reject</button>
+                @if( ($withdraw->status == '1') )
+                <span class="btn green_btn_light_new mr-2" >Accepted</span>
+                @elseif( ($withdraw->status == '2') )
+                <span class="btn reject_btn" >Rejected</span>
+                @else
+                
+               
+                <form action="{{url('/admin/withdraw-accept')}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $withdraw->id }}"  >
+                    <button type="submit" class="btn green_btn_light_new mr-2" name="accept-btn">Accept</button>
+                </form>
+                <form action="{{url('/admin/withdraw-reject')}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $withdraw->id }}"  >
+                    <button type="submit" class="btn reject_btn" name="reject-btn">Reject</button>
+                </form>
+                 @endif
               </li>     
                 @endforeach
                

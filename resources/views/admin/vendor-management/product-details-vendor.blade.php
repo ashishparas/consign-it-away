@@ -65,7 +65,11 @@
                             <h5 class="mb-4">Store Manager</h5>
                             <div class="media fs-14 pb-4 mb-3 border-bottom">
                               <div class="mr-2 align-self-center">
+                                  @if(!empty($product->store->manager))
                                 <img src="{{asset('public/vendor/'.$product->store->manager->profile_picture)}}" class="ms-img-round" alt="people">
+                                @else
+                                <img class="mr-3" src="{{asset('public/asset/img/46-46.png')}}" alt="img"/>
+                                @endif
                               </div>
                               <div class="media-body d-flex justify-content-between call_img align-items-center">
                                 <div>
