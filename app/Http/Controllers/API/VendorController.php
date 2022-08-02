@@ -1960,7 +1960,7 @@ public function ViewOrderByVendor(Request $request)
                     if($tracking_id['status'] === true):
                         $item['tracking_status'] =   $tracking_id['data'];  
                     else:
-                        $item['tracking_status'] = ['error' => $tracking_id['data']];
+                        $item['tracking_status'] = [];
                     endif;
 
                  

@@ -984,7 +984,7 @@ class ClientController extends ApiController
                         if($tracking_id['status'] === true):
                             $item['tracking_status'] =   $tracking_id['data'];  
                         else:
-                            $item['tracking_status'] = ['error' => $tracking_id['data']];
+                            $item['tracking_status'] = [];
                         endif;
 
                 $address = Address::where('id', $item->address_id)
