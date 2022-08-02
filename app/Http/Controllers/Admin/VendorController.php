@@ -105,10 +105,11 @@ class VendorController extends Controller
     public function VendorEditProfile($id)
     {
         
-        $vendors = User::select('id', 'name', 'fname', 'lname', 'email', 'profile_picture')->where('id', $id)->get();
-         dd($vendors);
+        //$vendors = User::select('id', 'name', 'fname', 'lname', 'email', 'profile_picture')->where('id', $id)->get();
+        $vendors = Store::where('id', $id)->with(['Manager','Product','PorductRating','Vendor'])->first();
+         //dd($vendors->toArray());
         
-        return view('admin/vendor-management.vendor-profile-edit');
+        return view('admin/vendor-management.vendor-profile-edit', compact('vendors'));
     }
 
 

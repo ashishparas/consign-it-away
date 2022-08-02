@@ -18,7 +18,7 @@
     </div> 
     <!--breadcrumbs-->
     <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="ms-panel">
                     <div class="ms-panel-header d-flex align-items-center justify-content-between">
                         <div>
@@ -32,21 +32,21 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="ms-panel">
-                    <div class="ms-panel-header d-flex align-items-center justify-content-between">
-                        <div>
-                            <h3 class="mb-0 pb-0 fs-20">00</h3>
-                            <p class="mb-0 pb-0 pt-0">Total No. of
-                                Visitors</p>
-                        </div>
-                        <div>
-                            <img src="{{asset('public/assets/img/radar.svg')}}" alt=""/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
+            <!--<div class="col-md-4">-->
+            <!--    <div class="ms-panel">-->
+            <!--        <div class="ms-panel-header d-flex align-items-center justify-content-between">-->
+            <!--            <div>-->
+            <!--                <h3 class="mb-0 pb-0 fs-20">00</h3>-->
+            <!--                <p class="mb-0 pb-0 pt-0">Total No. of-->
+            <!--                    Visitors</p>-->
+            <!--            </div>-->
+            <!--            <div>-->
+            <!--                <img src="{{asset('public/assets/img/radar.svg')}}" alt=""/>-->
+            <!--            </div>-->
+            <!--        </div>-->
+            <!--    </div>-->
+            <!--</div>-->
+            <div class="col-md-6">
                 <div class="ms-panel">
                     <div class="ms-panel-header d-flex align-items-center justify-content-between">
                         <div>

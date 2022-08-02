@@ -81,8 +81,13 @@
                     @endphp      
                     </span></td>
                       <td>$ {{$item->price}}</td>
-                      <td> <a class="btn orange_btn" <?php  if(!empty($item->product)) { ?> href="{{url('/admin/vendor-edit-profile/'.$item->product->store_id )}}" <?php } 
-                          ?>>View</a> </td>
+                      <td>
+                      @if (!empty($item->product))
+                      <a class="btn orange_btn"href="{{url('/admin/vendor-edit-profile/'.$item->product->store_id )}}" >View</a>
+                      @else
+                      <a class="btn orange_btn"href="#" >View</a>
+                      @endif
+                      </td>
                   </tr>
 @endforeach
                                

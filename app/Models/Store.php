@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 class Store extends Model
 {
@@ -39,7 +40,15 @@ class Store extends Model
     }
 
     public function Product(){
-        return $this->hasMany(Product::class)->select('id','store_id','name','image','amount');
+        return $this->hasMany(Product::class)->select('id','store_id','name','image','amount','quantity')->with(['PorductRating']);
+    }
+    
+    public function PorductRating(){
+      return $this->hasOne(Rating::class,'product_id', 'id')->select('product_id',DB::raw('AVG(rating) as rating, COUNT(comment) as ratingsCount'));
+    }
+    
+    public function Vendor(){
+        return $this->belongsTo(User::class,'user_id')->select('id','name','fname','lname','profile_picture','mobile_no','phonecode','fax');
     }
 
 }

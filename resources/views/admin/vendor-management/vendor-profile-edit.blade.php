@@ -33,10 +33,10 @@
         <div class="col-xl-12 col-md-12">
             <div class="ms-profile-overview">
                 <div class="ms-profile-cover">
-                  <img class="ms-profile-img" src="{{asset('public/assets/img/vendor_img.png')}}" alt="img">
+                  <img class="ms-profile-img" src="{{asset('public/vendor/'.$vendors->store_image )}}" alt="img">
                   <div class="ms-profile-user-info">
-                    <h4 class="ms-profile-username text-white">Kevin Retail Private Ltd</h4>
-                    <h2 class="ms-profile-role address_icon mb-0"><img src="assets/img/address_white.svg" alt="img" class="address_img"><span class="text-white fs-14 pt-2">Second Floor, Plot No. 82, Okhla Industrial Estate, Phase - III.</span></h2>
+                    <h4 class="ms-profile-username text-white">{{ $vendors->name }}</h4>
+                    <h2 class="ms-profile-role address_icon mb-0"><img src="{{asset('public/assets/img/address_white.svg')}}" alt="img" class="address_img"><span class="text-white fs-14 pt-2">{{ $vendors->location }}</span></h2>
                   </div>
                 </div>
                 </div>
@@ -76,12 +76,12 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade in active show" id="tab7">
                           <h5 class="border-bottom mb-0 p-3 d-flex">Store Information
-                            <span class="green_cl ml-auto fs-16"><img src="assets/img/green_circle.svg" class="mr-1">Active</span>
+                            <span class="green_cl ml-auto fs-16"><img src="{{asset('public/assets/img/green_circle.svg')}}" class="mr-1">Active</span>
                           </h5>
                           <div class="p-3">
-                          <h4 class="blue_cl">Kevin Retail Private Ltd</h4>
+                          <h4 class="blue_cl">{{ $vendors->name }}</h4>
                           <h2 class="ms-profile-role address_icon mb-0 d-flex align-items-center pt-2 pb-3"><img src="{{asset('public/assets/img/address_black.svg')}}" alt="img" class="address_img"><span class="fs-16">Second Floor, Plot No. 82, Okhla Industrial Estate, Phase - III.</span></h2>
-                          <p class="grey_cl">We allows you to walk away from the drudgery of grocery shopping and welcome an easy relaxed way of browsing and shopping for groceries. Discover new products and shop for all your food and grocery needs from the comfort of your home or office. No more getting stuck in traffic jams, paying for parking, standing in long queues and carrying heavy bags - get everything you need, when you need, right at your doorstep. Food shopping online is now easy as every product on your monthly shopping list, is now available online at bigbasket.com, India's best online grocery store.</p>
+                          <p class="grey_cl">{{ $vendors->description }}</p>
                           <h5 class="black_cl pt-2 pb-3">Manager Assigned</h5>
                           <div class="media fs-14 pb-3">
                             <div class="mr-2 align-self-center">
@@ -89,12 +89,12 @@
                             </div>
                             <div class="media-body d-flex justify-content-between call_img align-items-center">
                               <div>
-                              <h6 class="pb-0 mb-0">Rogger Estin</h6>
-                              <p class="fs-12 my-1 text-disabled">rogger_estin@gmail.com</p>
+                              <h6 class="pb-0 mb-0">{{ ($vendors->manager)?$vendors->manager->name : 'No-name'}}</h6>
+                              <p class="fs-12 my-1 text-disabled">{{ ($vendors->manager)?$vendors->manager->email : 'No-name' }}</p>
                             </div>
                             <div class="call_img">
                                 <img src="assets/img/call.jpg" alt="" class="mr-2">
-                                <span class="green_cl">+91-9878765654</span>
+                                <span class="green_cl">{{ ($vendors->manager)?$vendors->manager->phonecode:'' }}-{{ ($vendors->manager)?$vendors->manager->mobile_no:'' }}</span>
                             </div>
                             </div>
                           </div>
@@ -105,20 +105,20 @@
                             <div class="p-3">
                             <div class="media fs-14 pb-3 media-img">
                                 <div class="mr-2 align-self-center">
-                                  <img src="assets/img/small_img72x72.jpg" class="" alt="people">
+                                  <img src="{{asset('public/vendor/'.$vendors->vendor->profile_picture )}}" class="" alt="people">
                                 </div>
                                 <div class="media-body">
-                                  <h6 class="pb-0 mb-0">Roshan Girri</h6>
-                                  <p class="fs-12 my-1 text-disabled">roshan_giri@gmail.com</p>
+                                  <h6 class="pb-0 mb-0">{{ $vendors->vendor->name }}</h6>
+                                  <p class="fs-12 my-1 text-disabled">{{ $vendors->vendor->email }}</p>
                                 </div>
                                <div class="d-flex ml-auto call_img align-items-center">
-                                <img src="assets/img/call.jpg" alt="" class="mr-2">
-                                <span class="green_cl">+91-9878765654</span>
+                                <img src="{{asset('public/assets/img/call.jpg' )}}" alt="" class="mr-2">
+                                <span class="green_cl">{{ $vendors->vendor->phonecode }}-{{ $vendors->vendor->mobile_no }}</span>
                                </div>
                               </div>
                               <div class="d-flex align-items-center justify-content-between pb-2">
                                   <span class="grey_cl">FAX:</span>
-                                  <span class="black_cl">98378754</span>
+                                  <span class="black_cl">{{ $vendors->vendor->fax }}</span>
                               </div>
                               <div class="d-flex align-items-center justify-content-between pb-2">
                                 <span class="grey_cl">Bank Account No.:</span>
@@ -130,7 +130,7 @@
                             </div>
                             <div class="d-flex align-items-center justify-content-between">
                                 <span class="grey_cl">Address:</span>
-                                <span class="black_cl">Salt Lake City, Utah, 84101, United States</span>
+                                <span class="black_cl">{{ $vendors->vendor->fax }}</span>
                             </div>
                             </div>
                         </div>
@@ -139,33 +139,43 @@
                             <div class="p-3">
                               <div class="chat_scroll shipping_scroll w-100">
                                 <div class="row">
+                                    @foreach($vendors->product as $products )
+                                  
                                 <div class="col-lg-4 col-md-4 col-sm-4">
                                     <div class="ms-card">
-                                      <a href="product-details.html">
+                                      <a href="{{url('/admin/product/detail/vendor/'. $products->id)}}">
                                       <div class="ms-card-img card-img">
-                                        <img src="assets/img/product_img_vector.jpg" alt="card_img">
+                                        <img src="{{asset('public/products/'.$products->image[0] )}}" alt="card_img">
                                       </div>
                                       <div class="ms-card-body">
-                                        <h6 class="green_cl mb-1">Watch</h6>
+                                        <h6 class="green_cl mb-1">{{ $products->name }}</h6>
                                         <p class="black_cl mb-0">Noise ColorFit Pro 2...</p>
+                                        <?php
+                                              $rating = (empty($products->PorductRating))?0:$products->PorductRating->rating;
+                                             
+                                          ?>
                                         <div class="d-flex align-items-center pb-2">
                                             <ul class="ms-star-rating rating-fill-block mb-0">
-                                                <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
+                                                <?php
+                                                  for($i=0; $i < (int)$rating; $i++){ ?>
+                                                    <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
+                                                  <?php  } ?>
+                                               {{-- <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
                                                 <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
                                                 <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
                                                 <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
+                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li> --}}
                                               </ul>
-                                              <span class="grey_cl fs-14 pt-0">(159)</span>
+                                              <span class="grey_cl fs-14 pt-0">{{ ($products->PorductRating)?$products->PorductRating->ratingsCount:'0' }}</span>
                                   
                                             </div>
-                                            <div class="orange_cl fs-16 font-weight-bold">$180.00</div>
+                                            <div class="orange_cl fs-16 font-weight-bold">${{ $products->amount }}</div>
                                       </div>
                                       <div class="stock_block d-none">
                                         <div class="bg-white d-flex justify-content-between align-items-center p-2">
                                             <div class="d-flex flex-column fs-14">
-                                              In Stock
-                                              <span class="badge bg-black text-white px-3 py-2 mr-2">234</span>
+                                              {{($products->quantity >0)? 'In-Stock':'Out-of-stock'}}
+                                              <span class="badge bg-black text-white px-3 py-2 mr-2">{{ $products->quantity }}</span>
                                             </div>
                                             <div class="delete_icon">
                                               <img src="assets/img/delete_icon.svg" alt="">
@@ -175,286 +185,8 @@
                                     </a>
                                     </div>
                                   </div>
-                                  <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <div class="ms-card">
-                                      <a href="product-details.html">
-                                      <div class="ms-card-img card-img">
-                                        <img src="assets/img/product_img_vector.jpg" alt="card_img">
-                                      </div>
-                                      <div class="ms-card-body">
-                                        <h6 class="green_cl mb-1">Watch</h6>
-                                        <p class="black_cl mb-0">Noise ColorFit Pro 2...</p>
-                                        <div class="d-flex align-items-center pb-2">
-                                            <ul class="ms-star-rating rating-fill-block mb-0 rating-star">
-                                                <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                              </ul>
-                                              <span class="grey_cl fs-14 pt-0">(159)</span>
-                                            </div>
-                                            <div class="orange_cl fs-16 font-weight-bold">$180.00</div>
-                                      </div>
-                                      <div class="stock_block d-none">
-                                        <div class="bg-white d-flex justify-content-between align-items-center p-2">
-                                            <div class="d-flex flex-column fs-14">
-                                              In Stock
-                                              <span class="badge bg-black text-white px-3 py-2 mr-2">234</span>
-                                            </div>
-                                            <div class="delete_icon">
-                                              <img src="assets/img/delete_icon.svg" alt="">
-                                            </div>
-                                        </div>
-                                      </div>
-                                      </a>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <div class="ms-card">
-                                      <a href="product-details.html">
-                                      <div class="ms-card-img card-img">
-                                        <img src="assets/img/product_img_vector.jpg" alt="card_img">
-                                      </div>
-                                      <div class="ms-card-body">
-                                        <h6 class="green_cl mb-1">Watch</h6>
-                                        <p class="black_cl mb-0">Noise ColorFit Pro 2...</p>
-                                        <div class="d-flex align-items-center pb-2">
-                                            <ul class="ms-star-rating rating-fill-block mb-0 rating-star">
-                                                <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                              </ul>
-                                              <span class="grey_cl fs-14 pt-1">(159)</span>
-                                            </div>
-                                            <div class="orange_cl fs-16 font-weight-bold">$180.00</div>
-                                      </div>
-                                      <div class="stock_block d-none">
-                                        <div class="bg-white d-flex justify-content-between align-items-center p-2">
-                                            <div class="d-flex flex-column fs-14">
-                                              In Stock
-                                              <span class="badge bg-black text-white px-3 py-2 mr-2">234</span>
-                                            </div>
-                                            <div class="delete_icon">
-                                              <img src="assets/img/delete_icon.svg" alt="">
-                                            </div>
-                                        </div>
-                                      </div>
-                                      </a>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <div class="ms-card">
-                                      <a href="product-details.html">
-                                      <div class="ms-card-img card-img">
-                                        <img src="assets/img/product_img_vector.jpg" alt="card_img">
-                                      </div>
-                                      <div class="ms-card-body">
-                                        <h6 class="green_cl mb-1">Watch</h6>
-                                        <p class="black_cl mb-0">Noise ColorFit Pro 2...</p>
-                                        <div class="d-flex align-items-center pb-2">
-                                            <ul class="ms-star-rating rating-fill-block mb-0 rating-star">
-                                                <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                              </ul>
-                                              <span class="grey_cl fs-14 pt-1">(159)</span>
-                                            </div>
-                                            <div class="orange_cl fs-16 font-weight-bold">$180.00</div>
-                                      </div>
-                                      <div class="stock_block d-none">
-                                        <div class="bg-white d-flex justify-content-between align-items-center p-2">
-                                            <div class="d-flex flex-column fs-14">
-                                              In Stock
-                                              <span class="badge bg-black text-white px-3 py-2 mr-2">234</span>
-                                            </div>
-                                            <div class="delete_icon">
-                                              <img src="assets/img/delete_icon.svg" alt="">
-                                            </div>
-                                        </div>
-                                      </div>
-                                      </a>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <div class="ms-card">
-                                      <a href="product-details.html">
-                                      <div class="ms-card-img card-img">
-                                        <img src="assets/img/product_img_vector.jpg" alt="card_img">
-                                      </div>
-                                      <div class="ms-card-body">
-                                        <h6 class="green_cl mb-1">Watch</h6>
-                                        <p class="black_cl mb-0">Noise ColorFit Pro 2...</p>
-                                        <div class="d-flex align-items-center pb-2">
-                                            <ul class="ms-star-rating rating-fill-block mb-0 rating-star">
-                                                <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                              </ul>
-                                              <span class="grey_cl fs-14 pt-1">(159)</span>
-                                            </div>
-                                            <div class="orange_cl fs-16 font-weight-bold">$180.00</div>
-                                      </div>
-                                      <div class="stock_block d-none">
-                                        <div class="bg-white d-flex justify-content-between align-items-center p-2">
-                                            <div class="d-flex flex-column fs-14">
-                                              In Stock
-                                              <span class="badge bg-black text-white px-3 py-2 mr-2">234</span>
-                                            </div>
-                                            <div class="delete_icon">
-                                              <img src="assets/img/delete_icon.svg" alt="">
-                                            </div>
-                                        </div>
-                                      </div>
-                                      </a>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <div class="ms-card">
-                                      <a href="product-details.html">
-                                      <div class="ms-card-img card-img">
-                                        <img src="assets/img/product_img_vector.jpg" alt="card_img">
-                                      </div>
-                                      <div class="ms-card-body">
-                                        <h6 class="green_cl mb-1">Watch</h6>
-                                        <p class="black_cl mb-0">Noise ColorFit Pro 2...</p>
-                                        <div class="d-flex align-items-center pb-2">
-                                            <ul class="ms-star-rating rating-fill-block mb-0 rating-star">
-                                                <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                              </ul>
-                                              <span class="grey_cl fs-14 pt-1">(159)</span>
-                                            </div>
-                                            <div class="orange_cl fs-16 font-weight-bold">$180.00</div>
-                                      </div>
-                                      <div class="stock_block d-none">
-                                      <div class="bg-white d-flex justify-content-between align-items-center p-2">
-                                          <div class="d-flex flex-column fs-14">
-                                            In Stock
-                                            <span class="badge bg-black text-white px-3 py-2 mr-2">234</span>
-                                          </div>
-                                          <div class="delete_icon">
-                                            <img src="assets/img/delete_icon.svg" alt="">
-                                          </div>
-                                      </div>
-                                    </div>
-                                    </a>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <div class="ms-card">
-                                      <a href="product-details.html">
-                                      <div class="ms-card-img card-img">
-                                        <img src="assets/img/product_img_vector.jpg" alt="card_img">
-                                      </div>
-                                      <div class="ms-card-body">
-                                        <h6 class="green_cl mb-1">Watch</h6>
-                                        <p class="black_cl mb-0">Noise ColorFit Pro 2...</p>
-                                        <div class="d-flex align-items-center pb-2">
-                                            <ul class="ms-star-rating rating-fill-block mb-0 rating-star">
-                                                <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                              </ul>
-                                              <span class="grey_cl fs-14 pt-1">(159)</span>
-                                            </div>
-                                            <div class="orange_cl fs-16 font-weight-bold">$180.00</div>
-                                      </div>
-                                      <div class="stock_block d-none">
-                                      <div class="bg-white d-flex justify-content-between align-items-center p-2">
-                                          <div class="d-flex flex-column fs-14">
-                                            In Stock
-                                            <span class="badge bg-black text-white px-3 py-2 mr-2">234</span>
-                                          </div>
-                                          <div class="delete_icon">
-                                            <img src="assets/img/delete_icon.svg" alt="">
-                                          </div>
-                                      </div>
-                                    </div>
-                                    </a>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <div class="ms-card">
-                                      <a href="product-details.html">
-                                      <div class="ms-card-img card-img">
-                                        <img src="assets/img/product_img_vector.jpg" alt="card_img">
-                                      </div>
-                                      <div class="ms-card-body">
-                                        <h6 class="green_cl mb-1">Watch</h6>
-                                        <p class="black_cl mb-0">Noise ColorFit Pro 2...</p>
-                                        <div class="d-flex align-items-center pb-2">
-                                            <ul class="ms-star-rating rating-fill-block mb-0 rating-star">
-                                                <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                              </ul>
-                                              <span class="grey_cl fs-14 pt-1">(159)</span>
-                                            </div>
-                                            <div class="orange_cl fs-16 font-weight-bold">$180.00</div>
-                                      </div>
-                                      <div class="stock_block d-none">
-                                      <div class="bg-white d-flex justify-content-between align-items-center p-2">
-                                          <div class="d-flex flex-column fs-14">
-                                            In Stock
-                                            <span class="badge bg-black text-white px-3 py-2 mr-2">234</span>
-                                          </div>
-                                          <div class="delete_icon">
-                                            <img src="assets/img/delete_icon.svg" alt="">
-                                          </div>
-                                      </div>
-                                    </div>
-                                    </a>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <div class="ms-card">
-                                      <a href="product-details.html">
-                                      <div class="ms-card-img card-img">
-                                        <img src="assets/img/product_img_vector.jpg" alt="card_img">
-                                      </div>
-                                      <div class="ms-card-body">
-                                        <h6 class="green_cl mb-1">Watch</h6>
-                                        <p class="black_cl mb-0">Noise ColorFit Pro 2...</p>
-                                        <div class="d-flex align-items-center pb-2">
-                                            <ul class="ms-star-rating rating-fill-block mb-0 rating-star">
-                                                <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                                <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                                              </ul>
-                                              <span class="grey_cl fs-14 pt-1">(159)</span>
-                                            </div>
-                                            <div class="orange_cl fs-16 font-weight-bold">$180.00</div>
-                                      </div>
-                                      <div class="stock_block d-none">
-                                      <div class="bg-white d-flex justify-content-between align-items-center p-2">
-                                          <div class="d-flex flex-column fs-14">
-                                            In Stock
-                                            <span class="badge bg-black text-white px-3 py-2 mr-2">234</span>
-                                          </div>
-                                          <div class="delete_icon">
-                                            <img src="assets/img/delete_icon.svg" alt="">
-                                          </div>
-                                      </div>
-                                    </div>
-                                    </a>
-                                    </div>
-                                  </div>
+                                  @endforeach
+                                  
                                 </div>
                                 </div>
                             </div>
