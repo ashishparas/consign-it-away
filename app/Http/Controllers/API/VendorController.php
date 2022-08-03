@@ -1947,14 +1947,14 @@ public function ViewOrderByVendor(Request $request)
         return $validateAttributes;
        endif;
        try{
-           $input = $request->all();
-          
-        $item = Item::where('vendor_id',Auth::id())
-                ->where('id', $input['order_id'])
+
+            $input = $request->all();
+            $item = Item::where('vendor_id',Auth::id())
+                ->where('id', $request->order_id)
                 ->with(['Customer','cancelRequest','Product','Transaction','Rating','CustomerVariant','Offer'])
                 ->first();
-               // dd($item->toArray());
-    if($item){
+              
+        if($item){
                 
                     $tracking_id = Helper::trackCourier($item->tracking_id);
                     if($tracking_id['status'] === true):

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
+use App\Helper\Helper;
 class Item extends Model
 {
     use HasFactory;
@@ -21,7 +21,13 @@ class Item extends Model
 
     protected  $fillable = ['user_id','tracking_id','vendor_id','product_id','variant_id','offer_id','address_id','order_id','price','quantity','color','size','status'];
 
+    protected $appends = ['selectedVariants'];
 
+
+    public function getSelectedVariantsAttribute()
+    {
+        return Helper::ProductvariantById($this->variant_id);
+    }
     public function Product(){
         return $this->belongsTo(Product::class)->select('id','user_id','store_id','name','price','discount','image','description','category_id','weight', 'variants','tags','meta_description','selling_fee','shipping_type')->with(['User','Category','Discount']);
     }
@@ -67,6 +73,7 @@ class Item extends Model
     public function CustomerVariant(){
         return $this->hasOne(Variant::class,'id','variant_id');
     }
+
 
 
 }

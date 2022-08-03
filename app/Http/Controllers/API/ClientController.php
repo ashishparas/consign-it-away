@@ -680,7 +680,7 @@ class ClientController extends ApiController
 
    public function Order(Request $request)
    {
-       $rules = ['address_id' => 'required|exists:addresses,id', 'card_id' =>'required|exists:cards,id','items' =>'required','sub_total' => 'required','coupon_id' =>'','shipping_cost' => 'required','total_amount' => 'required','paymentToken' => 'required','paymentSource'=>'required'];
+       $rules = ['address_id' => 'required|exists:addresses,id', 'card_id' =>'','items' =>'required','sub_total' => 'required','coupon_id' =>'','shipping_cost' => 'required','total_amount' => 'required','paymentToken' => 'required','paymentSource'=>'required'];
        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
        if($validateAttributes):
         return $validateAttributes;
@@ -748,7 +748,7 @@ class ClientController extends ApiController
                             'price' => $product->price,
                             'payment_source' => $request->paymentSource,
                             'order_date' => date('Y-m-d')
-                        ]);
+                        ]); 
      
                         if($item){
                             $store = Store::where('id',$product->store_id)->first();
@@ -806,28 +806,31 @@ class ClientController extends ApiController
        if($validateAttributes):
         return $validateAttributes;
        endif;
-
        try{
+       
             $input  = $request->all();
             if($request->type === '1'){
                 $items = Item::where('user_id',Auth::id())->where('status','1')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
-
+                   
                 foreach($items as $key => $item){
                     $tracking = Helper::trackCourier($item->tracking_id);
                     $items[$key]['tracking_status'] = $tracking['data'];
+                    //  $items[$key]['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
                 }
-
+            //   dd($items->toArray());
             }else if($request->type === '2'){
                 $items = Item::where('user_id',Auth::id())->where('status','2')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
                 foreach($items as $key => $item){
                     $tracking = Helper::trackCourier($item->tracking_id);
                     $items[$key]['tracking_status'] = $tracking['data'];
+                    //$items[$key]['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
                 }
             }else if($request->type === '3'){
                 $items = Item::where('user_id',Auth::id())->where('status','3')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
                 foreach($items as $key => $item){
                     $tracking = Helper::trackCourier($item->tracking_id);
                     $items[$key]['tracking_status'] = $tracking['data'];
+                    //$items[$key]['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
                 }
             }elseif($request->type === '4'){
                 
