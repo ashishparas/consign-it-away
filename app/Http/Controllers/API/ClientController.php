@@ -785,7 +785,7 @@ class ClientController extends ApiController
             
                     }
          
-                   // Cart::where('user_id', Auth::id())->delete();
+                   Cart::where('user_id', Auth::id())->delete();
                     return parent::success("Your order Placed successfully!");
                 endif;   
             else:
@@ -810,7 +810,7 @@ class ClientController extends ApiController
        try{
             $input  = $request->all();
             if($request->type === '1'){
-                $items = Item::where('user_id',Auth::id())->where('status','1')->with(['Product'])->orderBy('created_at','DESC')->get();
+                $items = Item::where('user_id',Auth::id())->where('status','1')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
 
                 foreach($items as $key => $item){
                     $tracking = Helper::trackCourier($item->tracking_id);
@@ -818,13 +818,13 @@ class ClientController extends ApiController
                 }
 
             }else if($request->type === '2'){
-                $items = Item::where('user_id',Auth::id())->where('status','2')->with(['Product'])->orderBy('created_at','DESC')->get();
+                $items = Item::where('user_id',Auth::id())->where('status','2')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
                 foreach($items as $key => $item){
                     $tracking = Helper::trackCourier($item->tracking_id);
                     $items[$key]['tracking_status'] = $tracking['data'];
                 }
             }else if($request->type === '3'){
-                $items = Item::where('user_id',Auth::id())->where('status','3')->with(['Product'])->orderBy('created_at','DESC')->get();
+                $items = Item::where('user_id',Auth::id())->where('status','3')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
                 foreach($items as $key => $item){
                     $tracking = Helper::trackCourier($item->tracking_id);
                     $items[$key]['tracking_status'] = $tracking['data'];
@@ -837,7 +837,7 @@ class ClientController extends ApiController
                 if(isset($request->search)){
                     $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
                 }
-                $items = $items->with(['Product'])->orderBy('items.created_at','DESC');
+                $items = $items->with(['Product','CustomerVariant'])->orderBy('items.created_at','DESC');
             if(isset($request->sort)){
                     
                     
