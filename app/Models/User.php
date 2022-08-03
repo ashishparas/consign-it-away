@@ -116,5 +116,9 @@ class User extends Authenticatable
     public function StoreName(){
         return $this->hasOne(Store::class)->select('id','user_id','name');
     }
+    
+    public function Bank(){
+        return $this->belongsTo(Bank::class,'id','user_id')->select('id','user_id','name','bank_ac_no','routing_no');
+    }
 
 }

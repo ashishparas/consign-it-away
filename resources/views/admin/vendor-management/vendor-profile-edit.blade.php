@@ -57,9 +57,9 @@
                         <li role="presentation"><a href="#tab9" aria-controls="tab9" role="tab" data-toggle="tab" class="" aria-selected="false"> Products  <span class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="6.751" height="11.808" viewBox="0 0 6.751 11.808">
                             <path id="right_arrow" d="M15.963,12.1,11.494,7.633a.84.84,0,0,1,0-1.192.851.851,0,0,1,1.2,0L17.752,11.5a.842.842,0,0,1,.025,1.164l-5.084,5.094a.844.844,0,1,1-1.2-1.192Z" transform="translate(-11.246 -6.196)" fill="#858585"/>
                           </svg></span></a></li>
-                        <li role="presentation"><a href="#tab10" aria-controls="tab10" role="tab" data-toggle="tab" class="" aria-selected="false"> Reviews   <span class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="6.751" height="11.808" viewBox="0 0 6.751 11.808">
+                       {{-- <li role="presentation"><a href="#tab10" aria-controls="tab10" role="tab" data-toggle="tab" class="" aria-selected="false"> Reviews   <span class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="6.751" height="11.808" viewBox="0 0 6.751 11.808">
                             <path id="right_arrow" d="M15.963,12.1,11.494,7.633a.84.84,0,0,1,0-1.192.851.851,0,0,1,1.2,0L17.752,11.5a.842.842,0,0,1,.025,1.164l-5.084,5.094a.844.844,0,1,1-1.2-1.192Z" transform="translate(-11.246 -6.196)" fill="#858585"/>
-                          </svg></span></a></li>
+                          </svg></span></a></li> --}}
                         <li role="presentation"><a href="#tab11" aria-controls="tab11" role="tab" data-toggle="tab" class="" aria-selected="false"> Gallery  <span class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="6.751" height="11.808" viewBox="0 0 6.751 11.808">
                             <path id="right_arrow" d="M15.963,12.1,11.494,7.633a.84.84,0,0,1,0-1.192.851.851,0,0,1,1.2,0L17.752,11.5a.842.842,0,0,1,.025,1.164l-5.084,5.094a.844.844,0,1,1-1.2-1.192Z" transform="translate(-11.246 -6.196)" fill="#858585"/>
                           </svg></span></a></li>
@@ -122,16 +122,13 @@
                               </div>
                               <div class="d-flex align-items-center justify-content-between pb-2">
                                 <span class="grey_cl">Bank Account No.:</span>
-                                <span class="black_cl">3455-0988-788</span>
+                                <span class="black_cl">{{ $vendors->vendor->bank->bank_ac_no }}</span>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-2">
                                 <span class="grey_cl">Routing Number:</span>
-                                <span class="black_cl">3455-0988-788</span>
+                                <span class="black_cl">3{{ $vendors->vendor->bank->routing_no }}</span>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span class="grey_cl">Address:</span>
-                                <span class="black_cl">{{ $vendors->vendor->fax }}</span>
-                            </div>
+                        
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tab9">
@@ -191,7 +188,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane fade" id="tab10">
+                        {{-- <div role="tabpanel" class="tab-pane fade" id="tab10">
                           <h5 class="border-bottom mb-0 p-3 d-flex">Reviews</h5>
                           <div class="p-3">
                             <div class="chat_scroll shipping_scroll w-100">
@@ -353,38 +350,18 @@
                               </ul>
                               </div>
                               </div>
-                          </div>
+                          </div> --}}
                           <div role="tabpanel" class="tab-pane fade" id="tab11">
                             <h5 class="border-bottom mb-0 p-3 d-flex">Gallery</h5>
                             <div class="p-3">
                             <div class="row">
-                              <div class="col-md-4 col-lg-4">
-                                <div class="mb-4 gallery_block"><img src="assets/img/gallery_product_img.png" class="img-fluid"></div>
-                              </div>
-                              <div class="col-md-4 col-lg-4">
-                                <div class="mb-4 gallery_block"><img src="assets/img/gallery_product_img.png" class="img-fluid"></div>
-                              </div>
-                              <div class="col-md-4 col-lg-4">
-                                <div class="mb-4 gallery_block"><img src="assets/img/gallery_product_img.png" class="img-fluid"></div>
-                              </div>
-                              <div class="col-md-4 col-lg-4">
-                                <div class="mb-4 gallery_block"><img src="assets/img/gallery_product_img.png" class="img-fluid"></div>
-                              </div>
-                              <div class="col-md-4 col-lg-4">
-                                <div class="mb-4 gallery_block"><img src="assets/img/gallery_product_img.png" class="img-fluid"></div>
-                              </div>
-                              <div class="col-md-4 col-lg-4">
-                                <div class="mb-4 gallery_block"><img src="assets/img/gallery_product_img.png" class="img-fluid"></div>
-                              </div>
-                              <div class="col-md-4 col-lg-4">
-                                <div class="mb-4 gallery_block"><img src="assets/img/gallery_product_img.png" class="img-fluid"></div>
-                              </div>
-                              <div class="col-md-4 col-lg-4">
-                                <div class="mb-4 gallery_block"><img src="assets/img/gallery_product_img.png" class="img-fluid"></div>
-                              </div>
-                              <div class="col-md-4 col-lg-4">
-                                <div class="mb-4 gallery_block"><img src="assets/img/gallery_product_img.png" class="img-fluid"></div>
-                              </div>
+                                @foreach($vendors->photos as $pics )
+                                  <div class="col-md-4 col-lg-4">   
+                                    <div class="mb-4 gallery_block"><img src="{{asset('public/vendor/'.$pics )}}" class="img-fluid"></div>
+                                    
+                                  </div>
+                              @endforeach
+                              
                             </div>
                           </div>
                           </div>
@@ -392,9 +369,11 @@
                           <div role="tabpanel" class="tab-pane fade" id="tab12">
                             <h5 class="border-bottom mb-0 p-3 d-flex">Subscription</h5>
                             <div class="p-3">
-                                  <h6 class="text-uppercase"><b>Free Plan</b></h6>
-                                  <p class="grey_cl mb-1">Lorem Ipsum is simply dummy text of the printing & typesetting industry.</p>
-                                  <span class="badge orange_btn p-2">$ 0.00 Only</span>
+                                  <h6 class="text-uppercase"><b>@if(!empty($vendors->subscription))@foreach($vendors->subscription as $plans )@endforeach
+                                      {{ $plans->subscriptionPlan->name }} </b></h6>
+                                  <p class="grey_cl mb-1">{{ $plans->subscriptionPlan->content }}.</p>
+                                  <span class="badge orange_btn p-2">$ {{ $plans->subscriptionPlan->monthly_price }} Only</span>
+                                  @endif
                                   <h5 class="pt-4 border-top mt-3 pb-3"><b>History</b></h5>
                                 <div class="border history_block table-responsive">
                                   <table class="table">
@@ -404,52 +383,24 @@
                                         <th scope="col">Plan</th>
                                         <th scope="col">Type</th>
                                         <th scope="col">Status</th>
-                                        <th scope="col">Payment</th>
+                                       
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      <tr>
-                                        <td>23-09-2022</td>
-                                        <td>Bronze [FREE]</td>
-                                        <td>Monthy</td>
-                                        <td>Active</td>
-                                        <td>Paid</td>
-                                      </tr>
-                                      <tr>
-                                        <td>12-08-2022</td>
-                                        <td>Premium [$99.99]</td>
-                                        <td>Monthy</td>
-                                        <td>Expired</td>
-                                        <td>Paid</td>
-                                      </tr>
-                                      <tr>
-                                        <td>12-07-2022</td>
-                                        <td>Unlimited [$999.00]</td>
-                                        <td>Monthy</td>
-                                        <td>Expired</td>
-                                        <td>Paid</td>
-                                      </tr>
-                                      <tr>
-                                        <td>23-09-2022</td>
-                                        <td>Premium [FREE]</td>
-                                        <td>Monthy</td>
-                                        <td>Active</td>
-                                        <td>Paid</td>
-                                      </tr>
-                                      <tr>
-                                        <td>12-07-2022</td>
-                                        <td>Unlimited [$999.00]</td>
-                                        <td>Monthy</td>
-                                        <td>Expired</td>
-                                        <td>Paid</td>
-                                      </tr>
-                                      <tr>
-                                        <td>23-09-2022</td>
-                                        <td>Premium [FREE]</td>
-                                        <td>Monthy</td>
-                                        <td>Active</td>
-                                        <td>Paid</td>
-                                      </tr>
+                                       
+                                        @if(!empty($vendors->subscription))
+                                        @foreach($vendors->subscription as $plans )
+                                        
+                                          <tr>
+                                            <td>{{ date('d-m-Y',strtotime($plans->created_at)) }}</td>
+                                            <td>{{ $plans->subscriptionPlan->name }}</td>
+                                            <td>{{ $plans->type }}</td>
+                                            <td>{{ $plans->stripe_status }}</td>
+                                          </tr>
+                                      @endforeach
+                                     
+                                      @endif
+                                      
                                     </tbody>
                                   </table>
                                 </div>
