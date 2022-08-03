@@ -1087,7 +1087,7 @@ class ClientController extends ApiController
             $about = User::select('id','name','fname','lname','profile_picture')->where('id',$store->user_id)->first();
             $viewProductDetails = Product::select('id','name','image','price')
             ->where('id', $request->product_id)
-            ->with(['PorductRating','Category'])
+            ->with(['PorductRating'])
             ->first();
 
             $products = Product::select('id','image','name','amount')

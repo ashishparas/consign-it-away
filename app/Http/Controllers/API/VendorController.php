@@ -1177,12 +1177,13 @@ class VendorController extends ApiController
                             ->where('id',$store->user_id)
                             
                             ->first();
-            $products = Product::select('id','image','name','amount');
+            $products = Product::select('id','image','name','amount','category_id');
             if(isset($request->search)){
                 $products = $products->where("name","LIKE","%".$request->search."%");
             }
             $products = $products->where('user_id',$store->user_id)
             ->where('store_id',$store->id)
+            ->with(['Category'])
             ->paginate($limit);
 
             $countProductbyMonth = Product::where('user_id', Auth::id())->whereRaw("MONTH(created_at) = date('M')")->count();
