@@ -706,13 +706,13 @@ $input_xml = <<<EOXML
 
 
 
-    public static function SendVarificationEmail($email, $name, $message){
+    public static function SendVarificationEmail($email, $name, $message, $header="Consign-it-away"){
 
         $sendGridMail = new \SendGrid\Mail\Mail();
         $sendGridMail->setFrom(getenv('MAIL_ADDRESS'), "ConsignItAway");
         $sendGridMail->setSubject("OTP Verification Mail");
         $sendGridMail->addTo($email, $name);
-        $sendGridMail->addContent("text/plain", "OTP Verification Mail");
+        $sendGridMail->addContent("text/plain", $header);
         $sendGridMail->addContent("text/html",$message);
         
         $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
