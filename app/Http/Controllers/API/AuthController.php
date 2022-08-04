@@ -579,7 +579,7 @@ class AuthController extends ApiController {
                
                 $OTP = rand(1000,9999);
              
-                $header = "Email OTP Verification Mail"
+                $header = "Email OTP Verification Mail";
                 $html = '<p>Your consign-it-away verification code is '.$OTP.' This help us secure your account by verifying your OTP. This let you to access your consign-it-away account.</p>';
               
                  // send grid Dev:Ashish Mehra
