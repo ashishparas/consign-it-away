@@ -23,8 +23,8 @@
                 <div class="ms-panel-header border-0 d-flex justify-content-between">
                     <h3>Invoice Details</h3>
                     <span class="ml-auto">
-                        <a href="javascript:;" class="btn green_btn">Download PDF</a>
-                        <a href="javascript:;" class="btn green_badge">Email Vender</a>
+                        <a href="{{url('admin/invoice-pdf/'.$transaction->id)}}" class="btn green_btn">Download PDF</a>
+                        <a href="{{url('admin/invoice-email/'.$transaction->id)}}" class="btn green_badge">Email Vendor</a>
                     </span>
                 </div>
                 <div class="d-flex align-items-center w-100 py-2 px-4 border-bottom pb-3 mb-3">
@@ -65,16 +65,16 @@
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <span class="grey_cl">Role Manager:</span>
-                          <p>{{ ($transaction->product)?$transaction->product->store->manager->name :'-' }}</p>
+                          <p>{{ ($transaction->product->store->manager)?$transaction->product->store->manager->name :'-' }}</p>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <span class="grey_cl">Manager Contact:</span>
-                          <p>{{ ($transaction->product)?$transaction->product->store->manager->phonecode :'' }} - {{ ($transaction->product)?$transaction->product->store->manager->mobile_no:'' }}</p>
+                          <p>{{ ($transaction->product->store->manager)?$transaction->product->store->manager->phonecode :'' }} - {{ ($transaction->product->store->manager)?$transaction->product->store->manager->mobile_no:'' }}</p>
                         </div>
-                        <div class="d-flex align-items-center justify-content-between">
-                          <span class="grey_cl">Admin Contact:</span>
-                          <p>+91-9899897899</p>
-                        </div>
+                        <!--<div class="d-flex align-items-center justify-content-between">-->
+                        <!--  <span class="grey_cl">Admin Contact:</span>-->
+                        <!--  <p>+91-9899897899</p>-->
+                        <!--</div>-->
                         <div class="d-flex align-items-center justify-content-between">
                           <span class="grey_cl">Transaction ID:</span>
                           <p>#{{ $transaction->transaction_id }}</p>
