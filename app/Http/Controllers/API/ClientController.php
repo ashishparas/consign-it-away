@@ -236,15 +236,23 @@ class ClientController extends ApiController
             endforeach;
 
             $discount = Discount::orderBy('id','DESC')->take(5)->get();
-
-
+            $newCollection = Product::select('products.id','products.name','products.image as images','products.discount', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id, products.price as amount'))
+            ->leftJoin('ratings', 'ratings.product_id', 'products.id')
+            ->leftJoin('favourites', 'favourites.product_id', 'products.id')
+            ->where('products.status', '1')
+            ->with(['discount'])
+            ->groupBy('products.id')
+            ->orderBy('products.created_at', 'DESC')
+            ->take(10)
+            ->get();
+           
 
             $arr = array(
             array('name' => 'Category','type'=> 1,'items'=> $category),
             array('name' =>'Most Popular','type'=> 2,'items' =>$products),
             array('name' => 'Brands','type' => 3,'items' => $brands),
             array('name' => 'Recent Viewed','type' => 4, 'items' => $recentView),
-           
+            array('name' => 'New Collection','type' => 5, 'items' => $newCollection)
         );
         $cart = Cart::where('user_id', Auth::id())->count(); 
             return parent::success("Product view successfully",['home' => $arr,'cart_count' => $cart,'discount' => $discount]);
