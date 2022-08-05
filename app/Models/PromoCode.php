@@ -21,7 +21,7 @@ class PromoCode extends Model
 
     protected $appends = ['Product']; 
 
-
+ 
     public function getProductAttribute(){
         $products = explode(',',$this->product_id);
         return Product::
@@ -31,4 +31,10 @@ class PromoCode extends Model
         ->get()
         ->makeHidden(['soldBy','CartStatus','FavouriteId','favourite']);
     }
+
+
+
+
+
+    
 }

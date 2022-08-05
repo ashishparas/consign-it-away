@@ -34,7 +34,7 @@ class Product extends Model
 
     protected $appends = ['base_url','favourite','FavouriteId','CartStatus','soldBy'];
 
-    
+
     public function getCartStatusAttribute(){
         $cart_status = Cart::where('product_id',$this->id)->where('user_id', Auth::id())->first();
         $cart = (!empty($cart_status))? 'added_to_cart':'not_in_cart';
@@ -115,6 +115,9 @@ class Product extends Model
 public function Discount(){
     return $this->hasOne(Discount::class,'id','discount')->where('status','1')->select('id','percentage','description');
 }
+
+
+
   
     
 

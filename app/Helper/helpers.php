@@ -526,7 +526,7 @@ $input_xml = <<<EOXML
                 $uspsErrorData = isset($array_data['TrackInfo']['Error']) ? 
                                     $array_data['TrackInfo']['Error']['Description']:
                                     $array_data['TrackInfo']['TrackSummary'];
-               return array('status'=>false,'data'=> []);
+               return array('status'=>false,'data'=> $uspsErrorData);
             }
 
 

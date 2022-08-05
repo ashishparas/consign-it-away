@@ -630,6 +630,9 @@ class ClientController extends ApiController
            $cart = Cart::where('user_id' , Auth::id())
            ->with('Product','CustomerVariant')
            ->orderBy('created_at','DESC')->get();
+        //    foreach($cart->product as $key => $value){
+        //         dd($value);
+        //    }
            return parent::success("View cart successfully!",['cart' => $cart]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
