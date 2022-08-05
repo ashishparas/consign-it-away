@@ -30,7 +30,7 @@
                     <div class="ms-panel-body">
                         <div>
                             <div>
-                              <form class="ms-form-wizard ms-wizard-pill style2-wizard add-vendor-block" method="post" enctype="multipart/form-data" action="{{url('/admin/create-vendor')}}">
+                              <form class="ms-form-wizard ms-wizard-pill style2-wizard add-vendor-block" method="post" enctype="multipart/form-data" action="{{url('/admin/create-store')}}">
                                @csrf
                                 <!--<h3 class="text-left">Personal Information</h3>-->
                                 <div class="ms-wizard-step">
@@ -61,11 +61,12 @@
                                                 <div class="col-12 col-lg-6">
                                                     <div class="form-group">
                                                         <label for="exampleEmail">Store Name</label>
-                                                        <input type="email" class="form-control"  placeholder="Enter your store name" name="store_name">
+                                                        <input type="hidden" name="user_id" value="{{ $user_id }}">
+                                                        <input type="text" class="@error('name') is-invalid @enderror form-control"  placeholder="Enter your store name" name="name">
                                                       </div>
                                                       <div class="form-group">
                                                         <label for="examplePassword">Location</label>
-                                                         <input type="password" class="form-control" placeholder="Enter location" name="store_location">
+                                                         <input type="text" class="@error('location') is-invalid @enderror form-control" placeholder="Enter location" name="location">
                                                       </div>
                                                           <div class="form-group">
                                                         <label for="exampleTextarea">Description</label>

@@ -49,6 +49,12 @@
                                           </div>
                                         </div>
                                         <div class="col-md-4 mb-2">
+                                          <label for="validationCustomUsername">Email</label>
+                                          <div class="input-group">
+                                            <input type="text" class="@error('email') is-invalid @enderror form-control" placeholder="Email" name="email">
+                                              </div>
+                                        </div>
+                                        <div class="col-md-4 mb-2">
                                           <label for="validationCustomUsername">Phone Code</label>
                                           <div class="input-group">
                                             <input type="text" class="@error('phonecode') is-invalid @enderror form-control" placeholder="Phone Code" name="phonecode">

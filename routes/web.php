@@ -49,7 +49,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('/home', [HomeController::class, 'index'])->name('home');
             Route::get('/order-management',[AdminController::class, "orderManagement"]);
             Route::get('shipping-order-details/{id}',[AdminController::class, "ShippingOrderDetails"]);
-            Route::get('/vendor-management',[VendorController::class,"index"]);
+            Route::get('/vendor-management',[VendorController::class,"index"])->name('vendor-management');
             Route::get('subscription-plan',[VendorController::class,"SubscriptionPlan"]);
             Route::get('vendor-products',[VendorController::class, "VendorProducts"])->name('vendor.product.list');
             Route::get('product/detail/vendor/{id}',[VendorController::class,"ViewProductDetailsById"]);
@@ -68,7 +68,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::post("store/product",[VendorController::class, "StoreProduct"]);
             Route::post('view/store/by/id',[VendorController::class, "ViewStoreById"]);
             Route::post('view/subcategories/by/id',[VendorController::class,"ViewSubCategory"]);
-            Route::get('view/transactions', [VendorController::class, "ViewTransaction"]);
+            Route::get('view/transactions', [VendorController::class, "ViewTransaction"])->name('transactions');
             Route::get('category-management',[VendorController::class,"CategoryManagement"])->name('category-management');
             Route::get('add-category',[VendorController::class, "AddCategory"]);
             Route::post('create-category', [VendorController::class, "CreateCategory"]);
@@ -86,8 +86,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::post('withdraw-reject', [VendorController::class, "withdrawReject"]);
             Route::post('create-vendor', [VendorController::class, "CreateVendor"]);
             Route::get('add-vendor', [VendorController::class, "AddVendor"]);
-            Route::post('add-store/{id}', [VendorController::class, "AddStore"]);
+            Route::get('add-store/{id}', [VendorController::class, "AddStore"])->name('add-store');
             Route::post('create-store', [VendorController::class, "CreateStore"]);
+            Route::get('add-manager/{id}', [VendorController::class, "AddManager"])->name('add-manager');
+            Route::post('create-manager', [VendorController::class, "CreateManager"]);
             Route::get('invoice-pdf/{id}', [VendorController::class, 'generateInvoicePDF']);
             Route::get('invoice-email/{id}', [VendorController::class, 'emailInvoice']);
             

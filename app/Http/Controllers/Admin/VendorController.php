@@ -19,6 +19,7 @@ use App\Models\SubscriptionPlan;
 use App\Models\User;
 use App\Models\Withdraw;
 use App\Models\Transaction;
+use App\Models\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -511,6 +512,7 @@ class VendorController extends Controller
     
     public function CreateVendor(Request $request)
     {
+        
        $input = $request->all();
        $request->validate([
             'fname' => 'required',
@@ -540,8 +542,11 @@ class VendorController extends Controller
 
 
             $User = User::create($input);
+            
+            $lastInsertID = $User->id;
+         
             if ($User) :
-                return redirect()->route('vendor-management');
+                return redirect()->route('add-store', ['id' => $lastInsertID]);
             endif;
         } catch (\Exception $ex) {
             dd($ex->getMessage());
@@ -554,16 +559,93 @@ class VendorController extends Controller
         return view('admin.vendor-management.create-vendor');
     }
     
-    public function AddStore(Request $request)
+    public function AddStore(Request $request,$id)
     {
-        die("yeee");
-        return view('admin.store.create-store');
+        $user_id = $id;
+       
+        return view('admin.store.create-store', compact('user_id'));
     }
     
     public function CreateStore(Request $request)
     {
-        
-        return view('admin.vendor-management.create-vendor');
+      
+        $input = $request->all();
+        $request->validate([
+            'name' => 'required',
+            'location' => 'required'
+            
+        ]);
+
+        try {
+
+            $input = $request->all();
+            
+            if (isset($request->banner)) :
+
+                $bannerimage = time() . '.' . $request->banner->extension();
+                $request->banner->move(public_path('/vendor'), $bannerimage);
+                $input['banner'] = $bannerimage;
+            endif;
+            
+            if (isset($request->store_image)) :
+
+                $storeimage = time() . '.' . $request->store_image->extension();
+                $request->store_image->move(public_path('/vendor'), $storeimage);
+                $input['store_image'] = $storeimage;
+            endif;
+
+
+            $Store = Store::create($input);
+            
+            $lastInsertID = $Store->id;
+         
+            if ($Store) :
+                return redirect()->route('add-manager', ['id' => $lastInsertID]);
+            endif;
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
+       
+    }
+    
+    public function AddManager(Request $request,$id)
+    {
+        $user_id = $id;
+        return view('admin.manager.create-manager', compact('user_id'));
+    }
+    
+    public function CreateManager(Request $request)
+    {
+        $input = $request->all();
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'phonecode' => 'required',
+            'mobile_no' => 'required'
+            
+        ]);
+
+        try {
+
+            $input = $request->all();
+            
+            if (isset($request->profile_picture)) :
+
+                $bannerimage = time() . '.' . $request->profile_picture->extension();
+                $request->profile_picture->move(public_path('/vendor'), $bannerimage);
+                $input['profile_picture'] = $bannerimage;
+            endif;
+            
+            $input['status'] = '2';
+
+            $Manager = Manager::create($input);
+         
+            if ($Manager) :
+                return redirect()->route('vendor-management');
+            endif;
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
     }
     
     public function generateInvoicePDF($id)
@@ -589,8 +671,10 @@ class VendorController extends Controller
         
        
         $html = view('admin/transaction/invoicePDF',compact('transaction'));
+        $val = "$html"; 
+       
         
-        Helper::SendVarificationEmail($email, $name, $html, $header);
+        Helper::SendVarificationEmail($email, $name, $val, $header);
         
         return redirect()->route('transactions');
         
