@@ -21,8 +21,14 @@ class Item extends Model
 
     protected  $fillable = ['user_id','tracking_id','vendor_id','product_id','variant_id','offer_id','address_id','order_id','price','quantity','color','size','status'];
 
-    protected $appends = ['selectedVariants'];
+    protected $appends = ['selectedVariants','tracking_status'];
 
+
+    public function getTrackingStatusAttribute(){
+        // dd($value);
+        $tracking = Helper::trackCourier($this->tracking_id);
+        return $tracking['data'];
+    }
 
     public function getSelectedVariantsAttribute()
     {

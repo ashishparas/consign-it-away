@@ -520,13 +520,14 @@ $input_xml = <<<EOXML
                            
                             // }
                 endforeach;
-                        // dd($arr);
+                   
                     return array('status'=>true,'data'=> $av);
             }else{
                 $uspsErrorData = isset($array_data['TrackInfo']['Error']) ? 
                                     $array_data['TrackInfo']['Error']['Description']:
                                     $array_data['TrackInfo']['TrackSummary'];
-               return array('status'=>false,'data'=> $uspsErrorData);
+                                 
+               return array('status'=>false,'data'=> []);
             }
 
 

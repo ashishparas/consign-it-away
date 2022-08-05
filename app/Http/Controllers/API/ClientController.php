@@ -39,6 +39,7 @@ use App\Models\Product;
 use App\Models\Rating;
 use App\Models\RecentProducts;
 use App\Models\Store;
+use App\Models\StoreRating;
 use App\Models\Transaction;
 use App\Models\UserChat;
 use App\Models\Variant;
@@ -892,10 +893,10 @@ class ClientController extends ApiController
                     $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
                 }
                 $items = $items->where('items.status','1')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->get();
-                foreach($items as $key => $item){
-                    $tracking = Helper::trackCourier($item['tracking_id']);
-                        $items[$key]['tracking_status'] = $tracking['data'];
-                }
+                // foreach($items as $key => $item){
+                //     $tracking = Helper::trackCourier($item['tracking_id']);
+                //         $items[$key]['tracking_status'] = $tracking['data'];
+                // }
             }else if($request->type === '2'){
 
                 $items = Item::select('items.*','products.name')
@@ -1823,6 +1824,22 @@ public function ReturnLabel(Request $request)
     }
 }
 
+
+public function StoreRating(Request $request){
+    $rules = ['store_id' =>'required|exists:stores,id','product_id' => 'required|exists:products,id','rating' =>'required','comment' =>''];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $input['user_id'] = Auth::id();
+        $ratings = StoreRating::create($input);
+        return parent::success("Store rating added successfully", $ratings);
+    }catch(\exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 

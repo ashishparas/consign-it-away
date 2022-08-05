@@ -182,8 +182,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('initiate/refund',[VendorController::class, "Refund"]);
     Route::post('delete/product/image',[VendorController::class, "DeleteProductImage"]);
     Route::post('revenue',[VendorController::class, "Revenue"]);
-    route::post('courier/return',[ClientController::class,"ReturnLabel"]);
-    route::post('schedule/pickup',[VendorController::class, "SchedulePickup"]);
+    Route::post('courier/return',[ClientController::class,"ReturnLabel"]);
+    Route::post('schedule/pickup',[VendorController::class, "SchedulePickup"]);
+    Route::post('store/rating',[ClientController::class,"StoreRating"]);
     
     
    
