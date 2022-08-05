@@ -43,11 +43,11 @@
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <span class="grey_cl">Manager:</span>
-                          <p>{{ ($transaction->product)?$transaction->product->store->manager->name :'-' }}</p>
+                          <p>{{ ($transaction->product->store->manager)?$transaction->product->store->manager->name :'-' }}</p>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <span class="grey_cl">Manager Contact:</span>
-                          <p>{{ ($transaction->product)?$transaction->product->store->manager->phonecode :'' }} - {{ ($transaction->product)?$transaction->product->store->manager->mobile_no:'' }}</p>
+                          <p>{{ ($transaction->product->store->manager)?$transaction->product->store->manager->phonecode :'' }} - {{ ($transaction->product->store->manager)?$transaction->product->store->manager->mobile_no:'' }}</p>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                           <span class="grey_cl">Vender Contact:</span>

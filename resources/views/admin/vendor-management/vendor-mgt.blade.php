@@ -23,7 +23,7 @@
             <div class="ms-panel">
                 <div class="ms-panel-header border-0 d-flex justify-content-between">
                     <h3>Vendor Management</h3>
-                    <a href="add-vendor.html" class="btn green_btn">+ Add Vendor</a>
+                    <a href="{{url('admin/add-vendor')}}" class="btn green_btn">+ Add Vendor</a>
                 </div>
             </div>
         </div>

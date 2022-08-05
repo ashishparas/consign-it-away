@@ -23,6 +23,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use PDF;
+use App\Helper\Helper;
 
 class VendorController extends Controller
 {
@@ -505,6 +507,93 @@ class VendorController extends Controller
         $Withdraw->save();
         return redirect()->back()->with(['error' => 'Withdraw Rejected']);
             
+    }
+    
+    public function CreateVendor(Request $request)
+    {
+       $input = $request->all();
+       $request->validate([
+            'fname' => 'required',
+            'lname' => 'required',
+            'phonecode' => 'required',
+            'mobile_no' => 'required',
+            'street_address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'country' => 'required',
+            'zipcode'=> 'required',
+            'paypal_id' =>'required',
+            'bank_ac_no' => 'required',
+            'routing_no' => 'required'
+            
+        ]);
+
+        try {
+
+            $input = $request->all();
+            $phonecode =  str_replace('+','', $input['phonecode']);
+            $input['phonecode'] = '+'.$phonecode;
+            
+            $fullname = $input['fname'].' '.$input['lname'];
+            $input['name'] = $fullname;
+            $input['vendor_status'] = '2';
+
+
+            $User = User::create($input);
+            if ($User) :
+                return redirect()->route('vendor-management');
+            endif;
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
+    }
+    
+    public function AddVendor(Request $request)
+    {
+        
+        return view('admin.vendor-management.create-vendor');
+    }
+    
+    public function AddStore(Request $request)
+    {
+        die("yeee");
+        return view('admin.store.create-store');
+    }
+    
+    public function CreateStore(Request $request)
+    {
+        
+        return view('admin.vendor-management.create-vendor');
+    }
+    
+    public function generateInvoicePDF($id)
+    {
+        $transaction = Transaction::where('id', $id)->with(['Vendor','Product','Item'])->first();
+        $data = [
+            'transaction' => $transaction
+            
+        ];
+           
+        $pdf = PDF::loadView('admin/transaction/invoicePDF', $data);
+    
+        return $pdf->download('consign.pdf');
+    }
+    
+    public function emailInvoice($id)
+    {
+        $transaction = Transaction::where('id', $id)->with(['Vendor','Product','Item'])->first();
+       // dd($transaction->toArray());
+        $email = $transaction->vendor->email;
+        $name = $transaction->vendor->name;
+        $header = "Invoice";
+        
+       
+        $html = view('admin/transaction/invoicePDF',compact('transaction'));
+        
+        Helper::SendVarificationEmail($email, $name, $html, $header);
+        
+        return redirect()->route('transactions');
+        
     }
 
 

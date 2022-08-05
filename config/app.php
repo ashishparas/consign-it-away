@@ -163,6 +163,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+
     
         /*
          * Package Service Providers...
@@ -235,6 +237,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Helper' => App\Helper\Helper::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
         // 'FCM'      => LaravelFCM\Facades\FCM::class,
 	    // 'FCMGroup' => LaravelFCM\Facades\FCMGroup::class, // Optional
         // 'Usps' => Johnpaulmedina\Usps\Facades\Usps::class,
