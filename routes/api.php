@@ -31,7 +31,7 @@ Route::post('login',[AuthController::class, "Login"]);
 Route::post('social/login',[AuthController::class, "SocialLogin"]);
 Route::post('forget/password',[AuthController::class, "ResetPassword"]);
 Route::post('csv',[VendorController::class, "CSV"]);
-
+Route::post('reset/password',[VendorController::class,"ResetUserPassword"]);
 Route::post('usps/address/verify',[ClientController::class, "UspsVerifyAddress"]);
 Route::post('find/address/by/zip',[ClientController::class, "UspsFindAddressByZip"]); 
 Route::post('track/courier',[ClientController::class, "UspsTrackCourier"]);  

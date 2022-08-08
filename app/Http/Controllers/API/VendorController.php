@@ -2259,6 +2259,28 @@ public function SchedulePickup(Request $request){
     }
 }
 
+public function ResetUserPassword(Request $request)
+{
+    $rules = ['token' =>'required','password' =>'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $email = base64_decode($request->token);
+      
+        $user = User::FindOrfail($email);
+        dd($user);
+        $password = hash::make($request->password);
+        $user->fill(['password' => $password]);
+        $user->save();
+        return parent::success("Password changed successfully!");
+
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 
