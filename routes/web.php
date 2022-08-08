@@ -96,6 +96,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('add-plans',[VendorController::class, "AddPlans"]);
             Route::post('create-plans', [VendorController::class, "CreatePlans"]);
             Route::get('delete/plans/{id}',[VendorController::class, "DeletePlans"]);
+            Route::get('edit-plans/{id}',[VendorController::class,"EditPlans"]);
+            Route::post('update-plans',[VendorController::class,"UpdatePlans"]);
             
  });
  

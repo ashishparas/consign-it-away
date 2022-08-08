@@ -727,7 +727,23 @@ class VendorController extends Controller
         $SubscriptionPlan->delete();
         return redirect()->route('subscription-plan')->with('message', 'Plan Deleted Successfully!');
     }
-
+    
+    public function EditPlans($id){
+        $subscriptionPlan = SubscriptionPlan::FindOrfail($id);
+        return view('admin/subscriptions/edit-plans',compact('subscriptionPlan'));
+    }
+    
+    public function UpdatePlans(Request $request){
+        $input = $request->all();
+ 
+            
+        $subscriptionPlan = SubscriptionPlan::FindOrfail($request->id);
+     
+                $subscriptionPlan->fill($input);
+                $subscriptionPlan->save();
+        return redirect()->route('subscription-plan');
+            
+    }
 
 
 

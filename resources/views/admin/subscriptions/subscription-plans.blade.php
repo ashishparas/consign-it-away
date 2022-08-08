@@ -76,7 +76,7 @@
                             
                             </ul>
                             <div class="col-md-12 text-center pb-3">
-                              <button type="button" class="btn green_btn_light p-2">Edit</button>
+                              <a href="{{url('/admin/edit-plans/'.$subscription->id)}}" class="btn green_btn_light p-2">Edit</a>
                               <a href="{{url('/admin/delete/plans/'.$subscription->id)}}"  class="btn orange_btn_light p-2">Delete</a>
       
                             </div>
