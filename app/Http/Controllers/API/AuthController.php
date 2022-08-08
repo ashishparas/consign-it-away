@@ -532,8 +532,8 @@ class AuthController extends ApiController {
             return $validateAttributes;
         endif;
         try{
-            $email = base64_encode($request->email);
-            $baseUrl = $request->getHttpHost()."/consign/#/forgot-password/$email";
+           //$email = base64_encode($request->email);
+            $baseUrl = $request->getHttpHost()."/consign/#/forgot-password";
             
             $header = "Reset Password";
             $html = "<p>Your reset password url: <a href='$baseUrl'>Click Here</a></p>";
