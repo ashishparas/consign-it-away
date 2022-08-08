@@ -679,37 +679,13 @@ class VendorController extends Controller
         return redirect()->route('transactions');
         
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    public function ViewReportsDetail($id)
+    {
+         $contact = Contact::where('id', $id)->first();
+     
+        return view('admin.report.report-detail', compact('contact'));
+    }
 
 
 

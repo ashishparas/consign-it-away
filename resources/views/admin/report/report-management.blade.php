@@ -24,7 +24,7 @@
 
           @foreach($contacts as $contact)
           <div class="ms-panel-body d-flex mb-0 pb-2">
-            <a href="report-details.html" class="d-flex">
+            <a href="{{url('/admin/report-detail/'.$contact->id)}}" class="d-flex">
                 @php
                     $image = ($contact->image == null)? 'no-image.png':$contact->image;
                 @endphp

@@ -23,4 +23,6 @@ class Contact extends Model
     public function getBaseUrlAttribute(){
         return asset('public/vendor');
     }
+    
+ 
 }

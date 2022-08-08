@@ -92,6 +92,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::post('create-manager', [VendorController::class, "CreateManager"]);
             Route::get('invoice-pdf/{id}', [VendorController::class, 'generateInvoicePDF']);
             Route::get('invoice-email/{id}', [VendorController::class, 'emailInvoice']);
+            Route::get('report-detail/{id}',[VendorController::class, "ViewReportsDetail"]);
             
  });
  
