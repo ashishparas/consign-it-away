@@ -126,7 +126,7 @@
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-2">
                                 <span class="grey_cl">Routing Number:</span>
-                                <span class="black_cl">3{{ $vendors->vendor->bank->routing_no }}</span>
+                                <span class="black_cl">3{{ ($vendors->vendor->bank)?$vendors->vendor->bank->routing_no:'' }}</span>
                             </div>
                         
                             </div>
