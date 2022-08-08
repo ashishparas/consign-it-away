@@ -24,7 +24,7 @@
                 <div class="ms-panel-header border-0 d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">Subscription Management</h3>
                     <span>
-                        <a href="javascript:void()" class="btn green_btn">+ Add More Plan</a>
+                        <a href="{{url('/admin/add-plans')}}" class="btn green_btn">+ Add More Plan</a>
                     </span>
                 </div>
             </div>
@@ -77,7 +77,7 @@
                             </ul>
                             <div class="col-md-12 text-center pb-3">
                               <button type="button" class="btn green_btn_light p-2">Edit</button>
-                              <button type="button" class="btn orange_btn_light p-2">Delete</button>
+                              <a href="{{url('/admin/delete/plans/'.$subscription->id)}}"  class="btn orange_btn_light p-2">Delete</a>
       
                             </div>
                       </div>

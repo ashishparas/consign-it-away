@@ -686,6 +686,47 @@ class VendorController extends Controller
      
         return view('admin.report.report-detail', compact('contact'));
     }
+    
+    public function AddPlans()
+    {
+        return view('admin.subscriptions.create-plans');
+    }
+    
+    public function CreatePlans(Request $request)
+    {
+        $input = $request->all();
+        $features = implode(',', $request->features);
+        $features_arr = array(array("name"=>$features));
+        
+        $request->validate([
+            'name' => 'required',
+            'monthly_price' => 'required',
+            'yearly_price' => 'required',
+            'content' => 'required',
+            'features' => 'required'
+        ]);
+
+        try {
+
+            $input = $request->all();
+            $input['features'] = json_encode($features_arr);
+
+            $SubscriptionPlan = SubscriptionPlan::create($input);
+         
+            if ($SubscriptionPlan) :
+                return redirect()->route('subscription-plan');
+            endif;
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
+    }
+    
+    public function DeletePlans($id)
+    {
+        $SubscriptionPlan = SubscriptionPlan::FindOrfail($id);
+        $SubscriptionPlan->delete();
+        return redirect()->route('subscription-plan')->with('message', 'Plan Deleted Successfully!');
+    }
 
 
 

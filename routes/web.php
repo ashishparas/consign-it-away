@@ -50,7 +50,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('/order-management',[AdminController::class, "orderManagement"]);
             Route::get('shipping-order-details/{id}',[AdminController::class, "ShippingOrderDetails"]);
             Route::get('/vendor-management',[VendorController::class,"index"])->name('vendor-management');
-            Route::get('subscription-plan',[VendorController::class,"SubscriptionPlan"]);
+            Route::get('subscription-plan',[VendorController::class,"SubscriptionPlan"])->name('subscription-plan');
             Route::get('vendor-products',[VendorController::class, "VendorProducts"])->name('vendor.product.list');
             Route::get('product/detail/vendor/{id}',[VendorController::class,"ViewProductDetailsById"]);
             Route::get('report-management',[VendorController::class, "ViewReports"]);
@@ -93,6 +93,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('invoice-pdf/{id}', [VendorController::class, 'generateInvoicePDF']);
             Route::get('invoice-email/{id}', [VendorController::class, 'emailInvoice']);
             Route::get('report-detail/{id}',[VendorController::class, "ViewReportsDetail"]);
+            Route::get('add-plans',[VendorController::class, "AddPlans"]);
+            Route::post('create-plans', [VendorController::class, "CreatePlans"]);
+            Route::get('delete/plans/{id}',[VendorController::class, "DeletePlans"]);
             
  });
  
