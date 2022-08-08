@@ -369,10 +369,12 @@
                           <div role="tabpanel" class="tab-pane fade" id="tab12">
                             <h5 class="border-bottom mb-0 p-3 d-flex">Subscription</h5>
                             <div class="p-3">
-                                  <h6 class="text-uppercase"><b>@if(!empty($vendors->subscription))@foreach($vendors->subscription as $plans )@endforeach
-                                      {{ $plans->subscriptionPlan->name }} </b></h6>
-                                  <p class="grey_cl mb-1">{{ $plans->subscriptionPlan->content }}.</p>
-                                  <span class="badge orange_btn p-2">$ {{ $plans->subscriptionPlan->monthly_price }} Only</span>
+                                @if(!empty($vendors->subscription))@foreach($vendors->subscription as $plans )@endforeach
+                                @if(!empty($plans))
+                                  <h6 class="text-uppercase"><b>
+                                       {{ $plans->subscriptionPlan->name }} </b></h6>
+                                  <p class="grey_cl mb-1">  {{ $plans->subscriptionPlan->content }}.</p>
+                                  <span class="badge orange_btn p-2">$ {{ $plans->subscriptionPlan->monthly_price }} Only</span>  @endif
                                   @endif
                                   <h5 class="pt-4 border-top mt-3 pb-3"><b>History</b></h5>
                                 <div class="border history_block table-responsive">
