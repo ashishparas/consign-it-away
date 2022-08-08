@@ -115,6 +115,11 @@ class Product extends Model
 public function Discount(){
     return $this->hasOne(Discount::class,'id','discount')->where('status','1')->select('id','percentage','description');
 }
+
+
+public function PromoCode(){
+    return $this->hasOne(PromoProduct::class,'product_id','id')->select('id','product_id','code_id')->with(['CodeName']);
+}
   
 
     

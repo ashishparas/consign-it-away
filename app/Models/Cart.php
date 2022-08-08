@@ -45,7 +45,7 @@ class Cart extends Model
  
     public function Product(){
       
-       return $this->belongsTo(Product::class)->select('id','user_id','name','image','price','discount')->with(['Offer','Discount']);
+       return $this->belongsTo(Product::class)->select('id','user_id','name','image','price','discount')->with(['Offer','Discount'])->with(['PromoCode']);
       
     }
 

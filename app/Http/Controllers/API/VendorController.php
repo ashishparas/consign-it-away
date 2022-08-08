@@ -30,6 +30,7 @@ use App\Models\Notification;
 use App\Models\Offer;
 use App\Models\Product;
 use App\Models\PromoCode;
+use App\Models\PromoProduct;
 use App\Models\Refund;
 use App\Models\Stock;
 use App\Models\Subcategory;
@@ -983,7 +984,7 @@ class VendorController extends ApiController
             // dd($filename);
             $open = fopen($filename, "r");
             $data = fgetcsv($open, 1000, ",");
-            $brands = [];
+           
             $sql = '';
             while (($data = fgetcsv($open, 1000, ",")) !== FALSE) 
                 {
@@ -991,7 +992,7 @@ class VendorController extends ApiController
                    $sql .= "('".addslashes($data[0])."'),";
                 }
                 $sql = rtrim($sql,',');
-                // dd('insert into brands (name) values '.$sql);
+                // dd('insert into brands (name) values '.$sql);0
                 // DB::enableQueryLog();
                 $query  = DB::insert('insert into brands (name) values '.$sql);
                return parent::success("Brands added successfully!");
@@ -999,6 +1000,66 @@ class VendorController extends ApiController
             return parent::error($ex->getMessage());
         }
    }
+
+
+   public function productCSV(Request $request){
+
+    $rules = ['uploads' => ''];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $filename = $_FILES['uploads']['tmp_name'];
+       
+        $open = fopen($filename, "r");
+      
+        $value = fgetcsv($open, 1000, ",");
+     
+        $sql = '';
+        $i = 0;
+        
+        while (($data = fgetcsv($open, 1000, ",")) !== FALSE) 
+            {
+                $category_id = $value[0];
+                $subcategory_id = $value[1];
+                $store_id = $value[2];
+                $name = $value[3];
+                $image = $value[4];
+                $description  = $value[5];
+                $price = $value[6];
+                $discount = $value[7];
+                $brand = $value[8];
+                $color = $value[9];
+                $quantity  =$value[10];
+                $weight = $value[11];
+                $condition = $value[12];
+                $dimensions = $value[13];
+                $available_for_sale = $value[14];
+                $customer_contact = $value[15];
+                $inventory_track = $value[16];
+                $product_offer = $value[17];
+                $ships_from = $value[18];
+                $shipping_type = $value[19];
+                $is_variant = $value[20];
+                $user_id = Auth::id();
+             
+    $query  = DB::insert("insert into products (`user_id`,$category_id, $subcategory_id, $store_id, $name, $image,$description, $price,  $discount,$brand, $color, $quantity, $weight, `$condition`, $dimensions,$available_for_sale, $customer_contact, $inventory_track, $product_offer,  $ships_from, $shipping_type,$is_variant) values('$user_id','$data[0]','$data[1]','$data[2]','$data[3]','$data[4]','$data[5]','$data[6]','$data[7]','$data[8]','$data[9]','$data[10]','$data[11]','$data[12]','$data[13]','$data[14]','$data[15]','$data[16]','$data[17]','$data[18]','$data[19]','$data[20]')");
+
+            }
+
+            // $sql = rtrim($sql,',');
+          
+            // dd('insert into brands (name) values '.$sql);0
+            // DB::enableQueryLog();
+          
+           
+           return parent::success("Product added successfully!");
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
    public function Brands(Request $request){
@@ -1879,6 +1940,15 @@ public function CreatePromoCode(Request $request)
         $input = $request->all();
         $input['user_id'] = Auth::id();
         $promocode = PromoCode::create($input);
+        $products = explode(',', $promocode->product_id);
+        foreach($products as $product):
+            PromoProduct::create([
+                'user_id' => Auth::id(),
+                'code_id' => $promocode->id,
+                'product_id' => $product,
+                'expiry_date' => $promocode->expiry
+            ]);
+        endforeach;
         return parent::success("Promocode created successfully!", $promocode);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
