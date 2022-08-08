@@ -2270,8 +2270,10 @@ public function ResetUserPassword(Request $request)
         $input = $request->all();
         $email = base64_decode($request->token);
       
-        $user = User::FindOrfail($email);
-        dd($user);
+        $user = User::find($email);
+        if($user === null):
+            return parent::error("Invalid Token");
+        endif;
         $password = hash::make($request->password);
         $user->fill(['password' => $password]);
         $user->save();
