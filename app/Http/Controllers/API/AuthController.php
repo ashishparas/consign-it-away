@@ -5,16 +5,12 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-// use Auth;
 use App\Models\User;
-
 use \App\Models\Role;
 use Carbon\Carbon;
 use Laravel\Sanctum\HasApiTokens;
-// use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
-use App;
 use App\Helper\Helper;
 use Stripe;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +24,6 @@ use App\Models\Notification;
 use App\Models\Store;
 use App\Models\UserDevice;
 use GrahamCampbell\ResultType\Success;
-
 use function PHPUnit\Framework\isEmpty;
 use function PHPUnit\Framework\returnSelf;
 
@@ -531,36 +526,28 @@ class AuthController extends ApiController {
 
     public function ResetPassword(Request $request, Factory $view) {
         //Validating attributes
-        $rules = ['email' => 'required'];
+        $rules = ['email' => 'required|exists:users,email'];    
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
         if ($validateAttributes):
             return $validateAttributes;
         endif;
-        $view->composer('emails.auth.password', function($view) {
-            $view->with([
-                'title' => trans('front/password.email-title'),
-                'intro' => trans('front/password.email-intro'),
-                'link' => trans('front/password.email-link'),
-                'expire' => trans('front/password.email-expire'),
-                'minutes' => trans('front/password.minutes'),
-            ]);
-        });
-        return parent::success('Email has been send');
-//        dd($request->only('email'));
-        $response = Password::sendResetLink($request->only('email'), function (Message $message) {
-                    $message->subject(trans('front/password.reset'));
-                });
-//        dd($response);
-        switch ($response) {
-            case Password::RESET_LINK_SENT:
-                return parent::successCreated('Password reset link sent please check inbox');
-            case Password::INVALID_USER:
-                return parent::error(trans($response));
-            default :
-                return parent::error(trans($response));
-                break;
+        try{
+            $email = base64_encode($request->email);
+            $baseUrl = $request->getHttpHost()."/consign/#/forgot-password/$email";
+            
+            $header = "Reset Password";
+            $html = "<p>Your reset password url: <a href='$baseUrl'>Click Here</a></p>";
+          
+             // send grid Dev:Ashish Mehra
+            $ResetPassword = Helper::SendVarificationEmail($request->email,'Dear User', $html, $header);
+            if($ResetPassword):
+                return parent::success("Reset Password link has been send successfully!");
+            endif;
+
+        }catch(\exception $ex){
+            return parent::error($ex->getMessage());
         }
-        return parent::error('Something Went');
+        
     }
     
     
