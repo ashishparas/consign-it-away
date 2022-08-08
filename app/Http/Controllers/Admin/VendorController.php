@@ -577,24 +577,18 @@ class VendorController extends Controller
         ]);
 
         try {
-
             $input = $request->all();
             
-            if (isset($request->banner)) :
-
-                $bannerimage = time() . '.' . $request->banner->extension();
-                $request->banner->move(public_path('/vendor'), $bannerimage);
-                $input['banner'] = $bannerimage;
-            endif;
-            
-            if (isset($request->store_image)) :
-
-                $storeimage = time() . '.' . $request->store_image->extension();
-                $request->store_image->move(public_path('/vendor'), $storeimage);
-                $input['store_image'] = $storeimage;
+           
+            if (isset($request->banner)):
+                $input['banner'] = parent::__uploadImage($request->file('banner'), public_path('/vendor'), false);
             endif;
 
+            if (isset($request->store_image)):
+                $input['store_image'] = parent::__uploadImage($request->file('store_image'), public_path('/vendor'), false);
+            endif;
 
+           
             $Store = Store::create($input);
             
             $lastInsertID = $Store->id;
