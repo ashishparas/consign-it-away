@@ -1463,7 +1463,7 @@ class ClientController extends ApiController
             $mostPopular = new Product();
        
             $mostPopular = $mostPopular
-            ->select('products.id','products.subcategory_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite'))
+            ->select('products.id','products.subcategory_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', 'products.available_for_sale','products.created_at', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id');
          
@@ -1506,7 +1506,7 @@ class ClientController extends ApiController
 
         }else if($request->type === '3'){
             $newProducts = new Product();
-            $newProducts = $newProducts->select('id','subcategory_id','user_id','store_id','name','image','price','brand');
+            $newProducts = $newProducts->select('id','subcategory_id','user_id','store_id','name','image','price','brand', 'available_for_sale','created_at');
             
             if(isset($request->search)){
                 $newProducts = $newProducts->where('name', 'LIKE', '%'.$request->search.'%');
@@ -1544,7 +1544,7 @@ class ClientController extends ApiController
          
             $brand = new Product();
                 DB::enableQueryLog();
-            $brand = $brand->select('products.id','products.subcategory_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+            $brand = $brand->select('products.id','products.subcategory_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', 'products.available_for_sale','products.created_at', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id');
 
@@ -1587,7 +1587,7 @@ class ClientController extends ApiController
          
             $sub_category = new Product();
              
-                $sub_category = $sub_category->select('products.id','products.subcategory_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
+                $sub_category = $sub_category->select('products.id','products.subcategory_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', 'products.available_for_sale','products.created_at', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id');
 

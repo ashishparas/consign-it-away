@@ -524,7 +524,7 @@ class AuthController extends ApiController {
    
 
 
-    public function ResetPassword(Request $request, Factory $view) {
+    public function ResetPassword(Request $request) {
         //Validating attributes
         $rules = ['email' => 'required|exists:users,email'];    
         $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
@@ -532,6 +532,7 @@ class AuthController extends ApiController {
             return $validateAttributes;
         endif;
         try{
+         
             $email = base64_encode($request->email);
             $baseUrl = $request->getHttpHost()."/consign/#/forgot-password?token=$email";
             dd($baseUrl);
