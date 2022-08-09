@@ -105,14 +105,13 @@ class VendorController extends Controller
         return view('admin.order.running-orders', compact('items'));
     }
 
-    public function VendorEditProfile($id, $store_id)
+    public function VendorEditProfile($id)
     {
         DB::enableQueryLog();
         $vendors = Store::where('user_id', $id)
-                            ->where('id', $store_id)
                 ->with(['Manager','Product','PorductRating','Vendor','Subscription'])
                 ->first();
-                  dd(DB::getQueryLog($vendors));
+                //   dd(DB::getQueryLog($vendors));
         return view('admin/vendor-management.vendor-profile-edit', compact('vendors'));
     }
 

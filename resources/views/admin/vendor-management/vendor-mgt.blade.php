@@ -147,7 +147,7 @@
                                     <td>{{($vendor->email ==null)?'No Email':$vendor->email}}</td>
                                     <td><span class="green_cl">Active</span></td>
                                  
-                                    @if(false)
+                                    @if($product->user)
                                         <td><a href="{{url('admin/vendor-edit-profile/'.$vendor->id)}}" class="btn orange_btn">View</a></td>
                                     @endif
                                     
