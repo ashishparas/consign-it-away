@@ -31,11 +31,15 @@
         </div>
         <div class="col-xl-12 col-md-12">
             <div class="ms-profile-overview">
-                <div class="ms-profile-cover">
+                
+                 @if($vendors!= "")
+                <div class="ms-profile-cover" style="background-image: url({{asset('public/vendor/'.$vendors->store_image )}})">  @else
+                <div class="ms-profile-cover" >
+                    @endif
                     @if($vendors!= "")
                   <img class="ms-profile-img" src="{{asset('public/vendor/'.$vendors->store_image )}}" alt="img">
                   @else
-                 No Image
+                 <img class="ms-profile-img" src="{{asset('public/vendor/' )}}" alt="img">
                   @endif
                   <div class="ms-profile-user-info">
                     <h4 class="ms-profile-username text-white">@if($vendors!= "") {{($vendors->name ==null)?'No-name':$vendors->name}}  @endif</h4>
@@ -82,9 +86,9 @@
                             <span class="green_cl ml-auto fs-16"><img src="{{asset('public/assets/img/green_circle.svg')}}" class="mr-1">Active</span>
                           </h5>
                           <div class="p-3">
-                          <h4 class="blue_cl">{{ $vendors->name }}</h4>
-                          <h2 class="ms-profile-role address_icon mb-0 d-flex align-items-center pt-2 pb-3"><img src="{{asset('public/assets/img/address_black.svg')}}" alt="img" class="address_img"><span class="fs-16">Second Floor, Plot No. 82, Okhla Industrial Estate, Phase - III.</span></h2>
-                          <p class="grey_cl">{{ $vendors->description }}</p>
+                          <h4 class="blue_cl">{{($vendors)?$vendors->name:'No-Name'}}</h4>
+                          <h2 class="ms-profile-role address_icon mb-0 d-flex align-items-center pt-2 pb-3"><img src="{{asset('public/assets/img/address_black.svg')}}" alt="img" class="address_img"><span class="fs-16">{{($vendors)?$vendors->location:'No-Name'}}</span></h2>
+                          <p class="grey_cl">{{($vendors)?$vendors->description:'No-description'}}</p>
                           <h5 class="black_cl pt-2 pb-3">Manager Assigned</h5>
                           <div class="media fs-14 pb-3">
                             <div class="mr-2 align-self-center">
@@ -92,12 +96,12 @@
                             </div>
                             <div class="media-body d-flex justify-content-between call_img align-items-center">
                               <div>
-                              <h6 class="pb-0 mb-0">{{ ($vendors->manager)?$vendors->manager->name : 'No-name'}}</h6>
-                              <p class="fs-12 my-1 text-disabled">{{ ($vendors->manager)?$vendors->manager->email : 'No-name' }}</p>
+                              <h6 class="pb-0 mb-0">@if($vendors) {{ ($vendors->manager)?$vendors->manager->name : 'No-name'}}@endif</h6>
+                              <p class="fs-12 my-1 text-disabled">@if($vendors) {{ ($vendors->manager)?$vendors->manager->email : 'No-name' }}@endif</p>
                             </div>
                             <div class="call_img">
                                 <img src="assets/img/call.jpg" alt="" class="mr-2">
-                                <span class="green_cl">{{ ($vendors->manager)?$vendors->manager->phonecode:'' }}-{{ ($vendors->manager)?$vendors->manager->mobile_no:'' }}</span>
+                                <span class="green_cl">@if($vendors) {{ ($vendors->manager)?$vendors->manager->phonecode:'' }}-{{ ($vendors->manager)?$vendors->manager->mobile_no:'' }} @endif</span>
                             </div>
                             </div>
                           </div>
@@ -108,28 +112,30 @@
                             <div class="p-3">
                             <div class="media fs-14 pb-3 media-img">
                                 <div class="mr-2 align-self-center">
+                                    @if($vendors)
                                   <img src="{{asset('public/vendor/'.$vendors->vendor->profile_picture )}}" class="" alt="people">
+                                  @endif
                                 </div>
                                 <div class="media-body">
-                                  <h6 class="pb-0 mb-0">{{ $vendors->vendor->name }}</h6>
-                                  <p class="fs-12 my-1 text-disabled">{{ $vendors->vendor->email }}</p>
+                                  <h6 class="pb-0 mb-0">@if($vendors){{ $vendors->vendor->name }}@endif</h6>
+                                  <p class="fs-12 my-1 text-disabled">@if($vendors){{ $vendors->vendor->email }}@endif</p>
                                 </div>
                                <div class="d-flex ml-auto call_img align-items-center">
                                 <img src="{{asset('public/assets/img/call.jpg' )}}" alt="" class="mr-2">
-                                <span class="green_cl">{{ $vendors->vendor->phonecode }}-{{ $vendors->vendor->mobile_no }}</span>
+                                <span class="green_cl">@if($vendors){{ $vendors->vendor->phonecode }}-{{ $vendors->vendor->mobile_no }}@endif</span>
                                </div>
                               </div>
                               <div class="d-flex align-items-center justify-content-between pb-2">
                                   <span class="grey_cl">FAX:</span>
-                                  <span class="black_cl">{{ $vendors->vendor->fax }}</span>
+                                  <span class="black_cl">@if($vendors){{ $vendors->vendor->fax }}@endif</span>
                               </div>
                               <div class="d-flex align-items-center justify-content-between pb-2">
                                 <span class="grey_cl">Bank Account No.:</span>
-                                <span class="black_cl">{{ ($vendors->vendor->bank)?$vendors->vendor->bank->bank_ac_no:'' }}</span>
+                                <span class="black_cl">@if($vendors){{ ($vendors->vendor->bank)?$vendors->vendor->bank->bank_ac_no:'' }}@endif</span>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-2">
                                 <span class="grey_cl">Routing Number:</span>
-                                <span class="black_cl">3{{ ($vendors->vendor->bank)?$vendors->vendor->bank->routing_no:'' }}</span>
+                                <span class="black_cl">@if($vendors){{ ($vendors->vendor->bank)?$vendors->vendor->bank->routing_no:'' }}@endif</span>
                             </div>
                         
                             </div>
@@ -139,6 +145,7 @@
                             <div class="p-3">
                               <div class="chat_scroll shipping_scroll w-100">
                                 <div class="row">
+                                    @if($vendors)
                                     @foreach($vendors->product as $products )
                                   
                                 <div class="col-lg-4 col-md-4 col-sm-4">
@@ -186,6 +193,7 @@
                                     </div>
                                   </div>
                                   @endforeach
+                                  @endif
                                   
                                 </div>
                                 </div>
@@ -358,12 +366,14 @@
                             <h5 class="border-bottom mb-0 p-3 d-flex">Gallery</h5>
                             <div class="p-3">
                             <div class="row">
+                                @if($vendors)
                                 @foreach($vendors->photos as $pics )
                                   <div class="col-md-4 col-lg-4">   
                                     <div class="mb-4 gallery_block"><img src="{{asset('public/vendor/'.$pics )}}" class="img-fluid"></div>
                                     
                                   </div>
                               @endforeach
+                              @endif
                               
                             </div>
                           </div>
