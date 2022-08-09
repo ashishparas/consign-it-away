@@ -250,7 +250,7 @@ class ClientController extends ApiController
 
             $arr = array(
             array('name' => 'Category','type'=> 1,'items'=> $category),
-            array('name' =>'Most Popular','type'=> 2,'items' =>$products),
+            array('name' =>'Most Popular','type'=> 2,'items' => $products),
             array('name' => 'Brands','type' => 3,'items' => $brands),
             array('name' => 'Recent Viewed','type' => 4, 'items' => $recentView),
             array('name' => 'New Collection','type' => 5, 'items' => $newCollection)
