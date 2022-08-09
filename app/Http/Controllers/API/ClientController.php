@@ -202,7 +202,7 @@ class ClientController extends ApiController
         try{
         //   DB::enableQueryLog();
             $products = Product::
-                    select('products.id','products.name','products.image as images','products.discount','products.available_for_sale', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id, products.price as amount'))
+                    select('products.id','products.name','products.image as images','products.discount','products.available_for_sale','products.created_at', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id, products.price as amount'))
                     ->leftJoin('ratings', 'ratings.product_id', 'products.id')
                     ->leftJoin('favourites', 'favourites.product_id', 'products.id')
                     ->where('products.status', '1')
@@ -219,7 +219,7 @@ class ClientController extends ApiController
             $brands = Brand::whereIn('id',[9372,11739,41,9496,2494,162])->get();
          
             DB::enableQueryLog();
-            $recentView = RecentProducts::select(DB::raw('products.id as id, recent_products.id as recent_id '),'products.name','products.image','recent_products.user_id','products.available_for_sale','recent_products.product_id','products.discount',DB::raw("CONVERT(favourites.id, CHAR) as FavouriteId, products.price as amount"),DB::raw('(favourites.status) as favourite'))
+            $recentView = RecentProducts::select(DB::raw('products.id as id, recent_products.id as recent_id '),'products.name','products.image','recent_products.user_id','products.available_for_sale','recent_products.product_id','products.discount','products.created_at',DB::raw("CONVERT(favourites.id, CHAR) as FavouriteId, products.price as amount"),DB::raw('(favourites.status) as favourite'))
             
             ->leftJoin('favourites', 'favourites.product_id', 'recent_products.product_id')
             ->join('products', 'products.id', '=', 'recent_products.product_id')
@@ -237,7 +237,7 @@ class ClientController extends ApiController
             endforeach;
 
             $discount = Discount::orderBy('id','DESC')->take(5)->get();
-            $newCollection = Product::select('products.id','products.name','products.image as images','products.discount','products.available_for_sale', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id, products.price as amount'))
+            $newCollection = Product::select('products.id','products.name','products.image as images','products.discount','products.available_for_sale','products.created_at', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as favourite_id, products.price as amount'))
             ->leftJoin('ratings', 'ratings.product_id', 'products.id')
             ->leftJoin('favourites', 'favourites.product_id', 'products.id')
             ->where('products.status', '1')
@@ -1411,7 +1411,7 @@ class ClientController extends ApiController
         if($request->type === '2'){
             $product = new Product();
          
-        $RecentlyViewProduct = RecentProducts::select('products.id','products.subcategory_id','recent_products.product_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as FavouriteId'))
+        $RecentlyViewProduct = RecentProducts::select('products.id','products.subcategory_id','recent_products.product_id','products.user_id','products.brand','products.store_id','products.name','products.image as images','products.price','products.available_for_sale','products.created_at', DB::raw('AVG(ratings.rating) as AverageRating, COUNT(ratings.id) as TotalComments, (favourites.status) as favourite, favourites.id as FavouriteId'))
             ->Join('products', 'recent_products.product_id', 'products.id')
             ->leftJoin('ratings', 'ratings.product_id', 'products.id')
             ->leftJoin('favourites', 'favourites.product_id', 'products.id');
