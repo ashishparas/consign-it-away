@@ -55,7 +55,7 @@ class VendorController extends Controller
     {
         $vendors = User::select('id', 'name', 'fname', 'lname', 'email', 'profile_picture','phonecode','mobile_no')->where('type', '2')->get();
         $products = Product::select(DB::raw('DISTINCT user_id'), 'id', 'store_id', 'image', 'name', 'quantity', 'price', 'created_at')->with('User')->get();
-        // dd($products->toArray());  
+      
         return view('admin.vendor-management.vendor-mgt', compact('vendors', 'products'));
     }
 
@@ -105,13 +105,14 @@ class VendorController extends Controller
         return view('admin.order.running-orders', compact('items'));
     }
 
-    public function VendorEditProfile($id)
+    public function VendorEditProfile($id, $store_id)
     {
-        
-        //$vendors = User::select('id', 'name', 'fname', 'lname', 'email', 'profile_picture')->where('id', $id)->get();
-        $vendors = Store::where('id', $id)->with(['Manager','Product','PorductRating','Vendor','Subscription'])->first();
-         //dd($vendors->toArray());
-        
+        DB::enableQueryLog();
+        $vendors = Store::where('user_id', $id)
+                            ->where('id', $store_id)
+                ->with(['Manager','Product','PorductRating','Vendor','Subscription'])
+                ->first();
+                  dd(DB::getQueryLog($vendors));
         return view('admin/vendor-management.vendor-profile-edit', compact('vendors'));
     }
 
@@ -539,6 +540,8 @@ class VendorController extends Controller
             $fullname = $input['fname'].' '.$input['lname'];
             $input['name'] = $fullname;
             $input['vendor_status'] = '2';
+            $input['type'] = '2';
+            $input['status'] = '2';
 
 
             $User = User::create($input);

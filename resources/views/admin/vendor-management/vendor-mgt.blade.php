@@ -133,7 +133,10 @@
                                     <td>#{{$vendor->id}}</td>
                                     <td class="product_tuc">
                                         <div class="d-block d-lg-flex align-items-center">
-                                            <img class="mr-3" src="{{asset('public/vendor/'.$vendor->profile_picture)}}" alt="image" />
+                                    @php
+                                        $image = ($vendor->profile_picture)? $vendor->profile_picture:'no_image.jpg';    
+                                    @endphp
+        <img class="mr-3" src="{{asset('public/vendor/'.$image)}}" alt="image" />
                                             <div class="d-block d-lg-flex flex-column">
                                                 <!--<h6 class="mb-0">{{($product->soldBy == null)?'No Store Added':$product->soldBy->name}}</h6>-->
                                                 <small class="grey_cl">{{($vendor->name ==null)?'No-name':$vendor->name}}</small>
@@ -143,7 +146,8 @@
                                     <td>{{($vendor->mobile_no==null)?'Mobile no not given':$vendor->phonecode.''.$vendor->mobile_no}}</td>
                                     <td>{{($vendor->email ==null)?'No Email':$vendor->email}}</td>
                                     <td><span class="green_cl">Active</span></td>
-                                    @if($product->user)
+                                 
+                                    @if(false)
                                         <td><a href="{{url('admin/vendor-edit-profile/'.$vendor->id)}}" class="btn orange_btn">View</a></td>
                                     @endif
                                     
