@@ -31,7 +31,7 @@
             <div class="ms-panel">
                 <div class="ms-panel-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">Vendor Account Request</h4>
-                    <span class="requests_counts">{{ count($vendors) }}</span>
+                    <span class="requests_counts">{{ count($vendors ) }}</span>
                 </div>
                 <div class="ms-panel-body auto_scroll">
                     <div class="requests_scroll">
@@ -128,23 +128,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($products as $product)
+                                @foreach($vendors as $vendor)
                                 <tr>
-                                    <td>#{{$product->id}}</td>
+                                    <td>#{{$vendor->id}}</td>
                                     <td class="product_tuc">
                                         <div class="d-block d-lg-flex align-items-center">
-                                            <img class="mr-3" src="{{asset('public/products/'.$product->image[0])}}" alt="image" />
+                                            <img class="mr-3" src="{{asset('public/vendor/'.$vendor->profile_picture)}}" alt="image" />
                                             <div class="d-block d-lg-flex flex-column">
-                                                <h6 class="mb-0">{{($product->soldBy == null)?'No Store Added':$product->soldBy->name}}</h6>
-                                                <small class="grey_cl">{{($product->user ==null)?'No-name':$product->user->name}}</small>
+                                                <!--<h6 class="mb-0">{{($product->soldBy == null)?'No Store Added':$product->soldBy->name}}</h6>-->
+                                                <small class="grey_cl">{{($vendor->name ==null)?'No-name':$vendor->name}}</small>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{($product->user==null)?'Mobile no not given':$product->user->phonecode.''.$product->user->mobile_no}}</td>
-                                    <td>{{($product->user ==null)?'No Email':$product->user->email}}</td>
+                                    <td>{{($vendor->mobile_no==null)?'Mobile no not given':$vendor->phonecode.''.$vendor->mobile_no}}</td>
+                                    <td>{{($vendor->email ==null)?'No Email':$vendor->email}}</td>
                                     <td><span class="green_cl">Active</span></td>
                                     @if($product->user)
-                                        <td><a href="{{url('admin/vendor-edit-profile/'.$product->user->id)}}" class="btn orange_btn">View</a></td>
+                                        <td><a href="{{url('admin/vendor-edit-profile/'.$vendor->id)}}" class="btn orange_btn">View</a></td>
                                     @endif
                                     
                                 </tr>

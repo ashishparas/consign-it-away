@@ -33,10 +33,14 @@
         <div class="col-xl-12 col-md-12">
             <div class="ms-profile-overview">
                 <div class="ms-profile-cover">
+                    @if($vendors!= "")
                   <img class="ms-profile-img" src="{{asset('public/vendor/'.$vendors->store_image )}}" alt="img">
+                  @else
+                 No Image
+                  @endif
                   <div class="ms-profile-user-info">
-                    <h4 class="ms-profile-username text-white">{{ $vendors->name }}</h4>
-                    <h2 class="ms-profile-role address_icon mb-0"><img src="{{asset('public/assets/img/address_white.svg')}}" alt="img" class="address_img"><span class="text-white fs-14 pt-2">{{ $vendors->location }}</span></h2>
+                    <h4 class="ms-profile-username text-white">@if($vendors!= "") {{($vendors->name ==null)?'No-name':$vendors->name}}  @endif</h4>
+                    <h2 class="ms-profile-role address_icon mb-0"><img src="{{asset('public/assets/img/address_white.svg')}}" alt="img" class="address_img"><span class="text-white fs-14 pt-2">@if($vendors!= ""){{ $vendors->location }}@endif</span></h2>
                   </div>
                 </div>
                 </div>
