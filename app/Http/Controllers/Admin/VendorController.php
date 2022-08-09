@@ -622,16 +622,11 @@ class VendorController extends Controller
         try {
 
             $input = $request->all();
-            
-            if (isset($request->profile_picture)) :
-
-                $bannerimage = time() . '.' . $request->profile_picture->extension();
-                $request->profile_picture->move(public_path('/vendor'), $bannerimage);
-                $input['profile_picture'] = $bannerimage;
+            if (isset($request->profile_picture)):
+                $input['profile_picture'] = parent::__uploadImage($request->file('profile_picture'), public_path('/vendor'), false);
             endif;
             
             $input['status'] = '2';
-
             $Manager = Manager::create($input);
          
             if ($Manager) :
