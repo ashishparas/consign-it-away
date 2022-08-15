@@ -5,7 +5,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Brand;
+use App\Models\UserChat;
+use Carbon;
 use DataTables;
+use Illuminate\Support\Facades\DB;
+
 class AdminController extends Controller
 {
     /**
@@ -30,8 +34,14 @@ class AdminController extends Controller
                             ->whereIn('status',['3','4'])
                             ->take(10)
                             ->get();
-        // dd($items->toArray());
-        return view('order-management.order-mgt', compact('items','PastOrders'));
+                            DB::enableQueryLog();
+        $UserChat = UserChat::select('users.name','users.fname','users.lname','users.profile_picture','user_chat.message','user_chat.created_on','user_chat.MessageType')
+                ->join('users','users.id', 'user_chat.source_user_id')
+                ->orderBy('user_chat.created_on','DESC')
+                ->latest()
+                ->get()->unique('user_chat.source_user_id');
+        // dd(DB::getQueryLog($UserChat));
+        return view('order-management.order-mgt', compact('items','PastOrders','UserChat'));
     }
 
 

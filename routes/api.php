@@ -56,7 +56,7 @@ $middleware = ['api'];
 if (\Request::header('Authorization'))
 
     $middleware = array_merge(['auth:sanctum']);
-Route::group(['middleware' => $middleware], function () {
+    Route::group(['middleware' => $middleware], function () {
 
     Route::post('home', [ClientController::class, "Home"]);
     Route::post('product/by/id',[ClientController::class,"ProductById"]);
@@ -64,8 +64,6 @@ Route::group(['middleware' => $middleware], function () {
     Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
     Route::post('client/view/store/by/id',[ClientController::class, "ClientViewStore"]);
 });
-
-
 
 
 
