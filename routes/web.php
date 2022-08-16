@@ -98,6 +98,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('delete/plans/{id}',[VendorController::class, "DeletePlans"]);
             Route::get('edit-plans/{id}',[VendorController::class,"EditPlans"]);
             Route::post('update-plans',[VendorController::class,"UpdatePlans"]);
+            Route::get('view/banner', [VendorController::class, "bannerList"])->name('banner-list');
+            Route::get('create/banner',[VendorController::class, "createBanner"]);
+            Route::post('store/banner',[VendorController::class, "storeBanner"]);
+            Route::get('/delete/banner/{id}', [VendorController::class, "deleteBanner"]);
             
  });
  

@@ -11,6 +11,7 @@
 /public/cancel
 /public/admin_staff
 /public/assets
+/public/banner
 /storage/*.key
 /vendor
 .env

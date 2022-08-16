@@ -17,5 +17,5 @@ class Banner extends Model
 
 
 
-    protected $fillable = ['title','photo','baseurl','description'];
+    protected $fillable = ['photo','baseurl'];
 }

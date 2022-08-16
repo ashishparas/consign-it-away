@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use PDF;
 use App\Helper\Helper;
+use App\Models\Banner;
 
 class VendorController extends Controller
 {
@@ -736,6 +737,34 @@ class VendorController extends Controller
             
     }
 
+    public function bannerList(){
+        $banners = Banner::orderBy('created_at','DESC')->get();
+        return view('admin.banner.banner-list', compact('banners'));
+    }
 
+    public function createBanner(){
+        return view('admin.banner.banner-create');
+    }
+    public function storeBanner(Request $request){
+        $validate = $request->validate([
+            'photo' =>'required'
+        ]);
+
+        $input = $request->all();
+        // dd($input);
+        if (isset($request->photo)):
+            $input['photo'] = parent::__uploadImage($request->file('photo'), public_path('/banner'), false);
+        endif;
+        $input['baseurl'] = asset('public/banner');
+        Banner::create($input);
+        return redirect()->route('banner-list')->with('success','App Banner added successfully');
+    }
+
+    public function deleteBanner($id)
+    {
+        $banner = Banner::FindOrfail($id);
+        $banner->delete();
+        return redirect()->route('banner-list')->with('error','banner deleted successfully!');
+    }
 
 }
