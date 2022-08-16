@@ -19,6 +19,7 @@ use App\Models\Address;
 use App\Models\Attribute as ModelsAttribute;
 use App\Models\AttributeOption;
 use App\Models\Bank;
+use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\Card;
 use App\Models\Category;
@@ -2285,7 +2286,19 @@ public function ResetUserPassword(Request $request)
 }
 
 
-
+public function Banner(Request $request){
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $banner = Banner::orderBy('created_at','DESC')->get();
+        return parent::success("Banner view successfully!", $banner);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 
