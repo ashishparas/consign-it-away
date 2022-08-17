@@ -48,7 +48,7 @@ class Store extends Model
     }
     
     public function Vendor(){
-        return $this->belongsTo(User::class,'user_id')->select('id','name','fname','lname','profile_picture','mobile_no','phonecode','fax')->with(['Bank']);
+        return $this->belongsTo(User::class,'user_id')->select('id','name','fname','lname','profile_picture','mobile_no','phonecode','fax','bank_ac_no','routing_no')->with(['Bank']);
     }
     
     public function Subscription(){
