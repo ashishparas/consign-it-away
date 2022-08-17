@@ -360,13 +360,9 @@ class VendorController extends Controller
             $type = str_replace(' ', '_', $request->title);
             $input['type'] = $type;
             // dd($input);
-            if (isset($request->image)) :
-
-                $imageName = time() . '.' . $request->image->extension();
-                $request->image->move(public_path('/category'), $imageName);
-                $input['image'] = $imageName;
+            if (isset($request->image)):
+                $input['image'] = parent::__uploadImage($request->file('image'), public_path('/category'), false);
             endif;
-
 
             $Category = Category::create($input);
             if ($Category) :
