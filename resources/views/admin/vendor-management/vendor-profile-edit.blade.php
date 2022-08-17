@@ -131,12 +131,12 @@
                               </div>
                               <div class="d-flex align-items-center justify-content-between pb-2">
                                 <span class="grey_cl">Bank Account No.:</span>
-                                <span class="black_cl">@if($vendors){{ ($vendors->vendor->bank)?$vendors->vendor->bank->bank_ac_no:'' }}@endif</span>
+                                <span class="black_cl">@if($vendors){{ ($vendors->vendor)?$vendors->vendor->bank_ac_no:'Account no not added yet' }}@endif</span>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-2">
                                 <span class="grey_cl">Routing Number:</span>
-                              
-                                <span class="black_cl">{{ ($vendors->vendor->bank)?$vendors->vendor->bank->routing_no:'' }}</span>
+                                
+                                <span class="black_cl">{{ ($vendors->vendor)?$vendors->vendor->routing_no:'Not added Yet' }}</span>
                             </div>
                         
                             </div>
