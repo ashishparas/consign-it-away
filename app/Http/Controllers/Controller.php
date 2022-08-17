@@ -26,7 +26,7 @@ class Controller extends BaseController
             $img = \Intervention\Image\ImageManagerStatic::make($path . $imageName)->resize(320, 240);
             $img->save($path . 'thumbnail_' . $imageName);
         endif;
-//        /          ***************generate Thumbnail image end ********************* */
+//           /* ***************generate Thumbnail image end ********************* */
         return $imageName;
     }
     

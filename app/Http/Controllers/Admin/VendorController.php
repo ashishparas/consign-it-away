@@ -745,13 +745,14 @@ class VendorController extends Controller
     public function createBanner(){
         return view('admin.banner.banner-create');
     }
+
     public function storeBanner(Request $request){
         $validate = $request->validate([
             'photo' =>'required'
         ]);
-
+        
         $input = $request->all();
-        // dd($input);
+       
         if (isset($request->photo)):
             $input['photo'] = parent::__uploadImage($request->file('photo'), public_path('/banner'), false);
         endif;
