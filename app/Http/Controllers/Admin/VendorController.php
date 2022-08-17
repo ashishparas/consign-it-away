@@ -759,5 +759,23 @@ class VendorController extends Controller
         $banner->delete();
         return redirect()->route('banner-list')->with('error','banner deleted successfully!');
     }
+    
+    public function ReturnRefund()
+    {
+        
+        $return = Item::whereIn('status', ['4','5'])->with(['Product'])
+                
+                ->orderBy('id','DESC')
+                ->get();
+                
+        $request = Item::where('status','5')
+        ->with(['Customer'])
+        ->orderBy('id','DESC')
+        ->get();
+        
+     //   dd($request->toArray());
+        return view('admin.return.return',compact('return','request'));
+    }
+    
 
 }

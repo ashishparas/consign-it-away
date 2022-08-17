@@ -103,6 +103,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('create/banner',[VendorController::class, "createBanner"]);
             Route::post('store/banner',[VendorController::class, "storeBanner"]);
             Route::get('/delete/banner/{id}', [VendorController::class, "deleteBanner"]);
+            Route::get('return',[VendorController::class,"ReturnRefund"]);
             
  });
  

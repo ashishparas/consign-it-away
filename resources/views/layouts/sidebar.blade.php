@@ -58,7 +58,7 @@
         </a>
       </li>
       <li class="menu-item">
-        <a href="javascript:void(0)"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/return.svg')}}" alt="img">Returns & Refunds</span>
+        <a href="{{url('/admin/return')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/return.svg')}}" alt="img">Returns & Refunds</span>
         </a>
       </li>
       <li class="menu-item">
