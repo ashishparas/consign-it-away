@@ -368,9 +368,13 @@
                             <div class="p-3">
                             <div class="row">
                                 @if($vendors)
+                                   {{-- @dd($vendors->toArray()); --}}
                                 @foreach($vendors->photos as $pics )
-                                  <div class="col-md-4 col-lg-4">   
-                                    <div class="mb-4 gallery_block"><img src="{{asset('public/vendor/'.$pics )}}" class="img-fluid"></div>
+                                  <div class="col-md-4 col-lg-4">
+                                  @php
+                                      $storeImages = ($pics)?$pics: 'No_image.png';
+                                     
+                                  @endphp                                    <div class="mb-4 gallery_block"><img src="{{asset('public/vendor/'. $storeImages )}}" class="img-fluid"></div>
                                     
                                   </div>
                               @endforeach
