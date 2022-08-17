@@ -7,8 +7,8 @@
 @section('content')
 <div class="ms-content-wrapper">
         <!--breadcrumbs-->
-         @if(!empty($message))
-            <div class="alert alert-success"> {{ $message }}</div>  
+         @if(Session::has('success'))
+            <div class="alert alert-success"> {{ Session::get('success') }}</div>  
          @endif
         <div class="row">
           <div class="col-md-12">

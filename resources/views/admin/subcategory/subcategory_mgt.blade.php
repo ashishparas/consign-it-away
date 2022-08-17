@@ -7,8 +7,8 @@
 @section('content')
 <div class="ms-content-wrapper">
         <!--breadcrumbs-->
-         @if(!empty($message))
-            <div class="alert alert-success"> {{ $message }}</div>  
+         @if(Session::has('message'))
+            <div class="alert alert-danger"> {{ Session::get('message') }}</div>  
          @endif
         <div class="row">
           <div class="col-md-12">
@@ -58,11 +58,11 @@
                                                 <img class="mr-3" src="{{asset('public/category/'.$item->image)}}" alt="image">
                                             </div>
                                         </td>
-                                        <td>
-                                            <a href="{{url('/admin/edit-subcategory/'.$item->id)}}" class="edit btn btn-primary">Edit</a>
-                                            <a href="{{url('/admin/delete/subcategory/'.$item->id)}}" class="ml-3"><img src="{{asset('public/assets/img/delete.svg')}}" alt=""></a>
-                                        </td>
-                                    </tr>
+            <td>
+                <a href="{{url('/admin/edit-subcategory/'.$item->id)}}" class="edit btn btn-primary">Edit</a>
+                <a href="{{url('/admin/delete/subcategory/'.$item->id)}}" class="ml-3"><img src="{{asset('public/assets/img/delete.svg')}}" alt=""></a>
+            </td>
+        </tr>
                                     @endforeach
                                     
                                 </tbody>

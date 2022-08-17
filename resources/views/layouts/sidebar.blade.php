@@ -24,7 +24,7 @@
         </a>
       </li>
       <li class="menu-item">
-        <a href="{{url('/admin/subcategory-management')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/vendor.svg')}}" alt="img">Sub Category Management</span>
+        <a href="{{url('/admin/subcategory/list')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/vendor.svg')}}" alt="img">Sub Category Management</span>
         </a>
       </li>
       <li class="menu-item">

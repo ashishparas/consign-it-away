@@ -404,7 +404,7 @@ class VendorController extends Controller
 
             $subCategory = Subcategory::create($input);
             if ($subCategory) :
-                return redirect()->route('category-management');
+                return redirect()->route('category-management')->with('success', 'Sub-category Added successfully!');
             endif;
         } catch (\Exception $ex) {
             dd($ex->getMessage());
