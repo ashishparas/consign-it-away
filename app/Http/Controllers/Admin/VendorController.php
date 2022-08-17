@@ -398,13 +398,9 @@ class VendorController extends Controller
 
             $input = $request->all();
             // dd($input);
-            if (isset($request->image)) :
-
-                $imageName = time() . '.' . $request->image->extension();
-                $request->image->move(public_path('/category'), $imageName);
-                $input['image'] = $imageName;
+            if (isset($request->image)):
+                $input['image'] = parent::__uploadImage($request->file('image'), public_path('/category'), false);
             endif;
-
 
             $subCategory = Subcategory::create($input);
             if ($subCategory) :
