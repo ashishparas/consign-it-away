@@ -373,7 +373,6 @@
                                   <div class="col-md-4 col-lg-4">
                                   @php
                                       $storeImages = ($pics)?$pics: 'No_image.png';
-                                     
                                   @endphp                                    <div class="mb-4 gallery_block"><img src="{{asset('public/vendor/'. $storeImages )}}" class="img-fluid"></div>
                                     
                                   </div>
