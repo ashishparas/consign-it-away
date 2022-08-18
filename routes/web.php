@@ -102,6 +102,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('view/banner', [VendorController::class, "bannerList"])->name('banner-list');
             Route::get('create/banner',[VendorController::class, "createBanner"]);
             Route::post('store/banner',[VendorController::class, "storeBanner"]);
+            Route::get('update/banner/{id}',[VendorController::class, "updateBanner"]);
+            Route::post('edit/banner/{id}',[VendorController::class, "editBanner"]);
             Route::get('/delete/banner/{id}', [VendorController::class, "deleteBanner"]);
             Route::get('return',[VendorController::class,"ReturnRefund"]);
             

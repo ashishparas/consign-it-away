@@ -12,11 +12,11 @@
         </a>
       </li>
       <li class="menu-item">
-        <a href="{{url('/admin/view/banner')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/home.svg')}}" alt="img">Banner</span>
+        <a href="{{url('/admin/view/banner')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/home.svg')}}" alt="img"> App Banner</span>
         </a>
       </li>
       <li class="menu-item">
-        <a href="{{url('/admin/brand-list')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/star.svg')}}" alt="img">Brand</span>
+        <a href="{{url('/admin/brand-list')}}"> <span class="d-flex align-items-center"><img src="{{asset('public/assets/img/star.svg')}}" alt="img">App Brand</span>
         </a>
       </li>
       <li class="menu-item">

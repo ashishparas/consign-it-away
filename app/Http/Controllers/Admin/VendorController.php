@@ -753,6 +753,26 @@ class VendorController extends Controller
         return redirect()->route('banner-list')->with('success','App Banner added successfully');
     }
 
+
+
+    public function updateBanner($id)
+    {
+        $banner = Banner::FindOrfail($id);
+        return view('admin.banner.edit-banner', compact('banner'));
+    }
+
+    public function editBanner(Request $request, $id)
+    {
+        $input = $request->all();
+        if (isset($request->photo)):
+            $input['photo'] = parent::__uploadImage($request->file('photo'), public_path('/banner'), false);
+        endif;
+        $banner = Banner::FindOrfail($id);
+        $banner->fill($input);
+        $banner->save();
+        return redirect()->route('banner-list')->with('success','banner image updated successfully');
+    }
+
     public function deleteBanner($id)
     {
         $banner = Banner::FindOrfail($id);

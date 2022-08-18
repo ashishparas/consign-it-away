@@ -57,7 +57,9 @@
                         <td>{{ $banner->id }}</td>
                         <td><img src="{{asset('public/banner/'.$banner->photo)}}" width="50" height="50"></td>
                         <td>{{ $banner->baseurl }}</td>
-                        <td><a class="btn btn-info" href="{{url('admin/delete/banner', $banner->id)}}">Delete</a></td>
+                        <td><a class="btn btn-danger" href="{{url('admin/delete/banner', $banner->id)}}">Delete</a>
+                          <a href="{{url('admin/update/banner/'.$banner->id)}}" class="btn btn-info">Edit</a>
+                        </td>
                     </tr>    
                     @endforeach
                     

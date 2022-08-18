@@ -713,18 +713,7 @@ class ClientController extends ApiController
                         parent::error("payment failed please check your card details");
                 }
 
-                $stripe =  \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET'));
-            
-                    // Token is created using Stripe Checkout or Elements!
-                    // Get the payment token ID submitted by the form:
-                $token = $input['paymentToken'];
-                // $charge = \Stripe\Charge::create([
-                // 'amount' => ($input['total_amount'] * 100),
-                // 'currency' => 'usd',
-                // 'description' => 'Charge customer to place order',
-                // 'source' => $token,
-                // ]);
-                $input['charge_id'] = md5(rand(11111,99999)); //$charge['id'];
+                $input['charge_id'] = md5(rand(11111,99999));
                 $input['user_id'] = Auth::id();
 
                 $order = Order::create($input);
@@ -732,7 +721,7 @@ class ClientController extends ApiController
                 
                 
                     $items = Cart::where('user_id', Auth::id())->with(['Product'])->get();
-                   $test = [];
+                    $test = [];
                 
                     foreach($items as $item){
                         $product = Product::where('id', $item->product_id)->first();
