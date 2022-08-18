@@ -22,6 +22,7 @@ class CreateCancellationsTable extends Migration
             $table->bigInteger('product_id')->nullable();
             $table->text('reason')->nullable();
             $table->string('image')->nullable();
+            $table->enum('type',[1,2])->default(1)->comment('1-> Cancel, 2-> Refund');
             $table->enum('status',[1,2])->default(1)->comment('1->pending,2->initialed');
             $table->timestamps();
         });

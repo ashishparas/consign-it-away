@@ -10,6 +10,7 @@ use App\Models\User;
 use Nikolag\Square\Facades\Square;
 use Nikolag\Square\Models\customer;
 use App\Models\Variant;
+use Error;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -337,6 +338,44 @@ public static function trackingStatus($trackingId){
         }
     }
 
+    public static function zipCodeLookup($zipcode){
+        try{
+
+            $input_xml = <<<EOXML
+                        <CityStateLookupRequest USERID="641IHERB6005">
+                        <ZipCode ID='0'>
+                        <Zip5>$zipcode</Zip5>
+                        </ZipCode>
+                        </CityStateLookupRequest>
+                EOXML;
+            
+            $fields = array('API' => 'CityStateLookup','XML' => $input_xml);
+            
+            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            
+            // Convert the XML result into array
+            
+           $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
+        //    dd($array_data['ZipCode']);
+        if(isset($array_data['ZipCode']['Error'])){
+            // dd($array_data['ZipCode']['Error']);
+           return $array_data['ZipCode']['Error']['Description'];
+        }else{
+           return "zipcode available";
+        }
+            
+            return $array_data;
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
 
     public static function UPSP($data, $product_id , int $address_id=null, int $vendor_id, int $store_id=null){
     

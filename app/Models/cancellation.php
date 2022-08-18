@@ -15,5 +15,5 @@ class cancellation extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['user_id','item_id','product_id','reason','image'];
+    protected $fillable = ['user_id','item_id','product_id','reason','image','status','type'];
 }

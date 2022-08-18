@@ -1207,16 +1207,15 @@ class ClientController extends ApiController
 
    public function UspsVerifyAddress(Request $request)
    {
-        $rules = [];
+        $rules = ['zipcode' => 'required'];
         $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), false);
         if($validateAttributes):
             return $validateAttributes;
         endif;
         try{
-            
-
-            return parent::success("view address successfully!");
-
+            $ZipcodeLookup = Helper::zipCodeLookup($request->zipcode);
+          
+            return parent::success($ZipcodeLookup);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
@@ -1234,7 +1233,7 @@ class ClientController extends ApiController
         try{
             
             $input_xml = <<<EOXML
-            <ZipCodeLookupRequest USERID="778CONSI5321">
+            <ZipCodeLookupRequest USERID="641IHERB6005">
                 <Address ID="0">
                     <Address1></Address1>
                     <Address2>6406 Ivy Lane</Address2>
@@ -1246,7 +1245,7 @@ class ClientController extends ApiController
             
             $fields = array('API' => 'ZipCodeLookup','XML' => $input_xml);
             
-            $url = 'http://production.shippingapis.com/ShippingAPITest.dll?' . http_build_query($fields);
+            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -1841,7 +1840,43 @@ public function StoreRating(Request $request){
     }
 }
 
+public function ReturnRequest(Request $request)
+{
+    $rules = ['item_id' => 'required|exists:items,id','reason'=>'required','images' => ''];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
 
+        if (isset($request->image)):
+            if($files = $request->file('image')):
+                foreach($files as $file):
+                    
+                   $images[] = parent::__uploadImage($file, public_path('cancel'), false);
+                 
+                endforeach;
+            endif;
+
+            $input['image'] = implode(',', $images);
+
+        endif;
+        $input['user_id'] = Auth::id();
+        $input['type'] = '2';
+        $Refund = cancellation::create($input); 
+        if($Refund):
+            $item = Item::FindOrfail($request->item_id);
+            $item->fill(['status' => '5']);
+            $item->save();
+        endif;
+
+        
+        return parent::success("Refund request has been send successfully!",$Refund);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 
