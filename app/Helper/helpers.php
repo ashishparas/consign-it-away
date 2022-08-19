@@ -366,9 +366,9 @@ public static function trackingStatus($trackingId){
         //    dd($array_data['ZipCode']);
         if(isset($array_data['ZipCode']['Error'])){
             // dd($array_data['ZipCode']['Error']);
-           return $array_data['ZipCode']['Error']['Description'];
+           return array('status'=> false,'message' => $array_data['ZipCode']['Error']['Description']);
         }else{
-           return "zipcode available";
+           return array('status'=> true,'message' => 'zipcode available');
         }
             
             return $array_data;
