@@ -120,6 +120,8 @@ public function Discount(){
 public function PromoCode(){
     return $this->hasOne(PromoProduct::class,'product_id','id')->select('id','product_id','code_id')->with(['CodeName']);
 }
+
+
   
 
     

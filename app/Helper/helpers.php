@@ -29,192 +29,6 @@ class Helper extends ApiController
     }
 
 
-    public static function validateAddress($address_id=null){
-
-        try{
-            if($address_id !== null){
-                $address = Address::where('id' , $address_id)->first();
-                $fullName = $address->fname.' '.$address->lname;
-
-                \Shippo::setApiKey(env('SHIPPO_PRIVATE'));   
-                $toAddress = [
-                    "name" => ucfirst($fullName), // required
-                    "company" => "Consignitaway",
-                    "street1"=> $address->address,  // required
-                    "street2"=> "",
-                    "city"=> $address->city,  //required
-                    "state"=> $address->state, // required
-                    "zip"=> $address->zipcode,  // required
-                    "country"=> $address->country, // required
-                    "phone"=> $address->mobile_no, // required
-                    "email"=> $address->email, // required
-                    "is_residential"=> true,
-                    "metadata"=>"Customer ID". $address->user_id,
-                   "validate" => true
-        
-                ];
-                
-             $address =  \Shippo_Address::create([
-                    'name' => 'Shawn Ippotle',
-                    "company" => "Consignitaway",
-                    'street1' => '215 Clayton St.',
-                    'city' => 'San Francisco',
-                    'state' => 'CA',
-                    'zip' => '94117',
-                    'country' => 'US',
-                    "phone"=> "+9190678054", // required
-                    "email"=> $address->email, // required
-                    "validate" => true
-             ]);
-                // dd($address);
-                if(!empty($address['validation_results'])):
-                    $validate =   \Shippo_Address::validate($address['object_id']);
-                   
-                    return $address['validation_results']['is_valid'];    
-                else:
-                 return false;
-                endif;
-            }else{
-                return false;
-            }
-        }catch(\Exception $ex){
-            return parent::error($ex->getMessage());
-        }
-
-        
-}
-
-
-    // public static function CarierAccounts(){
-        
-    //     \Shippo::setApiKey(env('SHIPPO_PRIVATE'));
-    //     $fedex_account = \Shippo_CarrierAccount::create(array(
-    //         'carrier' => 'fedex',
-    //         'account_id' => '510087780',
-    //         'parameters' => array('first_name' => 'James', 'last_name' => 'Oddo', 'phone_number' => '+ 4177201199', 'from_address_st' => '1526 South Glenstone Ave', 'from_address_city' => 'Springfield', 'from_address_state' => 'MO', 'from_address_zip' => '65804', 'from_address_country_iso2' => 'United States'),
-    //         'test' => true,
-    //         'active' => true
-    //     ));
-    //     // $cr = \Shippo_CarrierAccount::all(array('carrier'=> ''));
-    //     dd($fedex_account );
-    // }
-
-
-public static function shippingLabel($addressId, $productId){
-        $customerAddress = Address::where('id', $addressId)->first();
-        $storeAddress = Product::select('id','name','store_id','weight','dimensions')
-        ->where('id', $productId)
-        ->with('Store')
-        ->first();
-        // dd( $storeAddress->store->country);
-        \Shippo::setApiKey(env('SHIPPO_PRIVATE'));
-        $fromAddress = array(
-            'name' => $storeAddress->store->name,
-            'street1' => $storeAddress->store->address,
-            'city' => $storeAddress->store->city,
-            'state' => $storeAddress->store->state,
-            'zip' => $storeAddress->store->zipcode,
-            'country' => $storeAddress->store->country,
-            'phone'   => $storeAddress->store->manager->mobile_no,
-            'email'   => $storeAddress->store->manager->email
-
-        );
-      
-        
-        $toAddress = array(
-            'name' =>  $customerAddress->fname.' '.$customerAddress->lname ,
-            'street1' => $customerAddress->address,
-            'city' => $customerAddress->city,
-            'state' => $customerAddress->state,
-            'zip' => $customerAddress->zipcode,
-            'country' => $customerAddress->country,
-            'phone' => $customerAddress->mobile_no
-        );
-       
-        $dimensions = json_decode($storeAddress->dimensions, true);
-    
-        $parcel = array(
-            'length'=> $dimensions? $dimensions['Length']:20,
-            'width'=> $dimensions? $dimensions['Breadth']:20,
-            'height'=> $dimensions? $dimensions['Height']:20,
-            'distance_unit'=> 'in',
-            'weight'=> $storeAddress->weight,
-            'mass_unit'=> 'lb',
-        );
-      
-        $shipment = \Shippo_Shipment::create( array(
-            'address_from'=> $fromAddress,
-            'address_to'=> $toAddress,
-            'parcels'=> array($parcel),
-            'async'=> false
-            )
-        );
-        // dd($shipment);
-        $rate = $shipment['rates'][7];
-
-        $transaction = \Shippo_Transaction::create(array(
-            'rate'=> $rate['object_id'],
-            'async'=> false,
-        ));
-    
-    // Print the shipping label from label_url
-    // Get the tracking number from tracking_number
-    if ($transaction['status'] == 'SUCCESS'){
-        $result = [
-            'tracking_no' => $transaction['tracking_number'],
-            'shiping_label' => $transaction['label_url']
-        ];
-        return $result;
-       
-    } else {
-        return parent::error($transaction['messages']);
-        // echo "Transaction failed with messages:" . "\n";
-        // foreach ($transaction['messages'] as $message) {
-        //     echo "--> " . $message . "\n";
-        // }
-    }
-           
-
-            
-
-}
-
-
-
-
-
-
-
-
-public static function trackingStatus($trackingId){
-    \Shippo::setApiKey(env('SHIPPO_PRIVATE'));
-    $status_params = array(
-        'id' => 'SHIPPO_TRANSIT',
-        'carrier' => 'shippo'
-    );
-    
- 
-    $status = \Shippo_Track::get_status($status_params);
-
-    $create_params = array(
-        "carrier" => "shippo",
-        "tracking_number"=> "SHIPPO_TRANSIT"
-    );
-    
-    //The response is stored in $webhook response and is identical to the response of Track::get_status 
-    $webhook_response = \Shippo_Track::create($create_params);
-    
-    
-    echo "--> " . "Carrier: " . $webhook_response['carrier'] . "\n";
-    echo "--> " . "Shipping tracking number: " . $webhook_response['tracking_number'] . "\n";
-    echo "--> " . "Address from: " . $webhook_response['address_from'] . "\n";
-    echo "--> " . "Address to: " . $webhook_response['address_to'] . "\n";
-    echo "--> " . "Tracking Status: " . $webhook_response['tracking_status'] . "\n";
-    exit;
-
-}
-
-
     public static function ProductVariants($variants=[]){
 
         foreach($variants as $key => $variant){
@@ -579,27 +393,33 @@ $input_xml = <<<EOXML
     }
 
 
-    public static function getShippingPrice(){
+    public static function getShippingPrice($product){
         try{
 
-    $input_xml = <<<EOXML
+                // dd($product->toArray());
+                $demensions  = json_decode($product->dimensions, true);
+                //dd($demensions);
+                $length = $demensions["Length"];
+                $breadth = $demensions['Breadth'];
+                $height = $demensions['Height'];
+                $input_xml = <<<EOXML
                     <RateV4Request USERID="641IHERB6005">
                     <Revision>2</Revision>
-                    <Package ID="0">
+                    <Package ID="1">
                     <Service>PRIORITY</Service>
-                    <ZipOrigination>22201</ZipOrigination>
-                    <ZipDestination>26301</ZipDestination>
-                    <Pounds>8</Pounds>
-                    <Ounces>2</Ounces>
+                    <ZipOrigination>20770</ZipOrigination>
+                    <ZipDestination>22201</ZipDestination>
+                    <Pounds>50</Pounds>
+                    <Ounces>05</Ounces>
                     <Container></Container>
-                    <Width></Width>
-                    <Length></Length>
-                    <Height></Height>
+                    <Width>$length</Width>
+                    <Length>$breadth</Length>
+                    <Height>$height</Height>
                     <Girth></Girth>
                     <Machinable>TRUE</Machinable>
                     </Package>
                     </RateV4Request>
-                EOXML;
+            EOXML;
             
             $fields = array('API' => 'RateV4','XML' => $input_xml);
             

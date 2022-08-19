@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Helper\Helper;
+use Illuminate\Support\Facades\Auth;
+
 class Cart extends Model
 {
     use HasFactory;
@@ -19,7 +22,7 @@ class Cart extends Model
 
     protected $fillable = ['user_id','vendor_id','product_id','vendor_id','variant_id','quantity'];
 
-    protected $appends = ['Attributes'];
+    protected $appends = ['Attributes','ShippingFee'];
     
     
     public function getAttributesAttribute(){
@@ -63,7 +66,12 @@ class Cart extends Model
         return $this->hasOne(Variant::class,'id','variant_id');
     }
 
-   
+   public function getShippingFeeAttribute()
+   {
+        $product = Product::select('id','ships_from','weight','dimensions')->where('id', $this->product_id)->first();
+            $ShippingRate = Helper::getShippingPrice( $product);
+                return $ShippingRate['Package']['Postage']['Rate'];
+   }
    
   
 }
