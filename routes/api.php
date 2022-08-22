@@ -35,7 +35,6 @@ Route::post('reset/password',[VendorController::class,"ResetUserPassword"]);
 Route::post('usps/address/verify',[ClientController::class, "UspsVerifyAddress"]);
 Route::post('find/address/by/zip',[ClientController::class, "UspsFindAddressByZip"]); 
 Route::post('track/courier',[ClientController::class, "UspsTrackCourier"]);  
-Route::get('shippment',[ClientController::class, "CreateShipment"]);
 Route::post('find/rate',[ClientController::class, "UspsFindRate"]); 
 Route::post('subcategories',[VendorController::class, "SubCategories"]);
 Route::post('colours',[VendorController::class, "Colours"]);

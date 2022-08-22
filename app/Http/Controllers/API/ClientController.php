@@ -1204,7 +1204,7 @@ class ClientController extends ApiController
         try{
             $ZipcodeLookup = Helper::zipCodeLookup($request->zipcode);
                 if(!$ZipcodeLookup['status']){
-                    return parent::error($ZipcodeLookup['message']);
+                    return response()->json(['status'=>false,'code' =>200,'message' =>$ZipcodeLookup['message'], 'data' => false ]);
                 }
           
             return parent::success($ZipcodeLookup['message']);

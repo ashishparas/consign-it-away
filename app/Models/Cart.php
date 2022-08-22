@@ -69,7 +69,7 @@ class Cart extends Model
    public function getShippingFeeAttribute()
    {
         $product = Product::select('id','ships_from','weight','dimensions')->where('id', $this->product_id)->first();
-        // dd($product->toArray());
+        dd($product->toArray());
             $ShippingRate = Helper::getShippingPrice( $product);
                 return $ShippingRate['Package']['Postage']['Rate'];
    }
