@@ -431,7 +431,13 @@ $input_xml = <<<EOXML
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
             $data = curl_exec($ch);
             curl_close($ch);
-            dd(json_decode(json_encode(simplexml_load_string($data)), true));
+
+          
+            $error = json_decode(json_encode(simplexml_load_string($data)), true);
+            if(isset($error['Package']['Postage']['Error'])){
+                return parent::error($error['Package']['Postage']['Error']['Description']);
+            }
+            
             return json_decode(json_encode(simplexml_load_string($data)), true);
          
                     
