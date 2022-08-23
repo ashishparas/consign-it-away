@@ -122,3 +122,8 @@
 [27-Jul-2022 05:48:16 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\Admin\VendorController::CreateProduct() in /home/phpparastechnolo/public_html/consign-it-away/app/Http/Controllers/Admin/VendorController.php on line 326
 [01-Aug-2022 07:55:22 UTC] PHP Fatal error:  Trait "Nikolag\Square\Traits\HasCustomers" not found in /home/phpparastechnolo/public_html/consign-it-away/app/Models/User.php on line 13
 [05-Aug-2022 10:29:35 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\Admin\VendorController::CreateStore() in /home/phpparastechnolo/public_html/consign-it-away/app/Http/Controllers/Admin/VendorController.php on line 617
+[19-Aug-2022 07:10:53 UTC] PHP Warning:  POST Content-Length of 9090146 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[19-Aug-2022 07:11:06 UTC] PHP Warning:  POST Content-Length of 9090146 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[19-Aug-2022 07:11:51 UTC] PHP Warning:  POST Content-Length of 9090146 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[19-Aug-2022 07:14:54 UTC] PHP Warning:  POST Content-Length of 12047738 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[19-Aug-2022 07:15:22 UTC] PHP Warning:  POST Content-Length of 9660394 bytes exceeds the limit of 8388608 bytes in Unknown on line 0

@@ -71,7 +71,8 @@ class Cart extends Model
         $product = Product::select('id','ships_from','weight','dimensions')->where('id', $this->product_id)->first();
         // dd($product->toArray());
             $ShippingRate = Helper::getShippingPrice( $product);
-                return $ShippingRate['Package']['Postage']['Rate'];
+            // dd($ShippingRate);
+                return $ShippingRate;
    }
    
   

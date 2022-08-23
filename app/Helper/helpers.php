@@ -434,11 +434,12 @@ $input_xml = <<<EOXML
 
           
             $error = json_decode(json_encode(simplexml_load_string($data)), true);
-            if(isset($error['Package']['Postage']['Error'])){
-                return parent::error($error['Package']['Postage']['Error']['Description']);
+            if(isset($error['Package']['Error'])){
+           
+                return $error['Package']['Error']['Description'];
             }
-            
-            return json_decode(json_encode(simplexml_load_string($data)), true);
+                $data = json_decode(json_encode(simplexml_load_string($data)), true);
+                return  $data['Package']['Postage']['Rate'];
          
                     
         }catch(\Exception $ex){
