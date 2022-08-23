@@ -569,6 +569,123 @@ $input_xml = <<<EOXML
     }
 
 
+    public static function eVS(){
+        try{
+
+            $input_xml = <<<EOXML
+                            <eVSRequest USERID= "641IHERB6005">
+                            <Option/>
+                            <Revision/>
+                            <ImageParameters>
+                            <LabelSequence>
+                            <PackageNumber>1</PackageNumber>
+                            <TotalPackages>1</TotalPackages>
+                            </LabelSequence>
+                            </ImageParameters>
+                            <FromName>Lina Smith</FromName>
+                            <FromFirm>Horizon</FromFirm>
+                            <FromAddress1>Apt 303</FromAddress1>
+                            <FromAddress2>1309 S Agnew Avenue</FromAddress2>
+                            <FromCity>Oklahoma City</FromCity>
+                            <FromState>OK</FromState>
+                            <FromZip5>73108</FromZip5>
+                            <FromZip4>2427</FromZip4>
+                            <FromPhone>1234567890</FromPhone>
+                            <POZipCode/>
+                            <AllowNonCleansedOriginAddr>false</AllowNonCleansedOriginAddr>
+                            <ToName>Tall Tom</ToName>
+                            <ToFirm>ABC Corp.</ToFirm>
+                            <ToAddress1/>
+                            <ToAddress2>1098 N Fraser Street</ToAddress2>
+                            <ToCity>Georgetown</ToCity>
+                            <ToState>SC</ToState>
+                            <ToZip5>29440</ToZip5>
+                            <ToZip4>2849</ToZip4>
+                            <ToPhone>8005554526</ToPhone>
+                            <POBox/>
+                            <ToContactPreference>email</ToContactPreference>
+                            <ToContactMessaging/>
+                            <ToContactEMail>talltom@aol.com</ToContactEMail>
+                            <AllowNonCleansedDestAddr>false</AllowNonCleansedDestAddr>
+                            <WeightInOunces>32</WeightInOunces>
+                            <ServiceType>PRIORITY</ServiceType>
+                            <Container>VARIABLE</Container>
+                            <Width>5.5</Width>
+                            <Length>11</Length>
+                            <Height>11</Height>
+                            <Machinable>TRUE</Machinable>
+                            <ProcessingCategory/>
+                            <PriceOptions/>
+                            <InsuredAmount>100.00</InsuredAmount>
+                            <AddressServiceRequested>true</AddressServiceRequested>
+                            <ExpressMailOptions>
+                            <DeliveryOption/>
+                            <WaiverOfSignature/>
+                            </ExpressMailOptions>
+                            <ShipDate></ShipDate>
+                            <CustomerRefNo>EF789UJK</CustomerRefNo>
+                            <CustomerRefNo2>EE66GG87</CustomerRefNo2>
+                            <ExtraServices>
+                            <ExtraService>120</ExtraService>
+                            </ExtraServices>
+                            <HoldForPickup/>
+                            <OpenDistribute/>
+                            <PermitNumber/>
+                            <PermitZIPCode/>
+                            <PermitHolderName/>
+                            <CRID>4569873</CRID>
+                            <MID>456789354</MID>
+                            <VendorCode>1234</VendorCode>
+                            <VendorProductVersionNumber>5.02.1B</VendorProductVersionNumber>
+                            <SenderName>Adam Johnson</SenderName>
+                            <SenderEMail>Adam1234d@aol.com</SenderEMail>
+                            <RecipientName>Robert Jones</RecipientName>
+                            <RecipientEMail>bobjones@aol.com</RecipientEMail>
+                            <ReceiptOption>SAME PAGE</ReceiptOption>
+                            <ImageType>PDF</ImageType>
+                            <HoldForManifest>N</HoldForManifest>
+                            <NineDigitRoutingZip>false</NineDigitRoutingZip>
+                            <ShipInfo>True</ShipInfo>
+                            <CarrierRelease>False</CarrierRelease>
+                            <DropOffTime/>
+                            <ReturnCommitments>True</ReturnCommitments>
+                            <PrintCustomerRefNo>False</PrintCustomerRefNo>
+                            <PrintCustomerRefNo2>True</PrintCustomerRefNo2>
+                            <Content>
+                            <ContentType>Perishable</ContentType>
+                            <ContentDescription>Other</ContentDescription>
+                            </Content>
+                            <ActionCode>M0</ActionCode>
+                            <OptOutOfSPE>false</OptOutOfSPE>
+                            <SortationLevel/>
+                            <DestinationEntryFacilityType/>
+                            </eVSRequest>
+                        EOXML;
+                    
+                    $fields = array('API' => 'eVS','XML' => $input_xml);
+                    
+                    $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+                    
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+                    $data = curl_exec($ch);
+                    curl_close($ch);
+                   
+                    $data = json_decode(json_encode(simplexml_load_string($data)), true);
+                    $pdf_decoded = base64_decode ($data['LabelImage']);
+
+                    $pdf = fopen ('shipping_label/'.time().rand(1111,9999).'label.pdf','w');
+                    fwrite ($pdf,$pdf_decoded);
+                    dd('done');
+                            
+                }catch(\Exception $ex){
+                    return parent::error($ex->getMessage());
+                }
+    }
+
+
 
 
 
@@ -591,6 +708,50 @@ $input_xml = <<<EOXML
         // exit;
     }
 
+
+    public static function VerifyAddressBeforeAdd($input){
+      
+        try{
+            $address = $input['address'];
+            $city = $input['city'];
+            $state = $input['state'];
+            $zipcode = $input['zipcode'];
+                $input_xml = <<<EOXML
+                        <AddressValidateRequest USERID="641IHERB6005">
+                            <Address ID="1">
+                                <Address1></Address1>
+                                <Address2>$address</Address2>
+                                <City>$city</City>
+                                <State>$state</State>
+                                <Zip5>$zipcode</Zip5>
+                                <Zip4></Zip4>
+                            </Address>
+                        </AddressValidateRequest>
+                EOXML;
+            
+            $fields = array('API' => 'Verify','XML' => $input_xml);
+            
+            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 300);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
+        //   dd($array_data);
+          
+                    if(array_key_exists('Error', $array_data['Address'])):
+                            return array('status'=> false, 'message' => $array_data['Address']['Error']['Description']);
+                        else:
+                            return array('status'=> true, 'message' => $array_data['Address']['ReturnText']);
+                    endif;     
+      
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
 
 
 

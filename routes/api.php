@@ -38,6 +38,7 @@ Route::post('track/courier',[ClientController::class, "UspsTrackCourier"]);
 Route::post('find/rate',[ClientController::class, "UspsFindRate"]); 
 Route::post('subcategories',[VendorController::class, "SubCategories"]);
 Route::post('colours',[VendorController::class, "Colours"]);
+Route::post('usps/evs', [VendorController::class, "eVS"]);
 // Route::group(['middleware' =>['auth:api']], function(){
     
 // });

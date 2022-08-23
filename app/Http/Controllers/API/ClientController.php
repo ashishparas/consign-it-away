@@ -118,7 +118,10 @@ class ClientController extends ApiController
             $phonecode = str_replace('+', '', $input['phonecode']);
             $input['phonecode'] = '+'.$phonecode;
             // dd($input['phonecode']);
-            
+           $verify =  Helper::VerifyAddressBeforeAdd($input);
+            if(!$verify['status']):
+                return parent::error($verify['message']);
+            endif;
             $address = Address::create($input);
             return parent::success("Address added successfully!",['address' => $address]);
         }catch(\exception $ex){
@@ -141,7 +144,10 @@ class ClientController extends ApiController
             $address = Address::FindOrfail($input['address_id']);
             $phonecode = str_replace('+','', $input['phonecode']);
             $input['phonecode'] = '+'.$phonecode;
-          
+            $verify =  Helper::VerifyAddressBeforeAdd($input);
+            if(!$verify['status']):
+                return parent::error($verify['message']);
+            endif;
             $address->fill($input);
             $address->save();
             // $updated = $address->first();
