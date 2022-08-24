@@ -314,7 +314,7 @@ $input_xml = <<<EOXML
                     $pdf = fopen ($fileName,'w');
                     fwrite ($pdf,$pdf_decoded);
                  
-            return array('print_label' => $fileName,'tracking_id'=> $array_data['BarcodeNumber'] ,'BaseUrl'=> asset('public'));
+            return array('print_label' => $fileName,'tracking_id'=> $array_data['BarcodeNumber'] ,'BaseUrl'=> asset(''));
 
             }else{
                 return false;
