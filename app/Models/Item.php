@@ -25,12 +25,13 @@ class Item extends Model
 
 
     public function getTrackingStatusAttribute(){
-        // dd($value);
+        
         if($this->tracking_id):
+            
             $tracking = Helper::trackCourier($this->tracking_id);
             return ($tracking['data'])? $tracking['data']:null;
         endif;
-        return null;
+        return '';
         
     }
 

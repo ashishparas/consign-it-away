@@ -2026,16 +2026,19 @@ public function ViewOrderByVendor(Request $request)
                 ->where('id', $request->order_id)
                 ->with(['Customer','cancelRequest','Product','Transaction','Rating','CustomerVariant','Offer'])
                 ->first();
-              
+            
         if($item){
                 
                     $tracking_id = Helper::trackCourier($item->tracking_id);
+               
                     if($tracking_id['status'] === true):
+                    
                         $item['tracking_status'] =   $tracking_id['data'];  
                     else:
+                     
                         $item['tracking_status'] = [];
                     endif;
-
+                  
                  
                   $specifications = Product::select('weight','brand','color','quantity')->where('id', $item->product_id)->first()
                     ->makeHidden('favourite','FavouriteId','CartStatus','soldBy');
@@ -2047,7 +2050,7 @@ public function ViewOrderByVendor(Request $request)
                  
                 $address = Address::where('id', $item->address_id)->first();
                 
-                $store = Store::select('id','store_image','name','description')
+                $store = Store::select('id','store_image','name','description','location','address','city','state','country','zipcode')
                                 ->where('id', $item->product->store_id)
                                 ->first();
 

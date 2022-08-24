@@ -333,18 +333,18 @@ $input_xml = <<<EOXML
 
     public static function trackCourier($tracking_id){
         try{
-
-        if($tracking_id !== null){
-
+         
+        if($tracking_id){
+       
                     $input_xml = <<<EOXML
                                     <TrackRequest USERID="778CONSI5321">
                                         <TrackID ID="$tracking_id"></TrackID>
                                     </TrackRequest>
                                 EOXML;
             
-                $fields = array('API' => 'TrackV2','XML' => $input_xml);
+                    $fields = array('API' => 'TrackV2','XML' => $input_xml);
             
-                $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+                    $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
                         $ch = curl_init();
                         curl_setopt($ch, CURLOPT_URL, $url);
@@ -396,7 +396,7 @@ $input_xml = <<<EOXML
 
 
         }
-
+        return array('status'=>false,'data'=> []);
         }catch(\Exception $ex){
             return false;
         }
