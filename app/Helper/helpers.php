@@ -191,9 +191,13 @@ class Helper extends ApiController
         }
     }
 
-    public static function UPSP($data, $product_id , int $address_id=null, int $vendor_id, int $store_id=null){
+    public static function UPSP($data, $product_id , int $address_id=null, int $vendor_id, int $store_id=null, $product_details){
       
         try{
+            $length = $product_details['length'];
+            $width = $product_details['width'];
+            $height = $product_details['height'];
+            $pound = $product_details['pound'];
             $store = Store::FindOrfail($store_id);
             $user = User::FindOrfail($data->user_id);
             $customerRefNo = base64_encode($data->user_id);
@@ -242,12 +246,12 @@ $input_xml = <<<EOXML
                         <ToContactMessaging/>
                         <ToContactEMail>$cusEmail</ToContactEMail>
                         <AllowNonCleansedDestAddr>false</AllowNonCleansedDestAddr>
-                        <WeightInOunces>$product->weight</WeightInOunces>
+                        <WeightInOunces>$pound</WeightInOunces>
                         <ServiceType>PRIORITY</ServiceType>
                         <Container>VARIABLE</Container>
-                        <Width>5.5</Width>
-                        <Length>11</Length>
-                        <Height>11</Height>
+                        <Width>$width</Width>
+                        <Length>$length</Length>
+                        <Height>$height </Height>
                         <Machinable>TRUE</Machinable>
                         <ProcessingCategory/>
                         <PriceOptions/>
@@ -306,10 +310,11 @@ $input_xml = <<<EOXML
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
             // dd($array_data);
                     $pdf_decoded = base64_decode ($array_data['LabelImage']);
-                    $pdf = fopen ('shipping_label/'.time().rand(1111,9999).'-label.pdf','w');
+                    $fileName = 'shipping_label/'.time().rand(1111,9999).'-label.pdf';
+                    $pdf = fopen ($fileName,'w');
                     fwrite ($pdf,$pdf_decoded);
-                    dd('done');
-            return $array_data['BarcodeNumber'];
+                 
+            return array('print_label' => $fileName,'tracking_id'=> $array_data['BarcodeNumber'] ,'BaseUrl'=> asset('public'));
 
             }else{
                 return false;

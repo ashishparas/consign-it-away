@@ -2305,7 +2305,7 @@ public function Banner(Request $request){
 public function eVS(Request $request)
 {
    
-    $rules = ['item_id' => 'required', 'product_id'=> 'required','store_id'=> 'required'];
+    $rules = ['item_id' => 'required', 'product_id'=> 'required','store_id'=> 'required','width' =>'required','height'=>'required','length' =>'required','pound' =>'required'];
     $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
     if($validateAttributes):
         return $validateAttributes;
@@ -2315,9 +2315,9 @@ public function eVS(Request $request)
             // dd($request->item_id);
             $item = Item::FindOrfail($request->item_id);
             // dd($item->toArray());
-        $label = Helper::UPSP($item, $request->product_id, $item['address_id'], $item->vendor_id,  $request->store_id);
-       dd($label);
-        return parent::success();
+        $label = Helper::UPSP($item, $request->product_id, $item['address_id'], $item->vendor_id,  $request->store_id, $input);
+    //    dd($label);
+        return parent::success("Shipping Label generated successfully!",$label);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }

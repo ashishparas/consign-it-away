@@ -12,6 +12,7 @@
 /public/admin_staff
 /public/assets
 /public/banner
+/public/shipping_label
 /storage/*.key
 /vendor
 .env
