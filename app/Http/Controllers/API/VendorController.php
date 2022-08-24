@@ -2241,9 +2241,9 @@ public function ViewOrderByVendor(Request $request)
             return $validateAttributes;
         endif;
         try{
-            $ShippingRate = helper::getShippingPrice();
+            // $ShippingRate = helper::getShippingPrice();
             
-            return parent::success("view shipping rate sucessfully!",$ShippingRate);
+            // return parent::success("view shipping rate sucessfully!",$ShippingRate);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
@@ -2319,7 +2319,9 @@ public function eVS(Request $request)
             $item = Item::FindOrfail($request->item_id);
             // dd($item->toArray());
         $label = Helper::UPSP($item, $request->product_id, $item['address_id'], $item->vendor_id,  $request->store_id, $input);
-    //    dd($label);
+        $item = Item::FindOrfail($request->item_id);
+        $item->fill(['tracking_id' => $label['tracking_id'],'tracking_label' =>  $label['print_label']]);
+        $item->save();
         return parent::success("Shipping Label generated successfully!",$label);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());

@@ -19,10 +19,14 @@ class Item extends Model
 
     protected $primarykey="id";
 
-    protected  $fillable = ['user_id','tracking_id','vendor_id','product_id','variant_id','offer_id','address_id','order_id','price','quantity','color','size','status'];
+    protected  $fillable = ['user_id','tracking_id','tracking_label','vendor_id','product_id','variant_id','offer_id','address_id','order_id','price','quantity','color','size','status'];
 
-    protected $appends = ['selectedVariants','tracking_status'];
+    protected $appends = ['selectedVariants','tracking_status','LabelBaseUrl'];
 
+
+    public function getLabelBaseUrlAttribute(){
+        return asset('');
+    }
 
     public function getTrackingStatusAttribute(){
         
