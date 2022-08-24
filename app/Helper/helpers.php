@@ -192,17 +192,18 @@ class Helper extends ApiController
     }
 
     public static function UPSP($data, $product_id , int $address_id=null, int $vendor_id, int $store_id=null){
-    
+      
         try{
             $store = Store::FindOrfail($store_id);
-            $user = User::FindOrfail($vendor_id);
-          
-            $cusName = Auth::user()->name;
-            $cusMobileNo = Auth::user()->mobile_no;
-            $cusEmail = Auth::user()->email;
+            $user = User::FindOrfail($data->user_id);
+            $customerRefNo = base64_encode($data->user_id);
+            $cusName = $user->name;
+            $cusMobileNo = $user->mobile_no;
+            $cusEmail = $user->email;
             $address = Address::FindOrfail($address_id);
-            $name = ($user->name !== '')?$user->name:'No-Name';
+            $name = (Auth::user()->fname !== '')? Auth::user()->name: 'No-Name';
             $product = Product::FindOrfail($product_id);
+            
             if($address_id != null && $vendor_id != null && $store_id !=null){
 
 $input_xml = <<<EOXML
@@ -256,7 +257,7 @@ $input_xml = <<<EOXML
                         <WaiverOfSignature/>
                         </ExpressMailOptions>
                         <ShipDate></ShipDate>
-                        <CustomerRefNo>EF789UJK</CustomerRefNo>
+                        <CustomerRefNo>$customerRefNo</CustomerRefNo>
                         <CustomerRefNo2>EE66GG87</CustomerRefNo2>
                         <ExtraServices>
                         <ExtraService>120</ExtraService>
@@ -303,7 +304,11 @@ $input_xml = <<<EOXML
             
             // Convert the XML result into array
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
-        
+            // dd($array_data);
+                    $pdf_decoded = base64_decode ($array_data['LabelImage']);
+                    $pdf = fopen ('shipping_label/'.time().rand(1111,9999).'-label.pdf','w');
+                    fwrite ($pdf,$pdf_decoded);
+                    dd('done');
             return $array_data['BarcodeNumber'];
 
             }else{
@@ -312,7 +317,7 @@ $input_xml = <<<EOXML
             
 
         }catch(\Exception $ex){
-            return false;
+            return parent::error($ex->getMessage());
         }
 
     }
@@ -518,34 +523,38 @@ $input_xml = <<<EOXML
 
 
 
-    public static function SchedulePickup(){
+    public static function SchedulePickup($store_id, $weight, $no_of_product,$package_location_desc=''){
         try{
-
+            $store = Store::FindOrfail($store_id);
+           // dd($store->toArray());
+            $fname = Auth::user()->fname;
+            $lname = Auth::user()->lname;
+            $phone = Auth::user()->mobile_no;
             $input_xml = <<<EOXML
                             <CarrierPickupScheduleRequest USERID="641IHERB6005">
-                            <FirstName>John</FirstName>
-                            <LastName>Doe</LastName>
-                            <FirmName>ABC Corp.</FirmName>
-                            <SuiteOrApt>Suite 777</SuiteOrApt>
-                            <Address2>8 Wildwood Drive</Address2>
+                            <FirstName>$fname</FirstName>
+                            <LastName>$lname</LastName>
+                            <FirmName>$store->name.</FirmName>
+                            <SuiteOrApt>$store->location</SuiteOrApt>
+                            <Address2>$store->address</Address2>
                             <Urbanization></Urbanization>
-                            <City>Old Lyme</City>
-                            <State>CT</State>
-                            <ZIP5>06371</ZIP5>
-                            <ZIP4>1234</ZIP4>
-                            <Phone>9068768054</Phone>
+                            <City>$store->city</City>
+                            <State>$store->state</State>
+                            <ZIP5>$store->zipcode</ZIP5>
+                            <ZIP4></ZIP4>
+                            <Phone>$phone</Phone>
                             <Extension>201</Extension>
                             <Package>
                             <ServiceType>PriorityMailExpress</ServiceType>
-                            <Count>2</Count>
+                            <Count>$no_of_product</Count>
                             </Package>
                             <Package>
                             <ServiceType>PriorityMail</ServiceType>
-                            <Count>1</Count>
+                            <Count>$no_of_product</Count>
                             </Package>
-                            <EstimatedWeight>14</EstimatedWeight>
+                            <EstimatedWeight>$weight</EstimatedWeight>
                             <PackageLocation>Front Door</PackageLocation>
-                            <SpecialInstructions>Packages are behind the screen door.</SpecialInstructions>
+                            <SpecialInstructions>$package_location_desc</SpecialInstructions>
                             </CarrierPickupScheduleRequest>
                         EOXML;
                     
@@ -560,8 +569,8 @@ $input_xml = <<<EOXML
                     $data = curl_exec($ch);
                     curl_close($ch);
                 
-                    return json_decode(json_encode(simplexml_load_string($data)), true);
-                 
+                    return  json_decode(json_encode(simplexml_load_string($data)), true);
+                    // dd($data);
                             
                 }catch(\Exception $ex){
                     return false;
@@ -674,11 +683,12 @@ $input_xml = <<<EOXML
                     curl_close($ch);
                    
                     $data = json_decode(json_encode(simplexml_load_string($data)), true);
-                    $pdf_decoded = base64_decode ($data['LabelImage']);
+                    dd($data);
+                    // $pdf_decoded = base64_decode ($data['LabelImage']);
 
-                    $pdf = fopen ('shipping_label/'.time().rand(1111,9999).'label.pdf','w');
-                    fwrite ($pdf,$pdf_decoded);
-                    dd('done');
+                    // $pdf = fopen ('shipping_label/'.time().rand(1111,9999).'label.pdf','w');
+                    // fwrite ($pdf,$pdf_decoded);
+                    // dd('done');
                             
                 }catch(\Exception $ex){
                     return parent::error($ex->getMessage());

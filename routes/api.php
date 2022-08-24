@@ -38,7 +38,7 @@ Route::post('track/courier',[ClientController::class, "UspsTrackCourier"]);
 Route::post('find/rate',[ClientController::class, "UspsFindRate"]); 
 Route::post('subcategories',[VendorController::class, "SubCategories"]);
 Route::post('colours',[VendorController::class, "Colours"]);
-Route::post('usps/evs', [VendorController::class, "eVS"]);
+
 // Route::group(['middleware' =>['auth:api']], function(){
     
 // });
@@ -185,7 +185,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('store/rating',[ClientController::class,"StoreRating"]);
     Route::post('product/csv',[VendorController::class,"productCSV"]);
     Route::post('refund/request',[ClientController::class, "ReturnRequest"]);
-   
+    Route::post('create/shipping/label', [VendorController::class, "eVS"]);
     
 });
 

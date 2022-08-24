@@ -26,8 +26,12 @@ class Item extends Model
 
     public function getTrackingStatusAttribute(){
         // dd($value);
-        $tracking = Helper::trackCourier($this->tracking_id);
-        return $tracking['data'];
+        if($this->tracking_id):
+            $tracking = Helper::trackCourier($this->tracking_id);
+            return ($tracking['data'])? $tracking['data']:null;
+        endif;
+        return null;
+        
     }
 
     public function getSelectedVariantsAttribute()

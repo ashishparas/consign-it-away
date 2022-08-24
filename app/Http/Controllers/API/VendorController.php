@@ -2247,13 +2247,14 @@ public function ViewOrderByVendor(Request $request)
    }
 
 public function SchedulePickup(Request $request){
-    $rules = [];
-    $validateAttributes = parent::validateAttributes($request,"POST",$rules,array_keys($rules),false);
+    $rules = ['store_id' => 'required|exists:stores,id','weight'=>'required','no_of_product'=>'required', 'package_location_desc'=>''];
+    $validateAttributes = parent::validateAttributes($request,"POST",$rules,array_keys($rules),true);
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
-        $SchedulePickup = Helper::SchedulePickup();
+        $input = $request->all();
+        $SchedulePickup = Helper::SchedulePickup($request->store_id, $request->weight, $request->no_of_product, $request->package_location_desc);
      
         return parent::success("Pickup schedule successfully",$SchedulePickup);
     }catch(\Exception $ex){
@@ -2304,14 +2305,19 @@ public function Banner(Request $request){
 public function eVS(Request $request)
 {
    
-    $rules = [];
+    $rules = ['item_id' => 'required', 'product_id'=> 'required','store_id'=> 'required'];
     $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
-        $eVS = Helper::eVS();
-        return parent::success($eVS);
+            $input = $request->all();
+            // dd($request->item_id);
+            $item = Item::FindOrfail($request->item_id);
+            // dd($item->toArray());
+        $label = Helper::UPSP($item, $request->product_id, $item['address_id'], $item->vendor_id,  $request->store_id);
+       dd($label);
+        return parent::success();
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }

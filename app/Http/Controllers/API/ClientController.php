@@ -761,13 +761,14 @@ class ClientController extends ApiController
 
                             // $carierAccounts = helper::shippingLabel(Auth::id(), $item->vendor_id);
                             // dd($carierAccounts);
-                            $tracking_id = "46768273648723648234762";//Helper::UPSP($item, $product->id ,$input['address_id'], $item->vendor_id,  $store->id);
+                            // $tracking_id = "46768273648723648234762";
+           
      
-                            if($tracking_id):
-                                $updatetrackingId = Item::FindOrfail($item->id);
-                                                    $updatetrackingId->fill(['tracking_id'=> $tracking_id]);
-                                                    $updatetrackingId->save();
-                            endif;
+                            // if($tracking_id):
+                            //     $updatetrackingId = Item::FindOrfail($item->id);
+                            //                         $updatetrackingId->fill(['tracking_id'=> $tracking_id]);
+                            //                         $updatetrackingId->save();
+                            // endif;
                             $StoreName = (!$store)?'No-name':$store->name;
                             $body = '#00'.$item->id.' has been ordered from '.$StoreName;
                        
@@ -791,7 +792,7 @@ class ClientController extends ApiController
             
                     }
          
-                   Cart::where('user_id', Auth::id())->delete();
+                    Cart::where('user_id', Auth::id())->delete();
                     return parent::success("Your order Placed successfully!");
                 endif;   
             else:
@@ -1851,9 +1852,9 @@ public function ReturnRequest(Request $request)
         if (isset($request->image)):
             if($files = $request->file('image')):
                 foreach($files as $file):
-                    
+                
                    $images[] = parent::__uploadImage($file, public_path('cancel'), false);
-                 
+                
                 endforeach;
             endif;
 
