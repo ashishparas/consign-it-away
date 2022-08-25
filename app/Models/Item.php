@@ -35,7 +35,7 @@ class Item extends Model
             $tracking = Helper::trackCourier($this->tracking_id);
             return ($tracking['data'])? $tracking['data']:null;
         endif;
-        return '';
+        return null;
         
     }
 

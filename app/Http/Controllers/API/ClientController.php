@@ -881,6 +881,7 @@ class ClientController extends ApiController
 
        try{
             $input  = $request->all();
+
             if($request->type === '1'){
                 $items = Item::select('items.*','products.name')
                 ->Join('products','products.id','items.product_id')
@@ -905,10 +906,10 @@ class ClientController extends ApiController
                                 ->with(['Product','Offer','CustomerVariant'])
                                 ->orderBy('items.created_at','DESC')
                                 ->get();
-                foreach($items as $key => $item){
-                    $tracking = Helper::trackCourier($item['tracking_id']);
-                        $items[$key]['tracking_status'] = $tracking['data'];
-                }
+                // foreach($items as $key => $item){
+                //     $tracking = Helper::trackCourier($item['tracking_id']);
+                //         $items[$key]['tracking_status'] = $tracking['data'];
+                // }
 
             }else if($request->type === '3'){   
 
@@ -922,10 +923,10 @@ class ClientController extends ApiController
                 ->with(['Product','Offer','CustomerVariant'])
                 ->orderBy('items.created_at','DESC')
                 ->get();
-                foreach($items as $key => $item){
-                        $tracking = Helper::trackCourier($item['tracking_id']);
-                        $items[$key]['tracking_status'] = $tracking['data'];
-                }
+                // foreach($items as $key => $item){
+                //         $tracking = Helper::trackCourier($item['tracking_id']);
+                //         $items[$key]['tracking_status'] = $tracking['data'];
+                // }
 
             }else if($request->type === '4'){
                 $items = Item::select('items.*','products.name')
