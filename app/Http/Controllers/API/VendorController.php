@@ -142,8 +142,9 @@ class VendorController extends ApiController
 
 
     public function AddStore(Request $request){
+
         $rules = ['banner'=>'required','image' => 'required','name'=>'required','location'=>'required','description'=>'required','store_images'=> 'required','address'=>'','city'=>'','state'=>'','country'=>'','zipcode'=>''];
-        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
+        $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),false);
         
         if($validateAttributes):
             return $validateAttributes;
@@ -179,7 +180,7 @@ class VendorController extends ApiController
             }
             
             return parent::success("Store added successfully!",['store' => $model]);
-            // return parent::success('Store added successfully!',[]);
+         
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
@@ -2250,7 +2251,7 @@ public function ViewOrderByVendor(Request $request)
    }
 
 public function SchedulePickup(Request $request){
-    $rules = ['store_id' => 'required|exists:stores,id','weight'=>'required','no_of_product'=>'required', 'package_location_desc'=>''];
+    $rules = ['store_id' => 'required|exists:stores,id','weight'=>'required','no_of_product'=>'required', 'package_location_desc'=>'','item_id' => 'required|exists:items,id'];
     $validateAttributes = parent::validateAttributes($request,"POST",$rules,array_keys($rules),true);
     if($validateAttributes):
         return $validateAttributes;
@@ -2258,8 +2259,15 @@ public function SchedulePickup(Request $request){
     try{
         $input = $request->all();
         $SchedulePickup = Helper::SchedulePickup($request->store_id, $request->weight, $request->no_of_product, $request->package_location_desc);
-     
-        return parent::success("Pickup schedule successfully",$SchedulePickup);
+        // dd($SchedulePickup);
+        if(!$SchedulePickup['status']):
+            return parent::error($SchedulePickup['message']);
+        endif;
+        $item = Item::FindOrfail($request->item_id);
+                $item->fill(['schedule_pickup' => '1']);
+                $item->save();
+            // dd($SchedulePickup);
+        return parent::success($SchedulePickup['message'],['item' => $item ,'schedule' => $SchedulePickup['data']]);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
