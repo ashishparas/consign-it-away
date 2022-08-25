@@ -194,22 +194,32 @@ class Helper extends ApiController
     public static function UPSP($data, $product_id , int $address_id=null, int $vendor_id, int $store_id=null, $product_details){
       
         try{
+         
             $length = $product_details['length'];
             $width = $product_details['width'];
             $height = $product_details['height'];
             $pound = $product_details['pound'];
+          
             $store = Store::FindOrfail($store_id);
+           
             $user = User::FindOrfail($data->user_id);
+           
             $customerRefNo = base64_encode($data->user_id);
+       
             $cusName = $user->name;
+         
             $cusMobileNo = $user->mobile_no;
-            $cusEmail = $user->email;
-            $address = Address::FindOrfail($address_id);
-            $name = (Auth::user()->fname !== '')? Auth::user()->name: 'No-Name';
-            $product = Product::FindOrfail($product_id);
             
+            $cusEmail = $user->email;
+          
+            $address = Address::FindOrfail($address_id);
+          
+            $name = (Auth::user()->fname !== '')? Auth::user()->name: 'No-Name';
+           
+            $product = Product::FindOrfail($product_id);
+           
             if($address_id != null && $vendor_id != null && $store_id !=null){
-
+               
 $input_xml = <<<EOXML
 
                         <eVSRequest USERID= "641IHERB6005">
@@ -308,7 +318,7 @@ $input_xml = <<<EOXML
             
             // Convert the XML result into array
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
-            // dd($array_data);
+         
                     $pdf_decoded = base64_decode ($array_data['LabelImage']);
                     $fileName = 'shipping_label/'.time().rand(1111,9999).'-label.pdf';
                     $pdf = fopen ($fileName,'w');
