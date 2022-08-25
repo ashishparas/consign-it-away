@@ -817,28 +817,29 @@ class ClientController extends ApiController
        
             $input  = $request->all();
             if($request->type === '1'){
+              
                 $items = Item::where('user_id',Auth::id())->where('status','1')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
                    
-                foreach($items as $key => $item){
-                    $tracking = Helper::trackCourier($item->tracking_id);
-                    $items[$key]['tracking_status'] = $tracking['data'];
+                // foreach($items as $key => $item){
+                 //   $tracking = Helper::trackCourier($item->tracking_id);
+                //     $items[$key]['tracking_status'] = $tracking['data'];
                     //  $items[$key]['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
-                }
+                // }
             //   dd($items->toArray());
             }else if($request->type === '2'){
                 $items = Item::where('user_id',Auth::id())->where('status','2')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
-                foreach($items as $key => $item){
-                    $tracking = Helper::trackCourier($item->tracking_id);
-                    $items[$key]['tracking_status'] = $tracking['data'];
+                // foreach($items as $key => $item){
+                    // $tracking = Helper::trackCourier($item->tracking_id);
+                    // $items[$key]['tracking_status'] = $tracking['data'];
                     //$items[$key]['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
-                }
+                // }
             }else if($request->type === '3'){
                 $items = Item::where('user_id',Auth::id())->where('status','3')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
-                foreach($items as $key => $item){
-                    $tracking = Helper::trackCourier($item->tracking_id);
-                    $items[$key]['tracking_status'] = $tracking['data'];
+                // foreach($items as $key => $item){
+                    // $tracking = Helper::trackCourier($item->tracking_id);
+                    // $items[$key]['tracking_status'] = $tracking['data'];
                     //$items[$key]['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
-                }
+                // }
             }elseif($request->type === '4'){
                 
             

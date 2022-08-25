@@ -226,7 +226,7 @@ class VendorController extends ApiController
             $input['user_id'] = Auth::id();
             $model = $model->fill($input);
             $store = $model->save();
-            User::FindOrfail(Auth::id())->update(['status' => '3']);
+            // User::FindOrfail(Auth::id())->update(['status' => '3']);
             return parent::success("Store edited successfully!",['store' => $model]);
             // return parent::success('Store added successfully!',[]);
         }catch(\Exception $ex){

@@ -21,8 +21,16 @@ class Item extends Model
 
     protected  $fillable = ['user_id','tracking_id','schedule_pickup','tracking_label','vendor_id','product_id','variant_id','offer_id','address_id','order_id','price','quantity','color','size','status'];
 
-    protected $appends = ['selectedVariants','tracking_status','LabelBaseUrl'];
+    protected $appends = ['selectedVariants','tracking_status','LabelBaseUrl','ShippingFee'];
 
+    public function getShippingFeeAttribute()
+   {
+        $product = Product::select('id','ships_from','weight','dimensions')->where('id', $this->product_id)->first();
+        // dd($product->toArray());
+            $ShippingRate = Helper::getShippingPrice( $product);
+            // dd($ShippingRate);
+                return $ShippingRate;
+   }
 
     public function getLabelBaseUrlAttribute(){
         return asset('');
