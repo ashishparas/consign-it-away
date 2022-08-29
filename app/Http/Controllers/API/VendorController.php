@@ -2331,6 +2331,7 @@ public function eVS(Request $request)
         $label = Helper::UPSP($item, $request->product_id, $item['address_id'], $item->vendor_id,  $request->store_id, $input);
       
         $item = Item::FindOrfail($request->item_id);
+    
         $item->fill(['tracking_id' => $label['tracking_id'],'tracking_label' =>  $label['print_label']]);
         $item->save();
         return parent::success("Shipping Label generated successfully!",$label);

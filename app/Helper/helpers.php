@@ -213,13 +213,13 @@ class Helper extends ApiController
             $cusEmail = $user->email;
           
             $address = Address::FindOrfail($address_id);
-          
+         
             $name = (Auth::user()->fname !== '')? Auth::user()->name: 'No-Name';
            
             $product = Product::FindOrfail($product_id);
-           
+          
             if($address_id != null && $vendor_id != null && $store_id !=null){
-               
+             
 $input_xml = <<<EOXML
 
                         <eVSRequest USERID= "641IHERB6005">
@@ -318,15 +318,16 @@ $input_xml = <<<EOXML
             
             // Convert the XML result into array
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
-         
+          
                     $pdf_decoded = base64_decode ($array_data['LabelImage']);
                     $fileName = 'shipping_label/'.time().rand(1111,9999).'-label.pdf';
                     $pdf = fopen ($fileName,'w');
                     fwrite ($pdf,$pdf_decoded);
-                 
-            return array('print_label' => $fileName,'tracking_id'=> $array_data['BarcodeNumber'] ,'BaseUrl'=> asset(''));
-
+               
+            return  array('print_label' => $fileName,'tracking_id'=> $array_data['BarcodeNumber'] ,'BaseUrl'=> asset(''));
+   
             }else{
+            
                 return false;
             }
             
