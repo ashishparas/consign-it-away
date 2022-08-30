@@ -44,7 +44,7 @@ class HomeController extends Controller
                         ->orderBy('count','DESC')
                         ->take('10')
                         ->get();
-        // dd($mostPopulars->toArray());
+        dd($mostPopulars->toArray());
         
         return view('home',compact('UserCount','OrderCount','transaction','transactions','trackUser','mostPopulars'));
     
