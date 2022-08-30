@@ -64,6 +64,7 @@ if (\Request::header('Authorization'))
     Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
     Route::post('client/view/store/by/id',[ClientController::class, "ClientViewStore"]);
     Route::post('banner/list',[VendorController::class, "Banner"]);
+    Route::post('get/vistors',[VendorController::class, "TrackUsers"]);
 });
 
 Route::middleware(['auth:sanctum'])->group(function(){
