@@ -37,6 +37,7 @@ use App\Models\Stock;
 use App\Models\Subcategory;
 use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
+use App\Models\TrackUser;
 use App\Models\Transaction;
 use App\Models\Variant;
 use App\Models\VariantItems;
@@ -2350,8 +2351,11 @@ public function TrackUsers(Request $request)
     endif;
     try{
         $input = $request->all();
-        dd($request->ip());
- 
+        $ip = $request->ip();
+        $ip = TrackUser::updateOrCreate(['ip' => $ip],[
+            'ip' => $ip
+        ]);
+        return parent::success("Get User info successfully!",$ip);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
