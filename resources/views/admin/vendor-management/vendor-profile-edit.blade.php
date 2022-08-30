@@ -136,7 +136,7 @@
                             <div class="d-flex align-items-center justify-content-between pb-2">
                                 <span class="grey_cl">Routing Number:</span>
                                 
-                                <span class="black_cl">{{ ($vendors->vendor)?$vendors->vendor->routing_no:'Not added Yet' }}</span>
+                                <span class="black_cl">{{ ($vendors)?$vendors->vendor->routing_no:'Not added Yet' }}</span>
                             </div>
                         
                             </div>
