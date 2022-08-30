@@ -116,19 +116,33 @@
                         <h5 class="font-weight-normal pb-3">Shipping Deatils</h5>
                         <div class="d-flex justify-content-between pb-2">
                             <span class="grey_cl">Shipped: <strong class="black_cl">{{$items->updated_at}}</strong></span>
-                            <span class="grey_cl">Status: <strong class="blue_cl">Out For Delivery</strong></span>
+                            <span class="grey_cl">Status: <strong class="blue_cl">
+                                @if($items->status === '1')
+                                    Order Placed
+                                @elseif($items->status === '2')
+                                    Out for Delivery
+                                    @elseif($items->status === '3')
+                                    Product Delivered
+                                    @elseif($items->status === '4')
+                                    Request For cancel order
+                                    @elseif($items->status === '5')
+                                    Requested For Refund
+                                    @endif
+                            </strong></span>
                         </div>
                         <div class="d-flex justify-content-between pb-2">
-                            <span class="grey_cl">Tracking ID: <strong class="black_cl">DHTC05588</strong></span>
+                            <span class="grey_cl">Tracking ID: <strong class="black_cl">{{ ($items->tracking_id)? $items->tracking_id: 'Not Updated Yet' }}</strong></span>
                         </div>
                         <div class="d-flex justify-content-between pb-2">
-                            <span class="grey_cl">Shipped With: <strong class="black_cl">DTDC</strong></span>
+                            <span class="grey_cl">Shipped With: <strong class="black_cl">{{
+                                ($items->product)? $items->product->shipping_type: 'Shipping method Not specify';
+                                }}</strong></span>
                         </div>
                         <div class="border-bottom py-2 mb-3"></div>
                         <h5 class="font-weight-normal pb-3">Label Information</h5> 
                         <div class="d-flex justify-content-between pb-2">
                             <span class="grey_cl">Weight </span>
-                            <span><strong class="black_cl">{{$items->product->weight}}</strong></span>
+                            <span><strong class="black_cl">{{$items->product->weight}} Pound</strong></span>
                         </div>
                         <div class="d-flex justify-content-between pb-2">
                             <span class="grey_cl">Dimensions </span>

@@ -147,8 +147,10 @@
                                     <td>{{($vendor->email ==null)?'No Email':$vendor->email}}</td>
                                     <td><span class="green_cl">Active</span></td>
                                  
-                                    @if($product->user)
+                                    @if(empty($vendor->store->isEmpty()))
                                         <td><a href="{{url('admin/vendor-edit-profile/'.$vendor->id)}}" class="btn orange_btn">View</a></td>
+                                    @else
+                                        <td><a href="javascript:void(0)" class="btn btn-info">No Store</a></td>
                                     @endif
                                     
                                 </tr>

@@ -54,9 +54,10 @@ class VendorController extends Controller
 
     public function index()
     {
-        $vendors = User::select('id', 'name', 'fname', 'lname', 'email', 'profile_picture','phonecode','mobile_no')->where('type', '2')->get();
+        $vendors = User::select('id', 'name', 'fname', 'lname', 'email', 'profile_picture','phonecode','mobile_no')->with(['Store'])->where('type', '2')->get();
+        // $bc = $vendors[0]->Store->isEmpty();
+        // dd($bc);
         $products = Product::select(DB::raw('DISTINCT user_id'), 'id', 'store_id', 'image', 'name', 'quantity', 'price', 'created_at')->with('User')->get();
-      
         return view('admin.vendor-management.vendor-mgt', compact('vendors', 'products'));
     }
 
@@ -108,11 +109,12 @@ class VendorController extends Controller
 
     public function VendorEditProfile($id)
     {
-        //DB::enableQueryLog();
-        $vendors = Store::where('user_id', $id)
+   
+        $vendors = Store::where('user_id',$id)
                 ->with(['Manager','Product','PorductRating','Vendor','Subscription'])
                 ->first();
-                //   dd(DB::getQueryLog($vendors));
+              
+                // dd($vendors);
         return view('admin/vendor-management.vendor-profile-edit', compact('vendors'));
     }
 
