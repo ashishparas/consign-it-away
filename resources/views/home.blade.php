@@ -71,70 +71,28 @@
                 </div>
                <div>No data</div>
                <div class="ms-panel-body border-bottom-0 auto_scroll">
-                   {{-- <a href="" class="pb-3 mb-3 border-bottom d-block">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex mb-3 align-items-center">
-                            <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
-                            <div class="chat_thread_data mt-3 flex_1">
-                                <h5 class="mb-0 mr-2 pr-lg-5 pr-0">Men Blue Slim Fit Faded Opaque Faded Casual Denim...</h5>
-                                <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">Roshan Brothers Ent.</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="mb-1 fs-2 p">No. of Product sell: <span class="black_cl mb-2">234</span></p>                          
-                  </a>
+            @foreach ($mostPopulars as $mostPopular)
 
                   <a href="" class="pb-3 mb-3 border-bottom d-block">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex mb-3 align-items-center">
-                          <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
+                          @php
+                        if(isset($mostPopular->product->image[0])):
+                          $image = $mostPopular->product->image[0];
+                        endif;
+                          @endphp
+                          <div class="mr-3"><img src="{{asset('public/products/'. $image)}}" alt="alt" width="90px" height="60px"></div>
                             <div class="chat_thread_data mt-3 flex_1">
-                                <h5 class="mb-0 mr-2 pr-lg-5 pr-0">Men Blue Slim Fit Faded Opaque Faded Casual Denim...</h5>
-                                <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">Roshan Brothers Ent.</span></p>
+                                <h5 class="mb-0 mr-2 pr-lg-5 pr-0">{{ ($mostPopular->product)? $mostPopular->product->name: 'No Name' }}</h5>
+                                <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">{{  ($mostPopular->SoldBy)? $mostPopular->SoldBy->name: 'No-Name' }}</span></p>
                             </div>
                         </div>
                     </div>
-                    <p class="mb-1 fs-2 p">No. of Product sell: <span class="black_cl mb-2">234</span></p>                          
+                    <p class="mb-1 fs-2 p">No. of Product sell: <span class="black_cl mb-2">{{ $mostPopular->count }}</span></p>                          
                   </a>
 
-                  <a href="" class="pb-3 mb-3 border-bottom d-block">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex mb-3 align-items-center">
-                          <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
-                            <div class="chat_thread_data mt-3 flex_1">
-                                <h5 class="mb-0 mr-2 pr-lg-5 pr-0">Men Blue Slim Fit Faded Opaque Faded Casual Denim...</h5>
-                                <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">Roshan Brothers Ent.</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="mb-1 fs-2 p">No. of Product sell: <span class="black_cl mb-2">234</span></p>                          
-                  </a>
-                    
-                  <a href="" class="pb-3 mb-3 border-bottom d-block">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex mb-3 align-items-center">
-                          <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
-                            <div class="chat_thread_data mt-3 flex_1">
-                                <h5 class="mb-0 mr-2 pr-lg-5 pr-0">Men Blue Slim Fit Faded Opaque Faded Casual Denim...</h5>
-                                <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">Roshan Brothers Ent.</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="mb-1 fs-2 p">No. of Product sell: <span class="black_cl mb-2">234</span></p>                          
-                  </a>
-
-                  <a href="" class="pb-3 mb-3 border-bottom d-block">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex mb-3 align-items-center">
-                          <div class="mr-3"><img src="{{asset('public/assets/img/78-78.png')}}" alt="alt"></div>
-                            <div class="chat_thread_data mt-3 flex_1">
-                                <h5 class="mb-0 mr-2 pr-lg-5 pr-0">Men Blue Slim Fit Faded Opaque Faded Casual Denim...</h5>
-                                <p class="mb-1 fs-2 p">Vendor: <span class="green_cl">Roshan Brothers Ent.</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="mb-1 fs-2 p">No. of Product sell: <span class="black_cl mb-2">234</span></p>                          
-                  </a> --}}
+            @endforeach
+                  
 
                 </div>
                </div>

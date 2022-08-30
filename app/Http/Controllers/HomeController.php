@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\Order;
 use App\Models\TrackUser;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 class HomeController extends Controller
 {
     /**
@@ -35,9 +38,15 @@ class HomeController extends Controller
         $trackUser = TrackUser::count();
        
         $transactions = Transaction::with(['Vendor'])->with(['OrderDetails'])->orderBy('id','DESC')->limit(5)->get();
+        $mostPopulars = Item::select('product_id','vendor_id', DB::raw('COUNT(product_id) as count'))
+                        ->with(['Product','SoldBy'])
+                        ->groupBy('product_id')
+                        ->orderBy('count','DESC')
+                        ->take('10')
+                        ->get();
+        // dd($mostPopulars->toArray());
         
-        // dd($transactions);
-        return view('home',compact('UserCount','OrderCount','transaction','transactions','trackUser'));
+        return view('home',compact('UserCount','OrderCount','transaction','transactions','trackUser','mostPopulars'));
     
     }
 
