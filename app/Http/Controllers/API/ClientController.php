@@ -1826,7 +1826,7 @@ public function ReturnLabel(Request $request)
 
 
 public function StoreRating(Request $request){
-    $rules = ['store_id' =>'required|exists:stores,id','product_id' => 'required|exists:products,id','rating' =>'required','comment' =>''];
+    $rules = ['store_id' =>'required|exists:stores,id','product_id' => '','rating' =>'required','comment' =>''];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
     if($validateAttributes):
         return $validateAttributes;
