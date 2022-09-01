@@ -47,7 +47,7 @@
               <tbody>
                   @foreach($items as $item)
                   <tr>
-                      <td>#00 {{$item->id}}</td>
+                      <td>{{$item->id}}</td>
                       <td class="product_tuc">
                         <div class="product_full_img">
                             @if(!empty($item->product))
@@ -83,7 +83,7 @@
                       <td>$ {{$item->price}}</td>
                       <td>
                       @if (!empty($item->product))
-                      <a class="btn orange_btn"href="{{url('/admin/vendor-edit-profile/'.$item->product->store_id )}}" >View</a>
+                      <a class="btn orange_btn"href="{{url('admin/running-order-details')}}" >View</a>
                       @else
                       <a class="btn orange_btn"href="#" >View</a>
                       @endif

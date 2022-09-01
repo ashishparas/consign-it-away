@@ -98,13 +98,19 @@ class VendorController extends Controller
 
     public function RunningOrders()
     {
-        $items = Item::with('Product')
-            ->whereIn('status', ['1', '2', '3'])
+            $items = Item::with('Product')
+                    ->whereIn('status', ['1', '2', '3'])
             // ->take(10)
             ->orderBy('created_at', 'DESC')
             ->get();
         // dd($items->toArray());
         return view('admin.order.running-orders', compact('items'));
+    }
+
+
+    public function RunningOrderDetails()
+    {
+        return view('admin.order.running-orders-details');
     }
 
     public function VendorEditProfile($id)

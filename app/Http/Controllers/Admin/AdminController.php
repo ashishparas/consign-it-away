@@ -48,7 +48,7 @@ class AdminController extends Controller
     public function ShippingOrderDetails($id){
       $items = Item::where('id', $id)->with(['Product','Rating','Customer','Address'])->first();
 
-      dd($items->toArray());
+    //   dd($items->toArray());
         return view('order-management.shipping-orders-details', compact('items'));
     }
     

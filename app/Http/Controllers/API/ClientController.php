@@ -807,7 +807,7 @@ class ClientController extends ApiController
 
    public function ViewOrder(Request $request)
    {
-       $rules = ['type' => 'required|in:1,2,3,4','search'=>'', 'sort'=>''];
+       $rules = ['type' => 'required|in:1,2,3,4','search'=>'', 'sort'=>'','limit' =>'', 'page' => ''];
       
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
        if($validateAttributes):
@@ -816,30 +816,24 @@ class ClientController extends ApiController
        try{
        
             $input  = $request->all();
+            $limit = (isset($request->limit))? $request->limit: 15;
             if($request->type === '1'){
               
-                $items = Item::where('user_id',Auth::id())->where('status','1')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
-                   
-                // foreach($items as $key => $item){
-                 //   $tracking = Helper::trackCourier($item->tracking_id);
-                //     $items[$key]['tracking_status'] = $tracking['data'];
-                    //  $items[$key]['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
-                // }
-            //   dd($items->toArray());
+                $items = Item::where('user_id',Auth::id())->where('status','1')->with(['Product','CustomerVariant'])
+                ->orderBy('created_at','DESC')
+                ->paginate($limit);
+ 
             }else if($request->type === '2'){
-                $items = Item::where('user_id',Auth::id())->where('status','2')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
-                // foreach($items as $key => $item){
-                    // $tracking = Helper::trackCourier($item->tracking_id);
-                    // $items[$key]['tracking_status'] = $tracking['data'];
-                    //$items[$key]['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
-                // }
+                $items = Item::where('user_id',Auth::id())->where('status','2')
+                                ->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')
+                                ->paginate($limit);
+       
             }else if($request->type === '3'){
-                $items = Item::where('user_id',Auth::id())->where('status','3')->with(['Product','CustomerVariant'])->orderBy('created_at','DESC')->get();
-                // foreach($items as $key => $item){
-                    // $tracking = Helper::trackCourier($item->tracking_id);
-                    // $items[$key]['tracking_status'] = $tracking['data'];
-                    //$items[$key]['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
-                // }
+                $items = Item::where('user_id',Auth::id())->where('status','3')
+                                ->with(['Product','CustomerVariant'])
+                                ->orderBy('created_at','DESC')
+                                ->paginate($limit);
+    
             }elseif($request->type === '4'){
                 
             
@@ -863,7 +857,7 @@ class ClientController extends ApiController
                 }
                     
             }
-                    $items = $items->get();
+                    $items = $items->paginate($limit);
         }
             return parent::success("View Orders successfully!",['orders' => $items]);
        }catch(\Exception $ex){
@@ -874,7 +868,7 @@ class ClientController extends ApiController
 
    public function ViewVendorOrder(Request $request)
    {
-       $rules = ['type' => 'required|in:1,2,3,4','search' => ''];
+       $rules = ['type' => 'required|in:1,2,3,4','search' => '','limit'=>'', 'page' => ''];
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),true);
        if($validateAttributes):
         return $validateAttributes;
@@ -882,7 +876,7 @@ class ClientController extends ApiController
 
        try{
             $input  = $request->all();
-
+            $limit = (isset($request->limit))? $request->limit : '15';
             if($request->type === '1'){
                 $items = Item::select('items.*','products.name')
                 ->Join('products','products.id','items.product_id')
@@ -890,7 +884,7 @@ class ClientController extends ApiController
                 if(isset($request->search)){
                     $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
                 }
-                $items = $items->where('items.status','1')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->get();
+                $items = $items->where('items.status','1')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->paginate($limit);
                 // foreach($items as $key => $item){
                 //     $tracking = Helper::trackCourier($item['tracking_id']);
                 //         $items[$key]['tracking_status'] = $tracking['data'];
@@ -906,7 +900,7 @@ class ClientController extends ApiController
                                 ->where('items.status','2')
                                 ->with(['Product','Offer','CustomerVariant'])
                                 ->orderBy('items.created_at','DESC')
-                                ->get();
+                                ->paginate($limit);
                 // foreach($items as $key => $item){
                 //     $tracking = Helper::trackCourier($item['tracking_id']);
                 //         $items[$key]['tracking_status'] = $tracking['data'];
@@ -920,14 +914,11 @@ class ClientController extends ApiController
                     $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
                 }
                 $items = $items->where('items.vendor_id',Auth::id())
-                ->where('items.status','3')
-                ->with(['Product','Offer','CustomerVariant'])
-                ->orderBy('items.created_at','DESC')
-                ->get();
-                // foreach($items as $key => $item){
-                //         $tracking = Helper::trackCourier($item['tracking_id']);
-                //         $items[$key]['tracking_status'] = $tracking['data'];
-                // }
+                        ->where('items.status','3')
+                        ->with(['Product','Offer','CustomerVariant'])
+                        ->orderBy('items.created_at','DESC')
+                        ->paginate($limit);
+               
 
             }else if($request->type === '4'){
                 $items = Item::select('items.*','products.name')
@@ -936,7 +927,9 @@ class ClientController extends ApiController
                 if(isset($request->search)){
                     $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
                 }
-                $items = $items->with(['Product','Offer','CustomerVariant'])->orderBy('items.created_at','DESC')->get();
+                $items = $items->with(['Product','Offer','CustomerVariant'])
+                        ->orderBy('items.created_at','DESC')
+                        ->get();
             }
 
            

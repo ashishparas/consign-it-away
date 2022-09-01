@@ -55,6 +55,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('product/detail/vendor/{id}',[VendorController::class,"ViewProductDetailsById"]);
             Route::get('report-management',[VendorController::class, "ViewReports"]);
             Route::get('running-orders',[VendorController::class, "RunningOrders"]);
+            Route::get('running-order-details',[VendorController::class,"RunningOrderDetails"]);
             Route::get('vendor-edit-profile/{id}',[VendorController::class, "VendorEditProfile"]);
             Route::get('staff-management',[VendorController::class,"StaffManagement"])->name('staff-management');
             Route::get('add-staff',[VendorController::class, "AddStaff"]);
