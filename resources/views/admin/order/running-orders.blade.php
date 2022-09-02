@@ -83,7 +83,7 @@
                       <td>$ {{$item->price}}</td>
                       <td>
                       @if (!empty($item->product))
-                      <a class="btn orange_btn"href="{{url('admin/running-order-details')}}" >View</a>
+                      <a class="btn orange_btn"href="{{url('admin/running-order-details', $item->id)}}" >View</a>
                       @else
                       <a class="btn orange_btn"href="#" >View</a>
                       @endif

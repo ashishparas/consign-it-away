@@ -1905,6 +1905,32 @@ public function Return(Request $request){
 }
 
 
+public function ReturnRequest(Request $request){
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), false);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;      
+    try{
+
+        $return = Item::whereIn('status', ['5'])
+                ->where('vendor_id', Auth::id())
+                ->with(['Product'])
+                ->orderBy('id','DESC')
+                ->get();
+        $request = Item::where('status','4')
+        ->where('vendor_id', Auth::id())
+        ->with(['Customer'])
+        ->orderBy('id','DESC')
+        ->get();
+        return parent::success("View returns successfully!",['returns' => $return,'request'=>$request]);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+        
+}
+
+
 
 public function Withdraw(Request $request)
 {

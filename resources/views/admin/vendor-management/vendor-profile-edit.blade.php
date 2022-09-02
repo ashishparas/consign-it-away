@@ -17,6 +17,7 @@
       </div>
     </div>
     <!--breadcrumbs-->
+ 
     <!--shipping-orders-->
     <div class="row align-items-start">
         <div class="col-xl-12 col-md-12">
@@ -24,7 +25,7 @@
                 <div class="ms-panel-header border-0 d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">Vendor Profile</h3>
                     <span>
-                        <a href="javascript:;" class="btn green_btn bg-transparent green_cl">Edit Store</a>
+                        <a href="{{url('admin/edit-vendor-details/'.$vendors->user_id)}}" class="btn green_btn bg-transparent green_cl">Edit Store</a>
                     </span>
                 </div>
             </div>

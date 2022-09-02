@@ -55,7 +55,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('product/detail/vendor/{id}',[VendorController::class,"ViewProductDetailsById"]);
             Route::get('report-management',[VendorController::class, "ViewReports"]);
             Route::get('running-orders',[VendorController::class, "RunningOrders"]);
-            Route::get('running-order-details',[VendorController::class,"RunningOrderDetails"]);
+            Route::get('running-order-details/{id}',[VendorController::class,"RunningOrderDetails"]);
             Route::get('vendor-edit-profile/{id}',[VendorController::class, "VendorEditProfile"]);
             Route::get('staff-management',[VendorController::class,"StaffManagement"])->name('staff-management');
             Route::get('add-staff',[VendorController::class, "AddStaff"]);
@@ -88,6 +88,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::post('withdraw-reject', [VendorController::class, "withdrawReject"]);
             Route::post('create-vendor', [VendorController::class, "CreateVendor"]);
             Route::get('add-vendor', [VendorController::class, "AddVendor"]);
+            Route::get('edit-vendor-details/{id}',[VendorController::class, "EditVendorDetails"]);
+            Route::post('edit-vendor-details/{id}',[VendorController::class, "UpdateVendorDetails"])->name('update-details');
             Route::get('add-store/{id}', [VendorController::class, "AddStore"])->name('add-store');
             Route::post('create-store', [VendorController::class, "CreateStore"]);
             Route::get('add-manager/{id}', [VendorController::class, "AddManager"])->name('add-manager');

@@ -807,7 +807,7 @@ class ClientController extends ApiController
 
    public function ViewOrder(Request $request)
    {
-       $rules = ['type' => 'required|in:1,2,3,4','search'=>'', 'sort'=>'','limit' =>'', 'page' => ''];
+       $rules = ['type' => 'required|in:1,2,3,4','search'=>'', 'sort'=>'','limit' =>'', 'page' => '', 'order_status' => ''];
       
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
        if($validateAttributes):
@@ -856,6 +856,11 @@ class ClientController extends ApiController
                     $items = $items->whereYear('items.created_at', Carbon::today()->subDays(365) );  
                 }
                     
+            }
+
+            if(isset($request->order_status)){
+                $status = explode(',', $request->order_status);
+                $items = $items->whereIn('items.status', $status);  
             }
                     $items = $items->paginate($limit);
         }

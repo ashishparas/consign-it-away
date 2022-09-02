@@ -130,7 +130,7 @@
                             <tbody>
                                 @foreach($vendors as $vendor)
                                 <tr>
-                                    <td>#{{$vendor->id}}</td>
+                                    <td>{{$vendor->id}}</td>
                                     <td class="product_tuc">
                                         <div class="d-block d-lg-flex align-items-center">
                                     @php

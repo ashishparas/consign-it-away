@@ -32,20 +32,28 @@ class Item extends Model
 //                 return $ShippingRate;
 //    }
 
+    public function ShippingFee(){
+        $product = Product::select('id','ships_from','weight','dimensions')->where('id', $this->product_id)->first();
+                // dd($product->toArray());
+                    $ShippingRate = Helper::getShippingPrice( $product);
+                    // dd($ShippingRate);
+                        return $ShippingRate;
+    }
+
     public function getLabelBaseUrlAttribute(){
         return asset('');
     }
 
-    // public function getTrackingStatusAttribute(){
+    public function TrackingStatus(){
         
-    //     if($this->tracking_id):
+        if($this->tracking_id):
             
-    //         $tracking = Helper::trackCourier($this->tracking_id);
-    //         return ($tracking['data'])? $tracking['data']:null;
-    //     endif;
-    //     return null;
+            $tracking = Helper::trackCourier($this->tracking_id);
+            return ($tracking['data'])? $tracking['data']:null;
+        endif;
+        return null;
         
-    // }
+    }
 
     public function getSelectedVariantsAttribute()
     {

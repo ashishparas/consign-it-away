@@ -10,7 +10,23 @@
       <div class="col-md-12">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb pl-0">
-                <li class="breadcrumb-item"><a href="order-mgt.html"><img src="{{ asset('assets/img/shopping-bag.svg') }}"> Order Management</a></li>
+                @php
+                    $image = ($item->product)? $item->product->image[0]:'no_image.png';
+                    $name =  ($item->product)? $item->product->name:'No Product Name found.!';
+                    $ProductDescription =  ($item->product)? $item->product->description:'No Product Name found.!';
+                    $ProductRatings  = ($item->rating)? $item->rating->rating:0;
+                    $ProductRatingCount = ($item->rating)? $item->rating->RatingCount : 0;
+                    $category = ($item->product)? $item->product->category->title:'No Category found.!';
+                    $CustomerName = ($item->customer)? $item->customer->name : 'No-Name';
+                    $CustomerPhone = ($item->customer)? $item->customer->phonecode.'-'.$item->customer->mobile_no : 'No-Name'; 
+                    $ShippingAddress = ($item->address)? $item->address->address:'No Address found!'; 
+                    $city = ($item->address)? $item->address->city:'City not found!'; 
+                    $state = ($item->address)? $item->address->state:'State not found!'; 
+                    $zipcode = ($item->address)? $item->address->zipcode:'Zipcode not found!'; 
+                    $country = ($item->address)? $item->address->country:'Country not found!'; 
+                   
+                @endphp
+                <li class="breadcrumb-item"><a href="order-mgt.html"><img src="{{ asset('public/assets/img/shopping-bag.svg') }}"> Order Management</a></li>
                 <li class="breadcrumb-item"><a href="running-orders.html">Running Orders</a></li>
                 <li class="breadcrumb-item active">Running Orders Details</li>
               </ol>
@@ -31,20 +47,20 @@
         <div class="ms-panel">
           <div class="ms-panel-body">
               <div class="d-flex">
-                <div class="shipping_img mr-3"><img src="{{ asset('assets/img/shipping_detail_img.png') }}" class="img-fulid" alt=""></div>
+                {{-- public/assets/img/shipping_detail_img.png --}}
+                
+                <div class="shipping_img mr-3"><img src="{{ asset('public/products/'.$image)}}" class="img-fulid" alt=""></div>
                 <div class="pt-2 flex_1">
-                    <h5 class="blue_cl">Watch</h5>
-                    <p class="black_cl fs-16 w-50 mb-2 font-weight-bold">Noise ColorFit Pro 2 Full Touch Control Smart Watch with 35g Weight & Upgraded LCD Display,
-                        IP68 Waterproof,Heart Rate...</p>
+                    <h5 class="blue_cl">{{ $name }}</h5>
+                    <p class="black_cl fs-16 w-50 mb-2 font-weight-bold">{{ $ProductDescription }}</p>
                         <div class="d-flex align-items-center pb-2">
                         <ul class="ms-star-rating rating-fill rating-circle ratings-new mb-0">
-                            <li class="ms-rating-item"> <i class="material-icons">star</i> </li>
-                            <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                            <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                            <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
-                            <li class="ms-rating-item rated"><i class="material-icons">star</i> </li>
+                        @for ($i = 1; $i <= (int)$ProductRatings; $i++)
+                        <li class="ms-rating-item rated"> <i class="material-icons">star</i> </li>
+                        @endfor
+                        
                           </ul>
-                          <span class="grey_cl fs-14 py-2">(159)</span>
+                          <span class="grey_cl fs-14 py-2">({{ $ProductRatingCount }})</span>
                         </div>
                           <p class="orange_cl mb-0 fs-16 p-1 font-weight-bold">$180.00</p>
                           <a role="button" href="javascript:;" class="btn btn-success">View Product</a>
@@ -55,51 +71,26 @@
                   <div class="border p-3">
                     <h5 class="mb-4">Order Tracking</h5>
                     <ul class="timeline" id="timeline">
-                      <li class="li complete">
-                        <div class="timestamp">
-                          <h4> Order Placed</h4>
-                        </div>
-                        <div class="status timestamp pt-3">
-                          <span class="author">1 Jan, 2022</span>
-                          <span class="date">10:07 AM<span>
-                        </div>
-                      </li>
-                      <li class="li complete">
-                        <div class="timestamp">
-                          <h4>Confirmed</h4>
-                        </div>
-                        <div class="status timestamp pt-3">
-                          <span class="author">2 Jan, 2022</span>
-                          <span class="date">10:15 AM<span>
-                        </div>
-                      </li>
-                      <li class="li">
-                        <div class="timestamp">
-                          <h4>Processing</h4>
-                        </div>
-                        <div class="status statusheight pt-3">
-                          <span class="author">&nbsp;</span>
-                          <span class="date">&nbsp;<span>
-                        </div>
-                      </li>
-                      <li class="li">
-                        <div class="timestamp">
-                          <h4>Out of Delivery</h4>
-                        </div>
-                        <div class="status statusheight pt-3">
-                          <span class="author">&nbsp;</span>
-                          <span class="date">&nbsp;<span>
-                        </div>
-                      </li>
-                      <li class="li">
-                        <div class="timestamp">
-                          <h4>Order Delivered</h4>
-                        </div>
-                        <div class="status statusheight pt-3">
-                          <span class="author">&nbsp;</span>
-                          <span class="date">&nbsp;<span>
-                        </div>
-                      </li>
+                        @if (isset($tracking_status))
+                        @foreach ($tracking_status as $tracking)
+                           
+                            <li class="li complete">
+                                <div class="timestamp">
+                                <p>{{ $tracking['status'] }}</p>
+                                </div>
+                                <div class="status timestamp pt-3">
+                                <span class="author">{{ date('d, M, Y', strtotime($tracking['date'])) }}</span>
+                                <span class="date">{{ $tracking['time'] }}<span>
+                                </div>
+                            </li>
+                        @endforeach
+                        @endif
+                            
+                      
+
+                    
+
+                   
                      </ul>  
                   </div>
                 </div>
@@ -109,49 +100,52 @@
                 <h4 class="font-weight-bold pb-3">Order Summary</h4>
                 <h5>Order Details </h5>
                 <div class="d-flex justify-content-between pb-2">
-                    <span class="grey_cl">Order ID: <strong class="black_cl">#87387399220</strong></span>
+                    <span class="grey_cl">Order ID: <strong class="black_cl">#{{$item->id}}</strong></span>
                 </div>
                 <div class="d-flex justify-content-between pb-2">
-                    <span class="grey_cl">Order on 21 May, 2021</span>
+                    {{-- 21 May, 2021 --}}
+                    <span class="grey_cl">Order on {{date('d M,Y', strtotime($item->created_at))}}</span>
                 </div>
                 <div class="d-flex justify-content-between pb-4">
-                    <span class="grey_cl">Category: <strong class="black_cl">Shoe</strong></span>
-                    <span>Quantity:<strong class="black_cl">1</strong></span>
+                    <span class="grey_cl">Category:  <strong class="black_cl"> {{ $category  }}</strong></span>
+                    <span>Quantity:<strong class="black_cl"> {{ $item->quantity }}</strong></span>
                 </div>
                   <h5 class="border-bottom pb-2 mb-3">Customer Details </h5>
                   <div class="d-flex justify-content-between pb-3">
                     <span class="grey_cl">Name:</span>
-                    <span class="black_cl">Michal Jonson</span>
+                    <span class="black_cl"> {{ $CustomerName }}</span>
                 </div>
                 <div class="d-flex justify-content-between pb-3">
                     <span class="grey_cl">Phone: </span>
-                    <span class="black_cl">+1 (415) 555 2671</span>
+                    <span class="black_cl"> {{ $CustomerPhone }}</span>
                 </div>
                 <div class="pb-4">
                     <span class="grey_cl">Shipping Address: </span>
                     <h6 class="green_cl mb-1 pt-1">Home</h6>
-                    <h6 class="black_cl w-75">NO 256, City Avenue, City San Francisco, Province California, USA</h6>
+                   
+
+                    <h6 class="black_cl w-75">{{$ShippingAddress}},   City {{ $city }},  <br>{{ $state }}, {{$country}},    {{$zipcode}}</h6>
                 </div>
                   <h5 class="border-bottom pb-2 mb-3">Payment Details</h5>
                   <div class="d-flex justify-content-between pb-3">
                     <span>Subtotal:</span>
-                      <span>$2115.00</span>
+                      <span>${{$item->price}}</span>
                   </div>
                   <div class="d-flex justify-content-between pb-3">
-                    <span>Coupon Applied</span>
-                    <span class="green_cl">- $100.00</span>
+                    <span>Coupon Applied-</span>
+                    <span class="green_cl">00</span>
                 </div>
                 <div class="d-flex justify-content-between pb-3 borderdotted mb-3">
                     <span>Shipping cost:</span>
-                    <span class="orange_cl"><strong>$35.00</strong></span>
+                    <span class="orange_cl"><strong>${{$shipping_fee}}</strong></span>
                 </div>
                 <div class="d-flex justify-content-between pb-1">
                     <h5 class="font-weight-normal">Total amount</h5>
-                    <h5><strong>$2050.00</strong></h5>
+                    <h5><strong>$ {{ $item->price + $shipping_fee  }}</strong></h5>
                 </div>
                 <div class="d-flex justify-content-between pb-3 borderdotted mb-3">
                     <h6 class="orange_cl">You earned</h6>
-                    <h6 class="orange_cl"><strong>$50.00</strong></h6>
+                    <h6 class="orange_cl"><strong>$00.00</strong></h6>
                 </div>
                 <div class="d-flex justify-content-between pb-3">
                     <h6>Payment Method</h6>
@@ -162,14 +156,27 @@
                     <div class="shipping_detail_bg p-3">
                         <h4 class="font-weight-bold pb-3">Shipping Deatils</h4>
                         <div class="d-flex justify-content-between pb-2">
-                            <span class="grey_cl">Shipped: <strong class="black_cl">24 May, 2021</strong></span>
-                            <span class="grey_cl">Status: <strong class="blue_cl">Out For Delivery</strong></span>
+                            {{-- 24 May, 2021 --}}
+                            <span class="grey_cl">Shipped: <strong class="black_cl">{{date('d, M , Y', strtotime('updated_at'))}}</strong></span>
+                            <span class="grey_cl">Status: <strong class="blue_cl">
+                            @if ($item->status === '1')
+                                order Placed Shipped
+                                @elseif($item->status === '2')
+                                Order Shipped
+                                @elseif($item->status === '3')
+                                Order Delivered
+                                @elseif($item->status === '4')
+                                Requested for cancel order
+                                @elseif($item->status === '5')
+                                    Requested for Refund
+                            @endif
+                            </strong></span>
                         </div>
                         <div class="d-flex justify-content-between pb-2">
-                            <span class="grey_cl">Tracking ID: <strong class="black_cl">DHTC05588</strong></span>
+                            <span class="grey_cl">Tracking ID: <strong class="black_cl">{{$item->tracking_id}}</strong></span>
                         </div>
                         <div class="d-flex justify-content-between pb-2">
-                            <span class="grey_cl">Shipped With: <strong class="black_cl">DTDC</strong></span>
+                            <span class="grey_cl">Shipped With: <strong class="black_cl">{{$item->product->shipping_type}}</strong></span>
                         </div>
                         <div class="border-bottom py-2 mb-3"></div>
                         <h4 class="font-weight-bold pb-3">Label Information</h4> 

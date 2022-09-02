@@ -103,14 +103,20 @@ class VendorController extends Controller
             // ->take(10)
             ->orderBy('created_at', 'DESC')
             ->get();
-        // dd($items->toArray());
+        dd($items->toArray());
         return view('admin.order.running-orders', compact('items'));
     }
 
 
-    public function RunningOrderDetails()
+    public function RunningOrderDetails($id)
     {
-        return view('admin.order.running-orders-details');
+        $item = Item::FindOrfail($id)->with(['Product','Rating','Customer','Address'])->first();
+        //  dd($item->toArray());
+        $shipping_fee = $item->ShippingFee();
+        $tracking_status = $item->TrackingStatus();
+       // dd($tracking_status);
+      
+        return view('admin.order.running-orders-details', compact('item','shipping_fee','tracking_status'));
     }
 
     public function VendorEditProfile($id)
@@ -120,7 +126,7 @@ class VendorController extends Controller
                 ->with(['Manager','Product','PorductRating','Vendor','Subscription'])
                 ->first();
               
-                // dd($vendors);
+              
         return view('admin/vendor-management.vendor-profile-edit', compact('vendors'));
     }
 
@@ -562,6 +568,24 @@ class VendorController extends Controller
         return view('admin.vendor-management.create-vendor');
     }
     
+
+    public function EditVendorDetails($id)
+    {
+        $vendor = User::FindOrfail($id);
+        // dd($vendor->toArray());
+        return view('admin.vendor-management.edit-vendor',compact('vendor'));
+    }
+
+    public function UpdateVendorDetails(Request  $request, $id)
+    {
+        $input = $request->all();
+        $vendor = User::FindOrfail($id);
+        $vendor->fill($input);
+        $vendor->save();
+        return redirect()->back()->with('success','Vendor details has been updated successfully..!');
+    }
+
+
     public function AddStore(Request $request,$id)
     {
         $user_id = $id;
