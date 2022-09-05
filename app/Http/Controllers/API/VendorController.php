@@ -1881,6 +1881,7 @@ public function ViewTransactions(Request $request)
 }
 
 public function Return(Request $request){
+   
     $rules = ['type' => 'required', 'limit' => '','page' =>''];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), false);
     if($validateAttributes):
@@ -1901,7 +1902,9 @@ public function Return(Request $request){
         $requests = $requests->with(['Customer','Product']);
         $requests = $requests->orderBy('id','DESC');
         $requests = $requests->paginate( $limit );
-               
+
+      
+        // $requests['request_count'] = $requests->RequestCount();
         return parent::success('View return request successfully!', $requests);
         
         

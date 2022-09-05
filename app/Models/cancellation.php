@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class cancellation extends Model
 {
@@ -15,6 +16,8 @@ class cancellation extends Model
     protected $primaryKey = "id";
 
 
+    protected $appends = ['RequestCount'];
+
     protected $fillable = ['user_id','item_id','vendor_id','product_id','reason','image','status','type'];
 
 
@@ -25,6 +28,12 @@ class cancellation extends Model
     }
 
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','user_id','store_id','name','price','discount','image');
+        return $this->belongsTo(Product::class)->select('id','user_id','category_id','store_id','name','price','discount','image')->with(['Category']);
     }
+
+    public function getRequestCountAttribute(){
+        return cancellation::where('type','2')->where('status','1')->where('vendor_id', Auth::id())->count();
+    }
+
+   
 }
