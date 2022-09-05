@@ -1889,25 +1889,20 @@ public function Return(Request $request){
     try{
         $input = $request->all();
         $limit = (isset($request->limit))? $request->limit : 15; 
-            $return = Item::whereIn('status', ['4','5'])
-                    ->where('vendor_id', Auth::id())
-                    ->with(['Product'])
-                    ->orderBy('id','DESC')
-                    ->paginate( $limit );
-       
-        $requests = cancellation::where('type','2')
-                ->where('vendor_id', Auth::id())
-                ->with(['Customer'])
-                ->orderBy('id','DESC')
-                ->paginate( $limit );
+          
+        $requests = cancellation::where('type','2');
+        if($request->type === '3'){
+            $requests= $requests->where('status', ['1','2']);
+        }else{
+            $requests= $requests->where('status', $request->type);
+        }
+        $requests = $requests->where('type', '2');
+        $requests = $requests->where('vendor_id', Auth::id());
+        $requests = $requests->with(['Customer','Product']);
+        $requests = $requests->orderBy('id','DESC');
+        $requests = $requests->paginate( $limit );
                
-     if($request->type == '1'){
-        return parent::success('View return successfully!', $return);
-     }elseif($request->type === '2'){
         return parent::success('View return request successfully!', $requests);
-     }elseif($request->type === '3'){
-        return parent::success("View returns successfully!",['returns' => $return,'request'=>$requests]);
-     }
         
         
         

@@ -23,4 +23,8 @@ class cancellation extends Model
     public function Customer(){
         return $this->hasOne(User::class,'id','user_id')->select('id','name','fname','lname','profile_picture','phonecode','mobile_no');
     }
+
+    public function Product(){
+        return $this->belongsTo(Product::class)->select('id','user_id','store_id','name','price','discount','image');
+    }
 }
