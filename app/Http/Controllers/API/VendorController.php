@@ -21,6 +21,7 @@ use App\Models\AttributeOption;
 use App\Models\Bank;
 use App\Models\Banner;
 use App\Models\Brand;
+use App\Models\cancellation;
 use App\Models\Card;
 use App\Models\Category;
 use App\Models\Colour;
@@ -1902,6 +1903,28 @@ public function Return(Request $request){
         return parent::error($ex->getMessage());
     }
         
+}
+
+
+public function RefundRequests(Request $request)
+{
+    // dd(Auth::id());
+$rules = [];
+$validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules),false);
+if($validateAttributes):
+    return $validateAttributes;
+endif;
+try{
+    $refunds = cancellation::where('vendor_id', Auth::id())
+                            ->where('type', '2')
+                            ->orderBy('created_at', 'DESC')
+                            ->get();
+        
+
+    return parent::success("View refund requests successfully!", $refunds);
+}catch(\Exception $ex){
+    return parent::error($ex->getMessage());
+}
 }
 
 

@@ -17,6 +17,7 @@ class CreateCancellationsTable extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->bigInteger('vendor_id')->nullable();
             $table->bigInteger('item_id')->unsigned()->nullable();
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
             $table->bigInteger('product_id')->nullable();
