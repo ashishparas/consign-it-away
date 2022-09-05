@@ -1834,7 +1834,7 @@ public function StoreRating(Request $request){
 
 public function ReturnRequest(Request $request)
 {
-    $rules = ['item_id' => 'required|exists:items,id','reason'=>'required','images' => ''];
+    $rules = ['item_id' => 'required|exists:items,id','reason'=>'required','images' => '', 'vendor_id' => 'required'];
     $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
     if($validateAttributes):
         return $validateAttributes;
@@ -1857,11 +1857,11 @@ public function ReturnRequest(Request $request)
         $input['user_id'] = Auth::id();
         $input['type'] = '2';
         $Refund = cancellation::create($input); 
-        if($Refund):
-            $item = Item::FindOrfail($request->item_id);
-            $item->fill(['status' => '5']);
-            $item->save();
-        endif;
+        // if($Refund):
+        //     $item = Item::FindOrfail($request->item_id);
+        //     $item->fill(['status' => '5']);
+        //     $item->save();
+        // endif;
 
         
         return parent::success("Refund request has been send successfully!",$Refund);

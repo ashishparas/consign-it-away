@@ -54,11 +54,18 @@ class VendorController extends Controller
 
     public function index()
     {
-        $vendors = User::select('id', 'name', 'fname', 'lname', 'email', 'profile_picture','phonecode','mobile_no')->with(['Store'])->where('type', '2')->get();
+        $vendors = User::select('id', 'name', 'fname', 'lname', 'email', 'profile_picture','phonecode','mobile_no','is_active')
+        ->with(['Store'])
+        ->where('type', '2')
+        ->get();
+        $vendorRequests = User::select('id', 'name', 'fname', 'lname', 'email', 'profile_picture','phonecode','mobile_no','is_active')
+        ->with(['Store'])
+        ->where('type', '2')->where('is_active','2')
+        ->get();
         // $bc = $vendors[0]->Store->isEmpty();
         // dd($bc);
         $products = Product::select(DB::raw('DISTINCT user_id'), 'id', 'store_id', 'image', 'name', 'quantity', 'price', 'created_at')->with('User')->get();
-        return view('admin.vendor-management.vendor-mgt', compact('vendors', 'products'));
+        return view('admin.vendor-management.vendor-mgt', compact('vendors', 'products','vendorRequests'));
     }
 
 

@@ -35,14 +35,14 @@
                 </div>
                 <div class="ms-panel-body auto_scroll">
                     <div class="requests_scroll">
-                        @foreach($vendors as $vendor)
+                        @foreach($vendorRequests as $vendorRequest)
                       
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="chat_thread d-flex mb-0">
-                                <img class="mr-4" src="{{asset('public/vendor/'.$vendor->profile_picture)}}" alt="alt" />
+                                <img class="mr-4" src="{{asset('public/vendor/'.$vendorRequest->profile_picture)}}" alt="alt" />
                                 <div class="chat_thread_data">
-                                    <h5 class="mb-1">{{$vendor->name}}</h5>
-                                    <p class="mb-0">{{$vendor->email}}</p>
+                                    <h5 class="mb-1">{{$vendorRequest->name}}</h5>
+                                    <p class="mb-0">{{$vendorRequest->email}}</p>
                                 </div>
                             </div>
                             <div class="d-flex">
@@ -147,11 +147,11 @@
                                     <td>{{($vendor->email ==null)?'No Email':$vendor->email}}</td>
                                     <td><span class="green_cl">Active</span></td>
                                  
-                                    @if(empty($vendor->store->isEmpty()))
-                                        <td><a href="{{url('admin/vendor-edit-profile/'.$vendor->id)}}" class="btn orange_btn">View</a></td>
-                                    @else
-                                        <td><a href="javascript:void(0)" class="btn btn-info">No Store</a></td>
-                                    @endif
+@if(empty($vendor->store->isEmpty()))
+    <td><a href="{{url('admin/vendor-edit-profile/'.$vendor->id)}}" class="btn @if($vendor->is_active == '1')orange_btn @else btn-danger @endif">{{($vendor->is_active == '1')? 'View' : 'Not-Active' }}</a></td>
+@else
+    <td><a href="javascript:void(0)" class="btn btn-info">No Store</a></td>
+@endif
                                     
                                 </tr>
                                 @endforeach
