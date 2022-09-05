@@ -890,10 +890,7 @@ class ClientController extends ApiController
                     $items = $items->where('products.name','LIKE', '%'.$request->search.'%');        
                 }
                 $items = $items->where('items.status','1')->with(['Product','Offer','CustomerVariant'])->orderBy('created_at','DESC')->paginate($limit);
-                // foreach($items as $key => $item){
-                //     $tracking = Helper::trackCourier($item['tracking_id']);
-                //         $items[$key]['tracking_status'] = $tracking['data'];
-                // }
+           
             }else if($request->type === '2'){
 
                 $items = Item::select('items.*','products.name')
@@ -906,11 +903,7 @@ class ClientController extends ApiController
                                 ->with(['Product','Offer','CustomerVariant'])
                                 ->orderBy('items.created_at','DESC')
                                 ->paginate($limit);
-                // foreach($items as $key => $item){
-                //     $tracking = Helper::trackCourier($item['tracking_id']);
-                //         $items[$key]['tracking_status'] = $tracking['data'];
-                // }
-
+  
             }else if($request->type === '3'){   
 
                 $items = Item::select('items.*','products.name')
@@ -1014,8 +1007,8 @@ class ClientController extends ApiController
                  ->where('id',$item->order_id)->with(['Card'])->first();
                  $item['coupon'] = '0';
                
-                 $item['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
-
+                $item['selectedVariant'] = Helper::ProductvariantById($item->variant_id);
+                $item['shipping_fee'] = $item->ShippingFee();
                 return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
 
                 }else{

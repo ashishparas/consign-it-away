@@ -1896,7 +1896,7 @@ public function Return(Request $request){
         }else{
             $requests= $requests->where('status', $request->type);
         }
-        
+
         $requests = $requests->where('vendor_id', Auth::id());
         $requests = $requests->with(['Customer','Product']);
         $requests = $requests->orderBy('id','DESC');
@@ -2127,9 +2127,9 @@ public function ViewOrderByVendor(Request $request)
             }
             endif;
 
-           $selectedvariants =  Helper::ProductvariantById($item->variant_id);
-           $item['selected_variants'] = $selectedvariants;
-
+            $selectedvariants =  Helper::ProductvariantById($item->variant_id);
+            $item['selected_variants'] = $selectedvariants;
+            $item['shipping_fee'] = $item->ShippingFee();
             return parent::success("View order details successfully",['store' => $store,'shipping_address'=>  $address,'order' =>  $item ]);
                 
         }else{
