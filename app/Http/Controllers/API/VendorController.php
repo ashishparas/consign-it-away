@@ -2388,7 +2388,21 @@ public function TrackUsers(Request $request)
 }
 
 
-
+public function BarcodeLookup(Request $request)
+{
+    $rules = ['barcode' => 'required','key' => 'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $barcodeLookup = Helper::BarcodeLookup($input);
+        return parent::success("View Product Successfully",$barcodeLookup);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 

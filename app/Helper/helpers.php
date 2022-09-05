@@ -782,7 +782,33 @@ $input_xml = <<<EOXML
         }
     }
 
+public static function BarcodeLookup($params){
 
+            $barcode = $params['barcode'];
+            $key = $params['key'];
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.barcodelookup.com/v3/products?barcode=$barcode&key=$key",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Cookie: __cf_bm=F3hAbNXtmodclJMEp_uzQO1djJeZqeur_vFT5pM1s9g-1662353038-0-AVgMHo82oah8NKuZQrpxe/YjwxWrnsetJZ2RVKZ+X1vtFMjBy0HdFNof4vHVLbbIxLQWFZ9ia+iIlIfLALMxPiq9KJhSGiT5+pafAwigyuao; bl_csrf=27a7972e50c9eaa4a922f54c214a4007; bl_session=oumjrkbvp0ag930q5s404n79bi1k77da; __cflb=0H28uyvJ4CKpQyt4K4sAVoNGmQD7bdrd7NJRPcFyAyT'
+            ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            return json_decode($response, true);
+
+
+}
 
 
 

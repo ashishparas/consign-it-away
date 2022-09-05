@@ -142,12 +142,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('view/product/variants',[VendorController::class, "ViewProductvariants"]); 
     Route::post('view/staff/by/id',[VendorController::class, "ViewStaffById"]);
     Route::post('view/store/by/id',[VendorController::class, "StoreById"]);
-    
     Route::post('search/variant',[ClientController::class, "SearchVariants"]);
     Route::post('buy/subscription',[VendorController::class, "VendorBuySubscription"]);
     Route::post('change/subscription/plan',[VendorController::class, "ChangeSubscriptionPlan"]);
-    Route::post('create/offer',[ClientController::class, "CreateOffer"]);
-    
+    Route::post('create/offer',[ClientController::class, "CreateOffer"]);  
     Route::post('offer/by/id',[ClientController::class, "getOfferDetailBy"]);
     Route::post('user/chat',[ClientController::class, "UserChat"]);
     Route::post('chat/image/url',[AuthController::class, "ChatImageUrl"]);
@@ -187,6 +185,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('product/csv',[VendorController::class,"productCSV"]);
     Route::post('refund/request',[ClientController::class, "ReturnRequest"]);
     Route::post('create/shipping/label', [VendorController::class, "eVS"]);
+    Route::post('barcode/lookup', [VendorController::class, "BarcodeLookup"]);
     
 });
 
