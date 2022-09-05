@@ -1896,7 +1896,7 @@ public function Return(Request $request){
         }else{
             $requests= $requests->where('status', $request->type);
         }
-        $requests = $requests->where('type', '2');
+        
         $requests = $requests->where('vendor_id', Auth::id());
         $requests = $requests->with(['Customer','Product']);
         $requests = $requests->orderBy('id','DESC');
