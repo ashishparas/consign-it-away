@@ -16,4 +16,11 @@ class cancellation extends Model
 
 
     protected $fillable = ['user_id','item_id','vendor_id','product_id','reason','image','status','type'];
+
+
+
+
+    public function Customer(){
+        return $this->hasOne(User::class,'id','user_id')->select('id','name','fname','lname','profile_picture','phonecode','mobile_no');
+    }
 }

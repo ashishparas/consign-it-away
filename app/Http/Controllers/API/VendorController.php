@@ -1881,24 +1881,36 @@ public function ViewTransactions(Request $request)
 }
 
 public function Return(Request $request){
-    $rules = [];
-    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), false);
+    $rules = ['type' => 'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
     if($validateAttributes):
         return $validateAttributes;
     endif;      
     try{
-
-        $return = Item::whereIn('status', ['4','5'])
+        $input = $request->all();
+    
+            $return = Item::whereIn('status', ['4','5'])
+                    ->where('vendor_id', Auth::id())
+                    ->with(['Product'])
+                    ->orderBy('id','DESC')
+                    ->get();
+       
+        $requests = cancellation::where('type','2')
                 ->where('vendor_id', Auth::id())
-                ->with(['Product'])
+                ->with(['Customer'])
                 ->orderBy('id','DESC')
                 ->get();
-        $request = Item::where('status','4')
-        ->where('vendor_id', Auth::id())
-        ->with(['Customer'])
-        ->orderBy('id','DESC')
-        ->get();
-        return parent::success("View returns successfully!",['returns' => $return,'request'=>$request]);
+               
+     if($request->type == '1'){
+        return parent::success('View return successfully!', $return);
+     }elseif($request->type === '2'){
+        return parent::success('View return request successfully!', $requests);
+     }elseif($request->type === '3'){
+        return parent::success("View returns successfully!",['returns' => $return,'request'=>$requests]);
+     }
+        
+        
+        
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
