@@ -1881,25 +1881,25 @@ public function ViewTransactions(Request $request)
 }
 
 public function Return(Request $request){
-    $rules = ['type' => 'required'];
-    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+    $rules = ['type' => 'required', 'limit' => '','page' =>''];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), false);
     if($validateAttributes):
         return $validateAttributes;
     endif;      
     try{
         $input = $request->all();
-    
+        $limit = (isset($request->limit))? $request->limit : 15; 
             $return = Item::whereIn('status', ['4','5'])
                     ->where('vendor_id', Auth::id())
                     ->with(['Product'])
                     ->orderBy('id','DESC')
-                    ->get();
+                    ->paginate( $limit );
        
         $requests = cancellation::where('type','2')
                 ->where('vendor_id', Auth::id())
                 ->with(['Customer'])
                 ->orderBy('id','DESC')
-                ->get();
+                ->paginate( $limit );
                
      if($request->type == '1'){
         return parent::success('View return successfully!', $return);
