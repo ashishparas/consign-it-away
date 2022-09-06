@@ -32,6 +32,7 @@ class User extends Authenticatable
         'email_otp',
         'mobile_otp',
         'profile_picture',
+        'is_active',
         'status',
         'is_switch',
         'vendor_status',

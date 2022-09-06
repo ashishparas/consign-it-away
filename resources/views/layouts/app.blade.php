@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="baseUrl" content="{{ asset('') }}">
   <title>{{ config('app.name', 'Laravel') }}</title>
   <!-- Iconic Fonts -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -334,7 +335,8 @@
 </script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"> </script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"> </script>
-<script src="{{asset('public/js/custom.js')}}"></script>
+<script src="{{asset('public/js/custom.js')}}"></script> //
+<script src="{{asset('public/js/slider.js')}}"></script> 
 <script>
   $(document).ready(function() {
       $('#example').DataTable();

@@ -25,7 +25,10 @@
                 <div class="ms-panel-header border-0 d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">Product Details</h3>
                     <span>
-                        <a href="javascript:;" class="btn green_badge">Edit</a>
+                   
+<a href="javascript:;" data-product-id="{{ $product->id }}" data-product-status="{{ $product->status }}" class="product-status btn @if($product->status==='1') btn-success @else btn-danger @endif">@if($product->status==='1') Approved @else Rejected @endif</a>
+                       
+                        <a href="javascript:;" class="btn btn-info">Edit</a>
                         <a href="javascript:;" class="btn btn-danger">Delete</a>
                     </span>
                 </div>
@@ -42,7 +45,7 @@
                                 <ul class='exzoom_img_ul'>
                                     @foreach ($product->image as $item)
                                    
-                                    <li><img src="{{asset('public/products/'.$item)}}" alt="img"/></li>    
+                                    <li><img src="{{asset('public/products/'.$item)}}" alt="img" /></li>    
                                     @endforeach
 
                                     

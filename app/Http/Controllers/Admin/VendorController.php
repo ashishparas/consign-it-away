@@ -819,4 +819,39 @@ class VendorController extends Controller
         return redirect()->route('banner-list')->with('error','banner deleted successfully!');
     }
 
+    public function AcceptVendorStatus(Request $request)
+    {
+       
+        if($request->ajax()):
+          $user = User::FindOrfail($request->vendor_id);
+        //   dd($user->toArray());
+                $user->fill(['is_active' => $request->vendor_status]);
+                $user->save();
+               
+            return response()->json(['status' => '1', 'message' => 'User updated successfully!' ]);
+        endif;
+    }
+
+    public function ProductStatus(Request $request)
+    {
+        $message = '';
+        if($request->ajax()):
+            $status = ($request->product_status === '1')? '2':'1';
+            $product = Product::FindOrfail($request->product_id);
+                        $product->fill(['status' => $status]);
+                        $product->save();
+                        if($status === '1'):
+                            $message = 'Product Approved successfully!';
+                        else:
+                            $message = 'Product Rejected successfully1';
+                        endif;
+                        return response()->json(['status' => true, 'message' => $message]);
+        endif;
+    }
+
+
+
+
+
+
 }

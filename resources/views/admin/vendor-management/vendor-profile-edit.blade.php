@@ -114,6 +114,7 @@
                             <div class="media fs-14 pb-3 media-img">
                                 <div class="mr-2 align-self-center">
                                     @if($vendors)
+                                    {{-- @dd($vendors->toArray()); --}}
                                   <img src="{{asset('public/vendor/'.$vendors->vendor->profile_picture )}}" class="" alt="people">
                                   @endif
                                 </div>

@@ -42,17 +42,29 @@
                                 <img class="mr-4" src="{{asset('public/vendor/'.$vendorRequest->profile_picture)}}" alt="alt" />
                                 <div class="chat_thread_data">
                                     <h5 class="mb-1">{{$vendorRequest->name}}</h5>
-                                    <p class="mb-0">{{$vendorRequest->email}}</p>
+                                    <p class="mb-0">{{ $vendorRequest->email }}</p>
                                 </div>
                             </div>
+                            @if ($vendorRequest->is_active === '1')
                             <div class="d-flex">
-                                <a href="#" class="mr-3">
-                                    <img class="img-fluid" src="{{asset('public/assets/img/accept.svg')}}" alt="alt" />
-                                </a>
-                                <a href="#">
-                                    <img class="img-fluid" src="{{asset('public/assets/img/decline.svg')}}" alt="alt" />
-                                </a>
+                                <button class="btn btn-success">Accepted</button>
+                                
                             </div>
+                            @else
+                            <form  method="POST">
+                <div class="d-flex">
+                    <a href="javascript:void(0)" class="mr-3 vendor-status" data-status="1" data-id="{{ $vendorRequest->id }}">
+                        <img class="img-fluid" src="{{asset('public/assets/img/accept.svg')}}" alt="alt" />
+                    </a>
+                    <a href="javascript:void(0)" class="vendor-status" data-status="2" data-id="{{ $vendorRequest->id }}" >
+                    <img class="img-fluid" src="{{asset('public/assets/img/decline.svg')}}" alt="alt" />
+                    </a>
+                </div>
+            </form>
+                            @endif
+                            
+
+                            
                         </div>
                  @endforeach
                     </div>
@@ -170,3 +182,4 @@
 
 
 @endsection
+

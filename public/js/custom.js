@@ -5,7 +5,7 @@ $(document).ready(function(){
     $("#vendorName").on('change', function(){
         let userId = $(this).val();
        
-        // alert(baseUrl);
+       
         $.ajax({
             url:baseUrl+'admin/view/store/by/id',
             headers: {
@@ -178,5 +178,59 @@ $(".advance_btn").click( function(){
         
         return (/^\d+$/.test(str));
         }
+
+// cODE for accept vendor request
+// Dev: Ashish Mehra
+
+    $(document).ready(function(){
+        $(".vendor-status").click(function(){
+            let vendorId = $(this).attr('data-id');
+            let vendorStatus = $(this).attr('data-status');
+            let baseUrl = $('meta[name="baseUrl"]').attr('content');
+            
+          
+            $.ajax({
+
+                url:baseUrl+'admin/vendor/vendor-account',
+                type:'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            
+                data:{'vendor_id':vendorId, 'vendor_status':vendorStatus },
+                success:function(data){
+                    location.reload();
+                }
+               
+            });
+
+        });
+
+    });
+
+// cODE for accept and reject vendor product
+// Dev: Ashish Mehra
+
+$(document).ready(function(){
+    $(".product-status").click(function(){
+        let productId = $(this).attr('data-product-id');
+        let productStatus = $(this).attr('data-product-status');
+        let baseUrl = $('meta[name="baseUrl"]').attr('content');
+        const newLocal = 'admin/product/status';
+        $.ajax({
+            url:baseUrl+newLocal,
+            type:'POST',
+            headers:{
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+            },
+            data:{'product_id': productId, 'product_status': productStatus},
+            success:function(data){
+                location.reload();
+            }
+        });
+
+    });
+});
+
 
 
