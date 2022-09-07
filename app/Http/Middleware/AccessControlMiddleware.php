@@ -17,7 +17,8 @@ class AccessControlMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check() || Auth::user()->status){
+      
+        if(Auth::check()){
             // dd(Auth::user()->type);
                if(Auth::user()->type === '4'){
                 return $next($request);
@@ -26,7 +27,8 @@ class AccessControlMiddleware
                    return abort(403);
                }
         }else{
-            return response()->json(['status'=>'Please login first']);
+            // return abort(403);
+            return response()->json(['status'=>'Your session has expired, Please login first']);
         }
         return $next($request);
     }

@@ -16,12 +16,18 @@ class cancellation extends Model
     protected $primaryKey = "id";
 
 
-    protected $appends = ['RequestCount'];
+    protected $appends = ['RequestCount','Image'];
 
     protected $fillable = ['user_id','item_id','vendor_id','product_id','reason','image','status','type'];
 
 
+    public function getImageAttribute($value){
+        // dd($value);
+        if(isset($value)):
 
+        return explode(',', $value);  
+        endif;
+    }
 
     public function Customer(){
         return $this->hasOne(User::class,'id','user_id')->select('id','name','fname','lname','profile_picture','phonecode','mobile_no');

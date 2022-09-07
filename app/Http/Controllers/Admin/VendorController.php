@@ -204,7 +204,9 @@ class VendorController extends Controller
     }
 
     public function editProduct($id){
-        return view('admin.products.product-edit');
+        $product = Product::FindOrfail($id);
+        // dd($product->toArray());
+        return view('admin.products.product-edit', compact('product'));
     }
 
     public function StoreProduct(Request $request)

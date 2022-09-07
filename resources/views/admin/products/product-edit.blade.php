@@ -10,7 +10,7 @@
       <div class="col-md-12">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb pl-0">
-            <li class="breadcrumb-item"><a href="vender-products.html"><img src="assets/img/vendor.svg"> Product Management</a></li>
+            <li class="breadcrumb-item"><a href="vender-products.html"><img src="{{asset('public/assets/img/vendor.svg')}}"> Product Management</a></li>
             <li class="breadcrumb-item">Product Details</li>
             <li class="breadcrumb-item active">Add Product</li>
           </ol>
@@ -72,7 +72,7 @@
                  <div class="d-block d-lg-flex mb-3">
                   <div class="position-relative add_product">
                     <div class="upload_green">
-                       <img src="assets/img/upload_banner.svg"/>
+                       <img src="{{asset('public/assets/img/upload_banner.svg')}}"/>
                     </div>
                     <div class="input_upload"><input type="file" class="custom-file-input" id="validatedCustomFile"></div>
                    </div>
@@ -80,20 +80,20 @@
                     <ul class="d-block d-lg-flex col-gap align-items-center">
                       <li>
                         <div class="more_infromation position-relative">
-                          <img src="assets/img/head_phone.png" alt="" />
-                          <span><a href="javascript:;"><img src="assets/img/close_icon.svg"/></a></span>
+                          <img src="{{asset('public/assets/img/head_phone.png')}}" alt="" />
+                          <span><a href="javascript:;"><img src="{{asset('public/assets/img/close_icon.svg')}}"/></a></span>
                          </div>
                       </li>
                       <li>
                         <div class="more_infromation position-relative">
-                          <img src="assets/img/head_phonethree.png" alt="" />
-                          <span><a href="javascript:;"><img src="assets/img/close_icon.svg"/></a></span>
+                          <img src="{{asset('public/assets/img/head_phonethree.png')}}" alt="" />
+                          <span><a href="javascript:;"><img src="{{asset('public/assets/img/close_icon.svg')}}"/></a></span>
                          </div>
                       </li>
                       <li>
                       <div class="more_infromation position-relative">
-                        <img src="assets/img/head_phonetwo.png" alt="" />
-                        <span><a href="javascript:;"><img src="assets/img/close_icon.svg"/></a></span>
+                        <img src="{{asset('public/assets/img/head_phonetwo.png')}}" alt="" />
+                        <span><a href="javascript:;"><img src="{{ asset('public/assets/img/close_icon.svg') }}"/></a></span>
                       </div>
                       </li>
                     </ul>
@@ -105,21 +105,21 @@
                   <div class="col-md-4 mb-3">
                     <label class="d-flex">Product name *
                       <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
-                        <img src="assets/img/question_mark.svg"/>
+                        <img src="{{asset('public/assets/img/question_mark.svg')}}"/>
                       </span>
                     </label>
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Enter Product Name">
+                      <input type="text" class="form-control" placeholder="Enter Product Name" name="name" value="{{$product->name}}">
                     </div>
                   </div>
                   <div class="col-md-4 mb-3">
-                    <label for="validationCustom02" class="d-flex">Brand<span class="ml-auto"  data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+                    <label for="validationCustom02" class="d-flex">Brand<span class="ml-auto"  data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Enter brand name">
+                      <input type="text" class="form-control" placeholder="Enter brand name" name="brand" value="{{$product->brand}}">
                     </div>
                   </div>
                   <div class="col-md-4 mb-3">
-                    <label for="validationCustom01" class="d-flex">Product Category *<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+                    <label for="validationCustom01" class="d-flex">Product Category *<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                     <div class="input-group">
                       <select class="form-control" id="validationCustom15" required="">
                         <option value="">Select Category</option>
@@ -130,7 +130,7 @@
                     </div>
                   </div>
                   <div class="col-md-4 mb-3">
-                    <label for="validationCustom01" class="d-flex">Product Sub-Category<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+                    <label for="validationCustom01" class="d-flex">Product Sub-Category<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                     <div class="input-group">
                       <select class="form-control" id="validationCustom15" required="">
                         <option value="">Select Sub-Category</option>
@@ -141,27 +141,28 @@
                     </div>
                   </div>
                   <div class="col-md-4 mb-3">
-                    <label for="validationCustom02" class="d-flex">Color<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+                    <label for="validationCustom02" class="d-flex">Color<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Enter color">
+                      <input type="text" class="form-control" name="color" value="{{$product->color}}" placeholder="Enter color">
                     </div>
                   </div>
                   <div class="col-md-4 mb-3">
-                    <label for="validationCustom02" class="d-flex">Description<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+                    <label for="validationCustom02" class="d-flex">Description<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Type Here...">
+                      {{-- <textarea cols="5" rows="2" class="form-control" name="description">{{ $product->description }}</textarea> --}}
+                      <input type="text" class="form-control" value="{{$product->description}}" name="description" placeholder="Type Here...">
                     </div>
                   </div>
                    <div class="col-md-4 mb-3">
-                    <label for="validationCustom02" class="d-flex">Quantity<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+                    <label for="validationCustom02" class="d-flex">Quantity<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Enter quantity">
+                      <input type="text" class="form-control" name="quantity" value="{{ $product->quantity }}" placeholder="Enter quantity">
                     </div>
                   </div>
                   <div class="col-md-4 mb-3">
-                    <label for="validationCustom02" class="d-flex">Weight<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+                    <label for="validationCustom02" class="d-flex">Weight<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Enter weight">
+                      <input type="text" name="weight" value="{{$product->weight}}" class="form-control" placeholder="Enter weight">
                     </div>
                   </div>
                 </div>
@@ -173,21 +174,21 @@
         <div class="col-xl-12 col-md-12">
           <div class="ms-panel">
               <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
-                 <h5 class="mb-0 pb-0">Conditions <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></h5>
+                 <h5 class="mb-0 pb-0">Conditions <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></h5>
               </div>
               <div class="form-row px-4 pt-3 pb-3">
                   <div class="col-md-4 mb-2">
                     <div class="green_pargh">
-                      <input class="form-check-input" value="1" type="radio" name="exampleRadios">
+                      <input class="form-check-input" value="new" type="radio" name="condition">
                       <div class="add-category-btn">
                       <h6>New</h6>
-                      <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
+                      <p class="mb-0">123 Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
                     </div>
                     </div>
                   </div>
                   <div class="col-md-4 mb-2">
                     <div class="green_pargh">
-                      <input class="form-check-input" value="1" type="radio" name="exampleRadios">
+                      <input class="form-check-input" value="like_new" type="radio" name="condition">
                       <div class="add-category-btn">
                       <h6>Like New</h6>
                       <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -196,7 +197,7 @@
                   </div>
                   <div class="col-md-4 mb-2">
                     <div class="green_pargh">
-                      <input class="form-check-input" value="1" type="radio" name="exampleRadios">
+                      <input class="form-check-input" value="old" type="radio" name="condition">
                       <div class="add-category-btn">
                       <h6>Like New</h6>
                       <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -209,28 +210,32 @@
         <div class="col-xl-12 col-md-12">
           <div class="ms-panel">
               <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
-                 <h5 class="mb-0 pb-0">Dimensions (Optional) <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></h5>
+                 <h5 class="mb-0 pb-0">Dimensions (Optional) <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></h5>
               </div>
               <div class="form-row px-4 pt-3">
                 <div class="col-md-12">
                   <p class="fs-16 grey_cl">If this product needs to mention dimensions.</p>
                 </div>
+                @php
+                    $dimensions = json_decode($product->dimensions, true);
+                 
+                @endphp
                   <div class="col-md-4 mb-2">
-                    <label>Length</label>
+                    <label>Length (Inches)</label>
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Enter Length">
+                      <input type="text" class="form-control" name="Length" value="{{ $dimensions['Length'] }}" placeholder="Enter Length">
                     </div>
                   </div>
                   <div class="col-md-4 mb-2">
-                    <label>Width</label>
+                    <label>Width (Inches)</label>
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Enter Width">
+                      <input type="text" class="form-control" name="Breadth" value="{{ $dimensions['Breadth'] }}" placeholder="Enter Width">
                     </div>
                   </div>
                   <div class="col-md-4 mb-2">
-                    <label>Height</label>
+                    <label>Height (Inches)</label>
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Enter Height">
+                      <input type="text"  name="Height"  value="{{ $dimensions['Height'] }}" class="form-control" placeholder="Enter Height ">
                     </div>
                   </div>
                 </div>   
@@ -240,7 +245,7 @@
       <div class="col-xl-12 col-md-12">
         <div class="ms-panel">
           <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
-             <h5 class="mb-0 pb-0">All Permissions Applied <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"></span></h5>
+             <h5 class="mb-0 pb-0">All Permissions Applied <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></h5>
           </div>
           <div class="ms-panel-body mt-2 d-flex align-items-center justify-content-between pb-3">
             <div>
@@ -249,7 +254,7 @@
             </div>
             <div>
               <label class="ms-switch">
-                <input type="checkbox"> <span class="ms-switch-slider round"></span>
+                <input type="checkbox" name="available_for_sale" @if($product->available_for_sale =='1') checked @endif> <span class="ms-switch-slider round"></span>
               </label>
             </div>
           </div>
@@ -304,13 +309,13 @@
           </div>
           <div class="form-row px-4 pt-3">
               <div class="col-md-6 mb-2">
-                <label>Ships from (zip code) <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+                <label>Ships from (zip code) <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
                   <input type="text" class="form-control" placeholder="Enter Length">
                 </div>
               </div>
               <div class="col-md-6 mb-2">
-                <label>Shipping Type <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+                <label>Shipping Type <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
                   <input type="text" class="form-control" placeholder="Enter Width">
                 </div>
@@ -327,13 +332,13 @@
         </div>
         <div class="form-row px-4 pt-3">
             <div class="col-md-6 mb-2">
-              <label>Set Price <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+              <label>Set Price <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Enter Length">
               </div>
             </div>
             <div class="col-md-6 mb-2">
-              <label>Apply Discount (Optional) <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="assets/img/question_mark.svg"/></span></label>
+              <label>Apply Discount (Optional) <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
               <div class="input-group">
                 <select class="form-control">
                   <option value="">Select Category</option>
