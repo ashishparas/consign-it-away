@@ -221,7 +221,7 @@ $(document).ready(function(){
             url:baseUrl+newLocal,
             type:'POST',
             headers:{
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data:{'product_id': productId, 'product_status': productStatus},
             success:function(data){

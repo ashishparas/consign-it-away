@@ -66,6 +66,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::get('edit-brand/{id}',[AdminController::class,"EditBrand"]);
             Route::post('update-brand',[AdminController::class,"UpdateBrand"]);
             Route::get('create/product',[VendorController::class, "CreateProduct"]);
+            Route::get('edit/product/{id}', [VendorController::class, "editProduct"]);
             Route::post("store/product",[VendorController::class, "StoreProduct"]);
             Route::post('view/store/by/id',[VendorController::class, "ViewStoreById"]);
             Route::post('view/subcategories/by/id',[VendorController::class,"ViewSubCategory"]);

@@ -2438,6 +2438,25 @@ public function BarcodeLookup(Request $request)
 }
 
 
+public function RefundDetailById(Request $request)
+{
+    $rules = ['request_id' => 'required|exists:cancellations,id'];
+    $validateAttributes= parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input  = $request->all();
+        $data = cancellation::where('id', $request->request_id)
+                                ->with(['Item','Product'])->first();
+ 
+        return parent::success("View detail successfully!", $data);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
 
 
 

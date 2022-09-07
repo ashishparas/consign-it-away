@@ -28,7 +28,7 @@
                    
 <a href="javascript:;" data-product-id="{{ $product->id }}" data-product-status="{{ $product->status }}" class="product-status btn @if($product->status==='1') btn-success @else btn-danger @endif">@if($product->status==='1') Approved @else Rejected @endif</a>
                        
-                        <a href="javascript:;" class="btn btn-info">Edit</a>
+                        <a href="{{url('admin/edit/product/'. $product->id)}}" class="btn btn-info">Edit</a>
                         <a href="javascript:;" class="btn btn-danger">Delete</a>
                     </span>
                 </div>

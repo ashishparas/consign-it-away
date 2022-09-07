@@ -35,5 +35,9 @@ class cancellation extends Model
         return cancellation::where('type','2')->where('status','1')->where('vendor_id', Auth::id())->count();
     }
 
+    public function Item(){
+        return $this->hasOne(Item::class,'id','item_id');
+    }
+
    
 }

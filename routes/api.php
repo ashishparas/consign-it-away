@@ -186,6 +186,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('refund/request',[ClientController::class, "ReturnRequest"]);
     Route::post('create/shipping/label', [VendorController::class, "eVS"]);
     Route::post('barcode/lookup', [VendorController::class, "BarcodeLookup"]);
+    Route::post('refund/details/by/id', [VendorController::class, "RefundDetailById"]);
     
 });
 

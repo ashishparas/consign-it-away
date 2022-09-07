@@ -203,7 +203,9 @@ class VendorController extends Controller
         return view('admin.products.product-create', compact('users', 'categories', 'brands', 'colors'));
     }
 
-
+    public function editProduct($id){
+        return view('admin.products.product-edit');
+    }
 
     public function StoreProduct(Request $request)
     {
