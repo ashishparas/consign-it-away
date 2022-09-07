@@ -16,8 +16,11 @@ class cancellation extends Model
     protected $primaryKey = "id";
 
 
-    protected $appends = ['RequestCount','Image'];
+    protected $appends = ['RequestCount','Image','baseUrl'];
 
+    public function getBaseUrlAttribute(){
+        return asset('cancel');
+    }
     protected $fillable = ['user_id','item_id','vendor_id','product_id','reason','image','status','type'];
 
 
