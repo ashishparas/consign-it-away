@@ -37,7 +37,7 @@ class cancellation extends Model
     }
 
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','user_id','category_id','store_id','name','price','discount','image')->with(['Category','Discount','Offer']);
+        return $this->belongsTo(Product::class)->select('id','user_id','category_id','store_id','name','price','discount','image')->with(['Category','Discount']);
     }
 
     public function getRequestCountAttribute(){
@@ -45,7 +45,7 @@ class cancellation extends Model
     }
 
     public function Item(){
-        return $this->hasOne(Item::class,'id','item_id')->with(['CustomerVariant']);
+        return $this->hasOne(Item::class,'id','item_id')->with(['CustomerVariant','Offer']);
     }
 
    
