@@ -520,7 +520,7 @@ $input_xml = <<<EOXML
             
             $fields = array('API' => 'USPSReturnsLabel','XML' => $input_xml);
             
-            $url = 'https://stg-secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
+            $url = 'https://secure.shippingapis.com/ShippingAPI.dll?' . http_build_query($fields);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
