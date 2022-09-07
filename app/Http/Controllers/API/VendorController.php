@@ -1899,7 +1899,7 @@ public function Return(Request $request){
         }
 
         $requests = $requests->where('vendor_id', Auth::id());
-        $requests = $requests->with(['Customer','Product']);
+        $requests = $requests->with(['Item','Customer','Product']);
         $requests = $requests->orderBy('id','DESC');
         $requests = $requests->paginate( $limit );
 
