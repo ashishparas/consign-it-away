@@ -115,9 +115,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('subscription/by/id',[VendorController::class, "SubscriptionPlanById"]);
     Route::post('personal',[ClientController::class, "Personal"]);
     Route::post('edit/personal',[ClientController::class, "EditPersonal"]);
-    
     Route::post('change/profile/picture',[AuthController::class, "ChangeProfilePicture"]);
-    
     Route::post('open/cart',[ClientController::class, "OpenCart"]);
     Route::post('add/to/cart',[ClientController::class, "AddToCart"]);
     Route::post('cart/count',[ClientController::class, "TotalCartItems"]);
@@ -187,7 +185,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('create/shipping/label', [VendorController::class, "eVS"]);
     Route::post('barcode/lookup', [VendorController::class, "BarcodeLookup"]);
     Route::post('refund/details/by/id', [VendorController::class, "RefundDetailById"]);
-    
 });
 
 

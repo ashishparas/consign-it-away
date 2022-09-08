@@ -2448,7 +2448,7 @@ public function RefundDetailById(Request $request)
     try{
         $input  = $request->all();
         $data = cancellation::where('id', $request->request_id)
-                                ->with(['Item','Product'])->first();
+                                ->with(['Customer','Item','Product'])->first();
  
         return parent::success("View detail successfully!", $data);
     }catch(\Exception $ex){
