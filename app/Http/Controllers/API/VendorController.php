@@ -2401,6 +2401,29 @@ public function eVS(Request $request)
 }
 
 
+// FedEx Shipping label
+public function FedexCreateShippingLabel(Request $request)
+{
+    $input = $request->all();
+    $rules = ['shipper_name'=>'required','shipper_phone_no' =>'required','shipper_store_name' =>'required','shipper_street_line' =>'required','shipper_city' =>'required','shipper_state' =>'required','shipper_zipcode' =>'required', 'shipper_country_code' =>'required','weight' =>'required', 'shipping_date' =>'required','to_name' =>'required','to_phone_no' =>'required','to_company' =>'required', 'to_address' =>'required','to_city' =>'required','to_state' =>'required','to_zipcode' =>'required','to_country_code' => 'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input  =  $request->all();
+        $fedex = Helper::FedexShippingLabel( $input);
+        $url =$fedex['output']['transactionShipments']['0']['pieceResponses']['0']['packageDocuments']['0']['url'];
+  
+          
+        return parent::success("Fedex Shipping label created successfully!", $fedex);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
 public function TrackUsers(Request $request)
 {
     $rules = [];

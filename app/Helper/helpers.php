@@ -21,7 +21,10 @@ class Helper extends ApiController
 {
     // public $AccountId = "778CONSI5321";
 
-    
+    public function __construct()
+    {
+        $this->fedExAc = "740561073";
+    }
     public static function shout(string $string)
     {
         
@@ -321,6 +324,7 @@ $input_xml = <<<EOXML
           
                     $pdf_decoded = base64_decode ($array_data['LabelImage']);
                     $fileName = 'shipping_label/'.time().rand(1111,9999).'-label.pdf';
+
                     $pdf = fopen ($fileName,'w');
                     fwrite ($pdf,$pdf_decoded);
                
@@ -338,6 +342,139 @@ $input_xml = <<<EOXML
 
     }
 
+    public static function AuthenticateFedExUser(){
+        
+
+                    $curl = curl_init();
+
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://apis-sandbox.fedex.com/oauth/token',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => 'grant_type=client_credentials&client_id=l7cd240451e0aa437b86597dd87a3ec3b5&client_secret=0e85f92c25864fca846bab1dd5890854',
+                    CURLOPT_HTTPHEADER => array(
+                        'Content-Type: application/x-www-form-urlencoded',
+                        'Cookie: _abck=CE1C42A2FE122BA7F0080A11B1927269~-1~YAAQhKg7F8AWGPSCAQAAdVETHAiW2yzoKMjBIFNF2wCFpaQMlXOtTl3rVtaBXjJP+ajRX9DNZ/fCHfc+8crJ5zYXwGcs46hdSxHh6JXwGJnWryFbUBb+ZMEbb0ZHnvKySC5/eNPZVoMlcM2XluOjcfi5xgenlK2hlX399La52DDHwhjmTaTc5cbIc2/tjMo6xZ8VKmDhz/Zj2QC9MNNe/6m1wRwyGQ+2Qsz2czRe1KKWBrOQQ+4gBaRUq2PqqofCzNqegVObeEOYKy8dWrW6zFEuPGJA3No0ukeC1Hf86QYfBkZqPoTfuCNVeg2yveLP2mLO+x+QvnipWeBiz/k7zWLw5BUIwmwS6PmRo5GV3GdnEzAhxjqYe8Aq0aDnN2QpzTM3zV3H~-1~-1~-1; ak_bmsc=B552D78874D1AEA9477B2EDE52F26916~000000000000000000000000000000~YAAQrPTfFyHIvv2CAQAAphR9HBG6T1nFu7BWUe8EUJ1cZ1iMuYjvleSea2xArsD2Mw5/gUPbIyaB9oynoElsSJ/lWFZ2BMjXlZQSwVFVAHEdYpKI9unPeoAuGVSR97329wC/Rz//SMKRAp1+CXXxMdwxaJY//DPk+Oqz1DDfEaDSmK7eVBKBOcKl7du+FchYZcdVQwh+6ldI3OI4mB0HpPB8j2Tcrh/CFwf90wCKYRyuvdp3BwaLbrEbEe1fNfHYGlE9YPVcyL5tM7TwXhyYpn8bbIx4wIdHMTHgOIOnsPbFkjEr1Ps9UQJRhCpsMgW/qIXIHLU6hoRQXNGepsXpiFfVcmugSZFI8tILRU+niA8oU7fj0LFM4V0JUw==; bm_sv=F05782F16144A15A477922282F0BF7B6~YAAQPfTfFzRIXf+CAQAAhYSRHBE8r3Wm8YL/q7cXLGb5cQl+EBp5uLzDRNr9cZnXiEOcw6/iK+U0jKoMBcH9KmM3Zo9ZECRcXJ0pwhsi2XSgiwXBT63j6MiOm72AWJOqgIr7WCX6suSxi+jvVC/p2dTVCUjrvUVDiDHdQkS5NZbROdnHcwP9hdWwWrW7/Xt+PkBxE3RukvTHCa6onW1fya22fxin05nuNUTI58XsdGJPfq6YIXI0eScVEpnmVSo=~1; bm_sz=0934D0CF924213D0F9694BDE6F295A74~YAAQhKg7F8IWGPSCAQAAdVETHBFPZjg723brfpFZdub2jT5CRjroKVvLg3JjQLofUFIvcMJrawsySwKu2QlFr4D4e0Ozbd3SQMduE1sPlxvsNaStkiS5QRFCvPifxYSEn0uTj2v6Ej+/87GeKHmYZuJK3dtU8+7BVEgRZ4WlVN7LJICwYj4qDCI8bbo1YJvUFw1iuYrmacXQMQgT1qlnqIswEiZ5JdssldYw+5TMQMci5tCTtSR7CyYE+2W2wnik5/uJKeSeVRh9j/NYEf27EmYTdO1bb9mffZeuGDdHAa32iQ==~3227957~3158597; fdx_cbid=10544296391657109399004850453631; level=test; siteDC=wtc'
+                    ),
+        ));
+
+                    $response = curl_exec($curl);
+
+                    curl_close($curl);
+                    return $response;
+
+    }
+
+    public static function FedexShippingLabel($params){
+
+        $Auth = self::AuthenticateFedExUser();
+        $Auth = json_decode($Auth, true);
+        $token = $Auth['access_token'];
+        // dd();
+                    $curl = curl_init();
+                   
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://apis-sandbox.fedex.com/ship/v1/shipments',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS =>'
+                    {
+                    "labelResponseOptions": "URL_ONLY",
+                    "requestedShipment": {
+                        "shipper": {
+                        "contact": {
+                            "personName": "'.$params['shipper_name'].'",
+                            "phoneNumber": '.$params['shipper_phone_no'].',
+                            "companyName": "'.$params['shipper_store_name'].'"
+                        },
+                        "address": {
+                            "streetLines": [
+                            "'.$params['shipper_street_line'].'"
+                            ],
+                            "city": "'.$params['shipper_city'].'",
+                            "stateOrProvinceCode": "'.$params['shipper_state'].'",
+                            "postalCode": '.$params['shipper_zipcode'].',
+                            "countryCode": "'.$params['shipper_country_code'].'"
+                        }
+                        },
+                        "recipients": [
+                        {
+                            "contact": {
+                            "personName": "'.$params['to_name'].'",
+                            "phoneNumber": '.$params['to_phone_no'].',
+                            "companyName": "'.$params['to_company'].'"
+                            },
+                            "address": {
+                            "streetLines": [
+                                "'.$params['to_address'].'",
+                                "RECIPIENT STREET LINE 2"
+                            ],
+                            "city": "'.$params['to_city'].'",
+                            "stateOrProvinceCode": "'.$params['to_state'].'",
+                            "postalCode": '.$params['to_zipcode'].',
+                            "countryCode": "'.$params['to_country_code'].'"
+                            }
+                        }
+                        ],
+                        "shipDatestamp": "'.$params['shipping_date'].'",
+                        "serviceType": "PRIORITY_OVERNIGHT",
+                        "packagingType": "FEDEX_PAK",
+                        "pickupType": "USE_SCHEDULED_PICKUP",
+                        "blockInsightVisibility": false,
+                        "shippingChargesPayment": {
+                        "paymentType": "SENDER"
+                        },
+                        "shipmentSpecialServices": {
+                        "specialServiceTypes": [
+                            "RETURN_SHIPMENT"
+                        ],
+                        "returnShipmentDetail": {
+                            "returnType": "PRINT_RETURN_LABEL"
+                        }
+                        },
+                        "labelSpecification": {
+                        "imageType": "PDF",
+                        "labelStockType": "PAPER_85X11_TOP_HALF_LABEL"
+                        },
+                        "requestedPackageLineItems": [
+                        {
+                            "weight": {
+                            "value": '.$params['weight'].',
+                            "units": "LB"
+                            }
+                        }
+                        ]
+                    },
+                    "accountNumber": {
+                        "value": "740561073"
+                    }
+                    }',
+                    CURLOPT_HTTPHEADER => array(
+                        'Content-Type: application/json',
+                        'x-locale: en_US',
+                        'x-customer-transaction-id: 624deea6-b709-470c-8c39-4b5511281492',
+                        'Authorization: Bearer '.$token,
+                        'Cookie: _abck=CE1C42A2FE122BA7F0080A11B1927269~-1~YAAQhKg7F8AWGPSCAQAAdVETHAiW2yzoKMjBIFNF2wCFpaQMlXOtTl3rVtaBXjJP+ajRX9DNZ/fCHfc+8crJ5zYXwGcs46hdSxHh6JXwGJnWryFbUBb+ZMEbb0ZHnvKySC5/eNPZVoMlcM2XluOjcfi5xgenlK2hlX399La52DDHwhjmTaTc5cbIc2/tjMo6xZ8VKmDhz/Zj2QC9MNNe/6m1wRwyGQ+2Qsz2czRe1KKWBrOQQ+4gBaRUq2PqqofCzNqegVObeEOYKy8dWrW6zFEuPGJA3No0ukeC1Hf86QYfBkZqPoTfuCNVeg2yveLP2mLO+x+QvnipWeBiz/k7zWLw5BUIwmwS6PmRo5GV3GdnEzAhxjqYe8Aq0aDnN2QpzTM3zV3H~-1~-1~-1; ak_bmsc=B552D78874D1AEA9477B2EDE52F26916~000000000000000000000000000000~YAAQrPTfFyHIvv2CAQAAphR9HBG6T1nFu7BWUe8EUJ1cZ1iMuYjvleSea2xArsD2Mw5/gUPbIyaB9oynoElsSJ/lWFZ2BMjXlZQSwVFVAHEdYpKI9unPeoAuGVSR97329wC/Rz//SMKRAp1+CXXxMdwxaJY//DPk+Oqz1DDfEaDSmK7eVBKBOcKl7du+FchYZcdVQwh+6ldI3OI4mB0HpPB8j2Tcrh/CFwf90wCKYRyuvdp3BwaLbrEbEe1fNfHYGlE9YPVcyL5tM7TwXhyYpn8bbIx4wIdHMTHgOIOnsPbFkjEr1Ps9UQJRhCpsMgW/qIXIHLU6hoRQXNGepsXpiFfVcmugSZFI8tILRU+niA8oU7fj0LFM4V0JUw==; bm_sv=F05782F16144A15A477922282F0BF7B6~YAAQPfTfFzRIXf+CAQAAhYSRHBE8r3Wm8YL/q7cXLGb5cQl+EBp5uLzDRNr9cZnXiEOcw6/iK+U0jKoMBcH9KmM3Zo9ZECRcXJ0pwhsi2XSgiwXBT63j6MiOm72AWJOqgIr7WCX6suSxi+jvVC/p2dTVCUjrvUVDiDHdQkS5NZbROdnHcwP9hdWwWrW7/Xt+PkBxE3RukvTHCa6onW1fya22fxin05nuNUTI58XsdGJPfq6YIXI0eScVEpnmVSo=~1; bm_sz=0934D0CF924213D0F9694BDE6F295A74~YAAQhKg7F8IWGPSCAQAAdVETHBFPZjg723brfpFZdub2jT5CRjroKVvLg3JjQLofUFIvcMJrawsySwKu2QlFr4D4e0Ozbd3SQMduE1sPlxvsNaStkiS5QRFCvPifxYSEn0uTj2v6Ej+/87GeKHmYZuJK3dtU8+7BVEgRZ4WlVN7LJICwYj4qDCI8bbo1YJvUFw1iuYrmacXQMQgT1qlnqIswEiZ5JdssldYw+5TMQMci5tCTtSR7CyYE+2W2wnik5/uJKeSeVRh9j/NYEf27EmYTdO1bb9mffZeuGDdHAa32iQ==~3227957~3158597; fdx_cbid=10544296391657109399004850453631; level=test; siteDC=wtc'
+                    ),
+                    ));
+
+                    $response = curl_exec($curl);
+
+                    curl_close($curl);
+                return json_decode($response, true);
+
+
+    }
 
 
 

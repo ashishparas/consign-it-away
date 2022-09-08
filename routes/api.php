@@ -183,6 +183,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('product/csv',[VendorController::class,"productCSV"]);
     Route::post('refund/request',[ClientController::class, "ReturnRequest"]);
     Route::post('create/shipping/label', [VendorController::class, "eVS"]);
+    Route::post('create/shipping/label/fedex', [VendorController::class, "FedexCreateShippingLabel"]);
     Route::post('barcode/lookup', [VendorController::class, "BarcodeLookup"]);
     Route::post('refund/details/by/id', [VendorController::class, "RefundDetailById"]);
 });
