@@ -704,13 +704,10 @@ class ClientController extends ApiController
        endif;
 
         try{
+
             $input = $request->all();
             // Charge for product
-        //     $Address = Helper::validateAddress($request->address_id);
-        //    $carierAccounts = helper::shippingLabel('2', '3');
-        //    $trackingId =  Helper::trackingStatus('92055901755477000000000015');
-                            // dd($trackingId);
-
+            //     $Address = Helper::validateAddress($request->address_id);
             $Address = true;
             if($Address):
 

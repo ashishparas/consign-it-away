@@ -2405,19 +2405,32 @@ public function eVS(Request $request)
 public function FedexCreateShippingLabel(Request $request)
 {
     $input = $request->all();
-    $rules = ['shipper_name'=>'required','shipper_phone_no' =>'required','shipper_store_name' =>'required','shipper_street_line' =>'required','shipper_city' =>'required','shipper_state' =>'required','shipper_zipcode' =>'required', 'shipper_country_code' =>'required','weight' =>'required', 'shipping_date' =>'required','to_name' =>'required','to_phone_no' =>'required','to_company' =>'required', 'to_address' =>'required','to_city' =>'required','to_state' =>'required','to_zipcode' =>'required','to_country_code' => 'required'];
+    $rules = ['item_id' => 'required|exists:items,id','shipper_name'=>'required','shipper_phone_no' =>'required','shipper_store_name' =>'required','shipper_street_line' =>'required','shipper_city' =>'required','shipper_state' =>'required','shipper_zipcode' =>'required', 'shipper_country_code' =>'required','weight' =>'required', 'shipping_date' =>'required','to_name' =>'required','to_phone_no' =>'required','to_company' =>'required', 'to_address' =>'required','to_city' =>'required','to_state' =>'required','to_zipcode' =>'required','to_country_code' => 'required'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
 
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
+        $fedex = [];
         $input  =  $request->all();
-        $fedex = Helper::FedexShippingLabel( $input);
-        $url =$fedex['output']['transactionShipments']['0']['pieceResponses']['0']['packageDocuments']['0']['url'];
-  
-          
-        return parent::success("Fedex Shipping label created successfully!", $fedex);
+        // $fedex = Helper::FedexShippingLabel( $input);
+        // $url =$fedex['output']['transactionShipments']['0']['pieceResponses']['0']['packageDocuments']['0']['url'];
+
+        $url = 'https://wwwtest.fedex.com/document/v1/cache/retrieve/SH,22b9f48bb19292c7795497766429_SHIPPING_P?isLabel=true&autoPrint=false';
+        // dd($url);
+            // Image path
+           // Save pdf DEV: aSHISH mEHRA
+         if(isset($fedex)):
+        
+            $filenName = 'shipping_label/'.time().rand(1111,9999).'-'.date('Y-m-d').'-label.pdf';          
+            $label = file_put_contents($filenName, file_get_contents($url));
+            $item = Item::Findorfail($request->item_id);
+                        $item->fill(['tracking_id' => '12344356789','schedule_pickup' => '1', 'tracking_label' => $filenName]);
+                        $item->save();
+
+         endif; 
+        return parent::success("Fedex Shipping label created successfully!", $item);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
@@ -2472,7 +2485,7 @@ public function RefundDetailById(Request $request)
         $input  = $request->all();
         $data = cancellation::where('id', $request->request_id)
                                 ->with(['Customer','Item','Product'])->first();
- 
+
         return parent::success("View detail successfully!", $data);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());

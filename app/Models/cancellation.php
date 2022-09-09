@@ -45,7 +45,7 @@ class cancellation extends Model
     }
 
     public function Item(){
-        return $this->hasOne(Item::class,'id','item_id')->with(['CustomerVariant','Offer','Rating']);
+        return $this->hasOne(Item::class,'id','item_id')->with(['Address','CustomerVariant','Offer','Rating']);
     }
 
    

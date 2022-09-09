@@ -323,7 +323,7 @@ $input_xml = <<<EOXML
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
           
                     $pdf_decoded = base64_decode ($array_data['LabelImage']);
-                    $fileName = 'shipping_label/'.time().rand(1111,9999).'-label.pdf';
+                    $fileName = 'shipping_label/'.time().rand(1111,9999).'-'.date('Y-m-d').'-label.pdf';
 
                     $pdf = fopen ($fileName,'w');
                     fwrite ($pdf,$pdf_decoded);

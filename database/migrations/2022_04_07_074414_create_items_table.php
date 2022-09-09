@@ -18,6 +18,7 @@ class CreateItemsTable extends Migration
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('tracking_id')->nullable();
+            $table->string('shipping_type')->nullable();
             $table->enum('schedule_pickup',[0,1])->default(0)->comment('0->Not Schedule, 1-> schedule complete');
             $table->string('tracking_label')->nullable();
             $table->bigInteger('vendor_id')->nullable();
