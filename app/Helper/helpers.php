@@ -366,15 +366,16 @@ $input_xml = <<<EOXML
                     $response = curl_exec($curl);
 
                     curl_close($curl);
-                    return $response;
+                    $Auth = json_decode($response, true);
+                    $token = $Auth['access_token'];
+                    return $token;
 
     }
 
     public static function FedexShippingLabel($params){
 
-        $Auth = self::AuthenticateFedExUser();
-        $Auth = json_decode($Auth, true);
-        $token = $Auth['access_token'];
+        $token = self::AuthenticateFedExUser();
+        
         // dd();
                     $curl = curl_init();
                    
@@ -550,6 +551,46 @@ $input_xml = <<<EOXML
         }
     }
 
+    public static function trackFedexCourier($tracking_id='795497766120'){
+
+        $token = self::AuthenticateFedExUser();
+                    $curl = curl_init();
+
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://apis-sandbox.fedex.com/track/v1/trackingnumbers',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS =>'{
+                    "trackingInfo": [
+                        {
+                        "trackingNumberInfo": {
+                            "trackingNumber": "795497766120"
+                        }
+                        }
+                    ],
+                    "includeDetailedScans": true
+                    }',
+                    CURLOPT_HTTPHEADER => array(
+                        'x-customer-transaction-id: 624deea6-b709-470c-8c39-4b5511281492',
+                        'x-locale: en_US',
+                        'Content-Type: application/json',
+                        'Authorization: Bearer '.$token,
+                        'Cookie: _abck=CE1C42A2FE122BA7F0080A11B1927269~-1~YAAQhKg7F8AWGPSCAQAAdVETHAiW2yzoKMjBIFNF2wCFpaQMlXOtTl3rVtaBXjJP+ajRX9DNZ/fCHfc+8crJ5zYXwGcs46hdSxHh6JXwGJnWryFbUBb+ZMEbb0ZHnvKySC5/eNPZVoMlcM2XluOjcfi5xgenlK2hlX399La52DDHwhjmTaTc5cbIc2/tjMo6xZ8VKmDhz/Zj2QC9MNNe/6m1wRwyGQ+2Qsz2czRe1KKWBrOQQ+4gBaRUq2PqqofCzNqegVObeEOYKy8dWrW6zFEuPGJA3No0ukeC1Hf86QYfBkZqPoTfuCNVeg2yveLP2mLO+x+QvnipWeBiz/k7zWLw5BUIwmwS6PmRo5GV3GdnEzAhxjqYe8Aq0aDnN2QpzTM3zV3H~-1~-1~-1; ak_bmsc=03BB9F921A9058227B0D456E44C4D135~000000000000000000000000000000~YAAQTq0cuHEwtPyCAQAAWq0nIRF+9die521FiVFBTXeExLS1ILlhSfYV6qo6x975oBpPPyxPUnmPyq/AeUXJ132VK5LdjCm/+V4KaRnvYuhMBdXyeXkhFbJAlFKhAvyvBQuqUhMT3YHxZ2iLOgYqwEbz1/mH4tMmFJdvl/geuGAEFCpWX+Dbv1fpG1khyvjQbbHZ2JMgq7xyiFcOEG/Xuumxxnbuae77pLrnDZZICtQu0x7bgcHhZvI2Q8B1DX8kN9lRL2FgVdegzZUOYLluHXt/ItyQ9rmbJ/+48Bk50QoUYS7+cVT8HQXUo02i7F/flwNmYpCBvGma1AsyNSeDPVaUmkfd3MAvnMr0ISM6ettmIYJAwei8toRiSHI=; fdx_cbid=10544296391657109399004850453631; siteDC=wtc'
+                    ),
+                    ));
+
+                    $response = curl_exec($curl);
+
+                    curl_close($curl);
+                    return json_decode($response, true);
+
+
+    }
 
     public static function getShippingPrice($product){
         try{

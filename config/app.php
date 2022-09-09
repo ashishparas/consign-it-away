@@ -180,6 +180,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         LaravelFCM\FCMServiceProvider::class,
         // Johnpaulmedina\Usps\UspsServiceProvider::class,
+        MOIREI\GoogleMerchantApi\GoogleMerchantApiServiceProvider::class,
 
     ],
 

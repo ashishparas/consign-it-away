@@ -18,6 +18,10 @@ class cancellation extends Model
 
     protected $appends = ['RequestCount','Image','baseUrl'];
 
+
+   
+
+
     public function getBaseUrlAttribute(){
         return asset('cancel');
     }

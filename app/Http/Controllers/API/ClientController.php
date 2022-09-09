@@ -730,6 +730,7 @@ class ClientController extends ApiController
                         $product = Product::where('id', $item->product_id)->first();
                 
                         $item =  Item::create([
+                                'shipping_type' =>  $product->shipping_type,
                                 'user_id' => Auth::id(),
                                 'order_id' => $order->id,
                                 'product_id' => $product->id,

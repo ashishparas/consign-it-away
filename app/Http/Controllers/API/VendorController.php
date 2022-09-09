@@ -1882,7 +1882,7 @@ public function ViewTransactions(Request $request)
 
 public function Return(Request $request){
    
-    $rules = ['type' => 'required', 'limit' => '','page' =>''];
+    $rules = [ 'search' => '', 'type' => 'required', 'limit' => '','page' =>''];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), false);
     if($validateAttributes):
         return $validateAttributes;
@@ -1890,19 +1890,25 @@ public function Return(Request $request){
     try{
         $input = $request->all();
         $limit = (isset($request->limit))? $request->limit : 15; 
-          
-        $requests = cancellation::where('type','2');
+        // DB::enableQueryLog();
+        $requests = cancellation::select('cancellations.*','products.name')->where('type','2')
+                    ->join('products','cancellations.product_id','products.id');
+      
         if($request->type === '3'){
-            $requests= $requests->where('status', ['1','2']);
+            $requests= $requests->where('cancellations.status', ['1','2']);
         }else{
-            $requests= $requests->where('status', $request->type);
+            $requests= $requests->where('cancellations.status', $request->type);
         }
 
-        $requests = $requests->where('vendor_id', Auth::id());
-        $requests = $requests->with(['Item','Customer','Product']);
-        $requests = $requests->orderBy('id','DESC');
-        $requests = $requests->paginate( $limit );
+        if(isset($request->search)){
+            $requests= $requests->where('products.name','LIKE', '%'.$request->search.'%');
+        }
 
+        $requests = $requests->where('cancellations.vendor_id', Auth::id());
+        $requests = $requests->with(['Item','Customer','Product']);
+        $requests = $requests->orderBy('cancellations.id','DESC');
+        $requests = $requests->paginate( $limit );
+        // dd(DB::getQueryLog($requests));
       
         // $requests['request_count'] = $requests->RequestCount();
         return parent::success('View return request successfully!', $requests);
@@ -2084,20 +2090,23 @@ public function ViewOrderByVendor(Request $request)
        try{
 
             $input = $request->all();
+            $tracking_id = [];
             $item = Item::where('vendor_id',Auth::id())
                 ->where('id', $request->order_id)
                 ->with(['Customer','cancelRequest','Product','Transaction','Rating','CustomerVariant','Offer'])
                 ->first();
             
         if($item){
-                
-                    $tracking_id = Helper::trackCourier($item->tracking_id);
-               
+                    // <=========== Temporary commented ==========>
+                    // if(strtoupper($item->shipping_type) === 'FEDEX'):
+                    //     $tracking_id = Helper::trackFedexCourier($item->tracking_id);
+                    // elseif(strtoupper($item->shipping_type) === 'USPS'):
+                    //     $tracking_id = Helper::trackCourier($item->tracking_id);
+                    // endif; 
+
                     if($tracking_id['status'] === true):
-                    
                         $item['tracking_status'] =   $tracking_id['data'];  
                     else:
-                     
                         $item['tracking_status'] = [];
                     endif;
                   
