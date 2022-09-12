@@ -2103,7 +2103,7 @@ public function ViewOrderByVendor(Request $request)
                     // elseif(strtoupper($item->shipping_type) === 'USPS'):
                     //     $tracking_id = Helper::trackCourier($item->tracking_id);
                     // endif; 
-
+                            $tracking_id = Helper::trackCourier($item->tracking_id);
                     if($tracking_id['status'] === true):
                         $item['tracking_status'] =   $tracking_id['data'];  
                     else:
