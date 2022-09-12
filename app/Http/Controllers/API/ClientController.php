@@ -1103,9 +1103,9 @@ class ClientController extends ApiController
             endforeach;
            
             $Product_ratings = Rating::where('product_id', $input['product_id'])->with(['User'])->get();
-            $Averagerating = StoreRating::where('store_id', $request->store_id)->avg('rating',1);
-          
-            $ratingCount = Rating::where('product_id', $input['product_id'])->with(['User'])->count();
+            $StoreRating = StoreRating::where('store_id', $request->store_id);
+            $Averagerating = $StoreRating->avg('rating',1);
+            $ratingCount = $StoreRating->count();
         return parent::success("View store details successfully!",['AverageRating'=> Number_format($Averagerating,1) ,'RatingCount'=> $ratingCount,'store' => $store,'product_details' =>  $viewProductDetails,'products' => $products,'product_ratings' => $Product_ratings,'about' => $about]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
