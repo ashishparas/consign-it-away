@@ -61,7 +61,10 @@ class Store extends Model
 
 
     public function StoreRatings(){
-        return $this->hasMany(StoreRating::class,'store_id', 'id');
+        return $this->hasMany(StoreRating::class,'store_id', 'id')->orderBy('id', 'DESC')->take(4);
+    }
+    public function StoreReview(){
+        return $this->hasMany(StoreRating::class,'store_id')->orderBy('id', 'DESC');
     }
  
 

@@ -35,6 +35,7 @@ use App\Models\PromoCode;
 use App\Models\PromoProduct;
 use App\Models\Refund;
 use App\Models\Stock;
+use App\Models\StoreRating;
 use App\Models\Subcategory;
 use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
@@ -2496,6 +2497,28 @@ public function RefundDetailById(Request $request)
                                 ->with(['Customer','Item','Product'])->first();
 
         return parent::success("View detail successfully!", $data);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
+
+
+public function ViewStorereview(Request $request)
+{
+    $rules = ['store_id' => 'required|exists:stores,id'];
+    $validateAttributes= parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        $Store = Store::where('id',$request->store_id)->with(['StoreReview'])->first();
+        $StoreRating = StoreRating::where('store_id', $request->store_id);
+        $Store['storeTotalrating'] = number_format($StoreRating->avg('rating'),2); 
+        $Store['StoreTotalCount'] = $StoreRating->count();
+        return parent::success("View store reviews successfully!", $Store);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
