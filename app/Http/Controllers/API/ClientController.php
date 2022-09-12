@@ -1081,7 +1081,7 @@ class ClientController extends ApiController
        endif;
        try{
             $input = $request->all();
-            $store = Store::where('id', $input['store_id'])->first();
+            $store = Store::where('id', $input['store_id'])->with('StoreRatings')->first();
             $about = User::select('id','name','fname','lname','profile_picture')
                         ->where('id',$store->user_id)->first();
             $viewProductDetails = Product::select('id','name','image','price')
@@ -1106,7 +1106,7 @@ class ClientController extends ApiController
             $StoreRating = StoreRating::where('store_id', $request->store_id);
             $Averagerating = $StoreRating->avg('rating',1);
             $ratingCount = $StoreRating->count();
-        return parent::success("View store details successfully!",['AverageRating'=> Number_format($Averagerating,1) ,'RatingCount'=> $ratingCount,'store' => $store,'product_details' =>  $viewProductDetails,'products' => $products,'product_ratings' => $Product_ratings,'about' => $about]);
+        return parent::success("View store details successfully!", ['AverageRating'=> Number_format($Averagerating,1) ,'RatingCount'=> $ratingCount,'store' => $store,'product_details' =>  $viewProductDetails,'products' => $products,'product_ratings' => $Product_ratings,'about' => $about]);
        }catch(\Exception $ex){
         return parent::error($ex->getMessage());
        }

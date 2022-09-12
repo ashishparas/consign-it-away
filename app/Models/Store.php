@@ -58,6 +58,11 @@ class Store extends Model
     public function Bank(){
         return $this->belongsTo(Bank::class,'user_id')->select('id','user_id','name','bank_ac_no','routing_no');
     }
+
+
+    public function StoreRatings(){
+        return $this->hasMany(StoreRating::class,'store_id', 'id');
+    }
  
 
 }
