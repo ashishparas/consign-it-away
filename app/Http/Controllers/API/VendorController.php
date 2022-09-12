@@ -2288,7 +2288,7 @@ public function ViewOrderByVendor(Request $request)
     for ($i = 1; $i <= 12; $i++) {
         if (!empty($usermcount[$i])) {
             $userArr[$i]['count'] = $usermcount[$i];
-            $userArr[$i]['sum'] = number_format($usermprice[$i],2);
+            $userArr[$i]['sum'] = $usermprice[$i];
         } else {
             $userArr[$i]['count'] = 0;
             $userArr[$i]['sum'] = "0";

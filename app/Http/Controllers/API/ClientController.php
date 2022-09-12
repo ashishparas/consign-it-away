@@ -348,6 +348,19 @@ class ClientController extends ApiController
         }
     }
 
+    public function productReviewById(request $request)
+    {
+        $rules = ['product_id' => 'required|exists:products,id'];
+        $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+        try{
+            // $input = $request->all();
+            // $product = Product::Rating()->select('id','product_id','from','upload','rating','comment','created_at')
+            // ->get();
+            return parent::success("View review successfully!");
+        }catch(\Exception $ex){
+            return parent::error($ex->getMessage());
+        }
+    }
 
 
     public function Rating(Request $request){

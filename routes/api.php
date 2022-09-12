@@ -60,6 +60,7 @@ if (\Request::header('Authorization'))
 
     Route::post('home', [ClientController::class, "Home"]);
     Route::post('product/by/id',[ClientController::class,"ProductById"]);
+    Route::post('view/product/review', [ClientController::class, "ProductReviewById"]);
     Route::get("product/filter",[ClientController::class,"ProductFilter"]);
     Route::get('recently/view/products',[ClientController::class, "RecentlyViewProducts"]);
     Route::post('client/view/store/by/id',[ClientController::class, "ClientViewStore"]);
