@@ -17,6 +17,6 @@ class StoreRating extends Model
     protected $fillable = ['user_id','store_id','product_id','rating','comment'];
 
     public function User(){
-        return $this->hasOne(User::class, 'id','user_id')->select('id','name','profile_picture');
+        return $this->hasOne(User::class, 'id','user_id')->select('id','name','fname','lname','profile_picture');
     }
 }
