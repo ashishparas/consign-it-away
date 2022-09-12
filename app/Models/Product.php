@@ -91,6 +91,10 @@ class Product extends Model
       return $this->hasOne(Rating::class);
     }
 
+    public function ProductAllRating(){   
+        return $this->hasMany(Rating::class)->with(['User']);
+      }
+
 
     public function Stock(){
         return $this->hasOne(Stock::class)->select('product_id','stock');

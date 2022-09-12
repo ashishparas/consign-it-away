@@ -354,9 +354,8 @@ class ClientController extends ApiController
         $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
         try{
             // $input = $request->all();
-            // $product = Product::Rating()->select('id','product_id','from','upload','rating','comment','created_at')
-            // ->get();
-            return parent::success("View review successfully!");
+            $product = Product::select('id','name', 'image')->where('id', $request->product_id)->with(['ProductAllRating'])->first();   
+            return parent::success("View review successfully!",$product);
         }catch(\Exception $ex){
             return parent::error($ex->getMessage());
         }
