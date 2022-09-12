@@ -1082,7 +1082,8 @@ class ClientController extends ApiController
        try{
             $input = $request->all();
             $store = Store::where('id', $input['store_id'])->first();
-            $about = User::select('id','name','fname','lname','profile_picture')->where('id',$store->user_id)->first();
+            $about = User::select('id','name','fname','lname','profile_picture')
+                        ->where('id',$store->user_id)->first();
             $viewProductDetails = Product::select('id','name','image','price')
             ->where('id', $request->product_id)
             ->with(['PorductRating'])
@@ -1102,7 +1103,8 @@ class ClientController extends ApiController
             endforeach;
            
             $Product_ratings = Rating::where('product_id', $input['product_id'])->with(['User'])->get();
-            $Averagerating = Rating::where('product_id', $input['product_id'])->with(['User'])->avg('rating',1);
+            $Averagerating = StoreRating::where('store_id', $request->store_id)->avg('rating',1);
+          
             $ratingCount = Rating::where('product_id', $input['product_id'])->with(['User'])->count();
         return parent::success("View store details successfully!",['AverageRating'=> Number_format($Averagerating,1) ,'RatingCount'=> $ratingCount,'store' => $store,'product_details' =>  $viewProductDetails,'products' => $products,'product_ratings' => $Product_ratings,'about' => $about]);
        }catch(\Exception $ex){
