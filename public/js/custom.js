@@ -240,7 +240,7 @@ $(document).ready(function(){
 $(".delete-image").click(function(){
     let productId = $(this).parent().attr('data-image-id');
     let imageKey = $(this).parent().attr('data-image-key');
-    alert(productId+' '+ imageKey);
+    // alert(productId+' '+ imageKey);
 });
 
 
