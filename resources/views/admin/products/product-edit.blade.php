@@ -78,24 +78,14 @@
                    </div>
                    <div>
                     <ul class="d-block d-lg-flex col-gap align-items-center">
+                      @foreach($product->image as $key => $images)
                       <li>
                         <div class="more_infromation position-relative">
-                          <img src="{{asset('public/assets/img/head_phone.png')}}" alt="" />
-                          <span><a href="javascript:;"><img src="{{asset('public/assets/img/close_icon.svg')}}"/></a></span>
+                          <img src="{{asset('public/products/'. $images)}}" alt="" />
+                          <span><a href="javascript:;" data-image-id="{{ $product->id }}" data-image-key = "{{ $key }}"><img class="delete-image"  src="{{asset('public/assets/img/close_icon.svg')}}"/></a></span>
                          </div>
                       </li>
-                      <li>
-                        <div class="more_infromation position-relative">
-                          <img src="{{asset('public/assets/img/head_phonethree.png')}}" alt="" />
-                          <span><a href="javascript:;"><img src="{{asset('public/assets/img/close_icon.svg')}}"/></a></span>
-                         </div>
-                      </li>
-                      <li>
-                      <div class="more_infromation position-relative">
-                        <img src="{{asset('public/assets/img/head_phonetwo.png')}}" alt="" />
-                        <span><a href="javascript:;"><img src="{{ asset('public/assets/img/close_icon.svg') }}"/></a></span>
-                      </div>
-                      </li>
+                      @endforeach
                     </ul>
                    </div>
                  </div>
@@ -179,7 +169,7 @@
               <div class="form-row px-4 pt-3 pb-3">
                   <div class="col-md-4 mb-2">
                     <div class="green_pargh">
-                      <input class="form-check-input" value="new" type="radio" name="condition">
+                      <input class="form-check-input" value="New" type="radio" name="condition" @if($product->condition === 'new') checked @endif>
                       <div class="add-category-btn">
                       <h6>New</h6>
                       <p class="mb-0">123 Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -188,7 +178,7 @@
                   </div>
                   <div class="col-md-4 mb-2">
                     <div class="green_pargh">
-                      <input class="form-check-input" value="like_new" type="radio" name="condition">
+                      <input class="form-check-input" value="like_new" type="radio" name="condition" @if($product->condition === 'like_new') checked @endif>
                       <div class="add-category-btn">
                       <h6>Like New</h6>
                       <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -197,7 +187,7 @@
                   </div>
                   <div class="col-md-4 mb-2">
                     <div class="green_pargh">
-                      <input class="form-check-input" value="old" type="radio" name="condition">
+                      <input class="form-check-input" value="old" type="radio" name="condition" @if($product->condition === 'old') checked @endif>
                       <div class="add-category-btn">
                       <h6>Like New</h6>
                       <p class="mb-0">Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -265,7 +255,7 @@
             </div>
             <div>
                 <label class="ms-switch">
-                  <input type="checkbox" checked=""> <span class="ms-switch-slider ms-switch-warning round"></span>
+                  <input type="checkbox" checked=""> <span class="ms-switch-slider ms-switch-warning round" @if($product->customer_contact === '1') checked @endif></span>
                 </label>
             </div>
           </div>
@@ -276,7 +266,7 @@
             </div>
             <div>
               <label class="ms-switch">
-                <input type="checkbox"> <span class="ms-switch-slider round"></span>
+                <input type="checkbox" name="inventory_track" @if($product->inventory_track ==='1') checked @endif> <span class="ms-switch-slider round"></span>
               </label>
             </div>
           </div>
@@ -301,7 +291,7 @@
           </h5>
           <div class="form-check pl-0">
             <label class="ms-checkbox-wrap mb-1">
-              <input class="form-check-input" type="checkbox" value="" id="invalidCheck">
+              <input class="form-check-input" type="checkbox" name="free_shipping" value="" id="invalidCheck" @if($product->free_shipping === '1') checked @endif>
               <i class="ms-checkbox-check"></i>
             </label>
             <span class="green_cl"> Free Shipping </span>
@@ -311,13 +301,19 @@
               <div class="col-md-6 mb-2">
                 <label>Ships from (zip code) <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Enter Length">
+                  <input type="text" name="ships_from" value="{{ $product->ships_from}}" class="form-control" placeholder="Enter Length">
                 </div>
               </div>
               <div class="col-md-6 mb-2">
                 <label>Shipping Type <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Enter Width">
+                  <select name="shipping_type" id="" class="form-control" required>
+                    <option value="USPS" @if($product->shipping_type === 'USPS') selected @endif>USPS</option>
+                    <option value="FEDEX" @if($product->shipping_type === 'FEDEX') selected @endif>FEDEX</option>
+                    <option value="DHL" @if($product->shipping_type === 'DHL') selected @endif>DHL</option>
+                    <option value="UPS" @if($product->shipping_type === 'UPS') selected @endif>UPS</option>
+                  </select>
+                  {{-- <input type="text" name="{{ $product-> }}" class="form-control" placeholder="Enter shiiping type"> --}}
                 </div>
               </div>
            
@@ -334,7 +330,7 @@
             <div class="col-md-6 mb-2">
               <label>Set Price <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Enter Length">
+                <input type="text" name="price" value="{{ $product->price }}" class="form-control" placeholder="Enter Price">
               </div>
             </div>
             <div class="col-md-6 mb-2">
@@ -354,7 +350,7 @@
 </div>
 
 
-<div class="col-xl-12 col-md-12">
+{{-- <div class="col-xl-12 col-md-12">
   <div class="ms-panel">
       <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
          <h5 class="mb-0 pb-0">Return & Refund</h5>
@@ -379,7 +375,7 @@
         </div>
         </div>   
   </div>
-</div>
+</div> --}}
 
 
         <div class="col-xl-12 col-md-12">

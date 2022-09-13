@@ -1245,7 +1245,7 @@ class VendorController extends ApiController
                             ->where('id',$store->user_id)
                             
                             ->first();
-            $products = Product::select('id','image','name','amount','category_id');
+            $products = Product::select('id','image','name',DB::raw('price as amount'),'category_id');
             if(isset($request->search)){
                 $products = $products->where("name","LIKE","%".$request->search."%");
             }

@@ -212,6 +212,9 @@ $(".advance_btn").click( function(){
 // Dev: Ashish Mehra
 
 $(document).ready(function(){
+
+
+
     $(".product-status").click(function(){
         let productId = $(this).attr('data-product-id');
         let productStatus = $(this).attr('data-product-status');
@@ -230,6 +233,23 @@ $(document).ready(function(){
         });
 
     });
+
+// delete product image
+// Dev: aSHISH mEHRA
+
+$(".delete-image").click(function(){
+    let productId = $(this).parent().attr('data-image-id');
+    let imageKey = $(this).parent().attr('data-image-key');
+    alert(productId+' '+ imageKey);
+});
+
+
+
+
+
+
+
+
 });
 
 
