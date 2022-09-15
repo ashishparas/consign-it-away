@@ -234,7 +234,7 @@ class ClientController extends ApiController
             ->groupBy('recent_products.product_id')
             // ->take(5)
             ->get();
-           // dd(DB::getQueryLog($recentView));
+           dd(DB::getQueryLog($recentView));
             foreach($recentView as $key => $value):
                 $images = explode(",", $value->image);
                 $recentView[$key]['images'] = $images;
