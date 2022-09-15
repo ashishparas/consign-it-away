@@ -231,7 +231,7 @@ class ClientController extends ApiController
             ->join('products', 'products.id', '=', 'recent_products.product_id')
             ->where('recent_products.user_id', Auth::id())
             ->where('favourites.by', Auth::id())
-            ->groupBy('products.id')
+            ->groupBy('recent_products.product_id')
             // ->take(5)
             ->get();
            // dd(DB::getQueryLog($recentView));
