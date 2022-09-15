@@ -989,7 +989,66 @@ public static function BarcodeLookup($params){
 }
 
 
+public static function FedExSchedulePickup($params)
+{
+    try{
 
+            $token = self::AuthenticateFedExUser();
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://apis-sandbox.fedex.com/pickup/v1/pickups',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS =>'{
+                "associatedAccountNumber": {
+                    "value": "740561073"
+                },
+                "originDetail": {
+                    "pickupLocation": {
+                    "contact": {
+                        "personName": "Ashish Mehra",
+                        "phoneNumber": "9068768054"
+                    },
+                    "address": {
+                        "streetLines": [
+                        "10 Fedex Pkwy"
+                        ],
+                        "city": "Collierville",
+                        "stateOrProvinceCode": "TN",
+                        "postalCode": "38017",
+                        "countryCode": "US"
+                    }
+                    },
+                    "packageLocation": "FRONT",
+                    "readyDateTimestamp": "2022-09-15T11:00:00Z",
+                    "customerCloseTime": "17:00:00"
+                },
+                "carrierCode": "FDXG"
+                }',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json',
+                    'x-locale: en_US',
+                    'x-customer-transaction-id: 6ff590ee-4db0-4642-8c04-c4085000aae3',
+                    'Authorization: Bearer '.$token,
+                    'Cookie: _abck=CE1C42A2FE122BA7F0080A11B1927269~-1~YAAQhKg7F8AWGPSCAQAAdVETHAiW2yzoKMjBIFNF2wCFpaQMlXOtTl3rVtaBXjJP+ajRX9DNZ/fCHfc+8crJ5zYXwGcs46hdSxHh6JXwGJnWryFbUBb+ZMEbb0ZHnvKySC5/eNPZVoMlcM2XluOjcfi5xgenlK2hlX399La52DDHwhjmTaTc5cbIc2/tjMo6xZ8VKmDhz/Zj2QC9MNNe/6m1wRwyGQ+2Qsz2czRe1KKWBrOQQ+4gBaRUq2PqqofCzNqegVObeEOYKy8dWrW6zFEuPGJA3No0ukeC1Hf86QYfBkZqPoTfuCNVeg2yveLP2mLO+x+QvnipWeBiz/k7zWLw5BUIwmwS6PmRo5GV3GdnEzAhxjqYe8Aq0aDnN2QpzTM3zV3H~-1~-1~-1; ak_bmsc=5F581410F472B5D17A72239202488A4C~000000000000000000000000000000~YAAQPfTfF53BKzWDAQAAdkKwNhFPeOAMts1wl7Sf6ifZfyYv7SIYrb5JsJJbM78JHqFe0Baats6d/8vRWq7aZTdoJ0ebvCp5D+kHYlMdVgr8/8KMV+xAUpLiNuerLwoTXs+3Ih4v4wl29HiEsEy8rjNiDT6NUEWY5siQE3hqn9aufE2P8TwaH3ZuXzk/ufp3O5sl7JfUOi6ACdVAfIR+87Uw1nR6EzBEsamWNMx4tluflHu2p8dkUhfJSJaUMi0vMuWTjr0aFjKUpF6FJyxdIDXRJzSDjRMIl9T2qcJ4YzseZi7eD+T3uFJfsiiXKLYeR5HPoNZWv0HwsRfCNBtGTjhOFWRpCBurAgVNcJ7j8jgW421Bm6HI0xXgMQ==; bm_sv=EF2FA6099E8575B778BCE08B6E4EF507~YAAQrPTfFzY3Jf6CAQAA3qmxNhGVj9XtNnqUC+CbPNuxVAYADmmcfubZZ17P3R8yPcUv/wY0cqHWfvOVjy7ID/DUpV+P6b2NRKftRJvlOAJYlnrEuPvTbnjnqzQ5x7g+b/77pn8E9Lvc3MLS8EAmyb3wArnnlBzbBOFTp4ldL3+afk0kr+ZxR/uh4mc0D8YpecIUCwzvP0kz89lg/Rkwp51AP54/OvagHGuno6vJtgUOLhR2P8d5MQSWBY8eVFs=~1; fdx_cbid=10544296391657109399004850453631'
+                ),
+        ));
+
+                $response = curl_exec($curl);
+                curl_close($curl);
+                echo $response;die;
+
+
+    }catch(\exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 

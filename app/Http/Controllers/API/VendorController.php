@@ -365,7 +365,7 @@ class VendorController extends ApiController
             endif;
            
             if (isset($request->image)):
-
+                dd('product Image');
                 if($files = $request->file('image')):
                     foreach($files as $file):
                         
@@ -378,7 +378,19 @@ class VendorController extends ApiController
 
             endif;
 
-
+            if(isset($request->banner_image)):
+            // code for saving Image from url Dev: aSHISH mEHRA
+                $url = $request->banner_image;
+                // dd($url);
+                $ext = pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION);
+                $digits = 3;
+                $fileName = time() . rand(pow(10, $digits - 1), pow(10, $digits) - 1) . '-banner.'.$ext;
+                $img = 'products/'.$fileName;
+                file_put_contents($img, file_get_contents($url));
+                $input['image'] = $fileName;
+            
+            endif;
+           
             $create = Product::create($input);
             $product = Product::where('id', $create->id)->first();
 
@@ -2526,6 +2538,24 @@ public function ViewStorereview(Request $request)
     }
 }
 
+
+public function FedExSchedulePickup(Request $request)
+{
+    $rules = ['sender_name' => 'required','sender_phone_no' =>'required','sender_address' =>'required',
+'sender_city' =>'required', 'sender_state' => 'required','sender_zipcode' =>'required','sender_country','required', 'package_location' => 'required','sender_closing_time' =>'required','pickup_date' =>'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+        $input = $request->all();
+        dd($input);
+        $SchedulePickup = Helper::FedExSchedulePickup($input);
+        return parent::success("FedEx schedule pickup successfully!", $SchedulePickup);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 

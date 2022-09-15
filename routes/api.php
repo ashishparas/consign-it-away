@@ -188,6 +188,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('barcode/lookup', [VendorController::class, "BarcodeLookup"]);
     Route::post('refund/details/by/id', [VendorController::class, "RefundDetailById"]);
     Route::post('store/review/details', [VendorController::class, "ViewStorereview"]);
+    Route::post('fedex/schedule/pickup', [VendorController::class, "FedExSchedulePickup"]);
 });
 
 
