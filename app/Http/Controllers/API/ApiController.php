@@ -471,6 +471,17 @@ class ApiController extends \App\Http\Controllers\Controller {
         return $imageName;
     }
 
+    protected static function __generateImageFromUrl($url){
+
+        $ext = pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION);
+                    $digits = 3;
+                    $fileName = time() . rand(pow(10, $digits - 1), pow(10, $digits) - 1) . '-banner.'.$ext;
+                    $img = 'products/'.$fileName;
+                    file_put_contents($img, file_get_contents($url));
+                    return  $fileName;
+
+
+    }
     public static function getDistanceByTable($lat, $lng, $distance, $tableName) {
         $latKey = 'latitude';
         $lngKey = 'longitude';

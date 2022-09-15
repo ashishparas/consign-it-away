@@ -359,38 +359,40 @@ class VendorController extends ApiController
             $input['is_variant'] = $request->type;
            
             $input['user_id'] = Auth::id();
-
+            $images = array();
+            $fileName = array();
             if($input['is_variant'] === '1'):
                 $input['status'] = '1';
             endif;
            
             if (isset($request->image)):
-                dd('product Image');
+                // dd('product Image');
                 if($files = $request->file('image')):
                     foreach($files as $file):
                         
                        $images[] = parent::__uploadImage($file, public_path('products'), false);
                      
                     endforeach;
+                   
                 endif;
     
-                $input['image'] = implode(',', $images);
+                
 
             endif;
 
             if(isset($request->banner_image)):
             // code for saving Image from url Dev: aSHISH mEHRA
                 $url = $request->banner_image;
-                // dd($url);
-                $ext = pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION);
-                $digits = 3;
-                $fileName = time() . rand(pow(10, $digits - 1), pow(10, $digits) - 1) . '-banner.'.$ext;
-                $img = 'products/'.$fileName;
-                file_put_contents($img, file_get_contents($url));
-                $input['image'] = $fileName;
-            
+                $UrlImages = explode(',', $url);
+                foreach($UrlImages as $url):
+                    $fileName[] = parent::__generateImageFromUrl($url);
+                endforeach;
+               
+               
+                
             endif;
-           
+            $allImages = array_merge($images, $fileName);
+            $input['image'] = implode(',',  $allImages );
             $create = Product::create($input);
             $product = Product::where('id', $create->id)->first();
 
