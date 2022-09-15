@@ -1045,7 +1045,7 @@ class ClientController extends ApiController
            endif;
          
          
-            $product = RecentProducts::orderBy('created_at', 'DESC')
+            $product = RecentProducts::where('user_id', Auth::id())->orderBy('created_at', 'DESC')
             ->with(['Product'])
             ->simplePaginate($limit);
            

@@ -375,9 +375,6 @@ class VendorController extends ApiController
                     endforeach;
                    
                 endif;
-    
-                
-
             endif;
 
             if(isset($request->banner_image)):
@@ -386,10 +383,7 @@ class VendorController extends ApiController
                 $UrlImages = explode(',', $url);
                 foreach($UrlImages as $url):
                     $fileName[] = parent::__generateImageFromUrl($url);
-                endforeach;
-               
-               
-                
+                endforeach;  
             endif;
             $allImages = array_merge($images, $fileName);
             $input['image'] = implode(',',  $allImages );
