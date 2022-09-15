@@ -198,7 +198,7 @@ class ClientController extends ApiController
     }
 
     public function Home(Request $request){
-    //    dd(Auth::id());
+     
         $rules = [];
         $validateAttributes=parent::validateAttributes($request, 'POST', $rules, array_keys($rules), false);
         if($validateAttributes):
@@ -230,11 +230,11 @@ class ClientController extends ApiController
             ->leftJoin('favourites', 'favourites.product_id', 'recent_products.product_id')
             ->join('products', 'products.id', '=', 'recent_products.product_id')
             ->where('recent_products.user_id', Auth::id())
-            ->where('favourites.by', Auth::id())
+            ->orWhere('favourites.by', Auth::id())
             ->groupBy('recent_products.product_id')
             // ->take(5)
             ->get();
-           dd(DB::getQueryLog($recentView));
+        //   dd(DB::getQueryLog($recentView));
             foreach($recentView as $key => $value):
                 $images = explode(",", $value->image);
                 $recentView[$key]['images'] = $images;

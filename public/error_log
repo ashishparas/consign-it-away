@@ -266,3 +266,8 @@ Stack trace:
 [19-Jul-2022 10:08:11 UTC] PHP Warning:  POST Content-Length of 15479754 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
 [01-Aug-2022 07:55:56 UTC] PHP Fatal error:  Trait "Nikolag\Square\Traits\HasCustomers" not found in /home/phpparastechnolo/public_html/consign-it-away/app/Models/User.php on line 13
 [01-Aug-2022 07:55:56 UTC] PHP Fatal error:  Trait "Nikolag\Square\Traits\HasCustomers" not found in /home/phpparastechnolo/public_html/consign-it-away/app/Models/User.php on line 13
+[05-Sep-2022 09:13:37 UTC] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[05-Sep-2022 09:15:06 UTC] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[06-Sep-2022 09:25:46 UTC] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[06-Sep-2022 09:28:07 UTC] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[06-Sep-2022 09:35:05 UTC] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
