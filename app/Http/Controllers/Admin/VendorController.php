@@ -110,7 +110,7 @@ class VendorController extends Controller
             // ->take(10)
             ->orderBy('created_at', 'DESC')
             ->get();
-        dd($items->toArray());
+        // dd($items->toArray());
         return view('admin.order.running-orders', compact('items'));
     }
 

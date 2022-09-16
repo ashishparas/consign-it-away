@@ -817,7 +817,7 @@ class ClientController extends ApiController
 
    public function ViewOrder(Request $request)
    {
-       $rules = ['type' => 'required|in:1,2,3,4','search'=>'', 'sort'=>'','limit' =>'', 'page' => '', 'order_status' => ''];
+       $rules = ['type' => 'required','search'=>'', 'sort'=>'','limit' =>'', 'page' => '', 'order_status' => ''];
       
        $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
        if($validateAttributes):
@@ -846,7 +846,6 @@ class ClientController extends ApiController
     
             }elseif($request->type === '4'){
                 
-            
                 $items = Item::select('items.*','products.name')->where('items.user_id',Auth::id())
                             ->Join('products','products.id','items.product_id');
                 if(isset($request->search)){

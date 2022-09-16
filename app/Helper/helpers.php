@@ -992,7 +992,7 @@ public static function BarcodeLookup($params){
 public static function FedExSchedulePickup($params)
 {
     try{
-
+            // dd($params);
             $token = self::AuthenticateFedExUser();
                 $curl = curl_init();
 
@@ -1012,22 +1012,22 @@ public static function FedExSchedulePickup($params)
                 "originDetail": {
                     "pickupLocation": {
                     "contact": {
-                        "personName": "Ashish Mehra",
-                        "phoneNumber": "9068768054"
+                        "personName": "'.$params['sender_name'].'",
+                        "phoneNumber": "'.$params['sender_phone_no'].'"
                     },
                     "address": {
                         "streetLines": [
-                        "10 Fedex Pkwy"
+                        "'.$params['sender_address'].'"
                         ],
-                        "city": "Collierville",
-                        "stateOrProvinceCode": "TN",
-                        "postalCode": "38017",
-                        "countryCode": "US"
+                        "city": "'.$params['sender_city'].'",
+                        "stateOrProvinceCode": "'.$params['sender_state'].'",
+                        "postalCode": "'.$params['sender_zipcode'].'",
+                        "countryCode": "'.$params['sender_country'].'"
                     }
                     },
-                    "packageLocation": "FRONT",
-                    "readyDateTimestamp": "2022-09-15T11:00:00Z",
-                    "customerCloseTime": "17:00:00"
+                    "packageLocation": "'.$params['package_location'].'",
+                    "readyDateTimestamp": "'.$params['pickup_date'].'",
+                    "customerCloseTime": "'.$params['sender_closing_time'].'"
                 },
                 "carrierCode": "FDXG"
                 }',
@@ -1042,7 +1042,7 @@ public static function FedExSchedulePickup($params)
 
                 $response = curl_exec($curl);
                 curl_close($curl);
-                echo $response;die;
+                return json_decode($response, true); 
 
 
     }catch(\exception $ex){

@@ -395,8 +395,8 @@
             </div>
             </div>
             <div class="col-md-6 text-right">
-                <a role="button" href="add-advance.html" class="btn advance_btn mt-0 px-5">Advance</a>
-                <a role="button" href="vender-products.html" class="btn track_order_but mt-0 px-4">Add Product</a>
+                <a role="button" href="" class="btn advance_btn mt-0 px-5">Advance</a>
+                <a role="button" href="" class="btn track_order_but mt-0 px-4">Add Product</a>
             </div>
             </div>
         </div>

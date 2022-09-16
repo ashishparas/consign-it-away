@@ -2434,10 +2434,10 @@ public function FedexCreateShippingLabel(Request $request)
     try{
         $fedex = [];
         $input  =  $request->all();
-        // $fedex = Helper::FedexShippingLabel( $input);
-        // $url =$fedex['output']['transactionShipments']['0']['pieceResponses']['0']['packageDocuments']['0']['url'];
+        $fedex = Helper::FedexShippingLabel( $input);
+        $url =$fedex['output']['transactionShipments']['0']['pieceResponses']['0']['packageDocuments']['0']['url'];
 
-        $url = 'https://wwwtest.fedex.com/document/v1/cache/retrieve/SH,22b9f48bb19292c7795497766429_SHIPPING_P?isLabel=true&autoPrint=false';
+        // $url = 'https://wwwtest.fedex.com/document/v1/cache/retrieve/SH,22b9f48bb19292c7795497766429_SHIPPING_P?isLabel=true&autoPrint=false';
         // dd($url);
             // Image path
            // Save pdf DEV: aSHISH mEHRA
@@ -2537,15 +2537,17 @@ public function ViewStorereview(Request $request)
 
 public function FedExSchedulePickup(Request $request)
 {
-    $rules = ['sender_name' => 'required','sender_phone_no' =>'required','sender_address' =>'required',
-'sender_city' =>'required', 'sender_state' => 'required','sender_zipcode' =>'required','sender_country','required', 'package_location' => 'required','sender_closing_time' =>'required','pickup_date' =>'required'];
+    $rules = [
+    'sender_name' => 'required','sender_phone_no' =>'required','sender_address' =>'required',
+    'sender_city' =>'required','sender_state' => 'required','sender_zipcode' =>'required',
+    'sender_country' => 'required','package_location' => 'required','sender_closing_time' =>'required','pickup_date' =>'required'];
     $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
         $input = $request->all();
-        dd($input);
+        // dd($input);
         $SchedulePickup = Helper::FedExSchedulePickup($input);
         return parent::success("FedEx schedule pickup successfully!", $SchedulePickup);
     }catch(\Exception $ex){
