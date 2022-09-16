@@ -244,6 +244,13 @@ $(".delete-image").click(function(){
 });
 
 
+// Code: Edit product advance and normal product hide & show button
+
+
+  $("#edit-advance_btn").click(function(){
+    $(".advice_block").toggle();
+  });
+
 
 
 

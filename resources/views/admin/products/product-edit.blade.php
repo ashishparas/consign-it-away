@@ -4,6 +4,8 @@
 
 
 @section('content')
+
+
 <div class="ms-content-wrapper">
     <!--breadcrumbs-->
     <div class="row">
@@ -395,14 +397,154 @@
             </div>
             </div>
             <div class="col-md-6 text-right">
-                <a role="button" href="" class="btn advance_btn mt-0 px-5">Advance</a>
+                <button type="button" class="btn mt-0 px-5" id="edit-advance_btn">Advance</button>
                 <a role="button" href="" class="btn track_order_but mt-0 px-4">Add Product</a>
             </div>
             </div>
         </div>
         </div>
         </div>
-            </div>
+   
             <!--shipping-orders-->
         </div>
+        
+        
+         <div class="advice_block row" style="display:none;">
+  <div class="col-xl-12 col-md-12">
+    <div class="ms-panel">
+        <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
+           <h5 class="mb-0 pb-0">Marketing</h5>
+        </div>
+        <div class="form-row px-4 pt-3">
+            <div class="col-md-4 mb-2">
+              <label class="d-flex font-weight-bold">Meta Tags
+                 <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
+                   <img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg">
+                  </span>
+                </label>
+              <div class="input-group">
+                <input type="text" class="form-control" value="" name="meta_tags" placeholder="Add meta tags here...">
+              </div>
+                          </div>
+            <div class="col-md-4 mb-2">
+                <label class="d-flex font-weight-bold">Meta Keywords <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg"></span></label>
+                <div class="input-group">
+                  <input type="text" class="form-control" value="" name="meta_keywords" placeholder="Add meta keywords here...">
+                </div>
+                              </div>
+              <div class="col-md-4 mb-2">
+                <label class="d-flex font-weight-bold">Product Title <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg"></span></label>
+                <div class="input-group">
+                  <input type="text" class="form-control" name="title" placeholder="Enter Title for marketing">
+                </div>
+              </div>
+              <div class="col-md-12 mb-2">
+                <label class="d-flex font-weight-bold">Meta Description <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg"></span></label>
+                <div class="input-group">
+                    <textarea rows="5" class="form-control" name="meta_description" placeholder="Type Here..."></textarea>
+                  </div>
+                                </div>
+          </div>   
+    </div>
+</div>
+
+<div class="col-md-4">
+  <div class="ms-panel">
+      <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 pb-0">Attributes <span data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg"></span></h5>
+       </div>
+      <div class="ms-panel-body">
+          <div class="form-group">
+              <label for="exampleEmail">Attribute</label>
+              <input type="text" class="form-control" id="attributeName" value="" placeholder="Enter attribute">
+              <span id="attrError"></span>
+            </div>
+            <div class="form-group">
+              <label for="exampleEmail">No. of Option</label>
+                 <input type="text" id="optionName" value="" class="form-control">
+                 <span id="optionError"></span>
+                 <span class="optionSpan"></span>
+                 <button type="button" id="addOption" class="btn btn-success py-2 px-2 mt-0 fs-16">Add Option </button>
+            </div>
+            <button type="button" id="createVariant" class="btn btn-success py-2 px-2 mt-0 fs-16">Create </button>
+               
+            <input type="text" id="variantsValue" name="variants" value="">
+          </div>
+            </div>
+</div>
+
+
+<div class="col-md-8">
+<div class="ms-panel">
+    <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 pb-0">Varients </h5>
+     </div>
+    <div class="ms-panel-body">
+        <div class="table-responsive">
+            <table class="table table-bordered advance_table">
+              <thead>
+                <tr>
+                  <th scope="col">
+                      <label class="ms-checkbox-wrap">
+                    <input type="checkbox" value=""> <i class="ms-checkbox-check"></i>
+                  </label>
+                    </th>
+                  <th scope="col">Attritubes</th>
+                  <th scope="col">Options</th>
+                </tr>
+              </thead>
+              <tbody id="combination">
+               
+              </tbody>
+            </table>
+          </div>
+        </div>
+</div>
+</div>
+
+<div class="col-md-12">
+<div class="ms-panel">
+  <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 pb-0">Product Specifications <span data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg"></span></h5>
+   </div>
+  <div class="ms-panel-body">
+    <h6>State</h6>
+      <div class="enter_spec">
+        <div class="form-group">
+          <input type="text" name="state" class="form-control" placeholder="Enter Specification">
+        </div>
+        
+      
+</div>
+</div>
+
+<div class="col-xl-12 col-md-12 pb-3">
+<div class="ms-panel">
+<div class="ms-panel-body">
+<div class="row">
+<div class="col-md-6">
+<div class="d-flex">
+<div>
+<p class="mb-0 black_cl fs-16">Selling fee (8%)</p>
+<h6 class="orange_cl">$9.12</h6>
+</div>
+<div class="pl-4">
+<p class="mb-0 black_cl fs-16">You earn (min-max):</p>
+<h6 class="orange_cl">$86.53 — $93.12</h6>
+</div>
+</div>
+</div>
+<div class="col-md-6 text-right">
+  <input type="submit" class="btn track_order_but mt-0 px-4" name="normal_product" value="Add Product">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+            </div>
+            </div>
+
 @endsection
