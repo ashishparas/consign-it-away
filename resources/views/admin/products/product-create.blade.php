@@ -35,7 +35,7 @@
       <div class="ms-panel">
           <div class="ms-panel-header border-0 d-flex justify-content-between align-items-center">
               <h3 class="mb-0">Add Product</h3>
-              <input type="text" name="url" id="url" value="{{asset('')}}" />
+              <input type="hidden" name="url" id="url" value="{{asset('')}}" />
           </div>
       </div>
   </div>
@@ -144,7 +144,7 @@
                 <label for="validationCustom01" class="d-flex">Product Sub-Category<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
                   <img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                 <div class="input-group">
-                <select class="form-control" id="subCategory" name="subcategory_id" value="" required="">
+                <select class="form-control" id="subCategory" name="subcategory_id"  required="">
                 
                 </select>
                 </div>

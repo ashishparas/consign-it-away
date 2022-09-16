@@ -42,7 +42,7 @@ class Product extends Model
     }
        
     public function getSoldByAttribute(){
-        $store =  Store::select('id','banner','name')->where('id', $this->store_id)->first();
+        $store =  Store::select('id','banner','name')->where('id', $this->store_id)->with(['Manager'])->first();
         return $store;
     }
 

@@ -33,10 +33,11 @@ $(document).ready(function(){
 
     // get subcategories by categoryId
 
-    $("#categories").on('change', function(){
+    $("#categories").on('change click', function(){
+     
         let categoryId = $(this).val();
         let baseUrl = $("#url").val();
-        // alert(baseUrl);
+     
         $.ajax({
             url:baseUrl+'admin/view/subcategories/by/id',
             headers: {
@@ -51,7 +52,7 @@ $(document).ready(function(){
                 }else{
                     $.each(data, function( index, value ) {
                        
-                        const newLocal = "<option>Select Sub-category</option><option value=" + value.id + ">" + value.title + "</option>";
+                        const newLocal = "<option value=" + value.id + ">" + value.title + "</option>";
                         $('#subCategory').append(newLocal);    
                     });
                 }
@@ -250,11 +251,6 @@ $(".delete-image").click(function(){
   $("#edit-advance_btn").click(function(){
     $(".advice_block").toggle();
   });
-
-
-
-
-
 
 
 });

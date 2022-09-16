@@ -1,10 +1,7 @@
 @extends('layouts.app')
 
 
-
-
 @section('content')
-
 
 <div class="ms-content-wrapper">
     <!--breadcrumbs-->
@@ -26,9 +23,13 @@
         <div class="ms-panel">
             <div class="ms-panel-header border-0 d-flex justify-content-between align-items-center">
                 <h3 class="mb-0">Product Details</h3>
+                <input type="text" name="url" id="url" value="{{asset('')}}" />
             </div>
         </div>
     </div>
+    <form action="{{ url('admin/update/product') }}" method="post" enctype="multipart/form-data">
+      @csrf
+
         <div class="col-xl-12 col-md-12">
             <div class="ms-panel">
                 <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
@@ -38,19 +39,15 @@
                     <div class="col-md-4 mb-2">
                       <label>Vendor Name</label>
                       <div class="input-group">
-                        <select class="form-control" id="exampleSelect">
-                            <option value="1">Gupta Enterprises</option>
-                            <option value="2">Gupta Enterprises 1</option>
-                            <option value="3">Gupta Enterprises 2</option>
-                            <option value="4">Gupta Enterprises 3</option>
-                            <option value="5">Gupta Enterprises 4</option>
+                        <select class="form-control" id="exampleSelect" name="store_id">
+                            <option value="{{$product->soldBy->id}}">{{ $product->soldBy->name }}</option>
                           </select>
                       </div>
                     </div>
                     <div class="col-md-4 mb-2">
                       <label>Manager Assigned</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Marchel Rose" disabled>
+                        <input type="text" class="form-control" value="{{$product->soldBy->manager->name}}" placeholder="Marchel Rose" disabled>
                       </div>
                     </div>
                     <div class="col-md-4 mb-2">
@@ -113,10 +110,11 @@
                   <div class="col-md-4 mb-3">
                     <label for="validationCustom01" class="d-flex">Product Category *<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                     <div class="input-group">
-                      <select class="form-control" id="validationCustom15" required="">
+                      <select class="form-control" id="categories" name="category_id" required="">
                         <option value="">Select Category</option>
-                        <option value="">Select Category1</option>
-                        <option value="">Select Category2</option>
+                        @foreach ($category as $categories)
+                        <option value="{{ $categories->id }}" @if($categories->id === $product->category_id) selected @endif>{{ $categories->title }}</option>
+                        @endforeach
                     
                       </select>
                     </div>
@@ -124,10 +122,8 @@
                   <div class="col-md-4 mb-3">
                     <label for="validationCustom01" class="d-flex">Product Sub-Category<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
                     <div class="input-group">
-                      <select class="form-control" id="validationCustom15" required="">
-                        <option value="">Select Sub-Category</option>
-                        <option value="">Select Sub-Category2</option>
-                        <option value="">SSelect Sub-Category3</option>
+                      <select class="form-control" id="subCategory" name="subcategory_id" required="">
+                       
                     
                       </select>
                     </div>
@@ -152,7 +148,11 @@
                     </div>
                   </div>
                   <div class="col-md-4 mb-3">
-                    <label for="validationCustom02" class="d-flex">Weight<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"/></span></label>
+                    <label for="validationCustom02" class="d-flex">Weight
+<span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum">
+        <img src="{{asset('public/assets/img/question_mark.svg')}}"/>
+                    </span>
+                  </label>
                     <div class="input-group">
                       <input type="text" name="weight" value="{{$product->weight}}" class="form-control" placeholder="Enter weight">
                     </div>
@@ -210,7 +210,6 @@
                 </div>
                 @php
                     $dimensions = json_decode($product->dimensions, true);
-                 
                 @endphp
                   <div class="col-md-4 mb-2">
                     <label>Length (Inches)</label>
@@ -246,7 +245,7 @@
             </div>
             <div>
               <label class="ms-switch">
-                <input type="checkbox" name="available_for_sale" @if($product->available_for_sale =='1') checked @endif> <span class="ms-switch-slider round"></span>
+                <input type="checkbox" value="1" name="available_for_sale" @if($product->available_for_sale =='1') checked @endif> <span class="ms-switch-slider round"></span>
               </label>
             </div>
           </div>
@@ -257,7 +256,7 @@
             </div>
             <div>
                 <label class="ms-switch">
-                  <input type="checkbox" checked=""> <span class="ms-switch-slider ms-switch-warning round" @if($product->customer_contact === '1') checked @endif></span>
+                  <input type="checkbox" checked="" value="1" name="customer_contact"> <span class="ms-switch-slider ms-switch-warning round" @if($product->customer_contact === '1') checked @endif></span>
                 </label>
             </div>
           </div>
@@ -268,7 +267,7 @@
             </div>
             <div>
               <label class="ms-switch">
-                <input type="checkbox" name="inventory_track" @if($product->inventory_track ==='1') checked @endif> <span class="ms-switch-slider round"></span>
+                <input type="checkbox" value="1" name="inventory_track" @if($product->inventory_track ==='1') checked @endif> <span class="ms-switch-slider round"></span>
               </label>
             </div>
           </div>
@@ -279,7 +278,7 @@
             </div>
             <div>
               <label class="ms-switch">
-                <input type="checkbox"> <span class="ms-switch-slider round"></span>
+                <input type="checkbox" name="product_offer"> <span class="ms-switch-slider round"></span>
               </label>
             </div>
           </div>
@@ -293,7 +292,7 @@
           </h5>
           <div class="form-check pl-0">
             <label class="ms-checkbox-wrap mb-1">
-              <input class="form-check-input" type="checkbox" name="free_shipping" value="" id="invalidCheck" @if($product->free_shipping === '1') checked @endif>
+              <input class="form-check-input" type="checkbox" name="free_shipping" id="invalidCheck" @if($product->free_shipping === '1') checked @endif>
               <i class="ms-checkbox-check"></i>
             </label>
             <span class="green_cl"> Free Shipping </span>
@@ -398,7 +397,8 @@
             </div>
             <div class="col-md-6 text-right">
                 <button type="button" class="btn mt-0 px-5" id="edit-advance_btn">Advance</button>
-                <a role="button" href="" class="btn track_order_but mt-0 px-4">Add Product</a>
+                <input type="submit" value="Add Product"  class="btn track_order_but mt-0 px-4" >
+                
             </div>
             </div>
         </div>
@@ -408,7 +408,7 @@
             <!--shipping-orders-->
         </div>
         
-        
+        {{-- Advance products --}}
          <div class="advice_block row" style="display:none;">
   <div class="col-xl-12 col-md-12">
     <div class="ms-panel">
@@ -419,29 +419,29 @@
             <div class="col-md-4 mb-2">
               <label class="d-flex font-weight-bold">Meta Tags
                  <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum">
-                   <img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg">
+                   <img src="{{asset('public/assets/img/question_mark.svg')}}">
                   </span>
                 </label>
               <div class="input-group">
-                <input type="text" class="form-control" value="" name="meta_tags" placeholder="Add meta tags here...">
+                <input type="text" class="form-control" value="{{ $product->meta_tags }}" name="meta_tags" placeholder="Add meta tags here...">
               </div>
                           </div>
             <div class="col-md-4 mb-2">
-                <label class="d-flex font-weight-bold">Meta Keywords <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg"></span></label>
+                <label class="d-flex font-weight-bold">Meta Keywords <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" value="" name="meta_keywords" placeholder="Add meta keywords here...">
+                  <input type="text" class="form-control" value="{{ $product->meta_keywords }}" name="meta_keywords" placeholder="Add meta keywords here...">
                 </div>
                               </div>
               <div class="col-md-4 mb-2">
-                <label class="d-flex font-weight-bold">Product Title <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg"></span></label>
+                <label class="d-flex font-weight-bold">Product Title <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" name="title" placeholder="Enter Title for marketing">
+                  <input type="text" class="form-control" value="{{ $product->title }}" name="title" placeholder="Enter Title for marketing">
                 </div>
               </div>
               <div class="col-md-12 mb-2">
-                <label class="d-flex font-weight-bold">Meta Description <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg"></span></label>
+                <label class="d-flex font-weight-bold">Meta Description <span class="ml-auto" data-toggle="tooltip" data-placement="left" title="" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></label>
                 <div class="input-group">
-                    <textarea rows="5" class="form-control" name="meta_description" placeholder="Type Here..."></textarea>
+                    <textarea rows="5" class="form-control" name="meta_description" placeholder="Type Here...">{{ $product->meta_description }}</textarea>
                   </div>
                                 </div>
           </div>   
@@ -451,7 +451,7 @@
 <div class="col-md-4">
   <div class="ms-panel">
       <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
-          <h5 class="mb-0 pb-0">Attributes <span data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg"></span></h5>
+          <h5 class="mb-0 pb-0">Attributes <span data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></h5>
        </div>
       <div class="ms-panel-body">
           <div class="form-group">
@@ -468,7 +468,7 @@
             </div>
             <button type="button" id="createVariant" class="btn btn-success py-2 px-2 mt-0 fs-16">Create </button>
                
-            <input type="text" id="variantsValue" name="variants" value="">
+            <input type="text" id="variantsValue" name="variants" value="{{$product->variants}}">
           </div>
             </div>
 </div>
@@ -505,13 +505,13 @@
 <div class="col-md-12">
 <div class="ms-panel">
   <div class="ms-panel-header border-bottom d-flex justify-content-between align-items-center">
-      <h5 class="mb-0 pb-0">Product Specifications <span data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="https://php.parastechnologies.in/consign-it-away/public/assets/img/question_mark.svg"></span></h5>
+      <h5 class="mb-0 pb-0">Product Specifications <span data-toggle="tooltip" data-placement="left" title="" class="ms-add-task-to-block ms-btn-icon float-right" data-original-title="Lorem Ipsum Lorem Ipsum"><img src="{{asset('public/assets/img/question_mark.svg')}}"></span></h5>
    </div>
   <div class="ms-panel-body">
     <h6>State</h6>
       <div class="enter_spec">
         <div class="form-group">
-          <input type="text" name="state" class="form-control" placeholder="Enter Specification">
+          <input type="text" name="state" value="{{ $product->state }}" class="form-control" placeholder="Enter Specification">
         </div>
         
       
@@ -538,13 +538,16 @@
   <input type="submit" class="btn track_order_but mt-0 px-4" name="normal_product" value="Add Product">
 
 </div>
+
+</form>
+{{-- Form End  --}}
 </div>
 </div>
 </div>
 </div>
 </div>
 
-            </div>
-            </div>
+</div>
+</div>
 
 @endsection
