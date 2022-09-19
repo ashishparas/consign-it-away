@@ -2540,7 +2540,7 @@ public function FedExSchedulePickup(Request $request)
     $rules = [
     'sender_name' => 'required','sender_phone_no' =>'required','sender_address' =>'required',
     'sender_city' =>'required','sender_state' => 'required','sender_zipcode' =>'required',
-    'sender_country' => 'required','package_location' => 'required','sender_closing_time' =>'required','pickup_date' =>'required'];
+    'sender_country' => 'required','package_location' => 'required','sender_closing_time' =>'required','pickup_date' =>'required', 'item_id' => 'required|exists:items,id'];
     $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), true);
     if($validateAttributes):
         return $validateAttributes;
@@ -2549,6 +2549,12 @@ public function FedExSchedulePickup(Request $request)
         $input = $request->all();
         // dd($input);
         $SchedulePickup = Helper::FedExSchedulePickup($input);
+        // dd($SchedulePickup);
+        if(isset($SchedulePickup['output'])):
+            $item = Item::FindOrfail($request->item_id);
+            $item->fill(['schedule_pickup' => '1']);
+            $item->save();
+        endif;
         return parent::success("FedEx schedule pickup successfully!", $SchedulePickup);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());

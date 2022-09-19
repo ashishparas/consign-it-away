@@ -443,7 +443,7 @@
                 <div class="input-group">
                     <textarea rows="5" class="form-control" name="meta_description" placeholder="Type Here...">{{ $product->meta_description }}</textarea>
                   </div>
-                                </div>
+          </div>
           </div>   
     </div>
 </div>
