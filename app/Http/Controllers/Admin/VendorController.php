@@ -211,7 +211,7 @@ class VendorController extends Controller
     }
 
     public function updateProduct(Request $request){
-        dd($request->all());
+        $input = $request->all();
     }
 
     public function StoreProduct(Request $request)
