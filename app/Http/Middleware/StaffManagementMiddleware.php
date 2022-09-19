@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AccessControlMiddleware
+class StaffManagementMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,17 +17,17 @@ class AccessControlMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-      
         if(Auth::check()){
-            // dd(Auth::user()->type);
-               if(Auth::user()->type === '4'){
+
+            if(Auth::user()->type === '5'){
+              
                 return $next($request);
-               }else{
-                   return abort(403);
-               }
+            }else{
+                return abort(404);
+            }
+
         }else{
-            // return abort(403);
-            return response()->json(['status'=>'Your session has expired, Please login first']);
+            return response()->json(['status' => 'your session has expired please login first.!']);
         }
         return $next($request);
     }

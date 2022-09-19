@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Validator;
 use PDF;
 use App\Helper\Helper;
 use App\Models\Banner;
+use Illuminate\Support\Facades\Hash;
 
 class VendorController extends Controller
 {
@@ -154,7 +155,8 @@ class VendorController extends Controller
     {
         $input = $request->all();
         $request->validate([
-            'name' => 'required',
+            'fname' => 'required',
+            'lname' => 'required',
             'email' => 'required',
             'mobile_no' => 'required',
             'role'   => 'required|in:1,2,3,4,5,6,7,8',
@@ -172,7 +174,12 @@ class VendorController extends Controller
                 $input['image'] = $imageName;
             endif;
 
-
+            $input['name'] = ucfirst($request->fname). ' '. ucfirst($request->lname);
+            $input['password'] = Hash::make(12345678);
+            $input['type'] = '5';
+            // dd($input);
+            $user = User::create($input);
+            $input['user_id'] = $user->id;
             $staff = AdminStaff::create($input);
             if ($staff) :
                 return redirect()->route('staff-management');
@@ -210,8 +217,22 @@ class VendorController extends Controller
         return view('admin.products.product-edit', compact('product','category'));
     }
 
-    public function updateProduct(Request $request){
+    public function updateProduct(Request $request, $id){
         $input = $request->all();
+        $input['product_offer'] = (isset($request->product_offer))? $request->product_offer : '2';
+        $input['free_shipping'] = (isset($request->free_shipping))? $request->free_shipping : '2';
+
+        $input['inventory_track'] = (isset($request->inventory_track))? $request->inventory_track : '2';
+        $input['customer_contact'] = (isset($request->customer_contact))? $request->customer_contact : '2';
+        $input['available_for_sale'] = (isset($request->available_for_sale))? $request->available_for_sale : '2';
+        $input['free_shipping'] = (isset($request->free_shipping))? $request->free_shipping : '2';
+
+        // dd($input);
+        $product = Product::FindOrFail($id);
+            $product->fill($input);
+            $product->save();
+        return redirect()->back()->with('success', 'Product details has been updated successfully!');
+
     }
 
     public function StoreProduct(Request $request)

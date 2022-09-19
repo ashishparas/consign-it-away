@@ -1689,11 +1689,7 @@ public function EditStoreManagerDetails(Request $request){
         $input['user_id'] = Auth::id();
         $model = $model->fill($input);
         $store = $model->save();
-       
-       
 
-        
-        
             Manager::where('store_id', $request->store_id)->update(['status' =>'1']);
             $manager = new Manager();
             $manager = $manager->FindOrfail($request->manager_id);
@@ -1758,7 +1754,7 @@ public function FilterProductByStore(request $request)
         $input =$request->all();
 
         $products = Product::select('products.id','products.user_id','products.image','products.name','products.price','products.quantity','stocks.stock')
-            ->leftJoin('stocks','products.id','stocks.product_id')
+                ->leftJoin('stocks','products.id','stocks.product_id')
             ->where('products.user_id', Auth::id())
             ->where('products.store_id',$request->store_id)
             ->where('products.category_id', $request->category_id);

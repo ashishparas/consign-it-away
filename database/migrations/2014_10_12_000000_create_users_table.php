@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->string('profile_picture')->nullable();
             $table->string('email_otp')->nullable();
             $table->string('mobile_otp')->nullable();
-            $table->enum('type',[1,2,3,4])->default(1)->comment('1->User,2->Vendor,3->Both,4->Admin')->nullable();
+            $table->enum('type',[1,2,3,4,5])->default(1)->comment('1->User,2->Vendor,3->Both,4->Admin,5->Staff')->nullable();
             $table->enum('status',[0,1,2,3,4,5,6])->default(0)->comment('0->Default,1->signup,2->verification or create profile, 3->add store or Mobile verification, 4->add staff, 5-> proceed, 6->subscribed');
 
             $table->enum('is_switch',[0,1,2,3])->default(0)->comment('0->Nothing,1->Client,2->vendor,3->Both');

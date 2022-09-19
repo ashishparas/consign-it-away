@@ -49,37 +49,64 @@
                 
                 <div class="form-row">
                     <div class="col-md-4 mb-3">
-                      <label for="validationCustom01">Staff Name</label>
+                      <label for="validationCustom01">first Name</label>
                       <div class="input-group">
-                        <input type="text" name="name" class="@error('name') is-invalid @enderror form-control" placeholder="Enter name">
+                        <input type="text" name="fname" class="@error('fname') is-invalid @enderror form-control" placeholder="Enter first name">
                         {{-- @error('name')
                         <span class="">{{ $message }}</span>
                              @enderror --}}
                       </div>
                     </div>
+
+                    <div class="form-row">
+                      <div class="col-md-4 mb-3">
+                        <label for="validationCustom01">Last Name</label>
+                        <div class="input-group">
+                          <input type="text" required name="lname" class="@error('lname') is-invalid @enderror form-control" placeholder="Enter last name">
+                          {{-- @error('name')
+                          <span class="">{{ $message }}</span>
+                               @enderror --}}
+                        </div>
+                      </div>
                    
                     <div class="col-md-4 mb-3">
                       <label for="validationCustom02">Email</label>
                       <div class="input-group">
-                        <input type="text" name="email" class="@error('email') is-invalid @enderror form-control" placeholder="Enter Email">
+                        <input type="text" required name="email" class="@error('email') is-invalid @enderror form-control" placeholder="Enter Email">
                         {{-- @error('email')
                           <span class="">{{ $message }}</span>
                         @enderror --}}
                       </div>
                     </div>
+
                     <div class="col-md-4 mb-3">
-                      <label for="validationCustom02">Contact</label>
+                      <label for="validationCustom02">Phone Code</label>
                       <div class="input-group">
-                        <input type="text" name="mobile_no" class="@error('mobile_no') is-invalid @enderror form-control" placeholder="Enter Mobile no">
+                        <select class="form-control" name="phonecode" id="" required>
+                          <option value="+44">+44</option>
+                          <option value="+91">+91</option>
+                        </select>
+                      
                         {{-- @error('mobile_no')
                           <span class="">{{ $message }}</span>
                         @enderror --}}
                       </div>
                     </div>
+
+                    <div class="col-md-4 mb-3">
+                      <label for="validationCustom02">Contact</label>
+                      <div class="input-group">
+                        <input type="text" required name="mobile_no" class="@error('mobile_no') is-invalid @enderror form-control" placeholder="Enter Mobile no">
+                        {{-- @error('mobile_no')
+                          <span class="">{{ $message }}</span>
+                        @enderror --}}
+                      </div>
+                    </div>
+
                     <div class="col-md-4">
                         <label for="validationCustom02">Role</label>
                         <div class="input-group mb-2">
-                                <select class="@error('role') is-invalid @enderror  form-control" name="role">
+                                <select class="@error('role') is-invalid @enderror  form-control" name="role" required>
                                     <option value="0">--select Role--</option>
                                     <option value="1">Order Management</option>
                                     <option value="2">Vendor Management</option>

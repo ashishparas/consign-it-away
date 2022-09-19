@@ -42,7 +42,10 @@ Route::get('license', function(){
 Auth::routes();
 
 
-
+ 
+// Route::get('dashboard', function(){
+//     dd('out-side');
+// })->name('dashboard')->middleware('staff');
 
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admin'], function () {
        // Route::get('/post', [AdminController::class, "index"]); 
@@ -67,7 +70,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::post('update-brand',[AdminController::class,"UpdateBrand"]);
             Route::get('create/product',[VendorController::class, "CreateProduct"]);
             Route::get('edit/product/{id}', [VendorController::class, "editProduct"]);
-            Route::post('update/product', [VendorController::class, "updateProduct"]);
+            Route::post('update/product/{id}', [VendorController::class, "updateProduct"]);
             Route::post("store/product",[VendorController::class, "StoreProduct"]);
             Route::post('view/store/by/id',[VendorController::class, "ViewStoreById"]);
             Route::post('view/subcategories/by/id',[VendorController::class,"ViewSubCategory"]);
@@ -115,6 +118,17 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
             Route::post('product/status', [VendorController::class, "ProductStatus"]);
             
  });
+
+
+
+
+// staff middlewares
+
+ Route::group(['namespace' => 'Staff', 'prefix' =>'staff', 'middleware' => 'staff'], function(){
+    Route::get('dashboard/staff', function(){
+        dd('Staff access control system');
+    })->name('dashboard');
+});
  
  
  

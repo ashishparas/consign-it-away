@@ -21,13 +21,17 @@
     <div class="row align-items-start">
       <div class="col-xl-12 col-md-12">
         <div class="ms-panel">
+          @if (Session::has('success'))
+              
+            <div class="alert alert-success">{{ Session::get('success') }}</div>
+          @endif
             <div class="ms-panel-header border-0 d-flex justify-content-between align-items-center">
                 <h3 class="mb-0">Product Details</h3>
                 <input type="text" name="url" id="url" value="{{asset('')}}" />
             </div>
         </div>
     </div>
-    <form action="{{ url('admin/update/product') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ url('admin/update/product/'. $product->id) }}" method="post" enctype="multipart/form-data">
       @csrf
 
         <div class="col-xl-12 col-md-12">
@@ -73,7 +77,8 @@
                     <div class="upload_green">
                        <img src="{{asset('public/assets/img/upload_banner.svg')}}"/>
                     </div>
-                    <div class="input_upload"><input type="file" class="custom-file-input" id="validatedCustomFile"></div>
+                    <div class="input_upload">
+                      <input type="file" name="image" class="custom-file-input" id="validatedCustomFile"></div>
                    </div>
                    <div>
                     <ul class="d-block d-lg-flex col-gap align-items-center">
@@ -171,7 +176,7 @@
               <div class="form-row px-4 pt-3 pb-3">
                   <div class="col-md-4 mb-2">
                     <div class="green_pargh">
-                      <input class="form-check-input" value="New" type="radio" name="condition" @if($product->condition === 'new') checked @endif>
+                      <input class="form-check-input" value="new" type="radio" name="condition" @if($product->condition === 'new') checked @endif>
                       <div class="add-category-btn">
                       <h6>New</h6>
                       <p class="mb-0">123 Lorem ipsum dolor sit am et, consectetur dipiscing elit dolor sit amet.</p>
@@ -255,8 +260,9 @@
               <p>This will make user to contact with the store manager for any query.</p>
             </div>
             <div>
+         
                 <label class="ms-switch">
-                  <input type="checkbox" checked="" value="1" name="customer_contact"> <span class="ms-switch-slider ms-switch-warning round" @if($product->customer_contact === '1') checked @endif></span>
+                  <input type="checkbox" checked="" value="1" name="customer_contact"> <span class="ms-switch-slider ms-switch-warning round" @if($product->customer_contact == '1') checked @endif></span>
                 </label>
             </div>
           </div>
@@ -278,7 +284,9 @@
             </div>
             <div>
               <label class="ms-switch">
-                <input type="checkbox" name="product_offer"> <span class="ms-switch-slider round"></span>
+                <input type="checkbox" name="product_offer" value="1" @if ($product->product_offer=== '1') checked
+                    
+                @endif> <span class="ms-switch-slider round"></span>
               </label>
             </div>
           </div>
@@ -292,7 +300,7 @@
           </h5>
           <div class="form-check pl-0">
             <label class="ms-checkbox-wrap mb-1">
-              <input class="form-check-input" type="checkbox" name="free_shipping" id="invalidCheck" @if($product->free_shipping === '1') checked @endif>
+              <input class="form-check-input" type="checkbox" value="1" name="free_shipping" id="invalidCheck" @if($product->free_shipping === '1') checked @endif>
               <i class="ms-checkbox-check"></i>
             </label>
             <span class="green_cl"> Free Shipping </span>
