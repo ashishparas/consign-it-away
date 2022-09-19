@@ -1652,7 +1652,7 @@ public function ChangeStaffStatus(Request $request){
 
 public function EditStoreManagerDetails(Request $request){
 
-    $rules = ['store_id'=> 'required|exists:stores,id','banner'=>'','image' => '','name'=>'required','location'=>'required','description'=>'required','manager_id' =>'Required|exists:managers,id',
+    $rules = ['store_id'=> 'required|exists:stores,id','banner'=>'','image' => '','name'=>'required','location'=>'required','address'=>'required', 'city' =>'required','state' =>'required','country' =>'required','zipcode' => 'required','description'=>'required','manager_id' =>'Required|exists:managers,id',
 'manager_name'=>'required','manager_email'=>'required','manager_mobile_no' =>'required','manager_status'=>'required|in:1,2','manager_image' =>''];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules),false);
     
