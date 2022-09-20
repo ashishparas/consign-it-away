@@ -378,7 +378,6 @@ $input_xml = <<<EOXML
         
         // dd();
                     $curl = curl_init();
-                   
                     curl_setopt_array($curl, array(
                     CURLOPT_URL => 'https://apis-sandbox.fedex.com/ship/v1/shipments',
                     CURLOPT_RETURNTRANSFER => true,
@@ -404,7 +403,7 @@ $input_xml = <<<EOXML
                             ],
                             "city": "'.$params['shipper_city'].'",
                             "stateOrProvinceCode": "'.$params['shipper_state'].'",
-                            "postalCode": '.$params['shipper_zipcode'].',
+                            "postalCode": "'.$params['shipper_zipcode'].'",
                             "countryCode": "'.$params['shipper_country_code'].'"
                         }
                         },
@@ -422,7 +421,7 @@ $input_xml = <<<EOXML
                             ],
                             "city": "'.$params['to_city'].'",
                             "stateOrProvinceCode": "'.$params['to_state'].'",
-                            "postalCode": '.$params['to_zipcode'].',
+                            "postalCode": "'.$params['to_zipcode'].'",
                             "countryCode": "'.$params['to_country_code'].'"
                             }
                         }
@@ -472,6 +471,7 @@ $input_xml = <<<EOXML
                     $response = curl_exec($curl);
 
                     curl_close($curl);
+                    // dd(json_decode($response, true));
                 return json_decode($response, true);
 
 

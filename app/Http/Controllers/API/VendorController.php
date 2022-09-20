@@ -2431,6 +2431,7 @@ public function FedexCreateShippingLabel(Request $request)
         $fedex = [];
         $input  =  $request->all();
         $fedex = Helper::FedexShippingLabel( $input);
+        // dd($fedex);
         $url =$fedex['output']['transactionShipments']['0']['pieceResponses']['0']['packageDocuments']['0']['url'];
 
         // $url = 'https://wwwtest.fedex.com/document/v1/cache/retrieve/SH,22b9f48bb19292c7795497766429_SHIPPING_P?isLabel=true&autoPrint=false';
