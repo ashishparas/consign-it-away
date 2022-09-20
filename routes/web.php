@@ -125,7 +125,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
 // staff middlewares
 
  Route::group(['namespace' => 'Staff', 'prefix' =>'staff', 'middleware' => 'staff'], function(){
-    Route::get('dashboard/staff', function(){
+    Route::get('dashboard', function(){
         dd('Staff access control system');
     })->name('dashboard');
 });
