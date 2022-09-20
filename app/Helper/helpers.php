@@ -947,12 +947,12 @@ $input_xml = <<<EOXML
             $data = curl_exec($ch);
             curl_close($ch);
             $array_data = json_decode(json_encode(simplexml_load_string($data)), true);
-        //   dd($array_data);
+        //  dd($array_data);
           
                     if(array_key_exists('Error', $array_data['Address'])):
                             return array('status'=> false, 'message' => $array_data['Address']['Error']['Description']);
                         else:
-                            return array('status'=> true, 'message' => $array_data['Address']['ReturnText']);
+                            return array('status'=> true, 'message' => $array_data['Address']);
                     endif;     
       
         }catch(\Exception $ex){

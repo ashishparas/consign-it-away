@@ -119,6 +119,7 @@ class ClientController extends ApiController
             $input['phonecode'] = '+'.$phonecode;
             // dd($input['phonecode']);
            $verify =  Helper::VerifyAddressBeforeAdd($input);
+        //    dd($verify);
             if(!$verify['status']):
                 return parent::error($verify['message']);
             endif;
