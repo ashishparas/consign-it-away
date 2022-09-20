@@ -2443,7 +2443,7 @@ public function FedexCreateShippingLabel(Request $request)
             $filenName = 'shipping_label/'.time().rand(1111,9999).'-'.date('Y-m-d').'-label.pdf';          
             $label = file_put_contents($filenName, file_get_contents($url));
             $item = Item::Findorfail($request->item_id);
-                        $item->fill(['tracking_id' => '12344356789','schedule_pickup' => '1', 'tracking_label' => $filenName]);
+                        $item->fill(['tracking_id' => '12344356789','schedule_pickup' => '0', 'tracking_label' => $filenName]);
                         $item->save();
 
          endif; 
