@@ -1465,7 +1465,11 @@ class VendorController extends ApiController
         $subscription = Subscription::where('user_id',Auth::id())->first();
       
         if($request->subscription_price > 0){
-
+         
+            if($input['PaymentToken'] === null || $input['PaymentToken'] === '' ):
+                return parent::error("PaymentToken is required");
+            endif;
+          
             $body = json_decode($subscription->body,true);
        
             if($subscription->subscription_item_id !== "0"):
