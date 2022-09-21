@@ -1044,7 +1044,7 @@ public static function FedExSchedulePickup($params)
                 $response = curl_exec($curl);
                 curl_close($curl);
                 $data =  json_decode($response, true); 
-                // dd($data);
+                dd($data);
                 if($data['errors']){
                     return array('status' => false, 'code' => $data['errors'][0]['code'],'message' => $data['errors'][0]['message']);
                 }
