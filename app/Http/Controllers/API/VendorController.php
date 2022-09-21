@@ -2559,7 +2559,7 @@ public function FedExSchedulePickup(Request $request)
         if($SchedulePickup['status'] === false):
             return parent::error($SchedulePickup['message']);
         endif;
-        return parent::success("FedEx schedule pickup successfully!", $SchedulePickup);
+        return parent::success("FedEx schedule pickup successfully!", $SchedulePickup['message']);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }

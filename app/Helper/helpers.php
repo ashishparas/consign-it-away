@@ -1044,11 +1044,11 @@ public static function FedExSchedulePickup($params)
                 $response = curl_exec($curl);
                 curl_close($curl);
                 $data =  json_decode($response, true); 
-                dd($data);
-                if($data['errors']){
+                // dd($data);
+                if(isset($data['errors'])){
                     return array('status' => false, 'code' => $data['errors'][0]['code'],'message' => $data['errors'][0]['message']);
                 }
-
+                return  array('status' => true, 'code' => "data view successfully!",'message' => $data['output']['pickupConfirmationCode']);
 
     }catch(\exception $ex){
         return parent::error($ex->getMessage());
