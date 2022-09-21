@@ -535,9 +535,9 @@ class AuthController extends ApiController {
          
             $email = base64_encode($request->email);
             $baseUrl = "https://".$request->getHttpHost()."/#/forgot-password?token=$email";
-        
+            // dd($baseUrl);
             $header = "Reset Password";
-            $html = "<p>Your reset password url: <a href='$baseUrl'>Click Here</a></p>";
+            $html = "<p>Your reset password url: <a href='$baseUrl'>Click Here</a></p><br><p>$baseUrl</p>";
           
              // send grid Dev:Ashish Mehra
             $ResetPassword = Helper::SendVarificationEmail($request->email,'Dear User', $html, $header);
