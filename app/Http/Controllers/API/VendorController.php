@@ -1453,7 +1453,7 @@ class VendorController extends ApiController
 
 
    public function ChangeSubscriptionPlan(request $request){
-    $rules = ['card_holder_name' => 'required','card_no' => 'required','expiry_date' =>'required','cvv' =>'required','subscription_price'=>'required','subscription_type'=>'required|in:month,year','PaymentToken'=>'','save_card' =>'required|in:1,2','plan_id' => 'required'];
+    $rules = ['card_holder_name' => '','card_no' => '','expiry_date' =>'','cvv' =>'','subscription_price'=>'required','subscription_type'=>'required|in:month,year','PaymentToken'=>'','save_card' =>'required|in:1,2','plan_id' => 'required'];
     $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
     if($validateAttributes):
         return $validateAttributes;
@@ -1466,8 +1466,20 @@ class VendorController extends ApiController
       
         if($request->subscription_price > 0){
          
+            if($input['cvv'] === null || $input['cvv'] === '' ):
+                return parent::error("CVV is required");
+            endif;
             if($input['PaymentToken'] === null || $input['PaymentToken'] === '' ):
                 return parent::error("PaymentToken is required");
+            endif;
+            if($input['card_no'] === null || $input['card_no'] === '' ):
+                return parent::error("Card Number is required");
+            endif;
+            if($input['expiry_date'] === null || $input['expiry_date'] === '' ):
+                return parent::error("Card expiry date is required");
+            endif;
+            if($input['card_holder_name'] === null || $input['card_holder_name'] === '' ):
+                return parent::error("Crad Holder Name is required");
             endif;
           
             $body = json_decode($subscription->body,true);
