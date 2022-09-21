@@ -1025,9 +1025,10 @@ public static function FedExSchedulePickup($params)
                         "countryCode": "'.$params['sender_country'].'"
                     }
                     },
+                    "customerCloseTime": "'.$params['sender_closing_time'].'",
                     "packageLocation": "'.$params['package_location'].'",
-                    "readyDateTimestamp": "'.$params['pickup_date'].'",
-                    "customerCloseTime": "'.$params['sender_closing_time'].'"
+                    "readyDateTimestamp": "'.$params['pickup_date'].'"
+                    
                 },
                 "carrierCode": "FDXG"
                 }',
@@ -1042,7 +1043,11 @@ public static function FedExSchedulePickup($params)
 
                 $response = curl_exec($curl);
                 curl_close($curl);
-                return json_decode($response, true); 
+                $data =  json_decode($response, true); 
+                // dd($data);
+                if($data['errors']){
+                    return array('status' => false, 'code' => $data['errors'][0]['code'],'message' => $data['errors'][0]['message']);
+                }
 
 
     }catch(\exception $ex){

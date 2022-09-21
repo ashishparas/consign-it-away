@@ -885,7 +885,8 @@ if ( $iPhone || $iPad ) {
     ?><script>
         window.location.href = "consignitaway://<?php echo $base_url;  ?>?product_id=<?php echo $id; ?>";
         setInterval(function () {
-            window.location.replace("https://php.parastechnologies.in/consign/#/details?id=<?php echo $id; ?>");
+            https://consignitaway.com/#/details?id=3
+            window.location.replace("https://consignitaway.com/#/details?id=<?php echo $id; ?>");
         }, 3000);
     </script>
     <?php } else {    ?>
@@ -893,7 +894,7 @@ if ( $iPhone || $iPad ) {
                 window.location.href = "consignitaway://details??product_id=<?php echo $id; ?>";
                 setInterval(function () {
                     
-                    window.location.replace("https://php.parastechnologies.in/consign/#/details?id=<?php echo $id; ?>");
+                    window.location.replace("https://consignitaway.com/#/details?id=<?php echo $id; ?>");
                 }, 3000);
             </script>
         <?php
