@@ -16,6 +16,12 @@ class Rating extends Model
 
     protected $fillable = ['product_id','to','from','rating','upload','comment'];
 
+    protected $appends = ['Upload'];
+
+    public function getUploadAttribute($value)
+    {
+        return explode(',', $value);
+    }
    
     public function User(){
         return $this->hasOne(User::class,'id','from')->select('id','name','fname','lname','profile_picture');

@@ -375,7 +375,12 @@ class ClientController extends ApiController
             $input['to'] = $input['product_id'];
 
             if (isset($request->upload)):
-                $input['upload'] = parent::__uploadImage($request->file('upload'), public_path('rating'), false);
+
+            foreach($request->file('upload') as $file):
+            $uploads[] = parent::__uploadImage($file, public_path('rating'), false);
+            endforeach;                
+
+            $input['upload']= implode(',', $uploads);    
             else:
                 $input['upload']= "";
             endif;
