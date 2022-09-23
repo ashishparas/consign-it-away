@@ -1660,7 +1660,12 @@ public function ChangeStaffStatus(Request $request){
             $manager = $manager->FindOrfail($request->staff_id);
             $manager->fill($input);
             $manager->save();
-            return parent::success("Staff status changed successfully!",$manager);
+            if($request->active_status === '1'){
+                $message = "Status actived successfully!";
+            }elseif($request->active_status === '2'){
+                $message = "Status deactived successfully!";
+            }
+            return parent::success($message,$manager);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
