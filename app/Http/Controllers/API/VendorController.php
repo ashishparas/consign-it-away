@@ -1660,7 +1660,7 @@ public function ChangeStaffStatus(Request $request){
             $manager = $manager->FindOrfail($request->staff_id);
             $manager->fill($input);
             $manager->save();
-            return parent::success("View discount successfully!",$manager);
+            return parent::success("Staff status changed successfully!",$manager);
     }catch(\Exception $ex){
         return parent::error($ex->getMessage());
     }
