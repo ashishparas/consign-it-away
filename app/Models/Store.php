@@ -16,7 +16,7 @@ class Store extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['banner','user_id','store_image','name','location','address','city','state','country','zipcode','description','photos','status'];
+    protected $fillable = ['banner','user_id','store_image','name','location','address','city','state','country','zipcode','description','photos','status','store_privacy'];
     protected $appends = ['base_url'];
 
 

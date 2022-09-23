@@ -29,6 +29,7 @@ class CreateStoresTable extends Migration
             $table->text('description')->nullable();
             $table->string('photos')->nullable();
             $table->enum('status',[1,2])->default(1)->comment('1->Active, 2->Inactive');
+            $table->enum('store_privacy',[1,2])->default(1)->comment('1->Show, 2->Hide');
             $table->timestamps();
         });
     }
