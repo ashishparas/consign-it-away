@@ -4,16 +4,10 @@
 <div class="ms-content-wrapper">
     <!--breadcrumbs-->
     <div class="row">
-      <div class="col-md-12">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb pl-0">
-            <li class="breadcrumb-item"><img src="{{asset('public/assets/img/home.svg')}}" alt="img">Dashboard</li>
-          </ol>
-        </nav>
-      </div>
+   
       <div class="col-md-12">
         <h3>Welcome Back, <strong>{{Auth::user()->name}}!</strong></h3>
-        <p class="grey_cl fs-16 pb-3">Last Update: 01 Aug, 2022 | 09:02 AM</p>
+        <p class="grey_cl fs-16 pb-3">{{date('d M, Y', strtotime(Auth::user()->updated_at))}} | {{date('h:i A', strtotime(Auth::user()->updated_at))}}</p>
       </div>
     </div> 
     <!--breadcrumbs-->
@@ -148,7 +142,7 @@
           <div class="ms-panel">
             <div class="ms-panel-header d-flex justify-content-between">
                 <h4 class="mb-0">Tranactions</h4>
-                <a class="btn green_btn" href="{{url('admin/view/transactions')}}">View All</a>
+                <a class="btn green_btn" href="{{ url('admin/view/transactions') }}">View All</a>
             </div>
             <div class="ms-panel-body">
               <div class="running_orders_summary table-responsive">

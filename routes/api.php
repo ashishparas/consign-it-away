@@ -189,6 +189,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('refund/details/by/id', [VendorController::class, "RefundDetailById"]);
     Route::post('store/review/details', [VendorController::class, "ViewStorereview"]);
     Route::post('fedex/schedule/pickup', [VendorController::class, "FedExSchedulePickup"]);
+    Route::post('avalara/tax/api', [VendorController::class, "AvalaraGovtTax"]);
 });
 
 

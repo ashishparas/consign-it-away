@@ -33,7 +33,7 @@ class CreateUsersTable extends Migration
 
             $table->enum('is_switch',[0,1,2,3])->default(0)->comment('0->Nothing,1->Client,2->vendor,3->Both');
             $table->enum('vendor_status',[0,1,2,3,4,5,6])->default(0)->comment('0->Default,1->signup,2->verification or create profile, 3->add store or Mobile verification, 4->add staff, 5-> proceed, 6->subscribed');
-
+            $table->string('assign_jobs')->default(0);
             $table->string('fax')->nullable();
             $table->string('paypal_id')->nullable();
             $table->enum('paypal_id_status',[1,2])->default(2)->comment('1->Set as default,2-> not selected');

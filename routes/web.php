@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\API\AuthController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Staff\StaffManagementController;
 use App\Http\Middleware\AccessControlMiddleware;
 /*
 |--------------------------------------------------------------------------
@@ -125,9 +127,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'admi
 // staff middlewares
 
  Route::group(['namespace' => 'Staff', 'prefix' =>'staff', 'middleware' => 'staff'], function(){
-    Route::get('dashboard', function(){
-        dd('Staff access control system');
-    })->name('dashboard');
+
+    Route::get('dashboard', [StaffManagementController::class, "Dashboard"])->name('dashboard');
 });
  
  

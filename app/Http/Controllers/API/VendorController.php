@@ -45,6 +45,7 @@ use App\Models\Variant;
 use App\Models\VariantItems;
 use App\Models\Withdraw;
 use Attribute;
+use Avalara\AvaTaxClient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
@@ -2582,6 +2583,23 @@ public function FedExSchedulePickup(Request $request)
         return parent::error($ex->getMessage());
     }
 }
+
+public function AvalaraGovtTax(Request $request){
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request, 'POST', $rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
+
+
+
+
 
 
 
