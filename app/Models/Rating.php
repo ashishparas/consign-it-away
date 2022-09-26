@@ -16,11 +16,16 @@ class Rating extends Model
 
     protected $fillable = ['product_id','to','from','rating','upload','comment'];
 
-    protected $appends = ['Upload'];
+    protected $appends = ['Upload', 'RatingBaseUrl'];
 
     public function getUploadAttribute($value)
     {
         return explode(',', $value);
+    }
+
+    public function getRatingBaseUrlAttribute()
+    {
+        return asset('rating');
     }
    
     public function User(){
