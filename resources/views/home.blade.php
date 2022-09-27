@@ -9,7 +9,7 @@
         <h3>Welcome Back, <strong>{{Auth::user()->name}}!</strong></h3>
         <p class="grey_cl fs-16 pb-3">{{date('d M, Y', strtotime(Auth::user()->updated_at))}} | {{date('h:i A', strtotime(Auth::user()->updated_at))}}</p>
       </div>
-    </div> 
+    </div>  
     <!--breadcrumbs-->
     <div class="row">
             <div class="col-md-6">
