@@ -37,7 +37,7 @@ class cancellation extends Model
     }
 
     public function Product(){
-        return $this->belongsTo(Product::class)->select('id','user_id','category_id','store_id','name','price','discount','image')->with(['Category','Discount']);
+        return $this->belongsTo(Product::class)->select('id','user_id','category_id','store_id','name','price','discount','image')->with(['User','Category','Discount']);
     }
 
     public function getRequestCountAttribute(){

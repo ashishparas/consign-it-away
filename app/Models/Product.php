@@ -83,7 +83,7 @@ class Product extends Model
    
   
     public function User(){
-        return $this->hasOne(User::class,'id','user_id')->select('id','name','fname','lname','email','phonecode','mobile_no','profile_picture');
+        return $this->hasOne(User::class,'id','user_id')->select('id','name','fname','lname','email','phonecode','mobile_no','profile_picture','street_address','city','state','country','zipcode');
     }
 
 
