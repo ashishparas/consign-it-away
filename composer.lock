@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "29225f2368a5ca49ce26ba26aa969406",
+    "content-hash": "a4cfe302eed563d208c23e962cd6f6b7",
     "packages": [
+        {
+            "name": "amzn/amazon-pay-api-sdk-php",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/amzn/amazon-pay-api-sdk-php.git",
+                "reference": "6c579f070b4d9a05266cd728e3f5e7281628f538"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/amzn/amazon-pay-api-sdk-php/zipball/6c579f070b4d9a05266cd728e3f5e7281628f538",
+                "reference": "6c579f070b4d9a05266cd728e3f5e7281628f538",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.5.0",
+                "phpseclib/phpseclib": "~3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Amazon\\Pay\\API\\": "Amazon/Pay/API/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Amazon Pay API SDK",
+                    "email": "amazon-pay-sdk@amazon.com"
+                }
+            ],
+            "description": "Amazon Pay API SDK (PHP)",
+            "homepage": "https://github.com/amzn/amazon-pay-api-sdk-php",
+            "keywords": [
+                "amazon",
+                "amazon pay",
+                "amazon payments",
+                "pay",
+                "pay with amazon",
+                "payment",
+                "payments"
+            ],
+            "support": {
+                "issues": "https://github.com/amzn/amazon-pay-api-sdk-php/issues",
+                "source": "https://github.com/amzn/amazon-pay-api-sdk-php/tree/2.4.0"
+            },
+            "time": "2022-08-26T12:09:07+00:00"
+        },
         {
             "name": "apility/laravel-fcm",
             "version": "v1.4.4",

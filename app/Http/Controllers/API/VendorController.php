@@ -2417,16 +2417,16 @@ public function eVS(Request $request)
 {
    
     $rules = ['item_id' => 'required|exists:items,id', 'product_id'=> 'required|exists:products,id','store_id'=> 'required|exists:stores,id','width' =>'required','height'=>'required','length' =>'required','pound' =>'required'];
+
     $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
     if($validateAttributes):
         return $validateAttributes;
     endif;
+    
     try{
        
             $input = $request->all();
-            // dd($request->item_id);
             $item = Item::FindOrfail($request->item_id);
-            // dd($item->toArray());
         $label = Helper::UPSP($item, $request->product_id, $item['address_id'], $item->vendor_id,  $request->store_id, $input);
       
         $item = Item::FindOrfail($request->item_id);
@@ -2596,6 +2596,8 @@ public function AvalaraGovtTax(Request $request){
         return parent::error($ex->getMessage());
     }
 }
+
+
 
 
 

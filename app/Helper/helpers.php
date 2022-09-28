@@ -202,27 +202,16 @@ class Helper extends ApiController
             $width = $product_details['width'];
             $height = $product_details['height'];
             $pound = $product_details['pound'];
-          
             $store = Store::FindOrfail($store_id);
-           
             $user = User::FindOrfail($data->user_id);
-           
             $customerRefNo = base64_encode($data->user_id);
-       
             $cusName = $user->name;
-         
             $cusMobileNo = $user->mobile_no;
-            
             $cusEmail = $user->email;
-          
             $address = Address::FindOrfail($address_id);
-         
             $name = (Auth::user()->fname !== '')? Auth::user()->name: 'No-Name';
-           
             $product = Product::FindOrfail($product_id);
-          
             if($address_id != null && $vendor_id != null && $store_id !=null){
-             
 $input_xml = <<<EOXML
 
                         <eVSRequest USERID= "641IHERB6005">

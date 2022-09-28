@@ -190,6 +190,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('store/review/details', [VendorController::class, "ViewStorereview"]);
     Route::post('fedex/schedule/pickup', [VendorController::class, "FedExSchedulePickup"]);
     Route::post('avalara/tax/api', [VendorController::class, "AvalaraGovtTax"]);
+    Route::post('amazon/pay', [ClientController::class, "AmazonPay"]);
 });
 
 

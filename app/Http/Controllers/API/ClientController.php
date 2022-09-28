@@ -1886,7 +1886,34 @@ public function ReturnRequest(Request $request)
     }
 }
 
-
+public function AmazonPay(Request $request)
+{
+    $rules = [];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules,array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
+       
+        $amazonpay_config = array(
+            'public_key_id' => 'SANDBOX-AGFZNCR7UKHG5N64OSMKBD2C',
+            'private_key'   => asset('amazon/AmazonPay_SANDBOX-AGFZNCR7UKHG5N64OSMKBD2C.pem'),
+            'region'        => 'US',
+            'sandbox'       => true
+        );
+    
+        $client = new \Amazon\Pay\API\Client($amazonpay_config);
+       
+        $payload = '{"storeId":"amzn1.application-oa2-client.xxxxx","webCheckoutDetails":{"checkoutReviewReturnUrl":"https://example.com/review.html"}}';
+        $result = $client->deliveryTrackers($payload);
+      
+        $signature = $client->generateButtonSignature($payload);
+        // echo "SDK_VERSION=" . \Amazon\Pay\API\Client::SDK_VERSION . "\n";
+        return parent::success("Amazon pay successfully!", $signature);
+    }catch(\Exception $ex){
+        return parent::error($ex->getMessage());
+    }
+}
 
 
 
