@@ -706,10 +706,28 @@ $input_xml = <<<EOXML
 
 
 
-    public static function SchedulePickup($store_id, $weight, $no_of_product,$package_location_desc=''){
+    public static function SchedulePickup($weight, $no_of_product,$package_location_desc='', $store_id=null){
         try{
-            $store = Store::FindOrfail($store_id);
-           // dd($store->toArray());
+            // dd(Auth::id());
+            $store = Store::where('id',$store_id)->first();
+          
+            if($store !== null){
+                $storeName = $store->name;
+                $storeLocation = $store->location;
+                $storeAddress = $store->address;
+                $storeCity = $store->city;
+                $storeState = $store->state;
+                $storeZipcode = $store->zipcode;
+                
+            }else{
+                $vendor = User::FindOrfail(Auth::id());
+                $storeName = $vendor->name;
+                $storeLocation = $vendor->street_address;
+                $storeAddress = $vendor->street_address;
+                $storeCity = $vendor->city;
+                $storeState = $vendor->state;
+                $storeZipcode = $vendor->zipcode;
+            }
             $fname = Auth::user()->fname;
             $lname = Auth::user()->lname;
             $phone = Auth::user()->mobile_no;
@@ -717,13 +735,13 @@ $input_xml = <<<EOXML
                             <CarrierPickupScheduleRequest USERID="641IHERB6005">
                             <FirstName>$fname</FirstName>
                             <LastName>$lname</LastName>
-                            <FirmName>$store->name.</FirmName>
-                            <SuiteOrApt>$store->location</SuiteOrApt>
-                            <Address2>$store->address</Address2>
+                            <FirmName>$storeName.</FirmName>
+                            <SuiteOrApt>$storeLocation</SuiteOrApt>
+                            <Address2>$storeAddress</Address2>
                             <Urbanization></Urbanization>
-                            <City>$store->city</City>
-                            <State>$store->state</State>
-                            <ZIP5>$store->zipcode</ZIP5>
+                            <City>$storeCity</City>
+                            <State> $storeState</State>
+                            <ZIP5>$storeZipcode</ZIP5>
                             <ZIP4></ZIP4>
                             <Phone>$phone</Phone>
                             <Extension>201</Extension>

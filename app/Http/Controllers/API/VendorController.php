@@ -2352,15 +2352,17 @@ public function ViewOrderByVendor(Request $request)
 
 public function SchedulePickup(Request $request){
 
-    $rules = ['store_id' => 'required|exists:stores,id','weight'=>'required','no_of_product'=>'required', 'package_location_desc'=>'','item_id' => 'required|exists:items,id'];
+    $rules = ['weight'=>'required','no_of_product'=>'required', 'package_location_desc'=>'','item_id' => 'required|exists:items,id', 'store_id' => ''];
     $validateAttributes = parent::validateAttributes($request,"POST",$rules,array_keys($rules),true);
+    
     if($validateAttributes):
         return $validateAttributes;
     endif;
     try{
         
         $input = $request->all();
-        $SchedulePickup = Helper::SchedulePickup($request->store_id, $request->weight, $request->no_of_product, $request->package_location_desc);
+       
+        $SchedulePickup = Helper::SchedulePickup( $request->weight, $request->no_of_product, $request->package_location_desc, $request->store_id);
         // dd($SchedulePickup);
         if(!$SchedulePickup['status']):
             return parent::error($SchedulePickup['message']);

@@ -1904,7 +1904,7 @@ public function AmazonPay(Request $request)
     
         $client = new \Amazon\Pay\API\Client($amazonpay_config);
        
-        $payload = '{"storeId":"amzn1.application-oa2-client.xxxxx","webCheckoutDetails":{"checkoutReviewReturnUrl":"https://example.com/review.html"}}';
+        $payload = '{"storeId":"amzn1.application-oa2-client.418f05b21553493faa90edbe59569a55","webCheckoutDetails":{"checkoutReviewReturnUrl":"https://example.com/review.html"}}';
         $result = $client->deliveryTrackers($payload);
       
         $signature = $client->generateButtonSignature($payload);

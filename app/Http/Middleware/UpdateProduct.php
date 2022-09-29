@@ -28,7 +28,7 @@ class UpdateProduct extends ApiController
             'inventory_track' => 'required|in:1,2','product_offer' => '','ships_from'=>'required', 'shipping_type' => 'required','free_shipping' => 'required|in:1,2', 'meta_description' => '',
             'meta_tags' => '', 'meta_keywords' => '', 'title' => '', 'variants' => '',
             'state'=> '','tags' =>'','advertisement' =>'', 'selling_fee' =>'required', 
-            'amount' => 'required','type'=>'required|in:1,2','store_id' =>'required|exists:stores,id'
+            'amount' => 'required','type'=>'required|in:1,2','store_id' =>''
 ];
         }elseif($request->type === '2'){
            
@@ -64,7 +64,8 @@ class UpdateProduct extends ApiController
                 'selling_fee' =>'required', 
                 'amount' => 'required',
                 'type'=>'required|in:1,2',
-                'store_id' =>'required|exists:stores,id'];
+                'store_id' =>''
+            ];
         }
 
         $validateAttributes = parent::validateAttributes($request,'POST', $rules, array_keys($rules), false);
