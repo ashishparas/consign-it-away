@@ -448,7 +448,7 @@ class VendorController extends ApiController
     try{
         $input = $request->all();
         $input['is_variant'] = $request->type;
-       
+        $input['customer_contact'] =  $request->constomer_contact;
         $input['user_id'] = Auth::id();
 
         if($input['is_variant'] === '1'):
