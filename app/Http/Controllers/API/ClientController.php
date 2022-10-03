@@ -634,7 +634,13 @@ class ClientController extends ApiController
     try{
         $input = $request->all();
         
-        $cart = Cart::FindOrfail($input['cart_id']);
+        $cart = Cart::FindOrfail($input['cart_id'])->with(['product'])->first();
+        if($cart->product->offer !== null ):
+           $offer = Offer::FindOrfail($cart->product->offer->id);
+           $offer->delete();
+        endif;
+       
+
         $cart->delete();
        
         $cart = Cart::where('user_id', Auth::id())->with('Product','CustomerVariant')->orderBy('created_at','DESC')->get();
