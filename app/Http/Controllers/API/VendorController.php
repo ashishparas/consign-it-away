@@ -366,7 +366,7 @@ class VendorController extends ApiController
             if($input['is_variant'] === '1'):
                 $input['status'] = '1';
             endif;
-           
+           $input['customer_contact'] = $request->constomer_contact;
             if (isset($request->image)):
                 // dd('product Image');
                 if($files = $request->file('image')):

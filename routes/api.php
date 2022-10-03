@@ -191,6 +191,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('fedex/schedule/pickup', [VendorController::class, "FedExSchedulePickup"]);
     Route::post('avalara/tax/api', [VendorController::class, "AvalaraGovtTax"]);
     Route::post('amazon/pay', [ClientController::class, "AmazonPay"]);
+    Route::post('paypal/generate/orderId',[ClientController::class, "PayPalGenerateOrderId"]);
 });
 
 

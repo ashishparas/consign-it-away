@@ -1915,7 +1915,28 @@ public function AmazonPay(Request $request)
     }
 }
 
+public function PayPalGenerateOrderId(Request $request){
+    $rules = ['items' => 'required'];
+    $validateAttributes = parent::validateAttributes($request,'POST',$rules, array_keys($rules), true);
+    if($validateAttributes):
+        return $validateAttributes;
+    endif;
+    try{
 
+        // $input = $request->all();
+        // $items = json_decode($request->items, true);
+        // $Payload = Helper::PaypalPayload();
+        // dd($Payload);
+        $orderId = Helper::PayPalGenerateOrderId($request->items);
+        if($orderId['status'] === false):
+            return parent::error($orderId['data']);
+        endif;
+        return parent::success("Paypal Order id created successfully!", $orderId['data']);
+    }catch(\exception $ex){
+        return parent::error($ex->getMessage());
+    }
+    
+}
 
 
 

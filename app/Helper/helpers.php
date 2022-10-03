@@ -20,7 +20,8 @@ use Shippo;
 class Helper extends ApiController
 {
     // public $AccountId = "778CONSI5321";
-
+    protected $PayPalClientId="AeWzj02TM37Owdcgw-XBzsZEgoBiaF0cb6UBJQUFxnZAylgU1CTq5sGIPJ7Ie3L1qZsdYvqTv6PN9aeo";
+    protected $PayPalSecretId = "EJGe6mvboDc1gsH1JU4kekJFyf6fsHMRIhonHg-wAoCDMkdn3TqQXC5DvCFzBmAg306KGbZsDZl-3ayE";
     public function __construct()
     {
         $this->fedExAc = "740561073";
@@ -1063,9 +1064,132 @@ public static function FedExSchedulePickup($params)
 }
 
 
+public  static function PayPalGenerateToken(){
+    $client_id = "AeWzj02TM37Owdcgw-XBzsZEgoBiaF0cb6UBJQUFxnZAylgU1CTq5sGIPJ7Ie3L1qZsdYvqTv6PN9aeo";
+    $secret_id = "EJGe6mvboDc1gsH1JU4kekJFyf6fsHMRIhonHg-wAoCDMkdn3TqQXC5DvCFzBmAg306KGbZsDZl-3ayE";
+    $url = "https://api-m.sandbox.paypal.com/v1/oauth2/token";
+    // generate Token 
+    // Dev: aSHISH mEHRA
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => 'grant_type=client_credentials&ignoreCache=true&return_authn_schemes=true&return_client_metadata=true&return_unconsented_scopes=true',
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: Basic QWVXemowMlRNMzdPd2RjZ3ctWEJ6c1pFZ29CaWFGMGNiNlVCSlFVRnhuWkF5bGdVMUNUcTVzR0lQSjdJZTNMMXFac2RZdnFUdjZQTjlhZW86RUpHZTZtdmJvRGMxZ3NIMUpVNGtla0pGeWY2ZnNITVJJaG9uSGctd0FvQ0RNa2RuM1RxUVhDNUR2Q0Z6Qm1BZzMwNktHYlpzRFpsLTNheUU=',
+                    'Content-Type: application/x-www-form-urlencoded'
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+                return $response;
+
+    // end code
+}
+
+
+public static function PaypalPayload(){
+
+    $payload = '{
+        "intent": "CAPTURE",
+        "purchase_units": [
+            {
+                "items": [
+                    {
+                        "name": "T-Shirt",
+                        "description": "Green XL",
+                        "quantity": "1",
+                        "unit_amount": {
+                            "currency_code": "USD",
+                            "value": "100.00"
+                        }
+                    },
+                    {
+                        "name": "T-Shirt-2",
+                        "description": "Green XLL",
+                        "quantity": "1",
+                        "unit_amount": {
+                            "currency_code": "USD",
+                            "value": "100.00"
+                        }
+                    }
+                ],
+                "amount": {
+                    "currency_code": "USD",
+                    "value": "200.00",
+                    "breakdown": {
+                        "item_total": {
+                            "currency_code": "USD",
+                            "value": "200.00"
+                        }
+                    }
+                }
+            }
+        ],
+        "application_context": {
+            "return_url": "https://example.com/return",
+            "cancel_url": "https://example.com/cancel"
+        }
+    }';
+
+    return json_decode($payload, true);
+
+}
 
 
 
+
+
+public static function PayPalGenerateOrderId($items =null){
+    // dd($items);
+    $after = json_encode(json_decode($items));
+    // dd($after);
+    $token = self::PayPalGenerateToken();
+    $AuthArray  = json_decode($token, true);
+    $token = $AuthArray['access_token'];
+
+    $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://api-m.sandbox.paypal.com/v2/checkout/orders',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => $after,
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json',
+            'Prefer: return=representation',
+            'PayPal-Request-Id: d87498eb-1bc9-4f19-8cd2-a2212ddae28c',
+            'Authorization: Bearer '. $token
+        ),
+        ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    $data =  json_decode($response, true);
+    if(isset($data['name'])){
+        // dd();
+        return array('status' => false, 'data' => $data['details'][0]['description']);
+    }else{
+        return array('status' => true, 'data' => $data);
+    }
+   
+
+
+}
 
 
 
